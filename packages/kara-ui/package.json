@@ -58,6 +58,7 @@
     "src",
     "lib",
     "app.plugin.js",
+    "bin",
     "!**/*.stories.tsx",
     "!**/contract.check.ts",
     "!**/story-decorators.tsx",
@@ -95,7 +96,6 @@
   },
   "peerDependencies": {
     "@expo/ui": "~57.0.0",
-    "@expo/vector-icons": "*",
     "@shopify/flash-list": ">=2.0.0",
     "expo": "~57.0.0",
     "expo-haptics": "*",
@@ -112,7 +112,6 @@
   },
   "devDependencies": {
     "@expo/ui": "~57.0.18",
-    "@expo/vector-icons": "^15.1.1",
     "@shopify/flash-list": "^2.3.2",
     "@types/react": "~19.2.18",
     "expo": "~57.0.22",
@@ -128,5 +127,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "bin": {
+    "kara-icons": "./bin/kara-icons.js"
   }
 }

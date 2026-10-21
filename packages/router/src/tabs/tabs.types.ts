@@ -8,9 +8,10 @@ export type TabsScreenProps = {
    * at runtime remounts the navigator, so pass a build constant.
    */
   hidden?: boolean
+  /** One of the app's icons — the asset-catalog image on iOS, the vector drawable on Android. */
   icon: IconName
   name: string
-  /** Swapped in while the tab is active — the filled/solid counterpart of `icon` on iOS. */
+  /** Swapped in while the tab is active — the filled counterpart of `icon`, say. */
   selectedIcon?: IconName
   testID?: string
   title: string

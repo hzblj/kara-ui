@@ -1,9 +1,11 @@
 package expo.modules.kara.ui
 
-import expo.modules.kara.ui.countdown.CountdownView
+import android.graphics.Color
 import expo.modules.kara.ui.fab.FloatingActionButtonMenuItemView
 import expo.modules.kara.ui.fab.FloatingActionButtonMenuView
 import expo.modules.kara.ui.fab.ToggleFloatingActionButtonView
+import expo.modules.kara.ui.icon.DrawableIconView
+import expo.modules.kara.ui.icon.IconView
 import expo.modules.kara.ui.modifiers.UNDERLINE_MODIFIER
 import expo.modules.kara.ui.modifiers.registerUnderlineModifier
 import expo.modules.kara.ui.ripple.RippleConfigurationView
@@ -30,7 +32,16 @@ class KaraUIModule : Module() {
     // @expo/ui's compose views inside `ModuleRegistry.getModuleHolder(viewClass)` and silently
     // drops our events. Class-based registration gives every view a unique `viewType`.
 
-    View(CountdownView::class)
+    View(DrawableIconView::class)
+
+    View(IconView::class) {
+      Prop("resourceName") { view: IconView, name: String? ->
+        view.setResourceName(name)
+      }
+      Prop("iconColor") { view: IconView, color: Color? ->
+        view.setIconColor(color)
+      }
+    }
 
     View(FloatingActionButtonMenuView::class)
 

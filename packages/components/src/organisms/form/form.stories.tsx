@@ -3,14 +3,14 @@ import {fn} from 'storybook/test'
 
 import {Switch} from '../../atoms/switch'
 import {TextField} from '../../atoms/text-field'
-import {insideIsland} from '../../story-decorators'
+import {insideIslandOfHeight} from '../../story-decorators'
 import {Form} from './form'
 
 /** `children` is `null` here on purpose — see `list.stories.tsx`; the sections come from the render. */
 const meta = {
   args: {children: null},
   component: Form,
-  decorators: [insideIsland],
+  decorators: [insideIslandOfHeight(420)],
   parameters: {
     notes: 'The grouped settings layout: a SwiftUI `Form` of `Section`s on iOS, a column of Material cards on Android.',
   },

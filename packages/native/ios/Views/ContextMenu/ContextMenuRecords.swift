@@ -5,6 +5,8 @@ internal final class ContextMenuActionRecord: Record {
   @Field var id: String = ""
   @Field var title: String = ""
   @Field var systemImage: String?
+  /// An image in the app's asset catalog — an app icon. Wins over `systemImage`.
+  @Field var image: String?
   @Field var destructive: Bool = false
 
   required init() {}

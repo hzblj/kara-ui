@@ -1,5 +1,6 @@
-export * from './countdown'
+export * from './drawable-icon'
 export * from './fab-menu'
+export * from './icon-view'
 export * from './modifiers'
 export * from './ripple-configuration'
 export * from './tooltip-box'

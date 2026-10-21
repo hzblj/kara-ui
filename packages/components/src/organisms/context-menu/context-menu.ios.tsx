@@ -1,24 +1,46 @@
-import {Button, ContextMenu as SwiftUIContextMenu} from '@expo/ui/swift-ui'
+import {iconResourceName} from '@hzblj/kara-native'
+import {
+  type ContextMenuItem,
+  ContextMenu as NativeContextMenu,
+  ContextMenuExclusion as NativeContextMenuExclusion,
+} from '@hzblj/kara-native/swift-ui'
+import {useSx} from '@hzblj/kara-sx'
+import {useCallback, useMemo} from 'react'
+import type {ContextMenuComponent, ContextMenuExclusionProps, ContextMenuProps} from './context-menu.types'
 
-import {useHostGuard} from '../../host-context'
-import type {ContextMenuComponent, ContextMenuProps} from './context-menu.types'
+const ContextMenuRoot = ({actions, children, onPreviewPress, preview, testID, ...sx}: ContextMenuProps) => {
+  const style = useSx(sx)
 
-export const ContextMenu: ContextMenuComponent = ({actions, children}: ContextMenuProps) => {
-  useHostGuard('ContextMenu')
+  /** The native side hands back an id; the index is the one identity every action has. */
+  const items = useMemo<ContextMenuItem[]>(
+    () =>
+      actions.map((action, index) => ({
+        destructive: action.destructive,
+        id: String(index),
+        image: action.icon ? iconResourceName(action.icon) : undefined,
+        title: action.label,
+      })),
+    [actions]
+  )
+
+  const onSelectItem = useCallback((id: string) => actions[Number(id)]?.onPress(), [actions])
 
   return (
-    <SwiftUIContextMenu>
-      <SwiftUIContextMenu.Items>
-        {actions.map(action => (
-          <Button
-            key={action.label}
-            label={action.label}
-            onPress={action.onPress}
-            role={action.destructive ? 'destructive' : 'default'}
-          />
-        ))}
-      </SwiftUIContextMenu.Items>
-      <SwiftUIContextMenu.Trigger>{children}</SwiftUIContextMenu.Trigger>
-    </SwiftUIContextMenu>
+    <NativeContextMenu
+      items={items}
+      onPreviewPress={onPreviewPress}
+      onSelectItem={onSelectItem}
+      preview={preview}
+      style={style}
+      testID={testID}
+    >
+      {children}
+    </NativeContextMenu>
   )
 }
+
+const Exclusion = ({children}: ContextMenuExclusionProps) => (
+  <NativeContextMenuExclusion>{children}</NativeContextMenuExclusion>
+)
+
+export const ContextMenu: ContextMenuComponent = Object.assign(ContextMenuRoot, {Exclusion})

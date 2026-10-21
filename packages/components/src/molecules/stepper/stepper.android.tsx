@@ -1,8 +1,8 @@
 import {useCallback} from 'react'
 import {HStack} from '../../atoms/h-stack'
-import {IconButton} from '../../atoms/icon-button'
 import {Spacer} from '../../atoms/spacer'
 import {Text} from '../../atoms/text'
+import {GlyphButton} from '../../glyph'
 import {useHostGuard} from '../../host-context'
 import type {StepperComponent, StepperProps} from './stepper.types'
 
@@ -23,9 +23,9 @@ export const Stepper: StepperComponent = ({
     <HStack align="center" spacing="s8" wide>
       <Text>{label}</Text>
       <Spacer />
-      <IconButton disabled={value <= min} name="close" onPress={onDecrement} />
+      <GlyphButton accessibilityLabel="Decrement" disabled={value <= min} name="minus" onPress={onDecrement} />
       <Text variant="labelMedium">{String(value)}</Text>
-      <IconButton disabled={value >= max} name="add" onPress={onIncrement} />
+      <GlyphButton accessibilityLabel="Increment" disabled={value >= max} name="plus" onPress={onIncrement} />
     </HStack>
   )
 }

@@ -1,6 +1,7 @@
 import {
   Alert,
   Badge,
+  Box,
   Card,
   Checkbox,
   Collapsible,
@@ -12,6 +13,7 @@ import {
   List,
   ListItem,
   Progress,
+  RnIcon,
   Sheet,
   Slider,
   Spacer,
@@ -80,14 +82,25 @@ export const TextFieldSection = () => (
   </Island>
 )
 
+/**
+ * The same SVGs in both tiers: `Icon` inside a native host, `RnIcon` in React Native layout beneath it. `share` is the
+ * platform variant — `share.android.svg` replaces `share.svg` on Android.
+ */
 export const IconSection = () => (
-  <Island>
-    <HStack spacing="s12" wide>
+  <Box gap="s12">
+    <Island>
+      <HStack spacing="s12" wide>
+        {ICONS.map(name => (
+          <Icon key={name} name={name} />
+        ))}
+      </HStack>
+    </Island>
+    <Box flexDirection="row" gap="s12">
       {ICONS.map(name => (
-        <Icon key={name} name={name} />
+        <RnIcon key={name} name={name} />
       ))}
-    </HStack>
-  </Island>
+    </Box>
+  </Box>
 )
 
 export const BadgeSection = () => (
@@ -128,13 +141,14 @@ export const CollapsibleSection = () => {
   )
 }
 
+/** A list scrolls, so its island takes a height rather than sizing to it — see `ListProps`. */
+const LIST_HEIGHT = {height: 220}
+
 export const ListSection = () => (
-  <Island>
+  <Island matchContents={false} style={LIST_HEIGHT}>
     <List>
       <ListItem icon="home" onPress={() => undefined} subtitle="With chevron" title="Tappable row" />
-      <Divider />
       <ListItem icon="settings" subtitle="No chevron" title="Plain row" />
-      <Divider />
       <ListItem title="Title only" />
     </List>
   </Island>
@@ -150,13 +164,13 @@ export const SheetAlertSection = () => {
         <HStack onPress={() => setSheetVisible(true)} py="s8" wide>
           <Text color="content.accent">Open sheet</Text>
           <Spacer />
-          <Icon color="content.accent" name="chevronRight" size="s16" />
+          <Icon color="content.accent" name="chevron-right" size="s16" />
         </HStack>
         <Divider />
         <HStack onPress={() => setAlertVisible(true)} py="s8" wide>
           <Text color="content.destructive">Open alert</Text>
           <Spacer />
-          <Icon color="content.destructive" name="chevronRight" size="s16" />
+          <Icon color="content.destructive" name="chevron-right" size="s16" />
         </HStack>
         <Sheet onDismiss={() => setSheetVisible(false)} visible={sheetVisible}>
           <VStack p="s24" spacing="s8">

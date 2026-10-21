@@ -2525,17 +2525,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@expo/vector-icons@npm:^15.1.1":
-  version: 15.1.1
-  resolution: "@expo/vector-icons@npm:15.1.1"
-  peerDependencies:
-    expo-font: ">=14.0.4"
-    react: "*"
-    react-native: "*"
-  checksum: 10c0/fdd50c90484934204b90d345904fa69ca788a5de704d62b3cb580c52aa4cf4bffe1c05c509d043cf2b6842f1bdad6b78585524f3c6ae5f77e36385d83c0aa577
-  languageName: node
-  linkType: hard
-
 "@expo/ws-tunnel@npm:^2.0.0":
   version: 2.0.1
   resolution: "@expo/ws-tunnel@npm:2.0.1"
@@ -2606,7 +2595,6 @@ __metadata:
   resolution: "@hzblj/kara-components@workspace:packages/components"
   dependencies:
     "@expo/ui": "npm:~57.0.18"
-    "@expo/vector-icons": "npm:^15.1.1"
     "@hzblj/kara-native": "workspace:^"
     "@hzblj/kara-sx": "workspace:^"
     "@hzblj/kara-theme": "workspace:^"
@@ -2626,7 +2614,6 @@ __metadata:
     typescript: "npm:~7.0.2"
   peerDependencies:
     "@expo/ui": ~57.0.0
-    "@expo/vector-icons": "*"
     "@shopify/flash-list": ">=2.0.0"
     expo: ~57.0.0
     expo-haptics: "*"
@@ -2654,11 +2641,14 @@ __metadata:
   resolution: "@hzblj/kara-native@workspace:packages/native"
   dependencies:
     "@expo/ui": "npm:~57.0.18"
+    "@hzblj/kara-expo-plugin": "workspace:^"
+    "@material-symbols/svg-400": "npm:^0.48.0"
     "@types/react": "npm:~19.2.18"
     expo: "npm:~57.0.22"
     react: "npm:19.2.3"
     react-native: "npm:0.86.3"
     react-native-builder-bob: "npm:^0.43.0"
+    sf-symbols-typescript: "npm:^2.2.0"
     typescript: "npm:~7.0.2"
   peerDependencies:
     "@expo/ui": ~57.0.0
@@ -2673,8 +2663,8 @@ __metadata:
   resolution: "@hzblj/kara-router@workspace:packages/router"
   dependencies:
     "@expo/ui": "npm:~57.0.18"
-    "@expo/vector-icons": "npm:^15.1.1"
     "@hzblj/kara-components": "workspace:^"
+    "@hzblj/kara-native": "workspace:^"
     "@hzblj/kara-theme": "workspace:^"
     "@storybook/react-native": "npm:^10.6.0"
     "@types/react": "npm:~19.2.18"
@@ -2683,11 +2673,9 @@ __metadata:
     react: "npm:19.2.3"
     react-native: "npm:0.86.3"
     react-native-builder-bob: "npm:^0.43.0"
-    sf-symbols-typescript: "npm:^2.2.0"
     storybook: "npm:^10.6.0"
     typescript: "npm:~7.0.2"
   peerDependencies:
-    "@expo/vector-icons": "*"
     expo-router: "*"
     react: "*"
     react-native: "*"
@@ -2734,7 +2722,6 @@ __metadata:
   resolution: "@hzblj/kara-ui@workspace:packages/kara-ui"
   dependencies:
     "@expo/ui": "npm:~57.0.18"
-    "@expo/vector-icons": "npm:^15.1.1"
     "@hzblj/kara-components": "workspace:^"
     "@hzblj/kara-expo-plugin": "workspace:^"
     "@hzblj/kara-native": "workspace:^"
@@ -2755,7 +2742,6 @@ __metadata:
     typescript: "npm:~7.0.2"
   peerDependencies:
     "@expo/ui": ~57.0.0
-    "@expo/vector-icons": "*"
     "@shopify/flash-list": ">=2.0.0"
     expo: ~57.0.0
     expo-haptics: "*"
@@ -2767,6 +2753,8 @@ __metadata:
   peerDependenciesMeta:
     expo-router:
       optional: true
+  bin:
+    kara-icons: ./bin/kara-icons.js
   languageName: unknown
   linkType: soft
 
@@ -2892,6 +2880,13 @@ __metadata:
     globby: "npm:^11.0.0"
     read-yaml-file: "npm:^1.1.0"
   checksum: 10c0/f05907d1174ae28861eaa06d0efdc144f773d9a4b8b65e1e7cdc01eb93361d335351b4a336e05c6aac02661be39e8809a3f7ad28bc67b6b338071434ab442130
+  languageName: node
+  linkType: hard
+
+"@material-symbols/svg-400@npm:^0.48.0":
+  version: 0.48.0
+  resolution: "@material-symbols/svg-400@npm:0.48.0"
+  checksum: 10c0/209699165d4e6ca1b59f00da791c85deb1e196cee7304e545067429ffb6f247fe2e0d7dacb8997c0357fcbd41e754d6b059f92b3131ff291917e47331b03cd1d
   languageName: node
   linkType: hard
 
@@ -7141,7 +7136,6 @@ __metadata:
   dependencies:
     "@babel/core": "npm:^7.29.7"
     "@expo/ui": "npm:~57.0.18"
-    "@expo/vector-icons": "npm:^15.1.1"
     "@gorhom/bottom-sheet": "npm:^5.2.14"
     "@hzblj/kara-ui": "workspace:*"
     "@react-native-community/datetimepicker": "npm:9.1.0"

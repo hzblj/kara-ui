@@ -13,7 +13,7 @@ const meta = {
   parameters: {
     notes:
       'Liquid Glass on iOS 26, as a UIKit view — no host, so it is cheap enough for every cell of a list. Below iOS 26 ' +
-      'and on Android it is a plain capsule of the tint (or `fill.tertiary`). The glass is set only once the view and ' +
+      'and on Android it is a plain capsule of the tint (or the translucent glass fill). The glass is set only once the view and ' +
       'every ancestor are fully opaque, so it materialises at the end of a fade rather than during one. Interactive ' +
       'glass swells toward the finger and carries its children; the press itself belongs to a `Pressable` around it.',
   },

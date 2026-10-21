@@ -5,7 +5,7 @@ import type {ReactNode} from 'react'
 /**
  * iOS 26 Liquid Glass around a React Native subtree, shaped as a capsule — the React Native tier, so it needs no host
  * and costs next to nothing in a list cell. Where there is no Liquid Glass (Android, and iOS before 26) it draws a
- * capsule of `tint` instead, or of `fill.tertiary` when there is none.
+ * capsule of `tint` instead, or of the glass buttons' translucent fill (`btn.bg.glass.base`) when there is none.
  */
 export type GlassViewProps = ResponsiveViewSx & {
   /** React Native views. Give them `pointerEvents="none"` when `interactive`, so the press reaches the `Pressable`. */

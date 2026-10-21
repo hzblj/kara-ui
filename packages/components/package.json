@@ -66,7 +66,6 @@
   },
   "peerDependencies": {
     "@expo/ui": "~57.0.0",
-    "@expo/vector-icons": "*",
     "@shopify/flash-list": ">=2.0.0",
     "expo": "~57.0.0",
     "expo-haptics": "*",
@@ -77,7 +76,6 @@
   },
   "devDependencies": {
     "@expo/ui": "~57.0.18",
-    "@expo/vector-icons": "^15.1.1",
     "@shopify/flash-list": "^2.3.2",
     "@storybook/react-native": "^10.6.0",
     "@types/react": "~19.2.18",

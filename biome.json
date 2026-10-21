@@ -55,7 +55,8 @@
       "includes": [
         "**/babel.config.js",
         "**/metro.config.js",
-        "**/app.plugin.js"
+        "**/app.plugin.js",
+        "**/bin/*.js"
       ],
       "linter": {
         "rules": {
@@ -69,7 +70,9 @@
       "includes": [
         "packages/components/src/host-context.tsx",
         "packages/components/src/platform-support.ts",
-        "scripts/**"
+        "scripts/**",
+        "packages/expo-plugin/src/cli.ts",
+        "packages/*/scripts/**"
       ],
       "linter": {
         "rules": {

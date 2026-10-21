@@ -83,7 +83,9 @@ public final class ContextMenuView: ExpoView, UIContextMenuInteractionDelegate {
           return nil
         }
         let children = self.items.map { action -> UIAction in
-          let image = action.systemImage.flatMap { UIImage(systemName: $0) }
+          let image =
+            action.image.flatMap { UIImage(named: $0)?.withRenderingMode(.alwaysTemplate) }
+            ?? action.systemImage.flatMap { UIImage(systemName: $0) }
           return UIAction(
             title: action.title,
             image: image,

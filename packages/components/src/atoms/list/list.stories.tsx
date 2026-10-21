@@ -2,8 +2,7 @@ import type {Meta, StoryObj} from '@storybook/react-native'
 import {fn} from 'storybook/test'
 
 import {ListItem} from '../../molecules/list-item'
-import {insideIsland} from '../../story-decorators'
-import {Divider} from '../divider'
+import {insideIslandOfHeight} from '../../story-decorators'
 import {List} from './list'
 
 const settle = () => new Promise<void>(resolve => setTimeout(resolve, 1200))
@@ -16,7 +15,8 @@ const settle = () => new Promise<void>(resolve => setTimeout(resolve, 1200))
 const meta = {
   args: {children: null},
   component: List,
-  decorators: [insideIsland],
+  // A list scrolls, so its island cannot size to it — on Android Compose throws on the infinite height.
+  decorators: [insideIslandOfHeight(240)],
   parameters: {
     notes:
       'A native `List` / `LazyColumn`, so its rows must be native too. `onRefresh` is async by design: the ' +
@@ -34,9 +34,7 @@ export const Default: Story = {
   render: args => (
     <List {...args}>
       <ListItem icon="home" onPress={fn()} subtitle="With chevron" title="Tappable row" />
-      <Divider />
       <ListItem icon="settings" subtitle="No chevron" title="Plain row" />
-      <Divider />
       <ListItem title="Title only" />
     </List>
   ),

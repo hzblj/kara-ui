@@ -8,6 +8,7 @@
  * quietly become `any` and everything would compile, so each `@ts-expect-error` is there to prove the types are real.
  */
 import {execFileSync} from 'node:child_process'
+import {existsSync} from 'node:fs'
 import {mkdir, readdir, readFile, rm, writeFile} from 'node:fs/promises'
 import path from 'node:path'
 
@@ -27,18 +28,21 @@ const COMMON_REQUIRED = ['package.json', 'README.md']
 const LIBRARY_REQUIRED = ['lib/module/index.js', 'lib/typescript/index.d.ts']
 
 const REQUIRED = {
-  '@hzblj/kara-expo-plugin': ['app.plugin.js', 'build/index.js', 'build/index.d.ts'],
+  '@hzblj/kara-expo-plugin': ['app.plugin.js', 'build/index.js', 'build/index.d.ts', 'build/cli.js'],
   '@hzblj/kara-native': [
     ...LIBRARY_REQUIRED,
     'expo-module.config.json',
     'ios/KaraUI.podspec',
     'android/build.gradle',
+    'android/src/main/res/drawable/kara_glyph_search.xml',
+    'THIRD_PARTY_NOTICES.md',
     'lib/typescript/swift-ui/index.d.ts',
     'lib/typescript/jetpack-compose/index.d.ts',
   ],
   '@hzblj/kara-ui': [
     ...LIBRARY_REQUIRED,
     'app.plugin.js',
+    'bin/kara-icons.js',
     'lib/typescript/router.d.ts',
     'lib/typescript/swift-ui.d.ts',
   ],
@@ -49,7 +53,13 @@ const FORBIDDEN = [/\.stories\.tsx?$/, /contract\.check/, /story-decorators/, /^
 const packages = []
 
 for (const directory of await readdir(path.join(ROOT, 'packages'))) {
-  const manifest = JSON.parse(await readFile(path.join(ROOT, 'packages', directory, 'package.json'), 'utf8'))
+  const manifestPath = path.join(ROOT, 'packages', directory, 'package.json')
+
+  if (!existsSync(manifestPath)) {
+    continue
+  }
+
+  const manifest = JSON.parse(await readFile(manifestPath, 'utf8'))
 
   if (!manifest.private) {
     packages.push({directory, name: manifest.name})
@@ -108,7 +118,9 @@ const consumer = `import {
   Button,
   type ColorToken,
   defineTheme,
+  Icon,
   KaraProvider,
+  RnIcon,
   native,
   Screen,
   Text,
@@ -146,11 +158,29 @@ export const App = () => {
 
 export const Layout = () => (
   <Tabs>
-    <Tabs.Screen icon="home" name="index" title="Home" />
+    <Tabs.Screen icon="bolt" name="index" title="Home" />
   </Tabs>
 )
 
 export const navigation = navigationTheme
+
+// What the config plugin writes into kara-icons.d.ts for an icon folder holding bolt.svg and arrow-left.svg.
+declare global {
+  interface KaraIcons {
+    bolt: true
+    'arrow-left': true
+  }
+}
+
+export const Icons = () => (
+  <>
+    <Icon name="bolt" />
+    <RnIcon color="content.accent" name="arrow-left" size="s16" />
+  </>
+)
+
+// @ts-expect-error — not in the app's icon folder
+export const MissingIcon = () => <Icon name="heart" />
 
 // @ts-expect-error — a raw number is not a spacing token
 export const RawSpacing = () => <VStack p={16} />

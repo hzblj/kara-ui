@@ -2,6 +2,7 @@ import {HStack} from '../../atoms/h-stack'
 import {Icon} from '../../atoms/icon'
 import {Spacer} from '../../atoms/spacer'
 import {Text} from '../../atoms/text'
+import {Glyph} from '../../glyph'
 import type {LabeledContentComponent, LabeledContentProps} from './labeled-content.types'
 
 const TrailingValue = ({value}: {value: string}) => (
@@ -23,6 +24,6 @@ export const LabeledContent: LabeledContentComponent = ({
     <Text variant="body">{label}</Text>
     <Spacer />
     {children ?? (value === undefined ? null : <TrailingValue value={value} />)}
-    {onPress ? <Icon color="content.quaternary" name="chevronRight" size="s16" /> : null}
+    {onPress ? <Glyph color="content.quaternary" name="chevronRight" size="s16" /> : null}
   </HStack>
 )

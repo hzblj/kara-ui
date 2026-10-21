@@ -1,8 +1,8 @@
 import {HStack} from '../../atoms/h-stack'
-import {Icon} from '../../atoms/icon'
 import {Spacer} from '../../atoms/spacer'
 import {Text} from '../../atoms/text'
 import {VStack} from '../../atoms/v-stack'
+import {Glyph} from '../../glyph'
 import {useHostGuard} from '../../host-context'
 import type {RadioGroupComponent, RadioGroupProps} from './radio-group.types'
 
@@ -15,7 +15,7 @@ export const RadioGroup: RadioGroupComponent = ({onValueChange, options, value}:
         <HStack align="center" key={option.value} onPress={() => onValueChange?.(option.value)} py="s8" wide>
           <Text>{option.label}</Text>
           <Spacer />
-          {option.value === value ? <Icon color="content.accent" name="check" size="s20" /> : null}
+          {option.value === value ? <Glyph color="content.accent" name="check" size="s20" /> : null}
         </HStack>
       ))}
     </VStack>

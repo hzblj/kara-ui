@@ -7,6 +7,9 @@ export type {ScrollEdgeEffect, ScrollEdgeScrollableProps} from '@hzblj/kara-nati
 /**
  * Bars over one React Native scroll view, with the iOS 26 scroll edge effect under them — the system's progressive
  * blur where content scrolls past a bar. The React Native tier: it needs no host.
+ *
+ * A screen-level container: wrap the screen's scroll view with it. Mounted inside a cell of a virtualized list on iOS
+ * it draws only its bottom bar — the hosted scroll view and the top bar stay blank.
  */
 export type ScrollEdgeContainerProps = ResponsiveViewSx & {
   /**

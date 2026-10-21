@@ -1,24 +1,18 @@
 import {
   Box,
-  Countdown,
+  ContextMenu,
   FabMenu,
   GlassView,
   Island,
   type MenuAction,
   NavigationBar,
   Pressable,
-  RnContextMenu,
   RnScrollView,
   RnText,
   RnTooltip,
   ScrollEdgeContainer,
 } from '@hzblj/kara-ui'
 import {useState} from 'react'
-
-const HOUR = 60 * 60 * 1000
-
-/** Fixed per mount, so the countdown keeps running towards one moment while the gallery re-renders around it. */
-const useDeadline = (fromNow: number) => useState(() => Date.now() + fromNow)[0]
 
 const noop = () => undefined
 
@@ -38,7 +32,7 @@ export const GlassViewSection = () => (
       </RnText>
     </GlassView>
     <Pressable onPress={noop}>
-      <GlassView interactive px="s16" py="s8" tint="fill.tertiary">
+      <GlassView interactive px="s16" py="s8">
         <RnText color="content.on.bg" pointerEvents="none" variant="labelMedium">
           Interactive
         </RnText>
@@ -46,18 +40,6 @@ export const GlassViewSection = () => (
     </Pressable>
   </Box>
 )
-
-export const CountdownSection = () => {
-  const soon = useDeadline(HOUR / 2)
-  const later = useDeadline(26 * HOUR)
-
-  return (
-    <Box gap="s8">
-      <Countdown endsAt={soon} variant="headingS" />
-      <Countdown color="content.accent" endsAt={later} variant="body" />
-    </Box>
-  )
-}
 
 export const NavigationBarSection = () => (
   <Box bg="surface.primary" borderRadius="medium" overflow="hidden">
@@ -111,8 +93,8 @@ export const RnTooltipSection = () => {
   )
 }
 
-export const RnContextMenuSection = () => (
-  <RnContextMenu
+export const ContextMenuSection = () => (
+  <ContextMenu
     actions={MENU_ACTIONS}
     bg="surface.primary"
     borderRadius="medium"
@@ -130,7 +112,7 @@ export const RnContextMenuSection = () => (
     <RnText color="content.secondary" variant="footnote">
       A React Native subtree with a native context menu and a custom preview.
     </RnText>
-  </RnContextMenu>
+  </ContextMenu>
 )
 
 export const FabMenuSection = () => (

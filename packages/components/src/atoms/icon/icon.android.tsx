@@ -1,17 +1,21 @@
-import MaterialIcons from '@expo/vector-icons/MaterialIcons'
+import {iconResourceName} from '@hzblj/kara-native'
+import {DrawableIcon} from '@hzblj/kara-native/jetpack-compose'
 import {spacing, useAppTheme} from '@hzblj/kara-theme'
-import {useHostGuard} from '../../host-context'
-import {RnView} from '../rn-view'
-import type {IconComponent, IconProps} from './icon.types'
-import {MATERIAL_ICONS} from './icon-names'
 
-export const Icon: IconComponent = ({color = 'content.primary', name, size = 's24', testID}: IconProps) => {
+import {useHostGuard} from '../../host-context'
+import type {IconComponent, IconProps} from './icon.types'
+
+/** The app's icon as the vector drawable the config plugin generated from the SVG, drawn by Material's `Icon`. */
+export const Icon: IconComponent = ({accessibilityLabel, color = 'content.primary', name, size = 's24'}: IconProps) => {
   useHostGuard('Icon')
   const theme = useAppTheme()
 
   return (
-    <RnView>
-      <MaterialIcons color={theme.color(color)} name={MATERIAL_ICONS[name]} size={spacing[size]} testID={testID} />
-    </RnView>
+    <DrawableIcon
+      accessibilityLabel={accessibilityLabel}
+      iconColor={theme.color(color)}
+      iconSize={spacing[size]}
+      resourceName={iconResourceName(name)}
+    />
   )
 }

@@ -64,6 +64,11 @@ number or hex does not type-check. Layout keys also take `{base, sm, md, lg, xl}
 `ThemeConfig` (`defineTheme`): colour overrides, the app's own font faces, the Android seed, `dynamicColor` (Material
 You). Text is set in the platform's face (SF Pro / Roboto) unless the app names its own — the library ships no fonts.
 
+**Icons are the app's SVGs, never the library's.** `plugins: [['@hzblj/kara-ui', {icons: {source}}]]` turns every
+SVG into an iOS asset-catalog image and an Android vector drawable at prebuild, and writes `kara-icons.d.ts` (the
+global `KaraIcons`) whenever the config is read. No `@expo/vector-icons`, no icon font. The few glyphs kara's own
+chrome draws are internal (`packages/native/glyphs.json`).
+
 **Native views need a host.** `@expo/ui`-backed atoms only render inside `<Screen>` or `<Island>`; outside one they
 silently disappear (dev warns via `useHostGuard`).
 

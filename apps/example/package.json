@@ -7,16 +7,16 @@
     "start": "expo start --dev-client",
     "ios": "expo run:ios",
     "android": "expo run:android",
-    "expo:prebuild": "expo prebuild --clean",
+    "expo:prebuild": "yarn workspace @hzblj/kara-expo-plugin build && expo prebuild --clean",
     "clean:native": "rm -rf android ios .expo",
     "lint": "yarn run -T concurrently \"yarn biome:check\" \"yarn tsc:check\"",
     "lint:fix": "yarn run -T biome check --write .",
     "biome:check": "yarn run -T biome check .",
-    "tsc:check": "yarn run -T concurrently \"tsc -p ./tsconfig.ios.json\" \"tsc -p ./tsconfig.android.json\""
+    "tsc:check": "yarn run -T concurrently \"tsc -p ./tsconfig.ios.json\" \"tsc -p ./tsconfig.android.json\"",
+    "icons": "kara-icons ./assets/icons"
   },
   "dependencies": {
     "@expo/ui": "~57.0.18",
-    "@expo/vector-icons": "^15.1.1",
     "@gorhom/bottom-sheet": "^5.2.14",
     "@hzblj/kara-ui": "workspace:*",
     "@react-native-community/datetimepicker": "9.1.0",

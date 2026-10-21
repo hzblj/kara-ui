@@ -15,7 +15,7 @@ const ControlledPicker = (args: PickerProps) => {
   const [, updateArgs] = useArgs<PickerProps>()
 
   return (
-    <Box bg="surface.primary" borderRadius="medium" overflow="hidden">
+    <Box bg="surface.primary" borderRadius="medium" p="s12">
       <Picker {...args} onValueChange={value => updateArgs({value})} />
     </Box>
   )

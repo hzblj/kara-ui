@@ -85,7 +85,7 @@ export const PickerSection = () => {
   const [size, setSize] = useState('md')
 
   return (
-    <Box bg="surface.primary" borderRadius="medium" overflow="hidden">
+    <Box bg="surface.primary" borderRadius="medium" p="s12">
       <Picker onValueChange={setSize} options={PICKER_OPTIONS} value={size} />
     </Box>
   )
@@ -96,7 +96,7 @@ export const DatePickerSection = () => {
 
   return (
     <Box gap="s8">
-      <Box bg="surface.primary" borderRadius="medium" overflow="hidden">
+      <Box bg="surface.primary" borderRadius="medium" p="s12">
         <DatePicker onValueChange={setDate} value={date} />
       </Box>
       <RnText color="content.secondary" variant="footnote">

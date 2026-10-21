@@ -21,7 +21,7 @@ const FormSection = ({children, footer, title}: FormSectionProps) => (
         {title}
       </Text>
     ) : null}
-    <Card>{children}</Card>
+    <Card wide>{children}</Card>
     {footer ? (
       <Text color="content.tertiary" variant="footnote">
         {footer}

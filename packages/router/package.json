@@ -60,18 +60,16 @@
   },
   "dependencies": {
     "@hzblj/kara-components": "workspace:^",
-    "@hzblj/kara-theme": "workspace:^",
-    "sf-symbols-typescript": "^2.2.0"
+    "@hzblj/kara-native": "workspace:^",
+    "@hzblj/kara-theme": "workspace:^"
   },
   "peerDependencies": {
-    "@expo/vector-icons": "*",
     "expo-router": "*",
     "react": "*",
     "react-native": "*"
   },
   "devDependencies": {
     "@expo/ui": "~57.0.18",
-    "@expo/vector-icons": "^15.1.1",
     "@storybook/react-native": "^10.6.0",
     "@types/react": "~19.2.18",
     "expo": "~57.0.22",

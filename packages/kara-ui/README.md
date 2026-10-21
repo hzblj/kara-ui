@@ -20,7 +20,7 @@ package includes a native module.
 ## Install
 
 ```bash
-npx expo install @hzblj/kara-ui @expo/ui @expo/vector-icons @shopify/flash-list expo-haptics expo-image react-native-reanimated react-native-worklets
+npx expo install @hzblj/kara-ui @expo/ui @shopify/flash-list expo-haptics expo-image react-native-reanimated react-native-worklets
 # optional, for `@hzblj/kara-ui/router` (native tabs)
 npx expo install expo-router
 ```
@@ -102,34 +102,64 @@ device.
 
 `materialSeed: null` is the halfway house: the wallpaper's neutrals and controls, your own accent.
 
-### iOS semantic colours (optional config plugin)
+### iOS semantic colours
 
 The theme decides which colour a token *uses*. To redefine what a UIKit semantic colour *is*, app-wide
 and natively (e.g. `labelColor`), use the config plugin:
 
-```json
-{
-  "plugins": [["@hzblj/kara-ui", {"iosSemanticColors": {"file": "./ios-colors.json"}}]]
-}
+```ts
+plugins: [['@hzblj/kara-ui', {icons: {source: './assets/icons'}, iosSemanticColors: {file: './ios-colors.json'}}]]
 ```
 
 `ios-colors.json` maps semantic names (with their `Color` suffix) to `{light, dark, highContrastLight?, highContrastDark?}`.
 It has no Android counterpart; use `colors` in the theme for both platforms.
 
+## Icons
+
+kara-ui ships no icon set — your app brings its own SVGs, and kara turns them into **native assets** on both
+platforms. No icon font, no JavaScript rendering.
+
+```ts
+// app.config.ts
+plugins: [['@hzblj/kara-ui', {icons: {source: './assets/icons'}}]]
+```
+
+```
+assets/icons/
+  bolt.svg            → <Icon name="bolt" />
+  share.svg           → iOS
+  share.android.svg   → Android's own share glyph
+```
+
+```tsx
+<Icon name="bolt" />                       // inside <Screen> / <Island>: SwiftUI Image · Compose Icon
+<RnIcon name="bolt" color="content.accent" />  // anywhere: UIImageView · ImageView
+<Tabs.Screen icon="home" selectedIcon="home-filled" name="index" title="Home" />
+```
+
+- At prebuild every SVG becomes a template image set in the iOS asset catalog (vector data kept, so it scales crisply)
+  and a vector drawable in Android's resources. A new or changed icon needs `npx expo prebuild`.
+- Whenever the app config is read — `expo start` included — the plugin writes `kara-icons.d.ts`, so `name` only accepts
+  icons that exist. `npx kara-icons ./assets/icons` does the same without Expo (CI).
+- One single-colour glyph per file, made of `<path>`s (`fill-rule="evenodd"` is fine). Groups, clips, masks and strokes
+  must be flattened first — the plugin fails loudly rather than shipping a broken icon. The platform tints every icon
+  with the `color` token.
+- `x.ios.svg` / `x.android.svg` replace `x.svg` on that platform, for glyphs that differ (share, back).
+
 ## Components
 
 | Tier | |
 | --- | --- |
-| Atoms | `Box`, `Text`, `Button`, `IconButton`, `TextField`, `Switch`, `Checkbox`, `Slider`, `Picker`, `DatePicker`, `ColorPicker`, `SegmentedControl`, `Icon`, `Image`, `Avatar`, `Badge`, `Chip`, `Card`, `Surface`, `Progress`, `ActivityIndicator`, `Skeleton`, `Fab`, `Divider`, `Spacer`, `VStack` / `HStack` / `ZStack`, `ScrollView`, `List`, `Island`, `Pressable`, `GlassView`, `Countdown` |
-| React Native tier | `RnView`, `RnText`, `RnScrollView`, `RnFlatList`, `RnSectionList`, `FlashList` — the same `sx` surface on plain React Native views |
+| Atoms | `Box`, `Text`, `Button`, `IconButton`, `TextField`, `Switch`, `Checkbox`, `Slider`, `Picker`, `DatePicker`, `ColorPicker`, `SegmentedControl`, `Icon`, `Image`, `Avatar`, `Badge`, `Chip`, `Card`, `Surface`, `Progress`, `ActivityIndicator`, `Skeleton`, `Fab`, `Divider`, `Spacer`, `VStack` / `HStack` / `ZStack`, `ScrollView`, `List`, `Island`, `Pressable`, `GlassView` |
+| React Native tier | `RnView`, `RnText`, `RnIcon`, `RnScrollView`, `RnFlatList`, `RnSectionList`, `FlashList` — the same `sx` surface on plain React Native views |
 | Molecules | `Label`, `LabeledContent`, `ListItem`, `Link`, `SearchBar`, `EmptyState`, `Collapsible`, `Pager`, `RadioGroup`, `Stepper`, `Tooltip`, `RnTooltip`, `NavigationBar`, `ScrollEdgeContainer` |
-| Organisms | `Sheet`, `ActionSheet`, `Alert`, `Menu`, `ContextMenu`, `RnContextMenu`, `Form`, `SwipeActions`, `Snackbar`, `FabMenu` |
+| Organisms | `Sheet`, `ActionSheet`, `Alert`, `Menu`, `ContextMenu`, `Form`, `SwipeActions`, `Snackbar`, `FabMenu` |
 | Templates | `Screen` |
 
 A few come from the package's own native module rather than `@expo/ui`: `GlassView` (iOS 26 Liquid
 Glass around React Native children), `ScrollEdgeContainer` (the iOS 26 scroll edge effect under your
-bars), `Countdown` (ticks and rolls its digits natively), `NavigationBar` (real `UINavigationBar`
-items in a sheet), `RnContextMenu` (long-press menu with a custom preview), `RnTooltip` (rich,
+bars), `NavigationBar` (real `UINavigationBar` items in a sheet), `ContextMenu` (long-press menu
+with a custom preview), `RnTooltip` (rich,
 controlled tooltip) and `FabMenu` (Material 3 Expressive on Android). Each falls back gracefully where
 the platform lacks the feature.
 
@@ -154,7 +184,7 @@ never need to depend on directly:
 | `@hzblj/kara-native` | The `KaraUI` Expo native module (Swift/Kotlin) and its bindings |
 | `@hzblj/kara-components` | Atoms, molecules, organisms, templates |
 | `@hzblj/kara-router` | `Tabs`, `navigationTheme` |
-| `@hzblj/kara-expo-plugin` | The optional config plugin |
+| `@hzblj/kara-expo-plugin` | The config plugin (icons, iOS semantic colours) and the `kara-icons` CLI |
 
 ## Development
 

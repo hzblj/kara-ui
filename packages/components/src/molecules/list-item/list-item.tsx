@@ -3,6 +3,7 @@ import {Icon} from '../../atoms/icon'
 import {Spacer} from '../../atoms/spacer'
 import {Text} from '../../atoms/text'
 import {VStack} from '../../atoms/v-stack'
+import {Glyph} from '../../glyph'
 import type {ListItemComponent, ListItemProps} from './list-item.types'
 
 export const ListItem: ListItemComponent = ({icon, onPress, subtitle, testID, title}: ListItemProps) => (
@@ -17,6 +18,6 @@ export const ListItem: ListItemComponent = ({icon, onPress, subtitle, testID, ti
       ) : null}
     </VStack>
     <Spacer />
-    {onPress ? <Icon color="content.quaternary" name="chevronRight" size="s16" /> : null}
+    {onPress ? <Glyph color="content.quaternary" name="chevronRight" size="s16" /> : null}
   </HStack>
 )

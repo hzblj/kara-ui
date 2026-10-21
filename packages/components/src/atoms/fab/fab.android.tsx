@@ -12,7 +12,10 @@ export const Fab: FabComponent = ({name, onPress}: FabProps) => {
 
   return (
     <FloatingActionButton containerColor={theme.color('fill.accent.primary')} onClick={onPress}>
-      <Icon color="content.on.bg" name={name} />
+      {/* `@expo/ui`'s FAB is slot-based: content outside `.Icon` is not composed at all. */}
+      <FloatingActionButton.Icon>
+        <Icon color="content.on.bg" name={name} />
+      </FloatingActionButton.Icon>
     </FloatingActionButton>
   )
 }

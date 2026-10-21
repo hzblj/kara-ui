@@ -6,7 +6,7 @@ import {Link} from './link'
 
 const meta = {
   args: {label: 'expo.dev', url: 'https://expo.dev'},
-  argTypes: {icon: {control: 'select', options: ['info', 'share', 'arrowRight']}},
+  argTypes: {icon: {control: 'select', options: ['info', 'share', 'arrow-right']}},
   component: Link,
   decorators: [insideIsland],
   parameters: {

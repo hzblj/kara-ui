@@ -2,8 +2,6 @@ import {
   ActionSheet,
   Button,
   ColorPicker,
-  ContextMenu,
-  Divider,
   Fab,
   Form,
   HStack,
@@ -14,6 +12,7 @@ import {
   Menu,
   type MenuAction,
   RadioGroup,
+  RnText,
   Stepper,
   Surface,
   SwipeActions,
@@ -24,6 +23,7 @@ import {
   VStack,
 } from '@hzblj/kara-ui'
 import {useState} from 'react'
+import {Platform} from 'react-native'
 
 const RADIO_OPTIONS = [
   {label: 'Automatic', value: 'auto'},
@@ -71,8 +71,14 @@ export const SurfaceSection = () => (
   </Island>
 )
 
+/**
+ * SwiftUI's `Form` scrolls like a `List`, so on iOS it gets a height to fill rather than sizing the island itself.
+ * Android's is a column of cards, which sizes itself.
+ */
+const FORM_ISLAND = Platform.OS === 'ios' ? {matchContents: false, style: {height: 420}} : {}
+
 export const FormSection = () => (
-  <Island>
+  <Island {...FORM_ISLAND}>
     <Form>
       <Form.Section footer="Sections are native on iOS, Cards on Android." title="Preferences">
         <Switch label="Notifications" value />
@@ -99,11 +105,6 @@ export const MenuSection = () => {
     <Island>
       <VStack spacing="s12" wide>
         <Menu actions={actions} label="Open menu" />
-        <ContextMenu actions={actions}>
-          <Surface bg="fill.tertiary" wide>
-            <Text variant="labelMedium">Long-press me</Text>
-          </Surface>
-        </ContextMenu>
         <HStack onPress={() => setActionSheetVisible(true)} py="s8" wide>
           <Text color="content.accent">Open action sheet</Text>
         </HStack>
@@ -139,8 +140,25 @@ export const TooltipSection = () => {
   )
 }
 
+/**
+ * Where a component has no Android implementation the gallery says so, rather than mounting the stub — which renders
+ * nothing and reports the gap as a dev error, the way any call site that forgot to branch on the platform would.
+ */
+/** A list scrolls, so its island takes a height rather than sizing to it — see `ListProps`. */
+const SWIPE_LIST_HEIGHT = {height: 200}
+
+const IosOnly = ({name}: {name: string}) => (
+  <RnText color="content.secondary" variant="footnote">
+    {name} is iOS only — SwiftUI has it, Compose does not.
+  </RnText>
+)
+
 export const ColorPickerSection = () => {
   const [color, setColor] = useState<string | null>('#FF5A1F')
+
+  if (Platform.OS !== 'ios') {
+    return <IosOnly name="ColorPicker" />
+  }
 
   return (
     <Island>
@@ -155,25 +173,27 @@ export const ColorPickerSection = () => {
   )
 }
 
-export const SwipeActionsSection = () => (
-  <Island>
-    <List>
-      <SwipeActions>
-        <ListItem subtitle="Swipe from the trailing edge" title="Swipe me" />
-        <SwipeActions.Actions>
-          <Button label="Delete" variant="destructive" />
-        </SwipeActions.Actions>
-      </SwipeActions>
-      <Divider />
-      <SwipeActions>
-        <ListItem subtitle="Leading edge, no full swipe" title="Swipe me too" />
-        <SwipeActions.Actions allowsFullSwipe={false} edge="leading">
-          <Button label="Pin" variant="secondary" />
-        </SwipeActions.Actions>
-      </SwipeActions>
-    </List>
-  </Island>
-)
+export const SwipeActionsSection = () =>
+  Platform.OS !== 'ios' ? (
+    <IosOnly name="SwipeActions" />
+  ) : (
+    <Island matchContents={false} style={SWIPE_LIST_HEIGHT}>
+      <List>
+        <SwipeActions>
+          <ListItem subtitle="Swipe from the trailing edge" title="Swipe me" />
+          <SwipeActions.Actions>
+            <Button label="Delete" variant="destructive" />
+          </SwipeActions.Actions>
+        </SwipeActions>
+        <SwipeActions>
+          <ListItem subtitle="Leading edge, no full swipe" title="Swipe me too" />
+          <SwipeActions.Actions allowsFullSwipe={false} edge="leading">
+            <Button label="Pin" variant="secondary" />
+          </SwipeActions.Actions>
+        </SwipeActions>
+      </List>
+    </Island>
+  )
 
 export const FabSection = () => (
   <Island>

@@ -1,7 +1,7 @@
 {
   "name": "@hzblj/kara-native",
   "version": "0.1.0",
-  "description": "The KaraUI Expo native module behind @hzblj/kara-ui: Liquid Glass, scroll edge effect, native countdown, context menu, tooltip, navigation bar and SwiftUI/Compose modifiers.",
+  "description": "The KaraUI Expo native module behind @hzblj/kara-ui: Liquid Glass, scroll edge effect, context menu with preview, tooltip, navigation bar, native icons and SwiftUI/Compose modifiers.",
   "author": "Jan Blazej",
   "license": "MIT",
   "repository": {
@@ -44,6 +44,7 @@
     "expo-module.config.json",
     "ios",
     "android",
+    "THIRD_PARTY_NOTICES.md",
     "!android/build/**",
     "!android/.gradle/**",
     "!ios/build/**",
@@ -59,7 +60,8 @@
     "lint": "yarn run -T concurrently \"yarn biome:check\" \"yarn tsc:check\"",
     "lint:fix": "yarn run -T biome check --write .",
     "biome:check": "yarn run -T biome check .",
-    "tsc:check": "yarn run -T concurrently \"tsc -p ./tsconfig.ios.json\" \"tsc -p ./tsconfig.android.json\""
+    "tsc:check": "yarn run -T concurrently \"tsc -p ./tsconfig.ios.json\" \"tsc -p ./tsconfig.android.json\"",
+    "glyphs:generate": "node ./scripts/generate-glyphs.mjs"
   },
   "react-native-builder-bob": {
     "source": "src",
@@ -82,6 +84,8 @@
   },
   "devDependencies": {
     "@expo/ui": "~57.0.18",
+    "@hzblj/kara-expo-plugin": "workspace:^",
+    "@material-symbols/svg-400": "^0.48.0",
     "@types/react": "~19.2.18",
     "expo": "~57.0.22",
     "react": "19.2.3",
@@ -91,5 +95,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "sf-symbols-typescript": "^2.2.0"
   }
 }

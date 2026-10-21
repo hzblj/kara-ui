@@ -1,6 +1,7 @@
 import {KaraProvider, useAppTheme} from '@hzblj/kara-ui'
 import {navigationTheme} from '@hzblj/kara-ui/router'
 import {ThemeProvider} from 'expo-router'
+import {StatusBar} from 'expo-status-bar'
 import {type ReactNode, useMemo} from 'react'
 import {GestureHandlerRootView} from 'react-native-gesture-handler'
 import {SafeAreaProvider} from 'react-native-safe-area-context'
@@ -11,13 +12,19 @@ const ROOT_STYLE = {flex: 1}
 
 /**
  * Sits *inside* `KaraProvider` so it maps the same `Theme` everything else sees — the system half of the palette is
- * resolved there, and a navigation theme built outside it would have nothing to resolve a system token into.
+ * resolved there, and a navigation theme built outside it would have nothing to resolve a system token into. The
+ * status bar follows the theme too: with the appearance picked in-app, the system's own guess can be the wrong one.
  */
 const NavigationTheme = ({children}: {children: ReactNode}) => {
   const theme = useAppTheme()
   const value = useMemo(() => navigationTheme(theme), [theme])
 
-  return <ThemeProvider value={value}>{children}</ThemeProvider>
+  return (
+    <ThemeProvider value={value}>
+      <StatusBar style={theme.dark ? 'light' : 'dark'} />
+      {children}
+    </ThemeProvider>
+  )
 }
 
 /** The accent themes are module-level constants, so switching one hands `KaraProvider` a stable config. */

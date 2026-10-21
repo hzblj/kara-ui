@@ -10,11 +10,11 @@ and `@hzblj/kara-native` — through their entry points only.
 | Path | What it is |
 | --- | --- |
 | `src/atoms/` | Primitives: Box, Text, Button, TextField, Switch, Checkbox, Slider, Picker, Icon, Image, the stacks (`VStack`/`HStack`/`ZStack`), Divider, Spacer, Surface, Card, Badge, Progress, Fab, Island, List, ScrollView. |
-| `src/atoms/rn-*` | The React Native tier — `RnView`, `RnText`, `RnScrollView`, `RnFlatList`, `RnSectionList`. Plain RN views with the same `sx` surface, for rows that host native views. |
-| `src/atoms/glass-view/`, `atoms/countdown/` | React Native-tier atoms over the package's own native views: iOS 26 Liquid Glass around RN children (a tinted capsule elsewhere), and a natively ticking countdown laid over an invisible RN text frame. |
+| `src/atoms/rn-*` | The React Native tier — `RnView`, `RnText`, `RnIcon`, `RnScrollView`, `RnFlatList`, `RnSectionList`. Plain RN views with the same `sx` surface, for rows that host native views. |
+| `src/atoms/glass-view/` | A React Native-tier atom over the native module: iOS 26 Liquid Glass around RN children (a translucent capsule elsewhere). |
 | `src/atoms/flash-list/` | The default list. Recycles and absolutely positions cells, which an `@expo/ui` host does not survive — use `RnFlatList`/`RnSectionList` when rows contain native atoms. |
 | `src/molecules/` | Label, LabeledContent, ListItem, Link, SearchBar, EmptyState, Collapsible, Pager, RadioGroup, Stepper, Tooltip — and over the native module: NavigationBar, ScrollEdgeContainer, RnTooltip. |
-| `src/organisms/` | Sheet, ActionSheet, Alert, Menu, ContextMenu, Form, SwipeActions, Snackbar — and over the native module: RnContextMenu, FabMenu. (`Tabs` lives in `@hzblj/kara-router`, behind the `@hzblj/kara-ui/router` entry, so the main entry never imports expo-router.) |
+| `src/organisms/` | Sheet, ActionSheet, Alert, Menu, Form, SwipeActions, Snackbar — and over the native module: ContextMenu (long-press on React Native content, with a custom preview on iOS), FabMenu. (`Tabs` lives in `@hzblj/kara-router`, behind the `@hzblj/kara-ui/router` entry, so the main entry never imports expo-router.) |
 | `src/templates/screen/` | `Screen` — the full-bleed native host every screen starts with. |
 | `src/host-context.tsx` | `HostBoundary` + `useHostGuard`: dev warning when a native atom renders outside `Screen`/`Island`. |
 | `src/platform-support.ts` | `warnUnsupported` — one-per-atom dev error for atoms only one platform can implement. |
@@ -97,9 +97,10 @@ feature until a second call site needs it. See the atomic-design and component-a
 Some components wrap views of the KaraUI Expo module (`@hzblj/kara-native` — Swift, Kotlin and raw bindings)
 rather than `@expo/ui`. Same shape and rules; three things differ.
 
-**`Rn*` means the React Native tier, not a duplicate.** `RnTooltip` and `RnContextMenu` take React Native
-anchors and children and need no host; `Tooltip` and `ContextMenu` stay the native-tier versions whose trigger
-is a native view inside a `Screen`/`Island`. Pick by what the trigger is.
+**`Rn*` means the React Native tier, not a duplicate.** `RnTooltip` takes a React Native anchor and needs no host;
+`Tooltip` stays the native-tier version whose anchor is a native view inside a `Screen`/`Island`. Pick by what the
+anchor is. `ContextMenu` has one implementation only — the native module's, on a React Native trigger — because it is
+the better one: a real `UIContextMenuInteraction` with a lifted preview.
 
 **Bindings live in `@hzblj/kara-native`, components never call `requireNativeView` themselves.** `requireKaraView`
 registers a view lazily, so a view only one platform implements fails when rendered there, never on import —
@@ -109,4 +110,22 @@ which is what lets `index.ts` export everything on both platforms. `isLiquidGlas
 **Never name a native prop after a React Native style key** (`width`, `backgroundColor`, `shadowColor`…):
 Fabric reads it as layout or style. Prefix it (`bubbleWidth`). A new native view needs a pod install / Gradle
 sync and a native rebuild of the app; a new `.ios.tsx`/`.android.tsx` caller needs Metro `--clear`.
+
+## Icons
+
+**The library has no icon set; apps bring SVGs.** `IconName` is the keys of the global `KaraIcons`, which the config
+plugin writes into the app's `kara-icons.d.ts` from its icon folder — any string until it exists. Every icon prop
+(`Icon`, `RnIcon`, `IconButton`, `Fab`, `ListItem`, `Label`, `LabeledContent`, `Link`, `EmptyState`, `FabMenu`, menu
+actions, `Tabs`) takes one, and resolves it through `iconResourceName` (`@hzblj/kara-native`) to the native asset the
+plugin generated: an asset-catalog template image on iOS, a vector drawable on Android.
+
+**`Icon` lives in a host, `RnIcon` anywhere.** `Icon` is SwiftUI `Image(assetName)` / Compose `Icon(painterResource)`;
+`RnIcon` is a `UIImageView` / `ImageView` (`IconView` in `@hzblj/kara-native`) — what a list row wants, rather than a
+host per row. Same props, same asset, same size.
+
+**`src/glyph/` is internal.** The handful of glyphs kara's own chrome draws — a search field's magnifier, a row's
+chevron, a stepper's plus and minus, a bar's back and close — come from `GLYPHS` in `@hzblj/kara-native`: SF Symbols
+on iOS, Material Symbols drawables the module ships on Android. `Glyph`, `RnGlyph` and `GlyphButton` are not
+exported; a component that needs a new glyph adds it to `packages/native/glyphs.json`. App-facing props never take a
+glyph.
 

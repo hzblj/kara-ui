@@ -1,56 +1,90 @@
-import {Column, Text as ComposeText, DropdownMenu} from '@expo/ui/jetpack-compose'
-import {clickable, combinedClickable} from '@expo/ui/jetpack-compose/modifiers'
+import {Text as ComposeText, DropdownMenu, DropdownMenuItem, Host} from '@expo/ui/jetpack-compose'
+import {useSx} from '@hzblj/kara-sx'
 import {useAppTheme} from '@hzblj/kara-theme'
-import {useCallback, useMemo, useState} from 'react'
-
-import {useHostGuard} from '../../host-context'
+import {useCallback, useState} from 'react'
+import {Pressable, StyleSheet, View} from 'react-native'
 import type {MenuAction} from '../menu'
-import type {ContextMenuComponent, ContextMenuProps} from './context-menu.types'
+import type {ContextMenuComponent, ContextMenuExclusionProps, ContextMenuProps} from './context-menu.types'
 
-type MenuItemProps = {
+/**
+ * The menu's anchor: a point at the trigger's bottom start, so the dropdown opens just under it. The host lies outside
+ * the touch path — the dropdown is a popup window of its own, which takes its touches regardless.
+ */
+const styles = StyleSheet.create({
+  anchor: {bottom: 0, height: 1, left: 0, position: 'absolute', width: 1},
+})
+
+type MenuRowProps = {
   action: MenuAction
   onDismiss: () => void
 }
 
-/** A row's `clickable` closes over its own action, so memoising it needs a component per row. */
-const MenuItem = ({action, onDismiss}: MenuItemProps) => {
+/** A row's `onClick` closes over its own action, so memoising it needs a component per row. */
+const MenuRow = ({action, onDismiss}: MenuRowProps) => {
   const theme = useAppTheme()
-  const modifiers = useMemo(
-    () => [
-      clickable(() => {
-        onDismiss()
-        action.onPress()
-      }),
-    ],
-    [action, onDismiss]
-  )
+
+  const onClick = useCallback(() => {
+    onDismiss()
+    action.onPress()
+  }, [action, onDismiss])
 
   return (
-    <ComposeText
-      color={theme.colorString(action.destructive ? 'content.destructive' : 'content.primary')}
-      modifiers={modifiers}
-      style={theme.typography.body}
-    >
-      {action.label}
-    </ComposeText>
+    <DropdownMenuItem onClick={onClick}>
+      <DropdownMenuItem.Text>
+        <ComposeText
+          color={theme.colorString(action.destructive ? 'content.destructive' : 'content.primary')}
+          style={theme.typography.body}
+        >
+          {action.label}
+        </ComposeText>
+      </DropdownMenuItem.Text>
+    </DropdownMenuItem>
   )
 }
 
-export const ContextMenu: ContextMenuComponent = ({actions, children}: ContextMenuProps) => {
-  useHostGuard('ContextMenu')
-
+/**
+ * The trigger stays a plain React Native subtree; a long press on it expands a Compose `DropdownMenu` anchored under
+ * it. The host behind the menu mounts on the first long press and stays — a list of triggers that are only scrolled
+ * past never builds one. `preview` and `onPreviewPress` are iOS-only: Material has no lifted preview.
+ */
+const ContextMenuRoot = ({actions, children, testID, ...props}: ContextMenuProps) => {
+  const {onPreviewPress: _onPreviewPress, preview: _preview, ...sx} = props
+  const theme = useAppTheme()
+  const style = useSx(sx)
+  const [isHostMounted, setIsHostMounted] = useState(false)
   const [expanded, setExpanded] = useState(false)
+
+  const open = useCallback(() => {
+    setIsHostMounted(true)
+    setExpanded(true)
+  }, [])
+
   const dismiss = useCallback(() => setExpanded(false), [])
-  const triggerModifiers = useMemo(() => [combinedClickable({onLongClick: () => setExpanded(true)})], [])
 
   return (
-    <Column>
-      <Column modifiers={triggerModifiers}>{children}</Column>
-      <DropdownMenu expanded={expanded} onDismissRequest={dismiss}>
-        {actions.map(action => (
-          <MenuItem action={action} key={action.label} onDismiss={dismiss} />
-        ))}
-      </DropdownMenu>
-    </Column>
+    <Pressable onLongPress={open} style={style} testID={testID}>
+      {children}
+      {isHostMounted ? (
+        <Host
+          colorScheme={theme.dark ? 'dark' : 'light'}
+          pointerEvents="none"
+          seedColor={theme.materialSeed}
+          style={styles.anchor}
+        >
+          <DropdownMenu expanded={expanded} onDismissRequest={dismiss}>
+            <DropdownMenu.Items>
+              {actions.map(action => (
+                <MenuRow action={action} key={action.label} onDismiss={dismiss} />
+              ))}
+            </DropdownMenu.Items>
+          </DropdownMenu>
+        </Host>
+      ) : null}
+    </Pressable>
   )
 }
+
+/** A touchable inside the trigger already claims its own long press on Android, so this only has to group. */
+const Exclusion = ({children}: ContextMenuExclusionProps) => <View>{children}</View>
+
+export const ContextMenu: ContextMenuComponent = Object.assign(ContextMenuRoot, {Exclusion})

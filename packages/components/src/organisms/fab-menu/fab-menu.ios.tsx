@@ -1,15 +1,16 @@
-import {Button, Menu} from '@expo/ui/swift-ui'
-import type {SFSymbol} from 'sf-symbols-typescript'
+import {Button, Image, Label, Menu} from '@expo/ui/swift-ui'
+import {iconResourceName} from '@hzblj/kara-native'
 
-import {Icon, SF_SYMBOLS} from '../../atoms/icon'
+import {Icon} from '../../atoms/icon'
 import {VStack} from '../../atoms/v-stack'
+import {Glyph} from '../../glyph'
 import {useHostGuard} from '../../host-context'
 import type {FabMenuComponent, FabMenuProps} from './fab-menu.types'
 
 /** Matches `Fab`, so a screen can switch between the two without the button changing shape. */
 const FAB_SIZE = 56
 
-export const FabMenu: FabMenuComponent = ({actions, icon = 'add', testID}: FabMenuProps) => {
+export const FabMenu: FabMenuComponent = ({actions, icon, testID}: FabMenuProps) => {
   useHostGuard('FabMenu')
 
   return (
@@ -24,19 +25,19 @@ export const FabMenu: FabMenuComponent = ({actions, icon = 'add', testID}: FabMe
           shadow="btn.accent"
           w={FAB_SIZE}
         >
-          <Icon color="content.on.bg" name={icon} />
+          {icon ? <Icon color="content.on.bg" name={icon} /> : <Glyph color="content.on.bg" name="plus" />}
         </VStack>
       }
       testID={testID}
     >
       {actions.map(action => (
-        <Button
-          key={action.label}
-          label={action.label}
-          onPress={action.onPress}
-          role={action.destructive ? 'destructive' : 'default'}
-          systemImage={action.icon ? (SF_SYMBOLS[action.icon] as SFSymbol) : undefined}
-        />
+        <Button key={action.label} onPress={action.onPress} role={action.destructive ? 'destructive' : 'default'}>
+          {/* A menu row is the system's Label: our icon is its image, from the asset catalog, and UIKit sizes it. */}
+          <Label
+            icon={action.icon ? <Image assetName={iconResourceName(action.icon)} /> : undefined}
+            title={action.label}
+          />
+        </Button>
       ))}
     </Menu>
   )

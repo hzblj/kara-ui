@@ -11,7 +11,7 @@ const ControlledDatePicker = (args: DatePickerProps) => {
 
   return (
     <Box gap="s8">
-      <Box bg="surface.primary" borderRadius="medium" overflow="hidden">
+      <Box bg="surface.primary" borderRadius="medium" p="s12">
         <DatePicker {...args} onValueChange={value => updateArgs({value})} />
       </Box>
       <RnText color="content.secondary" variant="footnote">

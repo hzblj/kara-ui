@@ -31,11 +31,10 @@ import {
   TooltipSection,
 } from './components/native-extras'
 import {
-  CountdownSection,
+  ContextMenuSection,
   FabMenuSection,
   GlassViewSection,
   NavigationBarSection,
-  RnContextMenuSection,
   RnTooltipSection,
   ScrollEdgeContainerSection,
 } from './components/native-module-sections'
@@ -91,7 +90,7 @@ export const GALLERY_SECTIONS = [
   {Content: SliderSection, id: 'slider', title: 'Slider'},
   {Content: ProgressSection, id: 'progress', title: 'Progress'},
   {Content: TextFieldSection, id: 'text-field', title: 'TextField'},
-  {Content: IconSection, id: 'icon', title: 'Icon · per-platform mapping'},
+  {Content: IconSection, id: 'icon', title: 'Icon · RnIcon · the app SVGs, native in both tiers'},
   {Content: BadgeSection, id: 'badge', title: 'Badge'},
   {Content: CardSection, id: 'card', title: 'Card'},
   {Content: CollapsibleSection, id: 'collapsible', title: 'Collapsible'},
@@ -101,7 +100,7 @@ export const GALLERY_SECTIONS = [
   {Content: RadioGroupSection, id: 'radio-group', title: 'RadioGroup'},
   {Content: SurfaceSection, id: 'surface', title: 'Surface · plain + glass'},
   {Content: FormSection, id: 'form', title: 'Form · Section'},
-  {Content: MenuSection, id: 'menu', title: 'Menu · ContextMenu (long-press) · ActionSheet'},
+  {Content: MenuSection, id: 'menu', title: 'Menu · ActionSheet'},
   {Content: TooltipSection, id: 'tooltip', title: 'Tooltip'},
   {
     Content: ColorPickerSection,
@@ -116,7 +115,6 @@ export const GALLERY_SECTIONS = [
   {Content: FabSection, id: 'fab', title: 'Fab'},
   {Content: FabMenuSection, id: 'fab-menu', title: 'FabMenu · M3 Expressive on Android, a Menu on iOS'},
   {Content: GlassViewSection, id: 'glass-view', title: 'GlassView · iOS 26 Liquid Glass, a tinted capsule elsewhere'},
-  {Content: CountdownSection, id: 'countdown', title: 'Countdown · ticks natively, rolls its digits'},
   {Content: NavigationBarSection, id: 'navigation-bar', title: 'NavigationBar · UINavigationBar items on iOS'},
   {
     Content: ScrollEdgeContainerSection,
@@ -124,7 +122,7 @@ export const GALLERY_SECTIONS = [
     title: 'ScrollEdgeContainer · iOS 26 scroll edge effect under the bars',
   },
   {Content: RnTooltipSection, id: 'rn-tooltip', title: 'RnTooltip · rich tooltip on a React Native anchor'},
-  {Content: RnContextMenuSection, id: 'rn-context-menu', title: 'RnContextMenu · long-press with a custom preview'},
+  {Content: ContextMenuSection, id: 'context-menu', title: 'ContextMenu · long-press, a custom preview on iOS'},
   {Content: SearchBarSection, id: 'search-bar', title: 'SearchBar · RN tier'},
   {Content: SnackbarSection, id: 'snackbar', title: 'Snackbar · overlay'},
   {Content: SegmentedControlSection, id: 'segmented-control', title: 'SegmentedControl · RN tier'},

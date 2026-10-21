@@ -1,7 +1,6 @@
 import type {Meta, StoryObj} from '@storybook/react-native'
 import {fn} from 'storybook/test'
 
-import {Divider} from '../../atoms/divider'
 import {List} from '../../atoms/list'
 import {insideIsland} from '../../story-decorators'
 import {ListItem} from './list-item'
@@ -29,9 +28,7 @@ export const InAList: Story = {
   render: () => (
     <List>
       <ListItem icon="home" onPress={fn()} subtitle="With chevron" title="Tappable row" />
-      <Divider />
       <ListItem icon="settings" subtitle="No chevron" title="Plain row" />
-      <Divider />
       <ListItem title="Title only" />
     </List>
   ),

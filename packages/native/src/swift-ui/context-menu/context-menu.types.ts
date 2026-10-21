@@ -6,6 +6,8 @@ export type ContextMenuItem = {
   destructive?: boolean
   /** Stable identity handed back to `onSelectItem`. */
   id: string
+  /** An image in the app's asset catalog — an app icon (`kara_icon_*`). Wins over `systemImage`. */
+  image?: string
   systemImage?: SFSymbol
   title: string
 }

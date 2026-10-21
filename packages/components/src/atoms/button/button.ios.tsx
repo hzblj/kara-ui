@@ -12,7 +12,7 @@ import {useHostGuard} from '../../host-context'
 import {Text} from '../text'
 import {VStack} from '../v-stack'
 import type {ButtonComponent, ButtonProps, ButtonStyleName, ButtonVariant} from './button.types'
-import {buttonTokens} from './button-tokens'
+import {buttonTokens, contentOnTint} from './button-tokens'
 
 const STYLE_BY_VARIANT = {
   accent: 'borderedProminent',
@@ -55,6 +55,9 @@ export const Button: ButtonComponent = ({
    * button its height — without it a tinted glass button comes out shorter than every other variant.
    */
   const glassTint = style === 'glass' && resolvedTint ? theme.color(resolvedTint) : undefined
+  const filled = Boolean(glassTint) || style === 'borderedProminent' || style === 'glassProminent'
+  // A prominent style — and tinted glass — is coloured by the tint, so a caller's own tint picks the label on it.
+  const content = tint && filled && !disabled ? contentOnTint(tint, theme) : tokens.content
 
   const modifiers = useMemo(() => {
     const list = [buttonStyleModifier(glassTint ? 'plain' : style), controlSizeModifier(controlSize)]
@@ -77,7 +80,7 @@ export const Button: ButtonComponent = ({
   return (
     <SwiftUIButton modifiers={modifiers} onPress={onPress} testID={testID}>
       <VStack align="center" py={glassTint ? 's16' : undefined} wide={wide}>
-        <Text color={tokens.content} variant="body">
+        <Text color={content} variant="body">
           {label}
         </Text>
       </VStack>

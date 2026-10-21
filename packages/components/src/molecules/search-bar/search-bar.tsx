@@ -1,10 +1,9 @@
-import {spacing, useAppTheme} from '@hzblj/kara-theme'
+import {useAppTheme} from '@hzblj/kara-theme'
 import {TextInput} from 'react-native'
 
 import {Box} from '../../atoms/box'
-import {Icon} from '../../atoms/icon'
-import {Island} from '../../atoms/island'
 import {Pressable} from '../../atoms/pressable'
+import {RnGlyph} from '../../glyph'
 import type {SearchBarComponent, SearchBarProps} from './search-bar.types'
 
 export const SearchBar: SearchBarComponent = ({
@@ -27,9 +26,7 @@ export const SearchBar: SearchBarComponent = ({
       testID={testID}
       wide
     >
-      <Island style={{height: spacing.s20, width: spacing.s20}}>
-        <Icon color="content.tertiary" name="search" size="s20" />
-      </Island>
+      <RnGlyph color="content.tertiary" name="search" size="s20" />
       <TextInput
         onChangeText={onChangeText}
         placeholder={placeholder}
@@ -39,9 +36,7 @@ export const SearchBar: SearchBarComponent = ({
       />
       {value.length > 0 ? (
         <Pressable onPress={() => onChangeText?.('')}>
-          <Island style={{height: spacing.s20, width: spacing.s20}}>
-            <Icon color="content.tertiary" name="close" size="s20" />
-          </Island>
+          <RnGlyph color="content.tertiary" name="close" size="s20" />
         </Pressable>
       ) : null}
     </Box>

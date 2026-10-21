@@ -10,7 +10,7 @@ import type {MenuAction} from '../menu'
  */
 export type FabMenuProps = {
   actions: MenuAction[]
-  /** The closed button's icon. `add` by default. */
+  /** The closed button's icon — one of the app's. A plus by default. */
   icon?: IconName
   testID?: string
 }

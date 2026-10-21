@@ -1,15 +1,10 @@
-import MaterialIcons from '@expo/vector-icons/MaterialIcons'
-import {type IconName, MATERIAL_ICONS, SF_SYMBOLS} from '@hzblj/kara-components'
+import {iconResourceName} from '@hzblj/kara-native'
 import {NativeTabs} from 'expo-router/unstable-native-tabs'
 import {Children, isValidElement} from 'react'
-import type {SFSymbol} from 'sf-symbols-typescript'
+
 import type {TabsComponent, TabsProps, TabsScreenProps} from './tabs.types'
 
-const {Icon, Label, VectorIcon} = NativeTabs.Trigger
-
-const sfSymbol = (name: IconName) => SF_SYMBOLS[name] as SFSymbol
-
-const materialIcon = (name: IconName) => <VectorIcon family={MaterialIcons} name={MATERIAL_ICONS[name]} />
+const {Icon, Label} = NativeTabs.Trigger
 
 /**
  * Declares one tab and renders nothing itself — `Tabs` reads these props and emits the trigger.
@@ -18,15 +13,24 @@ const materialIcon = (name: IconName) => <VectorIcon family={MaterialIcons} name
  */
 const TabsScreen: TabsComponent['Screen'] = () => null
 
-const renderTrigger = ({hidden, icon, name, selectedIcon, testID, title}: TabsScreenProps) => (
-  <NativeTabs.Trigger hidden={hidden} key={name} name={name} testID={testID}>
-    <Icon
-      sf={selectedIcon ? {default: sfSymbol(icon), selected: sfSymbol(selectedIcon)} : sfSymbol(icon)}
-      src={selectedIcon ? {default: materialIcon(icon), selected: materialIcon(selectedIcon)} : materialIcon(icon)}
-    />
-    <Label>{title}</Label>
-  </NativeTabs.Trigger>
-)
+/**
+ * The tab's icon, natively on both sides: the app icon's image set in the iOS asset catalog, its vector drawable on
+ * Android — one name, the one the config plugin gave both. No icon font, no bitmap rendered in JavaScript.
+ */
+const renderTrigger = ({hidden, icon, name, selectedIcon, testID, title}: TabsScreenProps) => {
+  const asset = iconResourceName(icon)
+  const selected = selectedIcon ? iconResourceName(selectedIcon) : undefined
+
+  return (
+    <NativeTabs.Trigger hidden={hidden} key={name} name={name} testID={testID}>
+      <Icon
+        drawable={selected ? {default: asset, selected} : asset}
+        xcasset={selected ? {default: asset, selected} : asset}
+      />
+      <Label>{title}</Label>
+    </NativeTabs.Trigger>
+  )
+}
 
 const TabsRoot = ({children, minimizeBehavior = 'never'}: TabsProps) => (
   <NativeTabs minimizeBehavior={minimizeBehavior}>

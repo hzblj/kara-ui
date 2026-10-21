@@ -7,6 +7,7 @@ import {
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useCallback, useState} from 'react'
 import {Icon} from '../../atoms/icon'
+import {Glyph} from '../../glyph'
 import {useHostGuard} from '../../host-context'
 import type {MenuAction} from '../menu'
 import type {FabMenuComponent, FabMenuProps} from './fab-menu.types'
@@ -46,7 +47,7 @@ const FabMenuRow = ({action, onSelect}: FabMenuRowProps) => {
  * content — rather than a row of its own. The pills take the button's colours, so the menu reads as the button
  * unfolding rather than a second surface.
  */
-export const FabMenu: FabMenuComponent = ({actions, icon = 'add'}: FabMenuProps) => {
+export const FabMenu: FabMenuComponent = ({actions, icon}: FabMenuProps) => {
   useHostGuard('FabMenu')
 
   const theme = useAppTheme()
@@ -66,7 +67,7 @@ export const FabMenu: FabMenuComponent = ({actions, icon = 'add'}: FabMenuProps)
           onCheckedChange={setExpanded}
         >
           <ToggleFloatingActionButton.Icon>
-            <Icon color="content.on.bg" name={icon} />
+            {icon ? <Icon color="content.on.bg" name={icon} /> : <Glyph color="content.on.bg" name="plus" />}
           </ToggleFloatingActionButton.Icon>
         </ToggleFloatingActionButton>
       </FloatingActionButtonMenu.Button>
