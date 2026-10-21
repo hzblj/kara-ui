@@ -1,0 +1,55 @@
+{
+  "name": "@hzblj/kara-expo-plugin",
+  "version": "0.0.0",
+  "description": "The optional Expo config plugin of @hzblj/kara-ui: redefines UIKit semantic colours app-wide, natively.",
+  "author": "Jan Blazej",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hzblj/kara-ui.git",
+    "directory": "packages/expo-plugin"
+  },
+  "bugs": {
+    "url": "https://github.com/hzblj/kara-ui/issues"
+  },
+  "homepage": "https://github.com/hzblj/kara-ui/tree/main/packages/expo-plugin#readme",
+  "keywords": [
+    "expo",
+    "config-plugin",
+    "kara-ui"
+  ],
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "default": "./build/index.js"
+    },
+    "./app.plugin.js": "./app.plugin.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "build",
+    "app.plugin.js"
+  ],
+  "scripts": {
+    "build": "tsc -p ./tsconfig.json",
+    "clean": "rm -rf build",
+    "prepack": "yarn run -T turbo run build --filter=$npm_package_name...",
+    "lint": "yarn run -T concurrently \"yarn biome:check\" \"yarn tsc:check\"",
+    "lint:fix": "yarn run -T biome check --write .",
+    "biome:check": "yarn run -T biome check .",
+    "tsc:check": "tsc -p ./tsconfig.json --noEmit"
+  },
+  "peerDependencies": {
+    "expo": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "expo": "~57.0.22",
+    "typescript": "~7.0.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

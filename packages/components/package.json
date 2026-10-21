@@ -1,0 +1,98 @@
+{
+  "name": "@hzblj/kara-components",
+  "version": "0.0.0",
+  "description": "The atoms, molecules, organisms and templates of @hzblj/kara-ui — real SwiftUI and Jetpack Compose views through @expo/ui.",
+  "author": "Jan Blazej",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hzblj/kara-ui.git",
+    "directory": "packages/components"
+  },
+  "bugs": {
+    "url": "https://github.com/hzblj/kara-ui/issues"
+  },
+  "homepage": "https://github.com/hzblj/kara-ui/tree/main/packages/components#readme",
+  "keywords": [
+    "react-native",
+    "expo",
+    "kara-ui"
+  ],
+  "main": "./lib/module/index.js",
+  "types": "./lib/typescript/index.d.ts",
+  "exports": {
+    ".": {
+      "source": "./src/index.ts",
+      "types": "./lib/typescript/index.d.ts",
+      "default": "./lib/module/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src",
+    "lib",
+    "!**/*.stories.tsx",
+    "!**/contract.check.ts",
+    "!**/story-decorators.tsx",
+    "!**/__tests__"
+  ],
+  "scripts": {
+    "build": "bob build && tsc -p ./tsconfig.build.json && node ../../scripts/fallback-declarations.mjs",
+    "clean": "rm -rf lib",
+    "prepack": "yarn run -T turbo run build --filter=$npm_package_name...",
+    "lint": "yarn run -T concurrently \"yarn biome:check\" \"yarn tsc:check\"",
+    "lint:fix": "yarn run -T biome check --write .",
+    "biome:check": "yarn run -T biome check .",
+    "tsc:check": "yarn run -T concurrently \"tsc -p ./tsconfig.ios.json\" \"tsc -p ./tsconfig.android.json\""
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "exclude": "{**/__tests__/**,**/__fixtures__/**,**/__mocks__/**,**/*.stories.tsx,**/contract.check.ts,**/story-decorators.tsx}",
+    "targets": [
+      [
+        "module",
+        {
+          "esm": true
+        }
+      ]
+    ]
+  },
+  "dependencies": {
+    "@hzblj/kara-native": "workspace:^",
+    "@hzblj/kara-sx": "workspace:^",
+    "@hzblj/kara-theme": "workspace:^",
+    "sf-symbols-typescript": "^2.2.0"
+  },
+  "peerDependencies": {
+    "@expo/ui": "~57.0.0",
+    "@expo/vector-icons": "*",
+    "@shopify/flash-list": ">=2.0.0",
+    "expo": "~57.0.0",
+    "expo-haptics": "*",
+    "expo-image": "*",
+    "react": "*",
+    "react-native": "*",
+    "react-native-reanimated": ">=4.0.0"
+  },
+  "devDependencies": {
+    "@expo/ui": "~57.0.18",
+    "@expo/vector-icons": "^15.1.1",
+    "@shopify/flash-list": "^2.3.2",
+    "@storybook/react-native": "^10.6.0",
+    "@types/react": "~19.2.18",
+    "expo": "~57.0.22",
+    "expo-haptics": "~57.0.3",
+    "expo-image": "~57.0.5",
+    "react": "19.2.3",
+    "react-native": "0.86.3",
+    "react-native-builder-bob": "^0.43.0",
+    "react-native-reanimated": "4.5.1",
+    "react-native-worklets": "0.10.1",
+    "storybook": "^10.6.0",
+    "typescript": "~7.0.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

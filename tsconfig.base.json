@@ -1,0 +1,20 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "noEmit": true,
+    "noUnusedLocals": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    // Components split into `.ios`/`.android` with no fallback `.tsx`, so a config without
+    // `moduleSuffixes` cannot resolve `./text` at all. This picks iOS for editors and any plain
+    // `tsconfig.json` check; `tsconfig.ios.json` and `tsconfig.android.json` override it, and those
+    // are what `yarn typecheck` runs per workspace.
+    "moduleSuffixes": [".ios", ""],
+    // Workspace packages resolve to each other's TypeScript `source` while type-checking, so `yarn typecheck` needs
+    // no build first and an edit in one package is seen by the next at once. `tsconfig.build.json` drops `source`.
+    "customConditions": ["react-native", "source"]
+  }
+}

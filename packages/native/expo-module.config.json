@@ -1,0 +1,10 @@
+{
+  "platforms": ["android", "ios"],
+  "android": {
+    "modules": ["expo.modules.kara.ui.KaraUIModule"]
+  },
+  "ios": {
+    "modules": ["KaraUIModule"]
+  },
+  "coreFeatures": ["compose"]
+}

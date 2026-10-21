@@ -1,0 +1,142 @@
+import {
+  BoxBordersSection,
+  BoxCornerRadiiSection,
+  BoxMarginsSection,
+  RadiiSection,
+  RnViewSection,
+  ShadowTokensSection,
+} from './components/box-sections'
+import {EmptyStateSection, LabeledContentSection, LabelSection, LinkSection} from './components/composite-sections'
+import {
+  BadgeSection,
+  CardSection,
+  CollapsibleSection,
+  IconSection,
+  ListSection,
+  ProgressSection,
+  SheetAlertSection,
+  SliderSection,
+  SwitchCheckboxSection,
+  TextFieldSection,
+} from './components/native-controls'
+import {
+  ColorPickerSection,
+  FabSection,
+  FormSection,
+  IconButtonStepperSection,
+  MenuSection,
+  RadioGroupSection,
+  SurfaceSection,
+  SwipeActionsSection,
+  TooltipSection,
+} from './components/native-extras'
+import {
+  CountdownSection,
+  FabMenuSection,
+  GlassViewSection,
+  NavigationBarSection,
+  RnContextMenuSection,
+  RnTooltipSection,
+  ScrollEdgeContainerSection,
+} from './components/native-module-sections'
+import {
+  AvatarSection,
+  ChipSection,
+  DatePickerSection,
+  FlashListSection,
+  PickerSection,
+  PressableSection,
+  SearchBarSection,
+  SegmentedControlSection,
+  SkeletonSection,
+  SnackbarSection,
+} from './components/rn-controls'
+import {DividerSection, HStackSection, VStackSection, ZStackSection} from './components/stack-sections'
+import {ButtonSection, TEXT_VARIANTS, TextStylesSection, TextVariantsSection} from './components/text-sections'
+import {TokenGrid} from './components/token-grid'
+import {TypographyCheck} from './components/typography-check'
+import type {GallerySectionEntry} from './UiGallery.types'
+
+export const GALLERY_SECTIONS = [
+  {
+    Content: TextVariantsSection,
+    id: 'text-variants',
+    title: `Text · ${TEXT_VARIANTS.length} variants`,
+  },
+  {Content: TextStylesSection, id: 'text-styles', title: 'Text · colour, align, transform, decoration'},
+  {Content: ButtonSection, id: 'button', title: 'Button · 4 variants, enabled + disabled'},
+  {Content: VStackSection, id: 'v-stack', title: 'VStack · spacing + align'},
+  {Content: HStackSection, id: 'h-stack', title: 'HStack · Spacer pushes apart'},
+  {Content: ZStackSection, id: 'z-stack', title: 'ZStack · layered'},
+  {Content: DividerSection, id: 'divider', title: 'Divider'},
+  {Content: LabelSection, id: 'label', title: 'Label · inline icon + text'},
+  {Content: LabeledContentSection, id: 'labeled-content', title: 'LabeledContent · settings rows'},
+  {Content: LinkSection, id: 'link', title: 'Link · opens an external URL'},
+  {
+    Content: EmptyStateSection,
+    id: 'empty-state',
+    title: 'EmptyState · icon, title, description, action',
+  },
+  {Content: RadiiSection, id: 'radii', title: 'Radii · none, small, medium, large, full'},
+  {Content: BoxCornerRadiiSection, id: 'box-corner-radii', title: 'Box · per-corner radii cascade'},
+  {
+    Content: BoxBordersSection,
+    id: 'box-borders',
+    title: 'Box · per-side borders, min/max, aspectRatio, percentage width',
+  },
+  {Content: ShadowTokensSection, id: 'shadow-tokens', title: 'Shadow tokens on native surfaces'},
+  {Content: RnViewSection, id: 'rn-view', title: 'RnView · React Native inside a native container'},
+  {Content: BoxMarginsSection, id: 'box-margins', title: 'Box · RN escape hatch with margins'},
+  {Content: SwitchCheckboxSection, id: 'switch-checkbox', title: 'Switch · Checkbox'},
+  {Content: SliderSection, id: 'slider', title: 'Slider'},
+  {Content: ProgressSection, id: 'progress', title: 'Progress'},
+  {Content: TextFieldSection, id: 'text-field', title: 'TextField'},
+  {Content: IconSection, id: 'icon', title: 'Icon · per-platform mapping'},
+  {Content: BadgeSection, id: 'badge', title: 'Badge'},
+  {Content: CardSection, id: 'card', title: 'Card'},
+  {Content: CollapsibleSection, id: 'collapsible', title: 'Collapsible'},
+  {Content: ListSection, id: 'list', title: 'List · ListItem (tappable rows)'},
+  {Content: SheetAlertSection, id: 'sheet-alert', title: 'Sheet · Alert'},
+  {Content: IconButtonStepperSection, id: 'icon-button-stepper', title: 'IconButton · Stepper'},
+  {Content: RadioGroupSection, id: 'radio-group', title: 'RadioGroup'},
+  {Content: SurfaceSection, id: 'surface', title: 'Surface · plain + glass'},
+  {Content: FormSection, id: 'form', title: 'Form · Section'},
+  {Content: MenuSection, id: 'menu', title: 'Menu · ContextMenu (long-press) · ActionSheet'},
+  {Content: TooltipSection, id: 'tooltip', title: 'Tooltip'},
+  {
+    Content: ColorPickerSection,
+    id: 'color-picker',
+    title: 'ColorPicker · iOS only, renders nothing on Android',
+  },
+  {
+    Content: SwipeActionsSection,
+    id: 'swipe-actions',
+    title: 'SwipeActions · iOS only, Android keeps the row and drops the buttons',
+  },
+  {Content: FabSection, id: 'fab', title: 'Fab'},
+  {Content: FabMenuSection, id: 'fab-menu', title: 'FabMenu · M3 Expressive on Android, a Menu on iOS'},
+  {Content: GlassViewSection, id: 'glass-view', title: 'GlassView · iOS 26 Liquid Glass, a tinted capsule elsewhere'},
+  {Content: CountdownSection, id: 'countdown', title: 'Countdown · ticks natively, rolls its digits'},
+  {Content: NavigationBarSection, id: 'navigation-bar', title: 'NavigationBar · UINavigationBar items on iOS'},
+  {
+    Content: ScrollEdgeContainerSection,
+    id: 'scroll-edge-container',
+    title: 'ScrollEdgeContainer · iOS 26 scroll edge effect under the bars',
+  },
+  {Content: RnTooltipSection, id: 'rn-tooltip', title: 'RnTooltip · rich tooltip on a React Native anchor'},
+  {Content: RnContextMenuSection, id: 'rn-context-menu', title: 'RnContextMenu · long-press with a custom preview'},
+  {Content: SearchBarSection, id: 'search-bar', title: 'SearchBar · RN tier'},
+  {Content: SnackbarSection, id: 'snackbar', title: 'Snackbar · overlay'},
+  {Content: SegmentedControlSection, id: 'segmented-control', title: 'SegmentedControl · RN tier'},
+  {Content: PickerSection, id: 'picker', title: 'Picker · RN tier'},
+  {Content: DatePickerSection, id: 'date-picker', title: 'DatePicker · RN tier'},
+  {Content: PressableSection, id: 'pressable', title: 'Pressable · scale 0.96 + haptics'},
+  {Content: ChipSection, id: 'chip', title: 'Chip'},
+  {Content: AvatarSection, id: 'avatar', title: 'Avatar'},
+  {Content: SkeletonSection, id: 'skeleton', title: 'Skeleton'},
+  {Content: FlashListSection, id: 'flash-list', title: 'FlashList · 30 rows'},
+  {Content: TypographyCheck, id: 'typography-check', title: 'Typography · native and React Native tiers agree'},
+  {Content: TokenGrid, id: 'design-tokens', title: 'Design tokens'},
+] as const satisfies readonly GallerySectionEntry[]
+
+export type GallerySectionId = (typeof GALLERY_SECTIONS)[number]['id']

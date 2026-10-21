@@ -1,0 +1,27 @@
+{
+  // Declarations, emitted once per package from the iOS resolution. `.android` files are left out because the two
+  // halves of a split component are held to one type by its `contract.check.ts`, so the iOS half's declaration is the
+  // component's declaration — `scripts/fallback-declarations.mjs` then gives every `x.ios.d.ts` a plain `x.d.ts`,
+  // which is what a consumer's TypeScript (no `moduleSuffixes`) resolves.
+  //
+  // Sibling packages resolve through their published `types`, not their `source` — a declaration build that pulled
+  // another package's sources into the program would emit them too. Turbo builds dependencies first (`^build`).
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "customConditions": ["react-native"],
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "moduleSuffixes": [".ios", ""],
+    "noEmit": false,
+    "outDir": "${configDir}/lib/typescript",
+    "rootDir": "${configDir}/src"
+  },
+  "include": ["${configDir}/src/**/*.ts", "${configDir}/src/**/*.tsx"],
+  "exclude": [
+    "${configDir}/src/**/*.android.ts",
+    "${configDir}/src/**/*.android.tsx",
+    "${configDir}/src/**/*.stories.tsx",
+    "${configDir}/src/**/contract.check.ts",
+    "${configDir}/src/**/story-decorators.tsx"
+  ]
+}

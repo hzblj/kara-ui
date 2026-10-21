@@ -1,0 +1,83 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": [
+    "@hzblj/biome-config",
+    "@hzblj/biome-config/react-native"
+  ],
+  "files": {
+    "includes": [
+      "**",
+      "!**/node_modules",
+      "!**/.expo",
+      "!**/.turbo",
+      "!**/.pack-check",
+      "!**/lib",
+      "!packages/expo-plugin/build",
+      "!apps/example/ios",
+      "!apps/example/android",
+      "!packages/native/android/build",
+      "!**/expo-env.d.ts",
+      "!**/storybook.requires.ts"
+    ]
+  },
+  "linter": {
+    "rules": {
+      "style": {
+        "noRestrictedImports": {
+          "level": "error",
+          "options": {
+            "paths": {
+              "@expo/ui": "The example composes kara-ui; @expo/ui stays inside the library.",
+              "@expo/ui/jetpack-compose": "The example composes kara-ui; @expo/ui stays inside the library.",
+              "@expo/ui/jetpack-compose/modifiers": "The example composes kara-ui; @expo/ui stays inside the library.",
+              "@expo/ui/swift-ui": "The example composes kara-ui; @expo/ui stays inside the library.",
+              "@expo/ui/swift-ui/modifiers": "The example composes kara-ui; @expo/ui stays inside the library."
+            }
+          }
+        }
+      }
+    }
+  },
+  "overrides": [
+    {
+      "includes": [
+        "packages/**"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "**/babel.config.js",
+        "**/metro.config.js",
+        "**/app.plugin.js"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noCommonJs": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "packages/components/src/host-context.tsx",
+        "packages/components/src/platform-support.ts",
+        "scripts/**"
+      ],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noConsole": "off"
+          }
+        }
+      }
+    }
+  ]
+}

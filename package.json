@@ -1,0 +1,38 @@
+{
+  "name": "kara-ui-monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "example": "yarn workspace kara-ui-example",
+    "start": "yarn example start",
+    "ios": "yarn example ios",
+    "android": "yarn example android",
+    "prebuild": "yarn example expo:prebuild",
+    "build": "yarn turbo run build",
+    "typecheck": "yarn turbo run tsc:check",
+    "lint": "yarn turbo run lint",
+    "biome:check": "biome check .",
+    "biome:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "pack:check": "yarn build && node ./scripts/pack-check.mjs",
+    "changeset": "changeset",
+    "changeset:version": "changeset version && yarn install --mode=update-lockfile",
+    "release": "yarn build && changeset publish",
+    "clean": "rm -rf .turbo node_modules/.cache/turbo && find . -name '.turbo' -type d -prune -exec rm -rf '{}' + && yarn example clean:native"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.13",
+    "@changesets/changelog-github": "^1.0.1",
+    "@changesets/cli": "^3.0.3",
+    "@hzblj/biome-config": "^0.2.1",
+    "concurrently": "^10.0.5",
+    "turbo": "^2.10.12",
+    "typescript": "~7.0.2"
+  },
+  "packageManager": "yarn@4.17.1"
+}

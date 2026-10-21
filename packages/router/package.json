@@ -1,0 +1,88 @@
+{
+  "name": "@hzblj/kara-router",
+  "version": "0.0.0",
+  "description": "Expo Router pieces of @hzblj/kara-ui: native tabs and a navigation theme mapped from the active kara theme.",
+  "author": "Jan Blazej",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hzblj/kara-ui.git",
+    "directory": "packages/router"
+  },
+  "bugs": {
+    "url": "https://github.com/hzblj/kara-ui/issues"
+  },
+  "homepage": "https://github.com/hzblj/kara-ui/tree/main/packages/router#readme",
+  "keywords": [
+    "react-native",
+    "expo",
+    "kara-ui"
+  ],
+  "main": "./lib/module/index.js",
+  "types": "./lib/typescript/index.d.ts",
+  "exports": {
+    ".": {
+      "source": "./src/index.ts",
+      "types": "./lib/typescript/index.d.ts",
+      "default": "./lib/module/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src",
+    "lib",
+    "!**/*.stories.tsx",
+    "!**/contract.check.ts",
+    "!**/story-decorators.tsx",
+    "!**/__tests__"
+  ],
+  "scripts": {
+    "build": "bob build && tsc -p ./tsconfig.build.json && node ../../scripts/fallback-declarations.mjs",
+    "clean": "rm -rf lib",
+    "prepack": "yarn run -T turbo run build --filter=$npm_package_name...",
+    "lint": "yarn run -T concurrently \"yarn biome:check\" \"yarn tsc:check\"",
+    "lint:fix": "yarn run -T biome check --write .",
+    "biome:check": "yarn run -T biome check .",
+    "tsc:check": "yarn run -T concurrently \"tsc -p ./tsconfig.ios.json\" \"tsc -p ./tsconfig.android.json\""
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "exclude": "{**/__tests__/**,**/__fixtures__/**,**/__mocks__/**,**/*.stories.tsx,**/contract.check.ts,**/story-decorators.tsx}",
+    "targets": [
+      [
+        "module",
+        {
+          "esm": true
+        }
+      ]
+    ]
+  },
+  "dependencies": {
+    "@hzblj/kara-components": "workspace:^",
+    "@hzblj/kara-theme": "workspace:^",
+    "sf-symbols-typescript": "^2.2.0"
+  },
+  "peerDependencies": {
+    "@expo/vector-icons": "*",
+    "expo-router": "*",
+    "react": "*",
+    "react-native": "*"
+  },
+  "devDependencies": {
+    "@expo/ui": "~57.0.18",
+    "@expo/vector-icons": "^15.1.1",
+    "@storybook/react-native": "^10.6.0",
+    "@types/react": "~19.2.18",
+    "expo": "~57.0.22",
+    "expo-router": "~57.0.21",
+    "react": "19.2.3",
+    "react-native": "0.86.3",
+    "react-native-builder-bob": "^0.43.0",
+    "storybook": "^10.6.0",
+    "typescript": "~7.0.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

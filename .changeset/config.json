@@ -1,0 +1,30 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@3.1.4/schema.json",
+  "changelog": [
+    "@changesets/changelog-github",
+    {
+      "repo": "hzblj/kara-ui"
+    }
+  ],
+  "commit": false,
+  "fixed": [
+    [
+      "@hzblj/kara-ui",
+      "@hzblj/kara-theme",
+      "@hzblj/kara-sx",
+      "@hzblj/kara-native",
+      "@hzblj/kara-components",
+      "@hzblj/kara-router",
+      "@hzblj/kara-expo-plugin"
+    ]
+  ],
+  "linked": [],
+  "access": "public",
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch",
+  "ignore": [],
+  "privatePackages": {
+    "tag": false,
+    "version": false
+  }
+}
