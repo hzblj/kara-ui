@@ -1,6 +1,6 @@
 {
   "name": "@hzblj/kara-native",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "The KaraUI Expo native module behind @hzblj/kara-ui: Liquid Glass, scroll edge effect, native countdown, context menu, tooltip, navigation bar and SwiftUI/Compose modifiers.",
   "author": "Jan Blazej",
   "license": "MIT",
