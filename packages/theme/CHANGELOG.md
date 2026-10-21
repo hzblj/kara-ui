@@ -1,5 +1,11 @@
 # @hzblj/kara-theme
 
+## 0.2.1
+
+### Patch Changes
+
+- [`be5be81`](https://github.com/hzblj/kara-ui/commit/be5be81a3764dfbd199c3c3cf90deadc6e53d268) Thanks [@hzblj](https://github.com/hzblj)! - Installable again: 0.2.0 was published with `workspace:^` ranges between the kara packages, which no package manager outside this repository resolves. The packages now go out through Yarn, which writes the real version ranges.
+
 ## 0.2.0
 
 ## 0.1.0
