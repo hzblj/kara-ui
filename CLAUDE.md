@@ -51,6 +51,12 @@ so declarations build against the dependencies' published types (turbo builds `^
 `metro.config.js` maps every workspace entry to its `source` for Fast Refresh. A new entry point goes into a package's
 `exports` with `source`, `types` and `default`, and both follow.
 
+**Publish through Yarn, tag through changesets.** `yarn release` runs `yarn npm publish` in every public workspace —
+Yarn rewrites `workspace:^` into real ranges, the same way `yarn pack` does for `yarn pack:check` — and then
+`changeset tag`, whose `New tag:` lines the release action reads to push tags and create GitHub releases. Never go
+back to `changeset publish`: its CLI (pinned to 2.x for those tag lines) calls npm, which ships `workspace:^` verbatim
+and makes the release uninstallable, as 0.2.0 was.
+
 **Platform split has no fallback file.** A split component is `x.ios.tsx` + `x.android.tsx` with a shared
 `x.types.ts` and a `contract.check.ts` that assigns both to the same component type. There is deliberately no plain
 `x.tsx`; resolution depends on `moduleSuffixes` (`tsconfig.ios.json` / `tsconfig.android.json` per workspace, which

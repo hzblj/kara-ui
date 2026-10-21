@@ -22,7 +22,7 @@
     "pack:check": "yarn build && node ./scripts/pack-check.mjs",
     "changeset": "changeset",
     "changeset:version": "changeset version && yarn install --mode=update-lockfile",
-    "release": "yarn build && changeset publish",
+    "release": "yarn build && yarn workspaces foreach --all --no-private --topological npm publish --tolerate-republish && changeset tag",
     "clean": "rm -rf .turbo node_modules/.cache/turbo && find . -name '.turbo' -type d -prune -exec rm -rf '{}' + && yarn example clean:native"
   },
   "devDependencies": {
