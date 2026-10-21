@@ -1,6 +1,6 @@
 {
   "name": "@hzblj/kara-expo-plugin",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "The optional Expo config plugin of @hzblj/kara-ui: redefines UIKit semantic colours app-wide, natively.",
   "author": "Jan Blazej",
   "license": "MIT",
