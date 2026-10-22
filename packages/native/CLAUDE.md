@@ -12,13 +12,14 @@ component. Autolinked into any app that installs `@hzblj/kara-ui` (a transitive 
 | `ios/Views/<Component>/` | `<Name>View.swift`, its records/helpers and `<Name>View+Definition.swift` (events and props). |
 | `ios/Modifiers/` | SwiftUI modifiers registered into `@expo/ui`'s registry: `scaledFont`, `underline`, `counterBadge`. |
 | `ios/Fabric/` | Runtime fixes to React Native's own component views, installed from `OnCreate`: `OpacityVisibilitySync`. |
-| `android/src/main/java/expo/modules/kara/ui/` | `KaraUIModule.kt` plus one package per component (`fab`, `icon`, `modifiers`, `ripple`, `tooltip`, `topappbar`, `zoomtransition`). |
+| `android/src/main/java/expo/modules/kara/ui/` | `KaraUIModule.kt` plus one package per component (`fab`, `haptics`, `icon`, `modifiers`, `ripple`, `tooltip`, `topappbar`, `zoomtransition`). |
 | `src/swift-ui/`, `src/jetpack-compose/` | `requireKaraView` bindings and typed wrappers per view, the modifiers' JS side. The `/swift-ui` and `/jetpack-compose` entries. |
 | `ios/Views/Icon/`, `android/.../icon/` | `IconView` (UIKit `UIImageView` / Android `ImageView`, the React Native tier) and Android's `DrawableIconView` (Compose `Icon`, inside a host): an app icon by asset/resource name, or an SF Symbol. |
 | `src/icons.ts` | `iconResourceName(name)` → `kara_icon_<name>`, the name the config plugin gives an app icon on both platforms. Mirrors the plugin's own copy, which runs in Node. |
 | `glyphs.json`, `scripts/generate-glyphs.mjs`, `src/glyphs.ts` | The few glyphs kara's components draw: SF Symbol + Material Symbol per name. `yarn glyphs:generate` writes `android/src/main/res/drawable/kara_glyph_*.xml` and `src/glyphs.ts` (both committed) from `@material-symbols/svg-400`; `THIRD_PARTY_NOTICES.md` carries the Apache 2.0 notice. |
 | `ios/Views/NavigationBar/`, `android/.../topappbar/` | The bar under `NavigationBar` and `Sheet.Header`: a standalone `UINavigationBar` (items as records, grouped into iOS 26 glass capsules unless `separated`, a centred or leading title view, an optional `UISearchBar`) and Material's `TopAppBar` (`navigationIcon` / `actions` slots). Both report presses as `onItemPress` with placement and index; the handlers stay in JS. |
 | `ios/Views/ZoomTransition/`, `android/.../zoomtransition/` | The zoom push behind `ZoomTransition` (`@hzblj/kara-router`): iOS 18's `preferredTransition = .zoom`, Material's `MaterialContainerTransform` on Android. Source, target and enabler views tied by an identifier through one registry of weak views; `reverseZoomTransition` (Android) plays the way back. See "Zoom transition" below. |
+| `ios/Haptics/`, `android/.../haptics/`, `src/haptics.ts` | `playHaptic` / `prepareHaptic`: synchronous module functions that hop to the main thread. Each `Haptic` name maps to one of UIKit's feedback generators, and to a chain of `HapticFeedbackConstants` on Android. `HAPTICS` lists the names. |
 | `src/availability.ts` | `isLiquidGlassAvailable` / `isScrollEdgeEffectAvailable` — one native call, cached; `false` on Android. |
 | `src/require-view.ts` | `requireKaraView` — lazy, so a view one platform lacks fails only when rendered there, never on import. |
 
@@ -47,6 +48,13 @@ cache lost its glass. The module wraps `RCTViewComponentView`'s `updateProps:old
 `prepareForRecycle` and replays a change across UIKit's 0.01 threshold through `alpha`. That is why `GlassView` sets
 its effect at once and never waits for its ancestors. Check the three selectors after a React Native upgrade. To
 debug missing glass, compare `isInHiddenAncestor` in the effect view's `_ivarDescription` (lldb) with a working one.
+
+**Haptics never touch `Vibrator`.** Android plays `View.performHapticFeedback` on the current activity's decor view;
+each name is a chain of constants, newest first — Android 14's say what happened (`TOGGLE_ON`, `SEGMENT_TICK`…), the
+older ones stand in where the OS lacks one or the device answers `false`. A vibrator pattern would feel the same on
+every phone and ignore the user's touch-feedback setting. iOS uses UIKit's feedback generators, not Core Haptics, for
+the same reason: they follow the System Haptics setting. A new name goes into all three — the Swift enum, the Kotlin
+enum and `HAPTICS` — or the native side rejects it.
 
 **The module name `KaraUI` is also the Swift module name.** An app whose Xcode target is named `KaraUI` would collide;
 that is why the example is called "Kara Example".

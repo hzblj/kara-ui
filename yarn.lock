@@ -2603,7 +2603,6 @@ __metadata:
     "@storybook/react-native": "npm:^10.6.0"
     "@types/react": "npm:~19.2.18"
     expo: "npm:~57.0.22"
-    expo-haptics: "npm:~57.0.3"
     expo-image: "npm:~57.0.5"
     react: "npm:19.2.3"
     react-native: "npm:0.86.3"
@@ -2618,7 +2617,6 @@ __metadata:
     "@lodev09/react-native-true-sheet": ">=3.11.0"
     "@shopify/flash-list": ">=2.0.0"
     expo: ~57.0.0
-    expo-haptics: "*"
     expo-image: "*"
     react: "*"
     react-native: "*"
@@ -2734,7 +2732,6 @@ __metadata:
     "@shopify/flash-list": "npm:^2.3.2"
     "@types/react": "npm:~19.2.18"
     expo: "npm:~57.0.22"
-    expo-haptics: "npm:~57.0.3"
     expo-image: "npm:~57.0.5"
     expo-router: "npm:~57.0.21"
     react: "npm:19.2.3"
@@ -2748,7 +2745,6 @@ __metadata:
     "@lodev09/react-native-true-sheet": ">=3.11.0"
     "@shopify/flash-list": ">=2.0.0"
     expo: ~57.0.0
-    expo-haptics: "*"
     expo-image: "*"
     expo-router: "*"
     react: "*"
@@ -6120,15 +6116,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-haptics@npm:~57.0.3":
-  version: 57.0.3
-  resolution: "expo-haptics@npm:57.0.3"
-  peerDependencies:
-    expo: "*"
-  checksum: 10c0/d538332720a7fa08f73c08f2803d53f82e6359fe41d5e518392cd16148eed682852df9ec062aeafbb88eaa893d8f0bf2295f6f3dfb0b665e7a81637f043caa0b
-  languageName: node
-  linkType: hard
-
 "expo-image@npm:~57.0.5":
   version: 57.0.5
   resolution: "expo-image@npm:57.0.5"
@@ -7192,7 +7179,6 @@ __metadata:
     expo: "npm:~57.0.22"
     expo-constants: "npm:~57.0.18"
     expo-dev-client: "npm:~57.0.19"
-    expo-haptics: "npm:~57.0.3"
     expo-image: "npm:~57.0.5"
     expo-linking: "npm:~57.0.10"
     expo-router: "npm:~57.0.21"

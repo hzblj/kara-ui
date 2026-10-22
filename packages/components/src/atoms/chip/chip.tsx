@@ -9,7 +9,7 @@ export const Chip: ChipComponent = ({label, onPress, selected = false, testID}: 
     borderColor={selected ? 'border.accent' : 'border.tertiary'}
     borderRadius="full"
     borderWidth={1}
-    haptic
+    haptic="selection"
     justify="center"
     onPress={onPress}
     px="s12"

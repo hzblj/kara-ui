@@ -10,8 +10,9 @@ its `package.json` is where the public entry points are defined.
 | `@hzblj/kara-ui/swift-ui`, `/jetpack-compose` | `@hzblj/kara-native/swift-ui`, `/jetpack-compose` |
 | `@hzblj/kara-ui/app.plugin.js` | `@hzblj/kara-expo-plugin` |
 
-`README.md` here is the npm landing page and the user-facing documentation for the whole system — keep it current
-when a building block changes something a consumer sees.
+`README.md` here is the npm landing page: a quick overview — what kara is, install, a minimal use, theme, icons, the
+entry points. Nothing component- or feature-specific (sheets, transitions, haptics…): those are documented in the
+example app and the packages' own docs. Keep it current only when one of those overview topics changes.
 
 **Peers are the union of the building blocks' peers**, so a consumer installing only this package is told what to
 install. `expo-router` is optional — only `/router` needs it.

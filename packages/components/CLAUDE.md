@@ -19,6 +19,7 @@ and `@hzblj/kara-native` — through their entry points only.
 | `src/host-context.tsx` | `HostBoundary` + `useHostGuard`: dev warning when a native atom renders outside `Screen`/`Island`. |
 | `src/platform-support.ts` | `warnUnsupported` — one-per-atom dev error for atoms only one platform can implement. |
 | `src/story-decorators.tsx` | `insideIsland` / `insideIslandOfHeight` — the host a story mounts its subject in. Internal: not exported from `index.ts`. |
+| `src/haptics/` | `haptics` (a function per `Haptic`, `play`, `prepare`, `setEnabled`) and `useHapticFeedback` — the public face of the native module's haptics, and the only way components play one. |
 | `src/use-refresh-state.ts` | Bridges SwiftUI's promise-driven `refreshable` and Compose's controlled `PullToRefreshBox` into one async `onRefresh`. |
 
 ## Component shape
@@ -110,6 +111,16 @@ which is what lets `index.ts` export everything on both platforms. `isLiquidGlas
 **Never name a native prop after a React Native style key** (`width`, `backgroundColor`, `shadowColor`…):
 Fabric reads it as layout or style. Prefix it (`bubbleWidth`). A new native view needs a pod install / Gradle
 sync and a native rebuild of the app; a new `.ios.tsx`/`.android.tsx` caller needs Metro `--clear`.
+
+## Haptics
+
+**A component plays a haptic only where the platform's own control would and ours does not.** Compose's Material
+controls play none, so on Android `Switch` plays `toggleOn`/`toggleOff`, a stepped `Slider` ticks at every stop,
+`SegmentedControl` plays `selection` for a new segment and `ContextMenu` its long press. On iOS `UISwitch` has none,
+and iOS 26's slider and segmented control play their own — adding one would double it. Every component haptic goes
+through `haptics`, so `haptics.setEnabled(false)` silences it too; a `Pressable` with `haptic` prepares it on press-in.
+
+**Haptics are felt, not seen.** The simulator and the emulator play nothing; check a change on a device.
 
 ## Ripples
 

@@ -1,10 +1,10 @@
 import {Text as ComposeText, DropdownMenu, DropdownMenuItem, Host} from '@expo/ui/jetpack-compose'
 import {useSx} from '@hzblj/kara-sx'
 import {useAppTheme} from '@hzblj/kara-theme'
-import * as Haptics from 'expo-haptics'
 import {useCallback, useMemo, useRef, useState} from 'react'
 import {type GestureResponderEvent, Pressable, StyleSheet, View} from 'react-native'
 import {Icon} from '../../atoms/icon'
+import {haptics} from '../../haptics'
 import {HostBoundary} from '../../host-context'
 import {splitForRipple} from '../../ripple-clip'
 import type {MenuAction} from '../menu'
@@ -70,7 +70,7 @@ const ContextMenuRoot = ({actions, children, testID, ...props}: ContextMenuProps
   const open = useCallback((event: GestureResponderEvent) => {
     const {pageX, pageY} = event.nativeEvent
 
-    Haptics.performAndroidHapticsAsync(Haptics.AndroidHaptics.Long_Press).catch(() => undefined)
+    haptics.longPress()
     // The touch in the trigger's own coordinates: `locationX/Y` are relative to whichever child was touched.
     trigger.current?.measure((_x, _y, _width, _height, left, top) => {
       setAnchor({x: pageX - left, y: pageY - top})
