@@ -1,5 +1,19 @@
 # @hzblj/kara-ui
 
+## 0.4.1
+
+### Patch Changes
+
+- [#6](https://github.com/hzblj/kara-ui/pull/6) [`d14bdd3`](https://github.com/hzblj/kara-ui/commit/d14bdd37bede9fef80f4d3af4621ea5d60b2b16b) Thanks [@hzblj](https://github.com/hzblj)! - `GlassView` always shows its glass. Glass mounted under a React Native view at opacity 0 — the first row of a Legend List opened from cache, content fading in from 0 — used to stay without it, because React Native changes opacity past UIKit, which then kept the subtree marked as hidden. React Native opacity changes that cross UIKit's hidden threshold now go through `UIView.alpha`, so this holds for every Liquid Glass view in the app. The glass is also set at once instead of polling until every ancestor is fully opaque, and its content no longer waits for it.
+
+- Updated dependencies [[`d14bdd3`](https://github.com/hzblj/kara-ui/commit/d14bdd37bede9fef80f4d3af4621ea5d60b2b16b)]:
+  - @hzblj/kara-native@0.4.1
+  - @hzblj/kara-theme@0.4.1
+  - @hzblj/kara-sx@0.4.1
+  - @hzblj/kara-components@0.4.1
+  - @hzblj/kara-router@0.4.1
+  - @hzblj/kara-expo-plugin@0.4.1
+
 ## 0.4.0
 
 ### Minor Changes
