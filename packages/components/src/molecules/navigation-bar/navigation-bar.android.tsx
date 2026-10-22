@@ -2,16 +2,11 @@ import {iconResourceName} from '@hzblj/kara-native'
 import {TopAppBar, type TopAppBarItem} from '@hzblj/kara-native/jetpack-compose'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
-import {StyleSheet} from 'react-native'
 import {Island} from '../../atoms/island'
 import type {NavigationBarComponent, NavigationBarItem, NavigationBarProps} from './navigation-bar.types'
 
 /** Material's small top app bar. */
 const BAR_HEIGHT = 64
-
-const styles = StyleSheet.create({
-  bar: {height: BAR_HEIGHT, width: '100%'},
-})
 
 const DEFAULT_LABELS = {back: 'Back', close: 'Close'} as const
 
@@ -38,7 +33,7 @@ export const NavigationBar: NavigationBarComponent = ({
   const nativeTrailingItems = useMemo(() => trailingItems?.map(toNativeItem), [trailingItems])
 
   return (
-    <Island matchContents={false} style={styles.bar} testID={testID}>
+    <Island h={BAR_HEIGHT} matchContents={false} testID={testID} w="100%">
       <TopAppBar
         fontFamily={font.fontFamily}
         fontSize={font.fontSize}

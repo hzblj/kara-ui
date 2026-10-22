@@ -183,7 +183,7 @@ const SwipeActionsDemo = () => {
 
   return (
     <Section caption="Swipe a row left to delete or share it, right to pin it. One row stays open at a time.">
-      <Island matchContents={false} style={{height: 240}}>
+      <Island h={240} matchContents={false}>
         <List>
           {orders.map(order => (
             <SwipeActions

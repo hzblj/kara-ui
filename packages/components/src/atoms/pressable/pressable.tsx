@@ -1,9 +1,11 @@
 import {useSplitSx} from '@hzblj/kara-sx'
-import {useCallback} from 'react'
-import {Pressable as RNPressable} from 'react-native'
+import {useAppTheme, withOpacity} from '@hzblj/kara-theme'
+import {useCallback, useMemo} from 'react'
+import {Platform, Pressable as RNPressable, View, type ViewStyle} from 'react-native'
 import Animated, {useAnimatedStyle, useSharedValue, withSpring} from 'react-native-reanimated'
 
 import {haptics} from '../../haptics'
+import {splitForRipple} from '../../ripple-clip'
 import type {PressableComponent, PressableProps} from './pressable.types'
 
 const SPRING = {damping: 20, stiffness: 400}
@@ -22,20 +24,39 @@ export const Pressable: PressableComponent = ({
   const scale = useSharedValue(1)
   const feedback = haptic === true ? 'light' : haptic || undefined
 
+  const theme = useAppTheme()
+  const isAndroid = Platform.OS === 'android'
+
   const rStyle = useAnimatedStyle(() => ({transform: [{scale: scale.value}]}), [])
+
+  // Android's press is Material's: a ripple over the content — the pressed state layer, `onSurface` at 10 % — clipped to
+  // the shape by an outer view (`splitForRipple`), and nothing moves. iOS springs down.
+  const ripple = useMemo(
+    () =>
+      isAndroid ? {color: withOpacity(String(theme.color('content.primary')), 'o10'), foreground: true} : undefined,
+    [isAndroid, theme]
+  )
+  const androidStyle = useMemo(
+    () => (isAndroid ? splitForRipple(resolved as ViewStyle) : undefined),
+    [isAndroid, resolved]
+  )
 
   // The finger is down: the Taptic Engine has until the release to wake, so the haptic lands with the press.
   const onPressIn = useCallback(() => {
-    scale.value = withSpring(0.96, SPRING)
+    if (!isAndroid) {
+      scale.value = withSpring(0.96, SPRING)
+    }
 
     if (feedback) {
       haptics.prepare(feedback)
     }
-  }, [feedback, scale])
+  }, [feedback, isAndroid, scale])
 
   const onPressOut = useCallback(() => {
-    scale.value = withSpring(1, SPRING)
-  }, [scale])
+    if (!isAndroid) {
+      scale.value = withSpring(1, SPRING)
+    }
+  }, [isAndroid, scale])
 
   const onPressWithHaptic = useCallback(() => {
     if (feedback) {
@@ -44,6 +65,25 @@ export const Pressable: PressableComponent = ({
 
     onPress?.()
   }, [feedback, onPress])
+
+  if (androidStyle) {
+    return (
+      <View style={androidStyle.outer}>
+        <RNPressable
+          android_ripple={ripple}
+          disabled={disabled}
+          hitSlop={8}
+          onPress={onPressWithHaptic}
+          onPressIn={onPressIn}
+          style={androidStyle.inner}
+          testID={testID}
+          {...rest}
+        >
+          {children}
+        </RNPressable>
+      </View>
+    )
+  }
 
   return (
     <AnimatedPressable

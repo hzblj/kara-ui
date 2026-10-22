@@ -23,6 +23,9 @@ const CONTENT_KEYS = new Set<string>([
 
 const FILL: ViewStyle = {flexGrow: 1}
 
+/** What gives the outer view a height of its own, rather than its content's. */
+const SIZING_KEYS = ['aspectRatio', 'flex', 'flexBasis', 'flexGrow', 'height', 'minHeight'] as const
+
 /**
  * Splits a resolved style for a pressable with an Android ripple. The ripple is drawn as the pressable's foreground,
  * which its own `overflow: hidden` does not clip — so it would spill past rounded corners. A parent clips its
@@ -43,5 +46,11 @@ export const splitForRipple = (style: ViewStyle | undefined): {inner: ViewStyle[
     }
   }
 
-  return {inner: [FILL, inner as ViewStyle], outer: outer as ViewStyle}
+  // Only a sized outer view needs the pressable stretched to it. Sized by its content it must not be: Yoga grows a
+  // `flexGrow` child of a fit-content parent to the most it may take — inside a row centred on its cross axis, the
+  // pressable would stretch to the row's full height and leave its content at the top.
+  const sized =
+    SIZING_KEYS.some(key => flat[key] !== undefined) || (flat.top !== undefined && flat.bottom !== undefined)
+
+  return {inner: sized ? [FILL, inner as ViewStyle] : [inner as ViewStyle], outer: outer as ViewStyle}
 }

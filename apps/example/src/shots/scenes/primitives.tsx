@@ -98,7 +98,7 @@ const RnFlatListScene: Scene = () => (
 )
 
 const ScrollViewScene: Scene = () => (
-  <Island matchContents={false} style={{height: 250}}>
+  <Island h={250} matchContents={false}>
     <ScrollView bg="surface.primary" borderRadius="large" p="s16" spacing="s12">
       {ROWS.slice(0, 8).map(row => (
         <VStack align="start" key={row} spacing="s8" wide>

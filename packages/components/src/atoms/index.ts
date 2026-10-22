@@ -1,6 +1,7 @@
 export * from './activity-indicator'
 export * from './avatar'
 export * from './badge'
+export * from './blur-view'
 export * from './box'
 export * from './button'
 export * from './card'

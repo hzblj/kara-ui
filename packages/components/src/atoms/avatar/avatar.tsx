@@ -32,7 +32,7 @@ export const Avatar: AvatarComponent = ({initials, size = 'md', source, testID}:
       w={diameter}
     >
       {source ? (
-        <Image source={source} style={{height: diameter, width: diameter}} />
+        <Image h={diameter} source={source} w={diameter} />
       ) : (
         <RnText color="content.secondary" variant={VARIANT[size]}>
           {initials ?? ''}

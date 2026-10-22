@@ -2,15 +2,10 @@ import {Box, ContextMenu, Image, type MenuAction, Pressable, RnText, SegmentedCo
 import {useZoomTransitionSourceId, ZOOM_TRANSITION_PARAM, ZoomTransition} from '@hzblj/kara-ui/router'
 import {router} from 'expo-router'
 import {useMemo, useState} from 'react'
-import {Platform, StyleSheet} from 'react-native'
+import {Platform} from 'react-native'
 
 import {Section} from '../../ui'
 import {DEFAULT_SETTINGS, PHOTOS, type Photo, type ZoomSettings} from './photos'
-
-const styles = StyleSheet.create({
-  card: {aspectRatio: 3 / 4, width: '100%'},
-  preview: {height: 360, width: 270},
-})
 
 type Choice<TValue extends string> = {label: string; value: TValue}
 
@@ -95,14 +90,20 @@ const PhotoCard = ({photo, settings}: PhotoCardProps) => {
       onPreviewPress={open}
       preview={
         <Box bg="surface.primary" borderRadius="large" overflow="hidden">
-          <Image cachePolicy="memory-disk" contentFit="cover" source={{uri: photo.uri}} style={styles.preview} />
+          <Image cachePolicy="memory-disk" contentFit="cover" h={360} source={{uri: photo.uri}} w={270} />
         </Box>
       }
     >
       <Pressable gap="s8" onPress={open}>
         <ZoomTransition.Source android={{borderRadius: 'large'}} identifier={sourceId}>
           <Box bg="surface.primary" borderRadius="large" overflow="hidden">
-            <Image cachePolicy="memory-disk" contentFit="cover" source={{uri: photo.uri}} style={styles.card} />
+            <Image
+              aspectRatio={3 / 4}
+              cachePolicy="memory-disk"
+              contentFit="cover"
+              source={{uri: photo.uri}}
+              w="100%"
+            />
           </Box>
         </ZoomTransition.Source>
         <RnText variant="subheadlineMedium">{photo.title}</RnText>

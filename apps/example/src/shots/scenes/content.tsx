@@ -1,6 +1,8 @@
 import {
   Avatar,
   Badge,
+  type BlurMaterial,
+  BlurView,
   Box,
   Button,
   Card,
@@ -23,17 +25,11 @@ import {
   Text,
   VStack,
 } from '@hzblj/kara-ui'
-import {StyleSheet} from 'react-native'
 
 import {PHOTOS} from '../../catalog/zoom/photos'
 import type {Scene} from '../shot.types'
 
 const noop = () => undefined
-
-const styles = StyleSheet.create({
-  fill: {...StyleSheet.absoluteFill},
-  photo: {borderRadius: 20, height: 220, width: '100%'},
-})
 
 const InsetDivider = () => (
   <VStack px="s16" wide>
@@ -183,12 +179,17 @@ const PHOTO = PHOTOS[0]?.uri
 
 const GlassViewScene: Scene = () => (
   <Box borderRadius="large" h={220} overflow="hidden">
-    <Image cachePolicy="memory-disk" contentFit="cover" source={{uri: PHOTO}} style={styles.fill} />
+    <Image cachePolicy="memory-disk" contentFit="cover" inset={0} position="absolute" source={{uri: PHOTO}} />
     <Box align="center" flex={1} flexDirection="row" gap="s12" justify="center">
-      <GlassView px="s20" py="s12">
-        <RnText variant="labelMedium">Glass</RnText>
-      </GlassView>
-      <Pressable onPress={noop}>
+      {/* `borderRadius="full"`: Android's ripple keeps to the capsule. */}
+      <Pressable borderRadius="full" onPress={noop}>
+        <GlassView interactive px="s20" py="s12">
+          <RnText pointerEvents="none" variant="labelMedium">
+            Glass
+          </RnText>
+        </GlassView>
+      </Pressable>
+      <Pressable borderRadius="full" onPress={noop}>
         <GlassView interactive px="s20" py="s12" tint="fill.accent.primary">
           <RnText color="content.on.bg" pointerEvents="none" variant="labelMedium">
             Tinted
@@ -196,6 +197,20 @@ const GlassViewScene: Scene = () => (
         </GlassView>
       </Pressable>
     </Box>
+  </Box>
+)
+
+const MATERIALS: BlurMaterial[] = ['ultraThin', 'thin', 'regular', 'thick', 'ultraThick']
+
+/** All five materials over the same photo, thinnest first: how much each lets through is the whole point. */
+const BlurViewScene: Scene = () => (
+  <Box borderRadius="large" gap="s8" h={260} justify="center" overflow="hidden" px="s16">
+    <Image cachePolicy="memory-disk" contentFit="cover" inset={0} position="absolute" source={{uri: PHOTO}} />
+    {MATERIALS.map(material => (
+      <BlurView borderRadius="medium" key={material} material={material} px="s16" py="s8">
+        <RnText variant="labelMedium">{material}</RnText>
+      </BlurView>
+    ))}
   </Box>
 )
 
@@ -213,12 +228,13 @@ const EmptyStateScene: Scene = () => (
 )
 
 const ImageScene: Scene = () => (
-  <Image cachePolicy="memory-disk" contentFit="cover" source={{uri: PHOTO}} style={styles.photo} />
+  <Image borderRadius="large" cachePolicy="memory-disk" contentFit="cover" h={220} source={{uri: PHOTO}} w="100%" />
 )
 
 export const CONTENT_SCENES = {
   avatar: AvatarScene,
   badge: BadgeScene,
+  'blur-view': BlurViewScene,
   card: CardScene,
   'empty-state': EmptyStateScene,
   'glass-view': GlassViewScene,

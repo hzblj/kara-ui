@@ -112,6 +112,8 @@ export const palette = {
     depth: adaptive({dark: gray[23], light: gray[3], ...MAX_CONTRAST_SURFACE}),
     high: {contrast: native({android: 'inverseSurface', ios: 'labelColor'})},
     primary: native({android: 'surfaceContainerLow', ios: 'secondarySystemGroupedBackgroundColor'}),
+    /** A step above `primary` — Material's `surfaceContainer`, what a top app bar fills with once content scrolls under it. */
+    secondary: native({android: 'surfaceContainer', ios: 'tertiarySystemGroupedBackgroundColor'}),
   },
 } as const satisfies PaletteShape
 

@@ -1,14 +1,10 @@
 import {Box, GlassView, Image, Pressable, RnIcon, RnScrollView, RnText} from '@hzblj/kara-ui'
 import {useZoomTransitionParam, ZoomTransition} from '@hzblj/kara-ui/router'
 import {router, useLocalSearchParams} from 'expo-router'
-import {Platform, StyleSheet} from 'react-native'
+import {Platform} from 'react-native'
 import {useSafeAreaInsets} from 'react-native-safe-area-context'
 
 import {enablerProps, photo as findPhoto, parseSettings, type ZoomSettings} from './photos'
-
-const styles = StyleSheet.create({
-  photo: {aspectRatio: 3 / 4, width: '100%'},
-})
 
 /** iOS draws its own close over the photo: the modal has no native bar there (see the root layout). */
 const CloseButton = () => {
@@ -52,11 +48,12 @@ export const ZoomDetailScreen = () => {
             <ZoomTransition.Target android={{borderRadius: 'large'}} identifier={sourceId}>
               <Box bg="surface.primary" borderRadius="large" overflow="hidden">
                 <Image
+                  aspectRatio={3 / 4}
                   cachePolicy="memory-disk"
                   contentFit="cover"
                   source={{uri: entry.uri}}
-                  style={styles.photo}
                   transition={null}
+                  w="100%"
                 />
               </Box>
             </ZoomTransition.Target>

@@ -1,25 +1,65 @@
-import {AnimatedVisibility, Column, Text as ComposeText, Row} from '@expo/ui/jetpack-compose'
-import {clickable} from '@expo/ui/jetpack-compose/modifiers'
-import {useAppTheme} from '@hzblj/kara-theme'
+import {
+  AnimatedVisibility,
+  Box,
+  Column,
+  Text as ComposeText,
+  EnterTransition,
+  ExitTransition,
+  Row,
+} from '@expo/ui/jetpack-compose'
+import {
+  animated,
+  clickable,
+  defaultMinSize,
+  fillMaxWidth,
+  graphicsLayer,
+  tween,
+} from '@expo/ui/jetpack-compose/modifiers'
+import {duration, useAppTheme} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
 import {Glyph} from '../../glyph'
 import {useHostGuard} from '../../host-context'
 import type {CollapsibleComponent, CollapsibleProps} from './collapsible.types'
 
+/** Material's standard easing, at the length a disclosure takes. */
+const TURN = tween({durationMillis: duration.d200, easing: 'fastOutSlowIn'})
+
+/** Down from the row, fading in — Compose's default grows from a corner, sideways as well as down. */
+const ENTER = EnterTransition.expandVertically().plus(EnterTransition.fadeIn())
+const EXIT = ExitTransition.shrinkVertically().plus(ExitTransition.fadeOut())
+
+const WIDE = [fillMaxWidth()]
+
+/** Material's least touch target. */
+const ROW_HEIGHT = 48
+
+/**
+ * A pressable row and an animated reveal: the content expands down from the row, and the chevron turns a quarter
+ * toward it, as a Material disclosure does — it used to jump between two glyphs. The row spans its parent, the chevron
+ * at the far end, and is never shorter than a touch target.
+ */
 export const Collapsible: CollapsibleComponent = ({children, expanded, label, onExpandedChange}: CollapsibleProps) => {
   useHostGuard('Collapsible')
   const theme = useAppTheme()
-  const modifiers = useMemo(() => [clickable(() => onExpandedChange(!expanded))], [expanded, onExpandedChange])
+  const modifiers = useMemo(
+    () => [fillMaxWidth(), defaultMinSize({minHeight: ROW_HEIGHT}), clickable(() => onExpandedChange(!expanded))],
+    [expanded, onExpandedChange]
+  )
+  const turn = useMemo(() => [graphicsLayer({rotationZ: animated(expanded ? 90 : 0, TURN)})], [expanded])
 
   return (
-    <Column>
+    <Column modifiers={WIDE}>
       <Row horizontalArrangement="spaceBetween" modifiers={modifiers} verticalAlignment="center">
         <ComposeText color={theme.colorString('content.primary')} style={theme.typography.body}>
           {label}
         </ComposeText>
-        <Glyph name={expanded ? 'chevronDown' : 'chevronRight'} size="s20" />
+        <Box modifiers={turn}>
+          <Glyph name="chevronRight" size="s20" />
+        </Box>
       </Row>
-      <AnimatedVisibility visible={expanded}>{children}</AnimatedVisibility>
+      <AnimatedVisibility enterTransition={ENTER} exitTransition={EXIT} visible={expanded}>
+        {children}
+      </AnimatedVisibility>
     </Column>
   )
 }

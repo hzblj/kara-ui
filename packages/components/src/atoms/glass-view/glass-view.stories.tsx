@@ -12,14 +12,15 @@ const meta = {
   component: GlassView,
   parameters: {
     notes:
-      'Liquid Glass on iOS 26, as a UIKit view — no host, so it is cheap enough for every cell of a list. Below iOS 26 ' +
-      'and on Android it is a plain capsule of the tint (or the translucent glass fill). The glass shows together with its ' +
-      'content, also inside a fade or a list cell that mounts hidden. Interactive glass swells toward the finger and ' +
-      'carries its children; the press itself belongs to a `Pressable` around it.',
+      'Liquid Glass on iOS 26, as a UIKit view — no host, so it is cheap enough for every cell of a list. On Android ' +
+      'it is frosted glass: what lies behind, blurred and saturated (Android 12+), under a translucent tonal surface. ' +
+      'Below iOS 26 it is a plain capsule of the tint (or the translucent glass fill). Interactive glass swells toward ' +
+      'the finger on iOS; the press itself belongs to a `Pressable` around it, whose ripple keeps to the capsule on ' +
+      'Android with `borderRadius="full"`.',
   },
   render: args => (
     <Box align="center" bg="fill.accent.primary" borderRadius="large" p="s24">
-      <Pressable onPress={fn()}>
+      <Pressable borderRadius="full" onPress={fn()}>
         <GlassView {...args}>
           <Box pointerEvents="none">
             <RnText variant="labelMedium">Glass capsule</RnText>

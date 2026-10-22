@@ -4,15 +4,17 @@ import {spacing} from '@hzblj/kara-theme'
 import {Children, useCallback, useEffect, useMemo, useRef, useState} from 'react'
 
 import {HStack} from '../../atoms/h-stack'
+import {Spacer} from '../../atoms/spacer'
 import {VStack} from '../../atoms/v-stack'
 import {useHostGuard} from '../../host-context'
 import type {PagerComponent, PagerProps} from './pager.types'
 
 const DOT_SIZE = 6
 
-/** Compose ships no page indicator, so the dots are composed out of atoms. */
+/** Compose ships no page indicator, so the dots are composed out of atoms — centred between two spacers. */
 const PagerDots = ({count, current}: {count: number; current: number}) => (
   <HStack align="center" py="s12" spacing="s6" wide>
+    <Spacer />
     {Array.from({length: count}, (_, index) => (
       <VStack
         bg={index === current ? 'content.primary' : 'fill.tertiary'}
@@ -22,6 +24,7 @@ const PagerDots = ({count, current}: {count: number; current: number}) => (
         w={DOT_SIZE}
       />
     ))}
+    <Spacer />
   </HStack>
 )
 

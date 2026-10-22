@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Alert,
   Box,
   Button,
@@ -41,13 +42,32 @@ const ProgressDemo = () => (
   </>
 )
 
+const ActivityIndicatorDemo = () => (
+  <>
+    <Section
+      caption="Beside what is loading. iOS turns UIKit’s spinner; Android morphs Material 3’s expressive shapes."
+      title="Small"
+    >
+      <Box align="center" bg="surface.primary" borderRadius="large" flexDirection="row" gap="s12" p="s16">
+        <ActivityIndicator />
+        <RnText color="content.secondary">Loading your orders…</RnText>
+      </Box>
+    </Section>
+    <Section caption="Holding a screen while it loads." title="Large">
+      <Box align="center" bg="surface.primary" borderRadius="large" justify="center" p="s32">
+        <ActivityIndicator size="large" />
+      </Box>
+    </Section>
+  </>
+)
+
 const SkeletonDemo = () => (
   <Section caption="Placeholders while content loads.">
     <Box bg="surface.primary" borderRadius="large" flexDirection="row" gap="s12" p="s16">
-      <Skeleton borderRadius="full" height={48} width={48} />
+      <Skeleton borderRadius="full" h={48} w={48} />
       <Box flex={1} gap="s8" justify="center">
-        <Skeleton height={16} width={160} />
-        <Skeleton height={16} />
+        <Skeleton h={16} w={160} />
+        <Skeleton h={16} />
       </Box>
     </Box>
   </Section>
@@ -142,7 +162,15 @@ export const FEEDBACK: CatalogEntry[] = [
     tags: NATIVE,
   },
   {
-    code: '<Skeleton height={16} width={160} />',
+    code: '<ActivityIndicator />\n<ActivityIndicator size="large" />',
+    Demo: ActivityIndicatorDemo,
+    id: 'activity-indicator',
+    name: 'ActivityIndicator',
+    summary: 'That something is loading, for as long as it takes.',
+    tags: KARA_MODULE,
+  },
+  {
+    code: '<Skeleton h={16} w={160} />',
     Demo: SkeletonDemo,
     id: 'skeleton',
     name: 'Skeleton',

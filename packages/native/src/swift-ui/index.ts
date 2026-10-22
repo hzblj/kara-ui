@@ -1,4 +1,5 @@
 export * from '../availability'
+export * from './blur-view'
 export * from './context-menu'
 export * from './glass-view'
 export * from './icon-view'

@@ -6,8 +6,6 @@ import {Text} from '../text'
 import {VStack} from '../v-stack'
 import {Island} from './island'
 
-const FIXED_HEIGHT = {height: 76}
-
 const meta = {
   component: Island,
   parameters: {
@@ -44,7 +42,7 @@ export const HostingReactNative: Story = {
       'size back into that same Yoga style, and the two loop until the main thread hangs.',
   },
   render: () => (
-    <Island matchContents={false} style={FIXED_HEIGHT}>
+    <Island h={76} matchContents={false}>
       <VStack bg="surface.primary" borderRadius="medium" p="s8" spacing="s8" wide>
         <Text variant="label">React Native boxes below</Text>
         <RnView>

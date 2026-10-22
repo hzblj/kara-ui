@@ -167,7 +167,10 @@ export const installation: Guide = {
             ['`@expo/ui`', 'The SwiftUI and Jetpack Compose views the native tier renders.'],
             ['`@lodev09/react-native-true-sheet`', '`Sheet` and the sheets built on it.'],
             ['`expo-image`', '`Image`, `Avatar` and the photos in a `ZoomTransition`.'],
-            ['`react-native-reanimated`, `react-native-worklets`', '`Pressable`’s spring, `Skeleton`, `Snackbar`.'],
+            [
+              '`react-native-reanimated`, `react-native-worklets`',
+              '`Pressable`’s spring on iOS, `ScrollEdgeContainer` on Android, `Skeleton`, `Snackbar`.',
+            ],
             ['`expo-router` (optional)', '`@hzblj/kara-ui/router`.'],
           ]}
         />
@@ -241,7 +244,7 @@ const SCREEN = `export default function Settings() {
   )
 }`
 
-const ISLAND_HEIGHT = `<Island matchContents={false} style={{height: 240}}>
+const ISLAND_HEIGHT = `<Island h={240} matchContents={false}>
   <List>
     <ListItem title="Account" />
     <ListItem title="Privacy" />

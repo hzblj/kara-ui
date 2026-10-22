@@ -240,7 +240,8 @@ export const COMPONENTS: ComponentDoc[] = [
     id: 'pressable',
     name: 'Pressable',
     notes: [
-      'Springs to 96 % while held and takes touches 8 points past its edges.',
+      'The press is each platform’s own: iOS springs it to 96 % while held; Android draws Material’s ripple over the content, clipped to the pressable’s shape — give it the `borderRadius` of what it wraps (`full` around a `GlassView`).',
+      'It takes touches 8 points past its edges.',
       '`haptic` is `true` for a light impact, or any haptic by name. iOS prepares it on press-in.',
     ],
     renders: {android: 'React Native Pressable', ios: 'React Native Pressable'},
@@ -442,6 +443,14 @@ export const COMPONENTS: ComponentDoc[] = [
   {
     code: `<Text variant="headline">Order summary</Text>
 <Text color="content.secondary">Arrives Friday</Text>`,
+    examples: [
+      {
+        code: `<Text ios={{animation: {value: count}, contentTransition: {type: 'numericText'}, monospacedDigit: true}}>
+  {String(count)}
+</Text>`,
+        title: 'A number that rolls to the next',
+      },
+    ],
     exports: ['Text'],
     group: 'content',
     host: 'native',
@@ -451,6 +460,8 @@ export const COMPONENTS: ComponentDoc[] = [
       'Native text, inside a host. Outside one, use `RnText` — same variants, same colours.',
       'Every variant grows with Dynamic Type on iOS and font scale on Android.',
       'With `numberOfLines`, iOS ends the last line with an ellipsis; Android clips it.',
+      'It takes the native `sx` surface: padding, a background, a frame — `wide` puts the text on the side `align` names.',
+      'On iOS, `contentTransition` with `animation` rolls a number to its next value; Android shows the new one at once.',
     ],
     renders: {android: 'Compose Text', ios: 'SwiftUI Text'},
     summary: 'Text in the type scale, coloured by token.',
@@ -529,7 +540,7 @@ export const COMPONENTS: ComponentDoc[] = [
     types: ['IconProps'],
   },
   {
-    code: `<Image contentFit="cover" source={{uri: photo}} style={{borderRadius: 20, height: 220, width: '100%'}} />`,
+    code: `<Image borderRadius="large" contentFit="cover" h={220} source={{uri: photo}} w="100%" />`,
     exports: ['Image'],
     group: 'content',
     host: 'rn',
@@ -537,6 +548,7 @@ export const COMPONENTS: ComponentDoc[] = [
     name: 'Image',
     notes: [
       '`expo-image`, with the design system’s 100 ms linear fade already applied, so a loaded image never pops in. It takes every `expo-image` prop.',
+      'It takes `Box`’s `sx` props for its own box: `w`, `h`, `aspectRatio`, `borderRadius`, `position` and `inset` — no `style` object needed.',
     ],
     renders: {android: 'expo-image', ios: 'expo-image'},
     summary: 'A remote or local image that fades in.',
@@ -581,7 +593,30 @@ export const COMPONENTS: ComponentDoc[] = [
     types: ['SurfaceProps'],
   },
   {
-    code: `<Pressable onPress={play}>
+    code: `<BlurView borderRadius="large" material="thin" p="s16">
+  <RnText variant="headline">Now playing</RnText>
+</BlurView>`,
+    examples: [
+      {code: '<BlurView material="ultraThick" vibrancy="secondary">…</BlurView>', title: 'Vibrant content (iOS)'},
+      {code: '<BlurView appearance="dark" material="thin">…</BlurView>', title: 'A dark HUD over any screen'},
+    ],
+    exports: ['BlurView'],
+    group: 'content',
+    host: 'rn',
+    id: 'blur-view',
+    name: 'BlurView',
+    notes: [
+      'The five system materials, by SwiftUI’s names — `ultraThin`, `thin`, `regular`, `thick`, `ultraThick` — as a UIKit view on iOS: no host, cheap enough for a list cell.',
+      '`vibrancy` draws the content the way iOS draws its own on a material: its colour becomes the material’s vibrant one at that level, its alpha the mask. iOS only.',
+      'Android has the same five, in its own terms: what lies behind, blurred and saturated (Android 12+), under a Material tonal surface that rises from `surface` to `surfaceContainerHighest` as the material thickens. Below Android 12 the surface alone, near-opaque.',
+      '`appearance` pins a material to light or dark whatever the app’s — Android draws the opposite one with Material’s inverse surface.',
+    ],
+    renders: {android: 'Backdrop blur + tonal surface (kara)', ios: 'UIBlurEffect system materials'},
+    summary: 'The system materials — what sheets, bars, menus and HUDs are made of.',
+    types: ['BlurViewProps'],
+  },
+  {
+    code: `<Pressable borderRadius="full" onPress={play}>
   <GlassView interactive px="s20" py="s12">
     <RnText pointerEvents="none" variant="labelMedium">Play</RnText>
   </GlassView>
@@ -593,11 +628,13 @@ export const COMPONENTS: ComponentDoc[] = [
     name: 'GlassView',
     notes: [
       'Liquid Glass on iOS 26, as a UIKit view — no host, so it is cheap enough for every cell of a list.',
-      'Below iOS 26 and on Android it is a capsule of `tint`, or of the translucent glass fill.',
-      'Interactive glass swells toward the finger and carries its children; the press itself belongs to a `Pressable` around it.',
+      'Android has frosted glass of its own: what lies behind the capsule, blurred (Android 12+), under a translucent tonal surface — or `tint` — and a light hairline; the blurred surfaces Android 16 gives its system UI. Below Android 12 the same colours are drawn near-opaque, so the content stays readable.',
+      'Below iOS 26 it is a capsule of `tint`, or of the translucent glass fill.',
+      'Interactive glass swells toward the finger on iOS and carries its children; the press itself belongs to a `Pressable` around it — with `borderRadius="full"`, its Android ripple keeps to the capsule.',
+      'On Android each glass re-records what lies behind it before every frame: a few buttons cost nothing, but keep it out of the cells of a long list.',
     ],
-    renders: {android: 'A translucent capsule', ios: 'UIGlassEffect'},
-    summary: 'Liquid Glass around any React Native content.',
+    renders: {android: 'Frosted glass — backdrop blur (kara)', ios: 'UIGlassEffect'},
+    summary: 'Glass around any React Native content — Liquid Glass on iOS, frosted on Android.',
     types: ['GlassViewProps'],
   },
   {
@@ -656,7 +693,8 @@ export const COMPONENTS: ComponentDoc[] = [
     name: 'Island',
     notes: [
       'Native views only render inside an `Island` or a `Screen`. Outside one they silently disappear (in development, a warning says so).',
-      'Sized to its content by default. Give it `matchContents={false}` and a height when the content has none of its own — a `List`, a `Form`, a `Pager` — or contains an `RnView`.',
+      'Sized to its content by default. Give it `matchContents={false}` and a height (`h`) when the content has none of its own — a `List`, a `Form`, a `Pager` — or contains an `RnView`.',
+      'It sits in React Native layout like a `Box` and takes the same `sx` props: `h`, `flex`, margins.',
       '`RnView` carries a React Native view back into a native layout.',
     ],
     renders: {android: 'Compose Host', ios: 'SwiftUI Host'},
@@ -753,12 +791,15 @@ export const COMPONENTS: ComponentDoc[] = [
     host: 'native',
     id: 'collapsible',
     name: 'Collapsible',
+    notes: [
+      'The animation is each platform’s own and not configurable: SwiftUI’s disclosure on iOS; on Android the content expands down from the row with a fade and the chevron turns toward it, as a Material disclosure does.',
+    ],
     renders: {android: 'Compose AnimatedVisibility', ios: 'SwiftUI DisclosureGroup'},
     summary: 'Content that expands under its label.',
     types: ['CollapsibleProps'],
   },
   {
-    code: `<Island matchContents={false} style={{height: 220}}>
+    code: `<Island h={220} matchContents={false}>
   <Pager indicators onPageChange={setPage} page={page}>
     <Promo title="New in" />
     <Promo title="Running" />
@@ -790,10 +831,10 @@ export const COMPONENTS: ComponentDoc[] = [
     notes: [
       'iOS 26 gives both bars the system scroll edge effect — the progressive blur under content scrolling past them.',
       'Below iOS 26 the bars are still inset, without the effect: check `isScrollEdgeEffectAvailable()` and give them a background.',
-      'Android has no effect, so the bars stack above and below the scroll view instead of over it.',
+      'Android does what a Material top app bar does on scroll: the bars stack above and below the scroll view, transparent at rest, and fill with `surface.secondary` (Material’s `surfaceContainer`) once content scrolls under the top one — the bottom one while there is more below. The scroll view keeps its own `onScroll`.',
     ],
-    renders: {android: 'A column of bar, scroll view, bar', ios: 'UIScrollEdgeEffect'},
-    summary: 'Bars over a scroll view, with the iOS 26 scroll edge effect under them.',
+    renders: {android: 'Material bars that fill on scroll', ios: 'UIScrollEdgeEffect'},
+    summary: 'Bars over a scroll view, with each platform’s scroll edge under them.',
     types: ['ScrollEdgeContainerProps'],
   },
 
@@ -816,22 +857,24 @@ export const COMPONENTS: ComponentDoc[] = [
     code: '<ActivityIndicator />',
     exports: ['ActivityIndicator'],
     group: 'feedback',
-    host: 'rn',
+    host: 'self',
     id: 'activity-indicator',
     name: 'ActivityIndicator',
     notes: [
-      'React Native’s own spinner, tinted with `fill.accent.primary`. It takes every React Native `ActivityIndicator` prop.',
+      'iOS turns UIKit’s spinner; Android plays Material 3’s expressive loading indicator, its shapes morphing as it turns.',
+      'It renders anywhere: a React Native view on iOS, a host of its own on Android. Tinted `fill.accent.primary` unless `color` names another token.',
+      'For how far along something is, use `Progress`.',
     ],
-    renders: {android: 'React Native ActivityIndicator', ios: 'React Native ActivityIndicator'},
-    summary: 'A small spinner, for the React Native tier.',
-    types: [],
+    renders: {android: 'Compose LoadingIndicator (Material 3 Expressive)', ios: 'UIActivityIndicatorView'},
+    summary: 'That something is loading, for as long as it takes.',
+    types: ['ActivityIndicatorProps'],
   },
   {
     code: `<Box flexDirection="row" gap="s12">
-  <Skeleton borderRadius="full" height={48} width={48} />
+  <Skeleton borderRadius="full" h={48} w={48} />
   <Box flex={1} gap="s8">
-    <Skeleton height={14} width={140} />
-    <Skeleton height={14} />
+    <Skeleton h={14} w={140} />
+    <Skeleton h={14} />
   </Box>
 </Box>`,
     exports: ['Skeleton'],
@@ -1079,6 +1122,7 @@ const zoomId = useZoomTransitionParam()
     name: 'RnText',
     notes: [
       'The same variants and colours as `Text`, for text outside a native host. It takes every React Native `Text` prop.',
+      'And `Box`’s `sx` props for its own box — margins, `flex`, padding — except `align`, which aligns its lines.',
     ],
     renders: {android: 'React Native Text', ios: 'React Native Text'},
     summary: 'React Native text in the type scale.',

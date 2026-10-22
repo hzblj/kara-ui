@@ -1,0 +1,13 @@
+# Content scrolls under the bars and back: iOS blurs it under them, Android fills them as a Material top app bar does.
+# The second swipe overshoots the top, so the list settles exactly there and the loop ends where it began.
+appId: com.hzblj.karaui.example
+---
+- startRecording: ${VIDEO}
+- takeScreenshot: ${STILL}
+- runFlow: {file: pause.yaml, env: {MS: 900}}
+- swipe: {start: '50%,57%', end: '50%,44%', duration: 900}
+- runFlow: {file: pause.yaml, env: {MS: 1500}}
+- swipe: {start: '50%,44%', end: '50%,62%', duration: 700}
+# Long enough for the scroll indicator to fade, as it had not yet at the start.
+- runFlow: {file: pause.yaml, env: {MS: 2400}}
+- stopRecording

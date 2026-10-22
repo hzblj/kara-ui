@@ -1,4 +1,6 @@
 import {
+  Animation,
+  animation,
   aspectRatio,
   background,
   blur,
@@ -20,6 +22,7 @@ import {
   layoutPriority,
   luminanceToAlpha,
   type ModifierConfig,
+  monospacedDigit,
   offset,
   opacity as opacityModifier,
   padding,
@@ -275,12 +278,22 @@ const iosModifiers = (ios: IosSx | undefined, theme: Theme, box: BoxShape): Modi
     modifiers.push(luminanceToAlpha())
   }
 
+  if (ios.monospacedDigit) {
+    modifiers.push(monospacedDigit())
+  }
+
   if (ios.contentTransition) {
     modifiers.push(
       contentTransition(ios.contentTransition.type, {
         countsDown: ios.contentTransition.countsDown,
       })
     )
+  }
+
+  // After the transition it plays: the animation is what makes the content change animate at all.
+  if (ios.animation) {
+    const {curve = 'default', duration, value} = ios.animation
+    modifiers.push(animation(curve === 'default' ? Animation.default : Animation[curve]({duration}), value))
   }
 
   if (ios.modifiers) {
