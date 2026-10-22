@@ -52,6 +52,13 @@ internal struct ScrollEdgeContainerView: ExpoSwiftUI.View, ExpoSwiftUI.WithHosti
   }
 }
 
+/**
+ Always the same structure, a bar of height 0 included: an `if height > 0` here put `content` in another branch when
+ the bar measured itself, and SwiftUI rebuilt the hosted React Native children for it. Each rebuild makes a new
+ `UIViewHost` container that takes the view with `addSubview`; on a remount (recycled React Native views) SwiftUI
+ made several and dropped the last one, whose dealloc took the scroll view and the top bar with it — they were
+ gone until the screen was rebuilt.
+ */
 private struct EdgeBarModifier: ViewModifier {
   let edge: VerticalEdge
   let height: Double
@@ -60,24 +67,20 @@ private struct EdgeBarModifier: ViewModifier {
 
   @ViewBuilder
   func body(content: Content) -> some View {
-    if height > 0 {
-      let sizedBar = bar
-        .frame(maxWidth: .infinity)
-        .frame(height: height)
-        .background(EdgeElementShape(opacity: elementOpacity))
+    let sizedBar = bar
+      .frame(maxWidth: .infinity)
+      .frame(height: height)
+      .background(EdgeElementShape(opacity: height > 0 ? elementOpacity : 0))
 
 #if compiler(>=6.2)
-      if #available(iOS 26.0, *) {
-        content.safeAreaBar(edge: edge, spacing: 0) { sizedBar }
-      } else {
-        content.safeAreaInset(edge: edge, spacing: 0) { sizedBar }
-      }
-#else
-      content.safeAreaInset(edge: edge, spacing: 0) { sizedBar }
-#endif
+    if #available(iOS 26.0, *) {
+      content.safeAreaBar(edge: edge, spacing: 0) { sizedBar }
     } else {
-      content
+      content.safeAreaInset(edge: edge, spacing: 0) { sizedBar }
     }
+#else
+    content.safeAreaInset(edge: edge, spacing: 0) { sizedBar }
+#endif
   }
 }
 
