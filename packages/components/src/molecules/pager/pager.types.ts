@@ -11,6 +11,7 @@ import type {ReactNode} from 'react'
  * ceremony would buy nothing.
  */
 export type PagerProps = {
+  /** The pages, one per child, in order. */
   children?: ReactNode
   /**
    * Page dots. iOS draws SwiftUI's own, over the bottom edge; Compose has no built-in indicator, so
@@ -28,6 +29,7 @@ export type PagerProps = {
    * content down with the swipe, so iOS always stays swipeable.
    */
   scrollEnabled?: boolean
+  /** Test identifier, forwarded to the native view. */
   testID?: string
 }
 

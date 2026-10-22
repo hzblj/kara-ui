@@ -1,5 +1,6 @@
 import type {ReactElement, ReactNode} from 'react'
 
+/** Carries a React Native view into a SwiftUI or Compose tree — `@expo/ui`'s `RNHostView` on both platforms. */
 export type RnViewProps = {
   /**
    * A single React Native *view*. It may not contain React Native text: a bare string becomes a
@@ -15,6 +16,7 @@ export type RnViewProps = {
    * intrinsic size and would otherwise stretch to fill the SwiftUI parent.
    */
   matchContents?: boolean
+  /** Not forwarded on either platform — give the child its own `testID`. */
   testID?: string
 }
 

@@ -6,9 +6,13 @@ import {useMemo} from 'react'
 import {useHostGuard} from '../../host-context'
 import type {CheckboxComponent, CheckboxProps} from './checkbox.types'
 
+/** Stands in for a missing handler: Material drops its 48dp touch target without one, and the box moves. */
+const NOOP = () => undefined
+
 /**
- * Material's checkbox, tinted with the accent. With a label it is a full-width row that toggles as a whole; the gap is
- * explicit because a checkbox without a handler drops Material's 48dp touch target, and with it the space around it.
+ * Material's checkbox, tinted with the accent. With a label it is a full-width row that toggles as a whole. It always
+ * gets a handler, so a disabled or read-only box keeps the touch target an enabled one has, and lines up with it;
+ * `enabled` is what stops the input.
  */
 export const Checkbox: CheckboxComponent = ({disabled = false, label, onValueChange, value}: CheckboxProps) => {
   useHostGuard('Checkbox')
@@ -21,7 +25,7 @@ export const Checkbox: CheckboxComponent = ({disabled = false, label, onValueCha
     <ComposeCheckbox
       colors={{checkedColor: theme.color('fill.accent.primary'), checkmarkColor: theme.color('content.on.bg')}}
       enabled={!disabled}
-      onCheckedChange={onValueChange}
+      onCheckedChange={onValueChange ?? NOOP}
       value={value}
     />
   )

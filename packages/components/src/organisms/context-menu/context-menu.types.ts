@@ -10,6 +10,7 @@ import type {MenuAction} from '../menu'
  * needs no `Screen` or `Island`.
  */
 export type ContextMenuProps = ResponsiveViewSx & {
+  /** The menu's actions, top to bottom. */
   actions: MenuAction[]
   /** The trigger, laid out as usual. */
   children: ReactNode
@@ -29,10 +30,13 @@ export type ContextMenuProps = ResponsiveViewSx & {
    * `ZoomTransition.Source`, `pop` otherwise.
    */
   previewTransition?: 'dismiss' | 'pop' | 'zoom'
+  /** Test identifier — on the native view around the trigger on iOS, on the trigger's `Pressable` on Android. */
   testID?: string
 }
 
+/** A region of a `ContextMenu`'s trigger that keeps its own long press — see `ContextMenu.Exclusion`. */
 export type ContextMenuExclusionProps = {
+  /** The region — a button inside the card, say. */
   children: ReactNode
 }
 

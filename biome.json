@@ -17,7 +17,10 @@
       "!apps/example/android",
       "!packages/native/android/build",
       "!**/expo-env.d.ts",
-      "!**/storybook.requires.ts"
+      "!**/storybook.requires.ts",
+      "!**/.next",
+      "!**/next-env.d.ts",
+      "!apps/website/public/media"
     ]
   },
   "linter": {
@@ -82,5 +85,10 @@
         }
       }
     }
-  ]
+  ],
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
+  }
 }

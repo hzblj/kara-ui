@@ -5,9 +5,13 @@ import type {ReactNode} from 'react'
  * renders nothing and says so in dev. Branch on `Platform.OS` if the screen needs a fallback.
  */
 export type ColorPickerProps = {
+  /** Text beside the colour well. */
   label?: string
+  /** Called with the colour the user picks. */
   onValueChange?: (color: string) => void
+  /** Lets the user pick an opacity as well. Off by default. */
   supportsOpacity?: boolean
+  /** Test identifier, forwarded to the native view. */
   testID?: string
   /** `#RRGGBB` or `#RRGGBBAA`. */
   value: string | null

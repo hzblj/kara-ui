@@ -47,7 +47,9 @@ const valueAt = (value: ResponsiveValue, active: ActiveBreakpoint): unknown => {
  * app, responsive or not.
  *
  * Hands back the very object it was given when nothing in it is responsive, which is the overwhelming
- * case: `sx()` wraps every view, and those call sites paying nothing is what keeps it affordable.
+ * case: `sx()` wraps every view, and those call sites paying nothing is what keeps it affordable. For
+ * the same reason it walks the props the component set rather than `keys`, and asks `keys` only about
+ * a value that already looks responsive.
  */
 export const flattenSx = <TSx extends object, TKey extends keyof TSx & string>(
   sx: ResponsiveOf<TSx, TKey>,
@@ -57,10 +59,10 @@ export const flattenSx = <TSx extends object, TKey extends keyof TSx & string>(
   const source = sx as Record<string, unknown>
   let flattened: Record<string, unknown> | undefined
 
-  for (const name of keys) {
+  for (const name of Object.keys(source)) {
     const value = source[name]
 
-    if (isResponsive(value)) {
+    if (isResponsive(value) && keys.includes(name as TKey)) {
       flattened ??= {...source}
       flattened[name] = valueAt(value, active)
     }

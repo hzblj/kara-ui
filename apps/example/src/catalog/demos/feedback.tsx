@@ -98,7 +98,7 @@ const TooltipDemo = () => {
   const [visible, setVisible] = useState(false)
 
   return (
-    <Section caption="A popover on iOS. Material shows its tooltip on a long press.">
+    <Section caption="Tap the link: a popover on iOS, Material’s plain tooltip on Android. A tap outside dismisses it.">
       <Island>
         <Tooltip onDismiss={() => setVisible(false)} text="Free returns within 30 days" visible={visible}>
           <HStack onPress={() => setVisible(true)} py="s8">

@@ -18,7 +18,7 @@ platform and never write a raw value.
 | `src/sx-to-style.ts`, `view-sx-to-style.ts` | `sx` → React Native `ViewStyle`, plus the view cache. |
 | `src/use-sx.ts` | `useSx` and `useSplitSx` — for components that own their `style` prop. |
 | `src/with-sx.tsx` | `sx(Component)` — wraps any style-taking component, memoised. |
-| `src/resolve-cache.ts`, `sx-key.ts`, `value-key.ts`, `sx-keys.ts` | The cache: stable style objects shared across components, keyed by flattened values + theme variant. |
+| `src/resolve-cache.ts`, `sx-key.ts`, `value-key.ts`, `present-keys.ts`, `sx-keys.ts` | The cache: stable style objects shared across components, keyed by flattened values + theme variant. Keys are built from the props a component set, not by walking the key lists. |
 | `src/sx-padding.ts` | The padding cascade (`pt` beats `py` beats `p`). |
 
 ## Rules

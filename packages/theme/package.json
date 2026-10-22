@@ -12,7 +12,7 @@
   "bugs": {
     "url": "https://github.com/hzblj/kara-ui/issues"
   },
-  "homepage": "https://github.com/hzblj/kara-ui/tree/main/packages/theme#readme",
+  "homepage": "https://kara.janblazej.dev/docs/theming",
   "keywords": [
     "react-native",
     "expo",

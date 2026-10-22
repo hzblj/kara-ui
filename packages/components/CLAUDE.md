@@ -12,7 +12,6 @@ and `@hzblj/kara-native` — through their entry points only.
 | `src/atoms/` | Primitives: Box, Text, Button, TextField, Switch, Checkbox, Slider, Picker, Icon, Image, the stacks (`VStack`/`HStack`/`ZStack`), Divider, Spacer, Surface, Card, Badge, Progress, Fab, Island, List, ScrollView. |
 | `src/atoms/rn-*` | The React Native tier — `RnView`, `RnText`, `RnIcon`, `RnScrollView`, `RnFlatList`, `RnSectionList`. Plain RN views with the same `sx` surface, for rows that host native views. |
 | `src/atoms/glass-view/` | A React Native-tier atom over the native module: iOS 26 Liquid Glass around RN children (a translucent capsule elsewhere). |
-| `src/atoms/flash-list/` | The default list. Recycles and absolutely positions cells, which an `@expo/ui` host does not survive — use `RnFlatList`/`RnSectionList` when rows contain native atoms. |
 | `src/molecules/` | Label, LabeledContent, ListItem (and `RnListItem`, its React Native-tier row for long lists), Link, SearchBar, EmptyState, Collapsible, Pager, RadioGroup, Stepper, Tooltip — and over the native module: NavigationBar, ScrollEdgeContainer, RnTooltip. |
 | `src/organisms/` | Sheet (TrueSheet with a native header: `Sheet.Header`, `Sheet.ScrollView`, `useSheetScroll`), ActionSheet, Alert, Menu, Form, SwipeActions, Snackbar — and over the native module: ContextMenu (long-press on React Native content, with a custom preview on iOS), FabMenu. (`Tabs` lives in `@hzblj/kara-router`, behind the `@hzblj/kara-ui/router` entry, so the main entry never imports expo-router.) |
 | `src/templates/screen/` | `Screen` — the full-bleed native host every screen starts with. |
@@ -86,7 +85,7 @@ required, `args` carries `children: null` purely to satisfy the type.
 **A controlled component writes its value back through `useArgs`**, not local state — that is what
 keeps the Controls panel showing what is actually on screen.
 
-**Divergence goes in `parameters.notes`.** iOS-only (`ColorPicker`, `SwipeActions`), SwiftUI-only
+**Divergence goes in `parameters.notes`.** iOS-only (`ColorPicker`), SwiftUI-only
 props (`buttonStyle`, `controlSize`), Android-only ones (`pageSpacing`) — the notes tab is where a
 reader finds out before the other platform surprises them.
 

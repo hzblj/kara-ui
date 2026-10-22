@@ -11,6 +11,7 @@ import expo.modules.kara.ui.icon.IconView
 import expo.modules.kara.ui.modifiers.UNDERLINE_MODIFIER
 import expo.modules.kara.ui.modifiers.registerUnderlineModifier
 import expo.modules.kara.ui.ripple.RippleConfigurationView
+import expo.modules.kara.ui.swipe.SwipeActionsBoxView
 import expo.modules.kara.ui.tooltip.TooltipBoxView
 import expo.modules.kara.ui.topappbar.TopAppBarView
 import expo.modules.kara.ui.zoomtransition.ZoomTransitionEnablerView
@@ -72,6 +73,10 @@ class KaraUIModule : Module() {
     }
 
     View(RippleConfigurationView::class)
+
+    View(SwipeActionsBoxView::class) {
+      Events("onOpenChange")
+    }
 
     View(TopAppBarView::class) {
       Events("onItemPress")

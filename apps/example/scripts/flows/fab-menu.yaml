@@ -1,0 +1,28 @@
+# The FAB sits at the bottom of the stage: centred on iOS, where it answers to its testID, and at the trailing edge on
+# Android, where Material aligns the menu to its end and the testID does not reach the button.
+appId: com.hzblj.karaui.example
+---
+- startRecording: ${VIDEO}
+- runFlow: {file: pause.yaml, env: {MS: 800}}
+- runFlow:
+    when: {platform: iOS}
+    commands:
+      - tapOn: {id: 'shot-fab-menu'}
+- runFlow:
+    when: {platform: Android}
+    commands:
+      - tapOn: {point: '84%,60%'}
+- runFlow: {file: pause.yaml, env: {MS: 1400}}
+- takeScreenshot: ${STILL}
+- runFlow: {file: pause.yaml, env: {MS: 800}}
+# Android: the FAB has turned into the menu's close, in the same place. iOS: a tap outside dismisses the menu.
+- runFlow:
+    when: {platform: Android}
+    commands:
+      - tapOn: {point: '84%,60%'}
+- runFlow:
+    when: {platform: iOS}
+    commands:
+      - tapOn: {point: '50%,10%'}
+- runFlow: {file: pause.yaml, env: {MS: 1200}}
+- stopRecording

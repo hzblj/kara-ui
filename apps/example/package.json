@@ -13,7 +13,8 @@
     "lint:fix": "yarn run -T biome check --write .",
     "biome:check": "yarn run -T biome check .",
     "tsc:check": "yarn run -T concurrently \"tsc -p ./tsconfig.ios.json\" \"tsc -p ./tsconfig.android.json\"",
-    "icons": "kara-icons ./assets/icons"
+    "icons": "kara-icons ./assets/icons",
+    "shots": "./scripts/capture-shots.sh"
   },
   "dependencies": {
     "@expo/ui": "~57.0.18",
@@ -22,7 +23,6 @@
     "@lodev09/react-native-true-sheet": "3.11.18",
     "@react-native-community/datetimepicker": "9.1.0",
     "@react-native-community/slider": "5.2.0",
-    "@shopify/flash-list": "^2.3.2",
     "expo": "~57.0.22",
     "expo-constants": "~57.0.18",
     "expo-dev-client": "~57.0.19",
@@ -56,8 +56,7 @@
   "expo": {
     "install": {
       "exclude": [
-        "typescript",
-        "@shopify/flash-list"
+        "typescript"
       ]
     }
   }

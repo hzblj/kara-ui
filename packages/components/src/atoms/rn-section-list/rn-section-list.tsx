@@ -7,14 +7,8 @@ import type {RnSectionListProps} from './rn-section-list.types'
 const NO_SX = {}
 
 /**
- * Sectioned list built on React Native's own `VirtualizedList` rather than FlashList.
- *
- * FlashList is the default for lists in this codebase and should stay that way for data rows. This
- * exists for the case it cannot serve: content that hosts native views. FlashList positions its rows
- * absolutely and recycles their cells, and an `@expo/ui` host does not survive either — the hosted
- * view ends up drawn where the layout no longer is. `VirtualizedList` renders its cells in normal flow
- * inside a scroll view, using blank spacers for the range it has not rendered, so a hosted view stays
- * exactly where the layout put it.
+ * `RnFlatList` with sections: React Native's own `VirtualizedList`, cells in normal flow inside a scroll view, so a
+ * row that hosts native views keeps them where the layout put it.
  *
  * Sticky headers default off, unlike React Native, where they are on for vertical lists. A header that
  * detaches and floats over the content is a deliberate effect, not something a list should do unasked.
@@ -30,6 +24,9 @@ export const RnSectionList = <TItem, TSection = DefaultSectionT>({
 
   return (
     <RNSectionList<TItem, TSection>
+      // Android clips by default, and a host is measured after its first layout — at zero height it counts as
+      // off-screen, is detached, and its native view never comes back.
+      removeClippedSubviews={false}
       sections={sections}
       {...rest}
       contentContainerStyle={content === undefined ? undefined : contentStyle}

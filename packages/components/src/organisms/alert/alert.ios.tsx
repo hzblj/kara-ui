@@ -1,7 +1,14 @@
-import {Button, Alert as SwiftUIAlert, Text as SwiftUIText} from '@expo/ui/swift-ui'
+import {Button, Spacer, Alert as SwiftUIAlert, Text as SwiftUIText} from '@expo/ui/swift-ui'
+import {frame} from '@expo/ui/swift-ui/modifiers'
 
 import {useHostGuard} from '../../host-context'
 import type {AlertComponent, AlertProps} from './alert.types'
+
+/**
+ * `@expo/ui` hangs the alert on its `Alert.Trigger`, and on an `EmptyView` when there is none — which SwiftUI never
+ * presents from, so the alert would not appear at all. A spacer framed to nothing is a real view that takes no room.
+ */
+const ANCHOR = [frame({height: 0, width: 0})]
 
 export const Alert: AlertComponent = ({
   confirmLabel = 'OK',
@@ -24,6 +31,9 @@ export const Alert: AlertComponent = ({
       }}
       title={title}
     >
+      <SwiftUIAlert.Trigger>
+        <Spacer modifiers={ANCHOR} />
+      </SwiftUIAlert.Trigger>
       <SwiftUIAlert.Actions>
         <Button label={confirmLabel} onPress={onConfirm ?? onDismiss} role={destructive ? 'destructive' : 'default'} />
         <Button label="Cancel" onPress={onDismiss} role="cancel" />

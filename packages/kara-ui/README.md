@@ -1,18 +1,39 @@
-# @hzblj/kara-ui
+# Kara UI
 
-A native-first design system for Expo. Components render real SwiftUI and Jetpack Compose views, styled through one
-token-typed `sx` surface. Platform colours and typeface by default, your own through the theme.
+[![npm version][npm-badge]][npm-url]
+[![License: MIT][license-badge]][license-url]
+[![Platforms: iOS · Android][platforms-badge]][docs-url]
 
-iOS and Android, Expo SDK 57, development build required.
+[npm-badge]: https://img.shields.io/npm/v/@hzblj/kara-ui?labelColor=27272a&color=ff5700&label=%40hzblj%2Fkara-ui
+[npm-url]: https://www.npmjs.com/package/@hzblj/kara-ui
+[license-badge]: https://img.shields.io/badge/license-MIT-ff5700?labelColor=27272a
+[license-url]: https://github.com/hzblj/kara-ui/blob/main/LICENSE
+[platforms-badge]: https://img.shields.io/badge/platforms-iOS%20%C2%B7%20Android-ff5700?labelColor=27272a
+[docs-url]: https://kara.janblazej.dev/docs
+
+<a href="https://kara.janblazej.dev"><img src="https://kara.janblazej.dev/og.png" alt="Kara — native UI for Expo: real SwiftUI and Jetpack Compose views" width="720"></a>
+
+A native-first design system for Expo. Kara's components render **real SwiftUI and Jetpack Compose views** — a
+`Switch` is a SwiftUI `Toggle` on iOS and a Material `Switch` on Android — styled through one token-typed `sx`
+surface. The platform's colours and typeface by default, yours through the theme.
+
+## Documentation
+
+**[kara.janblazej.dev/docs](https://kara.janblazej.dev/docs)** — the guides, the design tokens, and every component
+photographed on iOS and Android, in light and dark.
 
 ## Install
 
 ```bash
-npx expo install @hzblj/kara-ui @expo/ui @lodev09/react-native-true-sheet @shopify/flash-list expo-image react-native-reanimated react-native-worklets
-npx expo install expo-router   # optional, for @hzblj/kara-ui/router
+npx expo install @hzblj/kara-ui @expo/ui @lodev09/react-native-true-sheet \
+  expo-image react-native-reanimated react-native-worklets
 ```
 
-## Use
+Expo SDK 57 and a [development build](https://docs.expo.dev/develop/development-builds/introduction/) — Kara ships
+native code, so it does not run in Expo Go. The [installation guide](https://kara.janblazej.dev/docs/installation)
+covers the config plugin and the provider.
+
+## Quick start
 
 ```tsx
 import {Button, KaraProvider, Screen, Text, VStack} from '@hzblj/kara-ui'
@@ -29,33 +50,22 @@ export const App = () => (
 )
 ```
 
-Native components render inside `<Screen>` or `<Island>`. The `Rn*` components (`RnText`, `RnScrollView`, …) are plain
-React Native views with the same `sx` props.
+Native views render inside a [`Screen` or an `Island`](https://kara.janblazej.dev/docs/hosts); the `Rn*` components
+are plain React Native views with the same `sx` props.
 
-## Theme
+## Learn more
 
-```tsx
-const theme = defineTheme({
-  colors: {fill: {accent: {primary: '#4f46e5'}}},
-  fonts: {text: {regular: 'Inter-Regular', medium: 'Inter-Medium'}},
-  dynamicColor: true, // Material You on Android 12+
-})
+- [Styling with `sx`](https://kara.janblazej.dev/docs/styling) — tokens in place of raw values
+- [Theming](https://kara.janblazej.dev/docs/theming) — your colours, your typefaces, Material You
+- [Icons](https://kara.janblazej.dev/docs/icons) — your own SVGs, as native icons on both platforms
+- [Expo Router](https://kara.janblazej.dev/docs/router) — native tabs and the zoom transition
+- [Components](https://kara.janblazej.dev/docs/components) — the whole catalogue
+- [Changelog](https://kara.janblazej.dev/docs/changelog)
 
-<KaraProvider theme={theme} themePreference="system">…</KaraProvider>
-```
+## Sponsorship
 
-## Icons
+<a href="https://www.buymeacoffee.com/hzblj"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me a Coffee" height="48"></a>
 
-```ts
-// app.config.ts
-plugins: [['@hzblj/kara-ui', {icons: {source: './assets/icons'}}]]
-```
+## License
 
-Every SVG in the folder becomes a native icon at prebuild: `bolt.svg` → `<Icon name="bolt" />`.
-
-## Entry points
-
-`@hzblj/kara-ui` (everything), `@hzblj/kara-ui/router` (what needs Expo Router), `@hzblj/kara-ui/swift-ui` and
-`@hzblj/kara-ui/jetpack-compose` (the raw native views).
-
-[Example app and source](https://github.com/hzblj/kara-ui) · MIT
+MIT © Jan Blazej

@@ -1,5 +1,5 @@
 import {useAppTheme} from '@hzblj/kara-theme'
-import {TextInput} from 'react-native'
+import {Platform, TextInput} from 'react-native'
 
 import {Box} from '../../atoms/box'
 import {Pressable} from '../../atoms/pressable'
@@ -13,6 +13,13 @@ export const SearchBar: SearchBarComponent = ({
   value,
 }: SearchBarProps) => {
   const theme = useAppTheme()
+  const {lineHeight, ...face} = theme.typography.body
+  /**
+   * A single-line `UITextField` sets its text against the bottom of a line taller than the font, so the variant's
+   * `lineHeight` pushed the text below the magnifier beside it. iOS takes the face without it, in a field as tall as
+   * the line would have been; Android centres the line and keeps it.
+   */
+  const text = Platform.OS === 'ios' ? {...face, height: lineHeight} : theme.typography.body
 
   return (
     <Box
@@ -31,7 +38,7 @@ export const SearchBar: SearchBarComponent = ({
         onChangeText={onChangeText}
         placeholder={placeholder}
         placeholderTextColor={theme.color('content.quaternary')}
-        style={[theme.typography.body, {color: theme.color('content.primary'), flex: 1, padding: 0}]}
+        style={[text, {color: theme.color('content.primary'), flex: 1, padding: 0}]}
         value={value}
       />
       {value.length > 0 ? (

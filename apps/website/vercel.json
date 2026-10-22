@@ -1,0 +1,6 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "corepack yarn install --immutable",
+  "buildCommand": "corepack yarn workspace kara-ui-website build",
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- . ../../packages ../example/src/shots"
+}

@@ -7,13 +7,19 @@ import type {IconName} from '../../atoms/icon'
  * Pass `children` instead of `value` when the trailing side is a control rather than text.
  */
 export type LabeledContentProps = {
+  /** The trailing side when it is a control, in place of `value`. */
   children?: ReactNode
+  /** One of the app's icons, before the label, in the secondary colour. */
   icon?: IconName
+  /** The leading text. */
   label: string
+  /** Makes the row pressable and adds a chevron on the trailing edge. */
   onPress?: () => void
   /** Horizontal padding inside the row — inside its press area too, so Android's ripple reaches the card's edges. */
   px?: SpaceSize
+  /** Test identifier, forwarded to the native view. */
   testID?: string
+  /** The trailing text, in the secondary colour. Ignored when `children` is given. */
   value?: string
 }
 
