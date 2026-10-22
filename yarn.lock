@@ -6062,7 +6062,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-dev-menu@npm:~57.0.20":
+"expo-dev-menu@npm:57.0.20":
   version: 57.0.20
   resolution: "expo-dev-menu@npm:57.0.20"
   dependencies:
@@ -6071,6 +6071,18 @@ __metadata:
     expo: "*"
     react-native: "*"
   checksum: 10c0/5f3811088a9cf68ce04ac9df89fda152dbd2d30dbe68f9bff4fd6f5adfc1fcad972842b22a2c21527699af43ec3c9e9543dc7d047ada94f9a929b09c5cd71cba
+  languageName: node
+  linkType: hard
+
+"expo-dev-menu@patch:expo-dev-menu@npm%3A57.0.20#~/.yarn/patches/expo-dev-menu-npm-57.0.20-b1911ae02f.patch":
+  version: 57.0.20
+  resolution: "expo-dev-menu@patch:expo-dev-menu@npm%3A57.0.20#~/.yarn/patches/expo-dev-menu-npm-57.0.20-b1911ae02f.patch::version=57.0.20&hash=a02e4a"
+  dependencies:
+    expo-dev-menu-interface: "npm:~57.0.0"
+  peerDependencies:
+    expo: "*"
+    react-native: "*"
+  checksum: 10c0/02e05c3f6d6a13d7eb68fecc462748054794085e1b2ebde5db442e80d56ff9c778020313afc7db5cfbcfda4e0da1771b8bbdbe603c3232e3008d1646b729ec9d
   languageName: node
   linkType: hard
 
@@ -8935,6 +8947,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-screens@npm:4.26.2":
+  version: 4.26.2
+  resolution: "react-native-screens@npm:4.26.2"
+  dependencies:
+    react-freeze: "npm:^1.0.0"
+    warn-once: "npm:^0.1.0"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10c0/3cdc702d8e21c63331e306a2b971307d5d9e13df52d94f435c5bb8d5dcf09fed00f4ef788e85ba87fae1ba5b155f4cdc2ee177a70f1f512adff73f94eef844d1
+  languageName: node
+  linkType: hard
+
 "react-native-screens@npm:^4.26.0":
   version: 4.30.0
   resolution: "react-native-screens@npm:4.30.0"
@@ -8948,16 +8973,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-screens@npm:~4.26.0":
+"react-native-screens@patch:react-native-screens@npm%3A4.26.2#~/.yarn/patches/react-native-screens-npm-4.26.2-175183263a.patch":
   version: 4.26.2
-  resolution: "react-native-screens@npm:4.26.2"
+  resolution: "react-native-screens@patch:react-native-screens@npm%3A4.26.2#~/.yarn/patches/react-native-screens-npm-4.26.2-175183263a.patch::version=4.26.2&hash=76b757"
   dependencies:
     react-freeze: "npm:^1.0.0"
     warn-once: "npm:^0.1.0"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10c0/3cdc702d8e21c63331e306a2b971307d5d9e13df52d94f435c5bb8d5dcf09fed00f4ef788e85ba87fae1ba5b155f4cdc2ee177a70f1f512adff73f94eef844d1
+  checksum: 10c0/e1bfc197373a17312ad972cdb33253eb39cd47946526422fcd5fba830f96c26d4b7f9a445bfdbe5c00e6821f2fe296c469755fd4cf7f20b8263f228bb446b272
   languageName: node
   linkType: hard
 

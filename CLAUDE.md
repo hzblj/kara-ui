@@ -14,7 +14,7 @@ Every package has its own `CLAUDE.md` — read that one before touching it.
 | `packages/sx/` | `@hzblj/kara-sx` | The `sx` engine: one surface → SwiftUI modifiers, Compose modifiers or a React Native style. |
 | `packages/native/` | `@hzblj/kara-native` | The `KaraUI` Expo native module (Swift/Kotlin) and its raw bindings (`/swift-ui`, `/jetpack-compose`). |
 | `packages/components/` | `@hzblj/kara-components` | Atoms, molecules, organisms, `Screen` — and a story beside every component. |
-| `packages/router/` | `@hzblj/kara-router` | `Tabs` and `navigationTheme`, apart so nothing else imports expo-router. |
+| `packages/router/` | `@hzblj/kara-router` | `Tabs`, `navigationTheme` and `ZoomTransition`, apart so nothing else imports expo-router. |
 | `packages/expo-plugin/` | `@hzblj/kara-expo-plugin` | The optional config plugin (`iosSemanticColors`), compiled for Node. |
 | `packages/kara-ui/` | `@hzblj/kara-ui` | The umbrella consumers install: re-exports only, the public entry points, the npm README. |
 | `apps/example/` | — | The example app: Home, the component catalogue, the design pages, on-device Storybook. Runs every package from **source**. Private. |

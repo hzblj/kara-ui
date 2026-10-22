@@ -4,6 +4,7 @@ import {Platform} from 'react-native'
 
 import {LinkList, Section} from '../../ui'
 import type {CatalogEntry} from '../catalog.types'
+import {ZoomTransitionDemo} from '../zoom'
 import {KARA_MODULE} from './tags'
 
 type SheetDemoId = 'actions' | 'large' | 'leading' | 'plain' | 'search' | 'title'
@@ -182,5 +183,14 @@ export const NAVIGATION: CatalogEntry[] = [
     name: 'Tabs',
     summary: 'Native tabs for Expo Router.',
     tags: ['UIKit', 'Material'],
+  },
+  {
+    code: "// the list\nconst zoomId = useZoomTransitionSourceId(photo.id)\nconst open = () => router.push({pathname: '/photo/[id]', params: {id: photo.id, [ZOOM_TRANSITION_PARAM]: zoomId}})\n\n<Pressable onPress={open}>\n  <ZoomTransition.Source identifier={zoomId} android={{borderRadius: 'large'}}>\n    <Photo />\n  </ZoomTransition.Source>\n</Pressable>\n\n// the pushed screen\nconst zoomId = useZoomTransitionParam()\n\n<ZoomTransition.Enabler sourceIdentifier={zoomId} ios={{dismissGesture: 'vertical'}} android={{duration: 'd300'}} />\n<ZoomTransition.Target identifier={zoomId} android={{borderRadius: 'large'}}>\n  <Photo />\n</ZoomTransition.Target>\n\n// its layout\n<Stack.Screen name=\"photo/[id]\" options={withZoomTransition({title: 'Photo'})} />",
+    Demo: ZoomTransitionDemo,
+    id: 'zoom-transition',
+    name: 'ZoomTransition',
+    summary:
+      'A push that grows out of the photo it was opened from and shrinks back into it: UIKit’s zoom on iOS 18, Material’s container transform on Android.',
+    tags: ['UIKit', 'Material', 'Expo Router'],
   },
 ]

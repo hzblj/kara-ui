@@ -21,6 +21,14 @@ export type ContextMenuProps = ResponsiveViewSx & {
    * every preview up front.
    */
   preview?: ReactNode
+  /**
+   * iOS: how the preview leaves once tapped, before `onPreviewPress`. `zoom`: its photo grows straight into the pushed
+   * screen, the way the App Store expands a preview — needs a `ZoomTransition.Source` (`@hzblj/kara-ui/router`) in the
+   * trigger, a `preview` and iOS 18, and shrinks back like `dismiss` otherwise. `pop`: UIKit's default, the preview
+   * flies out. `dismiss`: it shrinks back onto the trigger first. Default: `zoom` when the trigger holds a
+   * `ZoomTransition.Source`, `pop` otherwise.
+   */
+  previewTransition?: 'dismiss' | 'pop' | 'zoom'
   testID?: string
 }
 

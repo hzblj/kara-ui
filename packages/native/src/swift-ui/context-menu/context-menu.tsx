@@ -2,7 +2,7 @@ import type {ReactNode} from 'react'
 import {type GestureResponderEvent, type StyleProp, StyleSheet, type ViewStyle} from 'react-native'
 
 import {requireKaraView} from '../../require-view'
-import type {ContextMenuItem, ContextMenuProps} from './context-menu.types'
+import type {ContextMenuItem, ContextMenuPreviewTransition, ContextMenuProps} from './context-menu.types'
 import {useDeferredPreview} from './use-deferred-preview'
 
 type NativeContextMenuProps = {
@@ -14,6 +14,7 @@ type NativeContextMenuProps = {
   onTouchEnd?: (event: GestureResponderEvent) => void
   onTouchMove?: (event: GestureResponderEvent) => void
   onTouchStart?: (event: GestureResponderEvent) => void
+  previewTransition?: ContextMenuPreviewTransition
   style?: StyleProp<ViewStyle>
   testID?: string
 }
@@ -40,6 +41,7 @@ export const ContextMenu = ({
   onPreviewPress,
   onSelectItem,
   preview,
+  previewTransition,
   style,
   testID,
 }: ContextMenuProps) => {
@@ -55,6 +57,7 @@ export const ContextMenu = ({
       onTouchEnd={hasPreview ? onTouchEnd : undefined}
       onTouchMove={hasPreview ? onTouchMove : undefined}
       onTouchStart={hasPreview ? onTouchStart : undefined}
+      previewTransition={previewTransition}
       style={style}
       testID={testID}
     >
