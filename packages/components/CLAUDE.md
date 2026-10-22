@@ -14,7 +14,7 @@ and `@hzblj/kara-native` — through their entry points only.
 | `src/atoms/glass-view/` | A React Native-tier atom over the native module: iOS 26 Liquid Glass around RN children (a translucent capsule elsewhere). |
 | `src/atoms/flash-list/` | The default list. Recycles and absolutely positions cells, which an `@expo/ui` host does not survive — use `RnFlatList`/`RnSectionList` when rows contain native atoms. |
 | `src/molecules/` | Label, LabeledContent, ListItem, Link, SearchBar, EmptyState, Collapsible, Pager, RadioGroup, Stepper, Tooltip — and over the native module: NavigationBar, ScrollEdgeContainer, RnTooltip. |
-| `src/organisms/` | Sheet, ActionSheet, Alert, Menu, Form, SwipeActions, Snackbar — and over the native module: ContextMenu (long-press on React Native content, with a custom preview on iOS), FabMenu. (`Tabs` lives in `@hzblj/kara-router`, behind the `@hzblj/kara-ui/router` entry, so the main entry never imports expo-router.) |
+| `src/organisms/` | Sheet (TrueSheet with a native header: `Sheet.Header`, `Sheet.ScrollView`, `useSheetScroll`), ActionSheet, Alert, Menu, Form, SwipeActions, Snackbar — and over the native module: ContextMenu (long-press on React Native content, with a custom preview on iOS), FabMenu. (`Tabs` lives in `@hzblj/kara-router`, behind the `@hzblj/kara-ui/router` entry, so the main entry never imports expo-router.) |
 | `src/templates/screen/` | `Screen` — the full-bleed native host every screen starts with. |
 | `src/host-context.tsx` | `HostBoundary` + `useHostGuard`: dev warning when a native atom renders outside `Screen`/`Island`. |
 | `src/platform-support.ts` | `warnUnsupported` — one-per-atom dev error for atoms only one platform can implement. |
@@ -110,6 +110,25 @@ which is what lets `index.ts` export everything on both platforms. `isLiquidGlas
 **Never name a native prop after a React Native style key** (`width`, `backgroundColor`, `shadowColor`…):
 Fabric reads it as layout or style. Prefix it (`bubbleWidth`). A new native view needs a pod install / Gradle
 sync and a native rebuild of the app; a new `.ios.tsx`/`.android.tsx` caller needs Metro `--clear`.
+
+## Sheets
+
+**`Sheet` is the React Native tier on TrueSheet** (`@lodev09/react-native-true-sheet`, a peer dependency): no host,
+and never inside one — native atoms in its content go in an `Island`. `<Sheet.Header>` is a slot, not a view: it must
+be a direct child, and `split-sheet-children.ts` lifts its props into TrueSheet's own `header`, built from
+`NavigationBar` by `use-sheet-header.tsx`.
+
+**On iOS 26 a scrollable sheet's header is laid over the content.** The scroll edge effect only blurs what scrolls
+*under* the header, so the header is absolutely positioned and `Sheet.ScrollView` (or a scroll view of your own reading
+`useSheetScroll`) pads its content by the header's measured height. Elsewhere the header sits above the content and
+the inset is 0. A `large` title lives inside the scroll view and flips the bar's own title on once it has scrolled away.
+
+**`onDismiss` is the user's dismissal only.** `visible` going false dismisses without calling it, and a sheet
+unmounted while presented dismisses itself — otherwise it would stay on screen over everything.
+
+**`NavigationBar` places nothing.** Items go on the side and in the order the caller gives; the close-on-the-right
+convention belongs to call sites. `separated` (iOS 26 glass capsules) has no Material counterpart, and `search` is
+iOS-only for now.
 
 ## Icons
 

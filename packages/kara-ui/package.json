@@ -96,6 +96,7 @@
   },
   "peerDependencies": {
     "@expo/ui": "~57.0.0",
+    "@lodev09/react-native-true-sheet": ">=3.11.0",
     "@shopify/flash-list": ">=2.0.0",
     "expo": "~57.0.0",
     "expo-haptics": "*",
@@ -112,6 +113,7 @@
   },
   "devDependencies": {
     "@expo/ui": "~57.0.18",
+    "@lodev09/react-native-true-sheet": "3.11.18",
     "@shopify/flash-list": "^2.3.2",
     "@types/react": "~19.2.18",
     "expo": "~57.0.22",

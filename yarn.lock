@@ -2598,6 +2598,7 @@ __metadata:
     "@hzblj/kara-native": "workspace:^"
     "@hzblj/kara-sx": "workspace:^"
     "@hzblj/kara-theme": "workspace:^"
+    "@lodev09/react-native-true-sheet": "npm:3.11.18"
     "@shopify/flash-list": "npm:^2.3.2"
     "@storybook/react-native": "npm:^10.6.0"
     "@types/react": "npm:~19.2.18"
@@ -2614,6 +2615,7 @@ __metadata:
     typescript: "npm:~7.0.2"
   peerDependencies:
     "@expo/ui": ~57.0.0
+    "@lodev09/react-native-true-sheet": ">=3.11.0"
     "@shopify/flash-list": ">=2.0.0"
     expo: ~57.0.0
     expo-haptics: "*"
@@ -2728,6 +2730,7 @@ __metadata:
     "@hzblj/kara-router": "workspace:^"
     "@hzblj/kara-sx": "workspace:^"
     "@hzblj/kara-theme": "workspace:^"
+    "@lodev09/react-native-true-sheet": "npm:3.11.18"
     "@shopify/flash-list": "npm:^2.3.2"
     "@types/react": "npm:~19.2.18"
     expo: "npm:~57.0.22"
@@ -2742,6 +2745,7 @@ __metadata:
     typescript: "npm:~7.0.2"
   peerDependencies:
     "@expo/ui": ~57.0.0
+    "@lodev09/react-native-true-sheet": ">=3.11.0"
     "@shopify/flash-list": ">=2.0.0"
     expo: ~57.0.0
     expo-haptics: "*"
@@ -2854,6 +2858,32 @@ __metadata:
     "@jridgewell/resolve-uri": "npm:^3.1.0"
     "@jridgewell/sourcemap-codec": "npm:^1.4.14"
   checksum: 10c0/4b30ec8cd56c5fd9a661f088230af01e0c1a3888d11ffb6b47639700f71225be21d1f7e168048d6d4f9449207b978a235c07c8f15c07705685d16dc06280e9d9
+  languageName: node
+  linkType: hard
+
+"@lodev09/react-native-true-sheet@npm:3.11.18":
+  version: 3.11.18
+  resolution: "@lodev09/react-native-true-sheet@npm:3.11.18"
+  peerDependencies:
+    "@radix-ui/react-dialog": ">=1"
+    "@radix-ui/react-presence": ">=1"
+    "@react-navigation/core": ">=7"
+    react: "*"
+    react-native: "*"
+    react-native-reanimated: ">=4"
+    react-native-worklets: "*"
+  peerDependenciesMeta:
+    "@radix-ui/react-dialog":
+      optional: true
+    "@radix-ui/react-presence":
+      optional: true
+    "@react-navigation/core":
+      optional: true
+    react-native-reanimated:
+      optional: true
+    react-native-worklets:
+      optional: true
+  checksum: 10c0/e42d284e9c3d2d2a129acbd81bba8375ca3329d12b81902962f6812829195c38401111dc8a116e07ca0a76173aca01f6c565f45775e72658d7fbfca6116f8546
   languageName: node
   linkType: hard
 
@@ -7138,6 +7168,7 @@ __metadata:
     "@expo/ui": "npm:~57.0.18"
     "@gorhom/bottom-sheet": "npm:^5.2.14"
     "@hzblj/kara-ui": "workspace:*"
+    "@lodev09/react-native-true-sheet": "npm:3.11.18"
     "@react-native-community/datetimepicker": "npm:9.1.0"
     "@react-native-community/slider": "npm:5.2.0"
     "@shopify/flash-list": "npm:^2.3.2"

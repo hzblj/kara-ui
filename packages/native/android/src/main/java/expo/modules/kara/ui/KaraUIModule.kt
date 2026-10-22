@@ -10,6 +10,7 @@ import expo.modules.kara.ui.modifiers.UNDERLINE_MODIFIER
 import expo.modules.kara.ui.modifiers.registerUnderlineModifier
 import expo.modules.kara.ui.ripple.RippleConfigurationView
 import expo.modules.kara.ui.tooltip.TooltipBoxView
+import expo.modules.kara.ui.topappbar.TopAppBarView
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 import expo.modules.ui.ModifierRegistry
@@ -58,5 +59,9 @@ class KaraUIModule : Module() {
     }
 
     View(RippleConfigurationView::class)
+
+    View(TopAppBarView::class) {
+      Events("onItemPress")
+    }
   }
 }

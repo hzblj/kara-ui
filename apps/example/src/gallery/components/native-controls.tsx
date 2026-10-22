@@ -5,7 +5,6 @@ import {
   Card,
   Checkbox,
   Collapsible,
-  Divider,
   HStack,
   Icon,
   type IconName,
@@ -14,7 +13,6 @@ import {
   ListItem,
   Progress,
   RnIcon,
-  Sheet,
   Slider,
   Spacer,
   Switch,
@@ -154,32 +152,17 @@ export const ListSection = () => (
   </Island>
 )
 
-export const SheetAlertSection = () => {
-  const [sheetVisible, setSheetVisible] = useState(false)
+export const AlertSection = () => {
   const [alertVisible, setAlertVisible] = useState(false)
 
   return (
     <Island>
       <VStack spacing="s8" wide>
-        <HStack onPress={() => setSheetVisible(true)} py="s8" wide>
-          <Text color="content.accent">Open sheet</Text>
-          <Spacer />
-          <Icon color="content.accent" name="chevron-right" size="s16" />
-        </HStack>
-        <Divider />
         <HStack onPress={() => setAlertVisible(true)} py="s8" wide>
           <Text color="content.destructive">Open alert</Text>
           <Spacer />
           <Icon color="content.destructive" name="chevron-right" size="s16" />
         </HStack>
-        <Sheet onDismiss={() => setSheetVisible(false)} visible={sheetVisible}>
-          <VStack p="s24" spacing="s8">
-            <Text variant="headingXs">Native bottom sheet</Text>
-            <Text color="content.secondary" variant="footnote">
-              BottomSheet on iOS, ModalBottomSheet on Android.
-            </Text>
-          </VStack>
-        </Sheet>
         <Alert
           confirmLabel="Delete"
           destructive

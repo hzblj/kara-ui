@@ -8,13 +8,13 @@ import {
 } from './components/box-sections'
 import {EmptyStateSection, LabeledContentSection, LabelSection, LinkSection} from './components/composite-sections'
 import {
+  AlertSection,
   BadgeSection,
   CardSection,
   CollapsibleSection,
   IconSection,
   ListSection,
   ProgressSection,
-  SheetAlertSection,
   SliderSection,
   SwitchCheckboxSection,
   TextFieldSection,
@@ -50,6 +50,7 @@ import {
   SkeletonSection,
   SnackbarSection,
 } from './components/rn-controls'
+import {SheetSection} from './components/sheet-sections'
 import {DividerSection, HStackSection, VStackSection, ZStackSection} from './components/stack-sections'
 import {ButtonSection, TEXT_VARIANTS, TextStylesSection, TextVariantsSection} from './components/text-sections'
 import {TokenGrid} from './components/token-grid'
@@ -95,7 +96,8 @@ export const GALLERY_SECTIONS = [
   {Content: CardSection, id: 'card', title: 'Card'},
   {Content: CollapsibleSection, id: 'collapsible', title: 'Collapsible'},
   {Content: ListSection, id: 'list', title: 'List · ListItem (tappable rows)'},
-  {Content: SheetAlertSection, id: 'sheet-alert', title: 'Sheet · Alert'},
+  {Content: SheetSection, id: 'sheet', title: 'Sheet · native header, detents, large title'},
+  {Content: AlertSection, id: 'alert', title: 'Alert'},
   {Content: IconButtonStepperSection, id: 'icon-button-stepper', title: 'IconButton · Stepper'},
   {Content: RadioGroupSection, id: 'radio-group', title: 'RadioGroup'},
   {Content: SurfaceSection, id: 'surface', title: 'Surface · plain + glass'},
@@ -115,7 +117,11 @@ export const GALLERY_SECTIONS = [
   {Content: FabSection, id: 'fab', title: 'Fab'},
   {Content: FabMenuSection, id: 'fab-menu', title: 'FabMenu · M3 Expressive on Android, a Menu on iOS'},
   {Content: GlassViewSection, id: 'glass-view', title: 'GlassView · iOS 26 Liquid Glass, a tinted capsule elsewhere'},
-  {Content: NavigationBarSection, id: 'navigation-bar', title: 'NavigationBar · UINavigationBar items on iOS'},
+  {
+    Content: NavigationBarSection,
+    id: 'navigation-bar',
+    title: 'NavigationBar · items either side, grouped glass on iOS 26',
+  },
   {
     Content: ScrollEdgeContainerSection,
     id: 'scroll-edge-container',

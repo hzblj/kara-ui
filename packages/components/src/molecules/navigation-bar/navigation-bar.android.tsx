@@ -1,28 +1,55 @@
-import {HStack} from '../../atoms/h-stack'
+import {iconResourceName} from '@hzblj/kara-native'
+import {TopAppBar, type TopAppBarItem} from '@hzblj/kara-native/jetpack-compose'
+import {useAppTheme} from '@hzblj/kara-theme'
+import {useMemo} from 'react'
+import {StyleSheet} from 'react-native'
 import {Island} from '../../atoms/island'
-import {Spacer} from '../../atoms/spacer'
-import {Text} from '../../atoms/text'
-import {GlyphButton} from '../../glyph'
-import type {NavigationBarComponent, NavigationBarProps} from './navigation-bar.types'
+import type {NavigationBarComponent, NavigationBarItem, NavigationBarProps} from './navigation-bar.types'
 
-/**
- * Material's top bar shape — navigation icon, start-aligned title, action at the end — built from the atoms in its own
- * island. Compose's icon buttons take no accessibility identifier, so `backTestID`/`closeTestID` are iOS-only.
- */
+/** Material's small top app bar. */
+const BAR_HEIGHT = 64
+
+const styles = StyleSheet.create({
+  bar: {height: BAR_HEIGHT, width: '100%'},
+})
+
+const DEFAULT_LABELS = {back: 'Back', close: 'Close'} as const
+
+const toNativeItem = ({onPress, testID, ...item}: NavigationBarItem): TopAppBarItem =>
+  item.type === 'icon'
+    ? {iconName: iconResourceName(item.icon), label: item.label, onPress, testID, type: 'icon'}
+    : {label: item.label ?? DEFAULT_LABELS[item.type], onPress, testID, type: item.type}
+
+/** Material's top app bar in its own host. `search` is iOS-only for now, and `separated` has no Material counterpart. */
 export const NavigationBar: NavigationBarComponent = ({
-  backLabel = 'Back',
-  closeLabel = 'Close',
-  onBack,
-  onClose,
+  inverted = false,
+  leadingItems,
   testID,
   title,
-}: NavigationBarProps) => (
-  <Island testID={testID}>
-    <HStack align="center" px="s4" spacing="s4" wide>
-      {onBack ? <GlyphButton accessibilityLabel={backLabel} name="back" onPress={onBack} /> : null}
-      {title ? <Text variant="body">{title}</Text> : null}
-      <Spacer />
-      {onClose ? <GlyphButton accessibilityLabel={closeLabel} name="close" onPress={onClose} /> : null}
-    </HStack>
-  </Island>
-)
+  titleAlignment = 'center',
+  titleVisible = true,
+  trailingItems,
+}: NavigationBarProps) => {
+  const theme = useAppTheme()
+  const font = theme.typography.headline
+  const color = theme.color(inverted ? 'content.on.bg' : 'content.primary')
+
+  const nativeLeadingItems = useMemo(() => leadingItems?.map(toNativeItem), [leadingItems])
+  const nativeTrailingItems = useMemo(() => trailingItems?.map(toNativeItem), [trailingItems])
+
+  return (
+    <Island matchContents={false} style={styles.bar} testID={testID}>
+      <TopAppBar
+        fontFamily={font.fontFamily}
+        fontSize={font.fontSize}
+        itemColor={color}
+        leadingItems={nativeLeadingItems}
+        title={title}
+        titleAlignment={titleAlignment}
+        titleColor={color}
+        titleVisible={titleVisible}
+        trailingItems={nativeTrailingItems}
+      />
+    </Island>
+  )
+}

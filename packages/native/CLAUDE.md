@@ -11,11 +11,12 @@ component. Autolinked into any app that installs `@hzblj/kara-ui` (a transitive 
 | `ios/KaraUIModule.swift` | Only composes the module: functions, `OnCreate` (modifier registration), one `<View>.definition()` per view. |
 | `ios/Views/<Component>/` | `<Name>View.swift`, its records/helpers and `<Name>View+Definition.swift` (events and props). |
 | `ios/Modifiers/` | SwiftUI modifiers registered into `@expo/ui`'s registry: `scaledFont`, `underline`, `counterBadge`. |
-| `android/src/main/java/expo/modules/kara/ui/` | `KaraUIModule.kt` plus one package per component (`fab`, `icon`, `modifiers`, `ripple`, `tooltip`). |
+| `android/src/main/java/expo/modules/kara/ui/` | `KaraUIModule.kt` plus one package per component (`fab`, `icon`, `modifiers`, `ripple`, `tooltip`, `topappbar`). |
 | `src/swift-ui/`, `src/jetpack-compose/` | `requireKaraView` bindings and typed wrappers per view, the modifiers' JS side. The `/swift-ui` and `/jetpack-compose` entries. |
 | `ios/Views/Icon/`, `android/.../icon/` | `IconView` (UIKit `UIImageView` / Android `ImageView`, the React Native tier) and Android's `DrawableIconView` (Compose `Icon`, inside a host): an app icon by asset/resource name, or an SF Symbol. |
 | `src/icons.ts` | `iconResourceName(name)` → `kara_icon_<name>`, the name the config plugin gives an app icon on both platforms. Mirrors the plugin's own copy, which runs in Node. |
 | `glyphs.json`, `scripts/generate-glyphs.mjs`, `src/glyphs.ts` | The few glyphs kara's components draw: SF Symbol + Material Symbol per name. `yarn glyphs:generate` writes `android/src/main/res/drawable/kara_glyph_*.xml` and `src/glyphs.ts` (both committed) from `@material-symbols/svg-400`; `THIRD_PARTY_NOTICES.md` carries the Apache 2.0 notice. |
+| `ios/Views/NavigationBar/`, `android/.../topappbar/` | The bar under `NavigationBar` and `Sheet.Header`: a standalone `UINavigationBar` (items as records, grouped into iOS 26 glass capsules unless `separated`, a centred or leading title view, an optional `UISearchBar`) and Material's `TopAppBar` (`navigationIcon` / `actions` slots). Both report presses as `onItemPress` with placement and index; the handlers stay in JS. |
 | `src/availability.ts` | `isLiquidGlassAvailable` / `isScrollEdgeEffectAvailable` — one native call, cached; `false` on Android. |
 | `src/require-view.ts` | `requireKaraView` — lazy, so a view one platform lacks fails only when rendered there, never on import. |
 

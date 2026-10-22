@@ -3,28 +3,32 @@ import ExpoModulesCore
 extension NavigationBarView {
   static func definition() -> ViewDefinition<NavigationBarView> {
     View(NavigationBarView.self) {
-      Events("onBack", "onClose")
+      Events("onItemPress", "onSearchTextChange", "onSearchFocusChange")
+
+      AsyncFunction("clearSearchText") { (view: NavigationBarView) in
+        view.clearSearchText()
+      }.runOnQueue(.main)
 
       Prop("title") { (view: NavigationBarView, title: String?) in
         view.setTitle(title)
       }
-      Prop("showsBack") { (view: NavigationBarView, showsBack: Bool) in
-        view.setShowsBack(showsBack)
+      Prop("titleAlignment") { (view: NavigationBarView, alignment: String?) in
+        view.setTitleAlignment(alignment ?? "center")
       }
-      Prop("showsClose") { (view: NavigationBarView, showsClose: Bool) in
-        view.setShowsClose(showsClose)
+      Prop("titleVisible") { (view: NavigationBarView, isVisible: Bool?) in
+        view.setTitleVisible(isVisible ?? true)
       }
-      Prop("backLabel") { (view: NavigationBarView, label: String?) in
-        view.setBackLabel(label)
+      Prop("leadingItems") { (view: NavigationBarView, items: [NavigationBarItemRecord]?) in
+        view.setItems((items ?? []).map(NavigationBarItem.init(record:)), placement: .leading)
       }
-      Prop("closeLabel") { (view: NavigationBarView, label: String?) in
-        view.setCloseLabel(label)
+      Prop("trailingItems") { (view: NavigationBarView, items: [NavigationBarItemRecord]?) in
+        view.setItems((items ?? []).map(NavigationBarItem.init(record:)), placement: .trailing)
       }
-      Prop("backTestID") { (view: NavigationBarView, testID: String?) in
-        view.setBackTestID(testID)
+      Prop("searchPlaceholder") { (view: NavigationBarView, placeholder: String?) in
+        view.setSearchPlaceholder(placeholder)
       }
-      Prop("closeTestID") { (view: NavigationBarView, testID: String?) in
-        view.setCloseTestID(testID)
+      Prop("searchTestID") { (view: NavigationBarView, testID: String?) in
+        view.setSearchTestID(testID)
       }
       Prop("itemColor") { (view: NavigationBarView, color: UIColor) in
         view.setItemColor(color)

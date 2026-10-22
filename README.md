@@ -1,51 +1,14 @@
 # kara-ui
 
-The monorepo behind [`@hzblj/kara-ui`](./packages/kara-ui) — a native-first design system for Expo:
-real SwiftUI and Jetpack Compose views through `@expo/ui`, styled by one token-typed `sx` engine.
+A native-first design system for Expo. Every component renders a real SwiftUI or Jetpack Compose view, styled through
+one token-typed `sx` surface, in the platform's own colours and typeface unless your theme says otherwise.
 
-| Workspace | |
-| --- | --- |
-| [`packages/kara-ui`](./packages/kara-ui) | `@hzblj/kara-ui` — what consumers install. Usage docs live in its README. |
-| [`packages/theme`](./packages/theme) | `@hzblj/kara-theme` — tokens, palette, typography, theme overrides, `KaraProvider` |
-| [`packages/sx`](./packages/sx) | `@hzblj/kara-sx` — the `sx` styling engine |
-| [`packages/native`](./packages/native) | `@hzblj/kara-native` — the `KaraUI` Expo native module (Swift/Kotlin) |
-| [`packages/components`](./packages/components) | `@hzblj/kara-components` — atoms, molecules, organisms, templates |
-| [`packages/router`](./packages/router) | `@hzblj/kara-router` — native tabs, navigation theme |
-| [`packages/expo-plugin`](./packages/expo-plugin) | `@hzblj/kara-expo-plugin` — the optional config plugin |
-| [`apps/example`](./apps/example) | The example app: a Showcase, the Gallery (every component in one scroll) and on-device Storybook. |
+- **Native, not imitated** — SwiftUI and Compose controls, Liquid Glass on iOS 26, Material 3 and Material You on Android.
+- **One set of tokens** — `p="s16"`, `bg="surface.primary"`; a raw number or hex does not type-check.
+- **Your icons, made native** — drop SVGs in a folder, get asset-catalog images and vector drawables.
+- **Native sheets** — with a real navigation bar for a header.
 
-## Getting started
-
-Requires Node 22, Yarn 4 (via Corepack), Xcode and/or Android Studio.
-
-```bash
-corepack enable
-yarn install
-yarn prebuild          # generate the example's native projects
-yarn ios               # or: yarn android
-```
-
-The example runs every package straight from its `src/`, so edits reach the app through Fast Refresh.
-Changes to native code (`packages/native/ios`, `packages/native/android`) need a native rebuild.
-
-## Scripts
-
-| Script | |
-| --- | --- |
-| `yarn ios` / `yarn android` | Run the example on a simulator or device. |
-| `yarn start` | Metro for an installed dev client. |
-| `yarn prebuild` | Clean `expo prebuild` of the example. |
-| `yarn typecheck` | TypeScript per workspace, against both the iOS and the Android resolution. |
-| `yarn lint` / `yarn biome:fix` | Biome + TypeScript / apply safe fixes. |
-| `yarn build` | Build every package, in dependency order (`lib/`, declarations, config plugin). |
-| `yarn pack:check` | Pack every package the way npm receives it and type-check a throwaway consumer. |
-
-## Releasing
-
-Releases go through [Changesets](https://github.com/changesets/changesets). Describe a change with
-`yarn changeset` and commit the file with it. On `main`, the Release workflow opens a "version
-packages" PR; merging it publishes every package, at one shared version, to npm (needs the `NPM_TOKEN` secret).
-
-## License
+Install [`@hzblj/kara-ui`](./packages/kara-ui) — its README has the docs. The example app in
+[`apps/example`](./apps/example) shows every component: `yarn install && yarn prebuild && yarn ios`.
 
 MIT

@@ -6,6 +6,7 @@ import {
   Island,
   type MenuAction,
   NavigationBar,
+  type NavigationBarItem,
   Pressable,
   RnScrollView,
   RnText,
@@ -41,9 +42,25 @@ export const GlassViewSection = () => (
   </Box>
 )
 
+const BAR_BACK: NavigationBarItem[] = [{onPress: noop, type: 'back'}]
+const BAR_CLOSE: NavigationBarItem[] = [{onPress: noop, type: 'close'}]
+const BAR_ACTIONS: NavigationBarItem[] = [
+  {icon: 'share', label: 'Share', onPress: noop, type: 'icon'},
+  {icon: 'heart', label: 'Favourite', onPress: noop, type: 'icon'},
+  {onPress: noop, separated: true, type: 'close'},
+]
+
 export const NavigationBarSection = () => (
-  <Box bg="surface.primary" borderRadius="medium" overflow="hidden">
-    <NavigationBar onBack={noop} onClose={noop} title="Sheet title" />
+  <Box gap="s8">
+    <Box bg="surface.primary" borderRadius="medium" overflow="hidden">
+      <NavigationBar leadingItems={BAR_BACK} title="Back and close" trailingItems={BAR_CLOSE} />
+    </Box>
+    <Box bg="surface.primary" borderRadius="medium" overflow="hidden">
+      <NavigationBar leadingItems={BAR_BACK} title="Grouped actions" trailingItems={BAR_ACTIONS} />
+    </Box>
+    <Box bg="surface.primary" borderRadius="medium" overflow="hidden">
+      <NavigationBar leadingItems={BAR_CLOSE} title="Leading title" titleAlignment="leading" />
+    </Box>
   </Box>
 )
 
