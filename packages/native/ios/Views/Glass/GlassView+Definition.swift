@@ -12,6 +12,10 @@ extension GlassView {
       Prop("colorScheme") { (view: GlassView, colorScheme: String?) in
         view.colorScheme = colorScheme
       }
+
+      OnViewDidUpdateProps { view in
+        view.applyEffectIfNeeded()
+      }
     }
   }
 }

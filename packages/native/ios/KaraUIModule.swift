@@ -13,6 +13,7 @@ public class KaraUIModule: Module {
     }
 
     OnCreate {
+      OpacityVisibilitySync.install()
       CounterBadgeModifier.register()
       ScaledFontModifier.register()
       UnderlineModifier.register()

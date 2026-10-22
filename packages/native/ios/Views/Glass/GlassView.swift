@@ -15,13 +15,14 @@ import UIKit
  */
 public final class GlassView: ExpoView {
   private let effectView = UIVisualEffectView(effect: nil)
+  private var needsEffectUpdate = true
 
   var glassTint: UIColor? {
-    didSet { applyEffectWhenVisible() }
+    didSet { needsEffectUpdate = true }
   }
 
   var isInteractive = false {
-    didSet { applyEffectWhenVisible() }
+    didSet { needsEffectUpdate = true }
   }
 
   /**
@@ -33,39 +34,15 @@ public final class GlassView: ExpoView {
     didSet { overrideUserInterfaceStyle = UIUserInterfaceStyle(colorScheme: colorScheme) }
   }
 
-  private static let materializeDuration: TimeInterval = 0.2
-  private static let fastRetryInterval: TimeInterval = 1.0 / 60
-  private static let slowRetryInterval: TimeInterval = 0.5
-  private static let fastRetryCount = 120
-
-  private var visibilityRetry: DispatchWorkItem?
-
   public required init(appContext: AppContext? = nil) {
     super.init(appContext: appContext)
     addSubview(effectView)
-    if Self.isGlassAvailable {
-      effectView.contentView.alpha = 0
-    }
-  }
-
-  private static var isGlassAvailable: Bool {
-#if compiler(>=6.2)
-    if #available(iOS 26.0, *) {
-      return true
-    }
-#endif
-    return false
   }
 
   public override func layoutSubviews() {
     super.layoutSubviews()
     effectView.frame = bounds
     effectView.layer.cornerRadius = min(bounds.width, bounds.height) / 2
-  }
-
-  public override func didMoveToWindow() {
-    super.didMoveToWindow()
-    applyEffectWhenVisible()
   }
 
   public override func mountChildComponentView(_ childComponentView: UIView, index: Int) {
@@ -77,77 +54,25 @@ public final class GlassView: ExpoView {
   }
 
   /**
-   The effect is set only once this view and every ancestor are at full opacity — exactly 1. React Native fades
-   through `layer.opacity`, which UIKit does not watch: a `UIGlassEffect` assigned under an ancestor below 1 stays set
-   but never renders, and UIKit only looks again when the view re-enters a window. A 0.99 threshold let it through
-   during the last frames of an ease-out fade, and the glass went missing at random.
-
-   So this polls every frame for two seconds, then every half second while the view is in a window — one retry
-   chain, restarted by a prop change or a new window. Until the glass is set the content stays at alpha 0 and
-   materialises with it, so an icon never shows before its glass; after two seconds it is revealed without one.
+   The effect is set as soon as the props arrive, mounted or not. UIKit keeps it from rendering while the view sits
+   in a hidden subtree and draws it once the subtree shows — which holds under React Native fades only thanks to
+   `OpacityVisibilitySync`. Without it, glass mounted under a view at opacity 0 never rendered; waiting for every
+   ancestor to reach full opacity before setting the effect, as this view once did, could not repair that.
    */
-  private func applyEffectWhenVisible() {
-    visibilityRetry?.cancel()
-    visibilityRetry = nil
-    applyEffectWhenVisible(attempt: 0)
-  }
-
-  private func applyEffectWhenVisible(attempt: Int) {
-    if isFullyVisible {
-      visibilityRetry = nil
-      applyEffect()
+  func applyEffectIfNeeded() {
+    guard needsEffectUpdate else {
       return
     }
-    guard window != nil else {
-      visibilityRetry = nil
-      return
-    }
-    if attempt == Self.fastRetryCount {
-      revealContent()
-    }
-    let retry = DispatchWorkItem { [weak self] in
-      self?.applyEffectWhenVisible(attempt: attempt + 1)
-    }
-    visibilityRetry = retry
-    let interval = attempt < Self.fastRetryCount ? Self.fastRetryInterval : Self.slowRetryInterval
-    DispatchQueue.main.asyncAfter(deadline: .now() + interval, execute: retry)
-  }
-
-  private func applyEffect() {
+    needsEffectUpdate = false
 #if compiler(>=6.2)
     if #available(iOS 26.0, *) {
       let effect = UIGlassEffect(style: .regular)
       effect.tintColor = glassTint
       effect.isInteractive = isInteractive
       effectView.cornerConfiguration = .capsule()
-      UIView.animate(withDuration: Self.materializeDuration) {
-        self.effectView.effect = effect
-        self.effectView.contentView.alpha = 1
-      }
+      effectView.effect = effect
     }
 #endif
-  }
-
-  private func revealContent() {
-    UIView.animate(withDuration: Self.materializeDuration) {
-      self.effectView.contentView.alpha = 1
-    }
-  }
-}
-
-extension UIView {
-  var isFullyVisible: Bool {
-    guard window != nil else {
-      return false
-    }
-    var current: UIView? = self
-    while let view = current {
-      if view.isHidden || view.alpha < 1 || (view.layer.presentation()?.opacity ?? view.layer.opacity) < 1 {
-        return false
-      }
-      current = view.superview
-    }
-    return true
   }
 }
 
