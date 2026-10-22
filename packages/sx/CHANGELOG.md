@@ -1,5 +1,12 @@
 # @hzblj/kara-sx
 
+## 0.5.0
+
+### Patch Changes
+
+- Updated dependencies [[`3b0a6fb`](https://github.com/hzblj/kara-ui/commit/3b0a6fbc49559720023fece2b5c6189ad4d88bc8)]:
+  - @hzblj/kara-theme@0.5.0
+
 ## 0.4.1
 
 ### Patch Changes
