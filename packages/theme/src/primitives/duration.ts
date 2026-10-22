@@ -20,3 +20,5 @@ export const duration = {
   d5000: 5000,
   d10000: 10000,
 } as const
+
+export type DurationSize = keyof typeof duration

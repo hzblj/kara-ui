@@ -34,5 +34,9 @@
     "turbo": "^2.10.12",
     "typescript": "~7.0.2"
   },
+  "resolutions": {
+    "expo-dev-menu@npm:~57.0.20": "patch:expo-dev-menu@npm%3A57.0.20#~/.yarn/patches/expo-dev-menu-npm-57.0.20-b1911ae02f.patch",
+    "react-native-screens@npm:~4.26.0": "patch:react-native-screens@npm%3A4.26.2#~/.yarn/patches/react-native-screens-npm-4.26.2-175183263a.patch"
+  },
   "packageManager": "yarn@4.17.1"
 }

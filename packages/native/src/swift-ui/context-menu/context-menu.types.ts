@@ -12,6 +12,13 @@ export type ContextMenuItem = {
   title: string
 }
 
+/**
+ * How a tapped preview leaves before `onPreviewPress`. `zoom`: its photo grows straight into the pushed screen (iOS 18,
+ * with a `ZoomTransitionSource` in the trigger; otherwise as `dismiss`). `pop`: UIKit's default, the preview flies
+ * out. `dismiss`: it shrinks back onto the trigger first.
+ */
+export type ContextMenuPreviewTransition = 'dismiss' | 'pop' | 'zoom'
+
 export type ContextMenuProps = {
   /** The always-visible trigger; a long press on it opens the menu. */
   children: ReactNode
@@ -21,6 +28,8 @@ export type ContextMenuProps = {
   onSelectItem?: (id: string) => void
   /** Shown lifted while the menu is open. A snapshot of the trigger when unset. */
   preview?: ReactNode
+  /** Default: `zoom` when the trigger holds a `ZoomTransitionSource`, `pop` otherwise. */
+  previewTransition?: ContextMenuPreviewTransition
   style?: StyleProp<ViewStyle>
   testID?: string
 }

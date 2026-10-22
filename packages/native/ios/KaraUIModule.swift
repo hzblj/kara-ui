@@ -27,5 +27,8 @@ public class KaraUIModule: Module {
     NavigationBarView.definition()
     ScrollEdgeContainerView.definition()
     TooltipView.definition()
+    ZoomTransitionSourceView.definition()
+    ZoomTransitionTargetView.definition()
+    ZoomTransitionEnablerView.definition()
   }
 }

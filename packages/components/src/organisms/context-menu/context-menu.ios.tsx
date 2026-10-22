@@ -8,7 +8,15 @@ import {useSx} from '@hzblj/kara-sx'
 import {useCallback, useMemo} from 'react'
 import type {ContextMenuComponent, ContextMenuExclusionProps, ContextMenuProps} from './context-menu.types'
 
-const ContextMenuRoot = ({actions, children, onPreviewPress, preview, testID, ...sx}: ContextMenuProps) => {
+const ContextMenuRoot = ({
+  actions,
+  children,
+  onPreviewPress,
+  preview,
+  previewTransition,
+  testID,
+  ...sx
+}: ContextMenuProps) => {
   const style = useSx(sx)
 
   /** The native side hands back an id; the index is the one identity every action has. */
@@ -31,6 +39,7 @@ const ContextMenuRoot = ({actions, children, onPreviewPress, preview, testID, ..
       onPreviewPress={onPreviewPress}
       onSelectItem={onSelectItem}
       preview={preview}
+      previewTransition={previewTransition}
       style={style}
       testID={testID}
     >
