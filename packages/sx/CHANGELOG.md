@@ -1,5 +1,14 @@
 # @hzblj/kara-sx
 
+## 0.7.0
+
+### Patch Changes
+
+- [#12](https://github.com/hzblj/kara-ui/pull/12) [`2a6595f`](https://github.com/hzblj/kara-ui/commit/2a6595f79176a3450610d361a02001aac9530490) Thanks [@hzblj](https://github.com/hzblj)! - `sx` costs less on every render. The style cache, the responsive flattening and the key behind `useSxModifiers` used to go through every key the surface has, about seventy for a `Box`, even when a component set two or three of them. Now they go through only the props that are set, and the theme's part of the cache key is worked out once per theme rather than on every render. Without a JIT, as on Hermes, an `sx()` view resolves its style 2.5–5× faster and a native atom 2–4.5× faster.
+
+- Updated dependencies []:
+  - @hzblj/kara-theme@0.7.0
+
 ## 0.6.0
 
 ### Patch Changes
