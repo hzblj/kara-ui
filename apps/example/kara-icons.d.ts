@@ -37,6 +37,7 @@ declare global {
     'text-fields': true
     trash: true
     user: true
+    vibration: true
     warning: true
     widgets: true
     'widgets-filled': true

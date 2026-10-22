@@ -4,6 +4,7 @@ import {
   Button,
   Divider,
   HStack,
+  haptics,
   Icon,
   Island,
   Label,
@@ -130,7 +131,12 @@ const Order = () => {
 
 const Preferences = () => {
   const [updates, setUpdates] = useState(true)
-  const [haptics, setHaptics] = useState(false)
+  const [hapticsOn, setHapticsOn] = useState(haptics.isEnabled)
+  // A real app stores the preference and calls `setEnabled` at start-up; the example keeps it for the session.
+  const toggleHaptics = (on: boolean) => {
+    haptics.setEnabled(on)
+    setHapticsOn(on)
+  }
 
   return (
     <Section caption="Settings rows, the way each platform draws them." title="Feels at home">
@@ -141,7 +147,7 @@ const Preferences = () => {
           </LabeledContent>
           <InsetDivider />
           <LabeledContent icon="bolt" label="Haptics" px="s16">
-            <Switch onValueChange={setHaptics} value={haptics} />
+            <Switch onValueChange={toggleHaptics} value={hapticsOn} />
           </LabeledContent>
           <InsetDivider />
           <LabeledContent icon="user" label="Account" onPress={() => undefined} px="s16" value="you@example.com" />

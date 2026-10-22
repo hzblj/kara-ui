@@ -1,4 +1,5 @@
 export * from './atoms'
+export * from './haptics'
 export * from './molecules'
 export * from './organisms'
 export * from './templates'
