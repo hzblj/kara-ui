@@ -9,9 +9,9 @@
 [license-badge]: https://img.shields.io/badge/license-MIT-ff5700?labelColor=27272a
 [license-url]: https://github.com/hzblj/kara-ui/blob/main/LICENSE
 [platforms-badge]: https://img.shields.io/badge/platforms-iOS%20%C2%B7%20Android-ff5700?labelColor=27272a
-[docs-url]: https://kara.janblazej.dev/docs
+[docs-url]: https://www.kara.janblazej.dev/docs
 
-<a href="https://kara.janblazej.dev"><img src="https://kara.janblazej.dev/og.png" alt="Kara — native UI for Expo: real SwiftUI and Jetpack Compose views" width="720"></a>
+<a href="https://www.kara.janblazej.dev"><img src="https://www.kara.janblazej.dev/og.png" alt="Kara — native UI for Expo: real SwiftUI and Jetpack Compose views" width="720"></a>
 
 A native-first design system for Expo. Kara's components render **real SwiftUI and Jetpack Compose views** — a
 `Switch` is a SwiftUI `Toggle` on iOS and a Material `Switch` on Android — styled through one token-typed `sx`
@@ -19,7 +19,7 @@ surface. The platform's colours and typeface by default, yours through the theme
 
 ## Documentation
 
-**[kara.janblazej.dev/docs](https://kara.janblazej.dev/docs)** — the guides, the design tokens, and every component
+**[www.kara.janblazej.dev/docs](https://www.kara.janblazej.dev/docs)** — the guides, the design tokens, and every component
 photographed on iOS and Android, in light and dark.
 
 ## Install
@@ -30,7 +30,7 @@ npx expo install @hzblj/kara-ui @expo/ui @lodev09/react-native-true-sheet \
 ```
 
 Expo SDK 57 and a [development build](https://docs.expo.dev/develop/development-builds/introduction/) — Kara ships
-native code, so it does not run in Expo Go. The [installation guide](https://kara.janblazej.dev/docs/installation)
+native code, so it does not run in Expo Go. The [installation guide](https://www.kara.janblazej.dev/docs/installation)
 covers the config plugin and the provider.
 
 ## Quick start
@@ -50,17 +50,17 @@ export const App = () => (
 )
 ```
 
-Native views render inside a [`Screen` or an `Island`](https://kara.janblazej.dev/docs/hosts); the `Rn*` components
+Native views render inside a [`Screen` or an `Island`](https://www.kara.janblazej.dev/docs/hosts); the `Rn*` components
 are plain React Native views with the same `sx` props.
 
 ## Learn more
 
-- [Styling with `sx`](https://kara.janblazej.dev/docs/styling) — tokens in place of raw values
-- [Theming](https://kara.janblazej.dev/docs/theming) — your colours, your typefaces, Material You
-- [Icons](https://kara.janblazej.dev/docs/icons) — your own SVGs, as native icons on both platforms
-- [Expo Router](https://kara.janblazej.dev/docs/router) — native tabs and the zoom transition
-- [Components](https://kara.janblazej.dev/docs/components) — the whole catalogue
-- [Changelog](https://kara.janblazej.dev/docs/changelog)
+- [Styling with `sx`](https://www.kara.janblazej.dev/docs/styling) — tokens in place of raw values
+- [Theming](https://www.kara.janblazej.dev/docs/theming) — your colours, your typefaces, Material You
+- [Icons](https://www.kara.janblazej.dev/docs/icons) — your own SVGs, as native icons on both platforms
+- [Expo Router](https://www.kara.janblazej.dev/docs/router) — native tabs and the zoom transition
+- [Components](https://www.kara.janblazej.dev/docs/components) — the whole catalogue
+- [Changelog](https://www.kara.janblazej.dev/docs/changelog)
 
 ## Sponsorship
 

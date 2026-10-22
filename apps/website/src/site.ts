@@ -1,4 +1,4 @@
-export const SITE_URL = 'https://kara.janblazej.dev'
+export const SITE_URL = 'https://www.kara.janblazej.dev'
 export const SITE_NAME = 'Kara UI'
 export const PACKAGE_NAME = '@hzblj/kara-ui'
 export const REPOSITORY_URL = 'https://github.com/hzblj/kara-ui'

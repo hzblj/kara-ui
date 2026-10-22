@@ -8,9 +8,9 @@
 [license-badge]: https://img.shields.io/badge/license-MIT-ff5700?labelColor=27272a
 [license-url]: https://github.com/hzblj/kara-ui/blob/main/LICENSE
 
-<a href="https://kara.janblazej.dev"><img src="https://kara.janblazej.dev/og.png" alt="Kara — native UI for Expo: real SwiftUI and Jetpack Compose views" width="720"></a>
+<a href="https://www.kara.janblazej.dev"><img src="https://www.kara.janblazej.dev/og.png" alt="Kara — native UI for Expo: real SwiftUI and Jetpack Compose views" width="720"></a>
 
-The components of [Kara UI](https://kara.janblazej.dev) — a native-first design system for Expo.
+The components of [Kara UI](https://www.kara.janblazej.dev) — a native-first design system for Expo.
 
 > **Install [`@hzblj/kara-ui`](https://www.npmjs.com/package/@hzblj/kara-ui) instead.** This package is one of its
 > building blocks, published so its types resolve; everything here is re-exported from `@hzblj/kara-ui`.
@@ -26,9 +26,9 @@ The components of [Kara UI](https://kara.janblazej.dev) — a native-first desig
 
 ## Documentation
 
-- [Components](https://kara.janblazej.dev/docs/components) — every one photographed on iOS and Android, with its props
-- [Screen and Island](https://kara.janblazej.dev/docs/hosts)
-- [Haptics](https://kara.janblazej.dev/docs/haptics)
+- [Components](https://www.kara.janblazej.dev/docs/components) — every one photographed on iOS and Android, with its props
+- [Screen and Island](https://www.kara.janblazej.dev/docs/hosts)
+- [Haptics](https://www.kara.janblazej.dev/docs/haptics)
 
 ## License
 

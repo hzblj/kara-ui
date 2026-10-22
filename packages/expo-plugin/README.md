@@ -8,9 +8,9 @@
 [license-badge]: https://img.shields.io/badge/license-MIT-ff5700?labelColor=27272a
 [license-url]: https://github.com/hzblj/kara-ui/blob/main/LICENSE
 
-<a href="https://kara.janblazej.dev"><img src="https://kara.janblazej.dev/og.png" alt="Kara — native UI for Expo: real SwiftUI and Jetpack Compose views" width="720"></a>
+<a href="https://www.kara.janblazej.dev"><img src="https://www.kara.janblazej.dev/og.png" alt="Kara — native UI for Expo: real SwiftUI and Jetpack Compose views" width="720"></a>
 
-The Expo config plugin of [Kara UI](https://kara.janblazej.dev) — a native-first design system for Expo.
+The Expo config plugin of [Kara UI](https://www.kara.janblazej.dev) — a native-first design system for Expo.
 
 > **Install [`@hzblj/kara-ui`](https://www.npmjs.com/package/@hzblj/kara-ui) instead.** This package is one of its
 > building blocks; apps name `@hzblj/kara-ui` in their plugins, and it hands over to this one.
@@ -29,8 +29,8 @@ plugins: [['@hzblj/kara-ui', {icons: {source: './assets/icons'}}]]
 
 ## Documentation
 
-- [Icons](https://kara.janblazej.dev/docs/icons)
-- [Redefining a UIKit colour](https://kara.janblazej.dev/docs/theming#semantic-colours)
+- [Icons](https://www.kara.janblazej.dev/docs/icons)
+- [Redefining a UIKit colour](https://www.kara.janblazej.dev/docs/theming#semantic-colours)
 
 ## License
 

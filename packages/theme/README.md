@@ -8,9 +8,9 @@
 [license-badge]: https://img.shields.io/badge/license-MIT-ff5700?labelColor=27272a
 [license-url]: https://github.com/hzblj/kara-ui/blob/main/LICENSE
 
-<a href="https://kara.janblazej.dev"><img src="https://kara.janblazej.dev/og.png" alt="Kara — native UI for Expo: real SwiftUI and Jetpack Compose views" width="720"></a>
+<a href="https://www.kara.janblazej.dev"><img src="https://www.kara.janblazej.dev/og.png" alt="Kara — native UI for Expo: real SwiftUI and Jetpack Compose views" width="720"></a>
 
-The design tokens, palette, typography and theme of [Kara UI](https://kara.janblazej.dev) — a native-first design
+The design tokens, palette, typography and theme of [Kara UI](https://www.kara.janblazej.dev) — a native-first design
 system for Expo.
 
 > **Install [`@hzblj/kara-ui`](https://www.npmjs.com/package/@hzblj/kara-ui) instead.** This package is one of its
@@ -26,8 +26,8 @@ system for Expo.
 
 ## Documentation
 
-- [Theming](https://kara.janblazej.dev/docs/theming)
-- [Design tokens](https://kara.janblazej.dev/docs/tokens)
+- [Theming](https://www.kara.janblazej.dev/docs/theming)
+- [Design tokens](https://www.kara.janblazej.dev/docs/tokens)
 
 ## License
 
