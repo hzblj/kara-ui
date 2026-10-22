@@ -1,9 +1,7 @@
 import {Column} from '@expo/ui/jetpack-compose'
-import {clickable, testID as testIdModifier} from '@expo/ui/jetpack-compose/modifiers'
-import {useSxModifiers} from '@hzblj/kara-sx'
 import {spacing} from '@hzblj/kara-theme'
-import {useMemo} from 'react'
 import {useHostGuard} from '../../host-context'
+import {useStackModifiers} from '../../use-stack-modifiers'
 import type {VStackAlign, VStackComponent, VStackProps} from './v-stack.types'
 
 const ALIGNMENT = {
@@ -21,11 +19,7 @@ export const VStack: VStackComponent = ({
   ...sx
 }: VStackProps) => {
   useHostGuard('VStack')
-  const sxModifiers = useSxModifiers(sx)
-  const modifiers = useMemo(
-    () => [...sxModifiers, ...(testID ? [testIdModifier(testID)] : []), ...(onPress ? [clickable(onPress)] : [])],
-    [onPress, sxModifiers, testID]
-  )
+  const modifiers = useStackModifiers(sx, onPress, testID)
 
   return (
     <Column

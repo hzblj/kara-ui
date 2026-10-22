@@ -6,11 +6,14 @@ declare global {
     'arrow-left': true
     'arrow-right': true
     bolt: true
+    brush: true
     calendar: true
     check: true
     'chevron-down': true
     'chevron-right': true
     close: true
+    code: true
+    'dark-mode': true
     error: true
     grid: true
     'grid-filled': true
@@ -21,13 +24,22 @@ declare global {
     lock: true
     more: true
     notification: true
+    palette: true
+    'palette-filled': true
+    'rounded-corner': true
     search: true
     settings: true
+    shadow: true
     share: true
+    'shopping-bag': true
     star: true
+    straighten: true
+    'text-fields': true
     trash: true
     user: true
     warning: true
+    widgets: true
+    'widgets-filled': true
   }
 }
 

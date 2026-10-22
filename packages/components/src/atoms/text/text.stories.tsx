@@ -7,7 +7,7 @@ import {Text} from './text'
 
 const VARIANTS = Object.keys(textStyles) as TextVariant[]
 
-const SAMPLE = 'Příšerně žluťoučký kůň úpěl ďábelské ódy'
+const SAMPLE = 'The quick brown fox jumps over the lazy dog'
 
 const meta = {
   args: {children: SAMPLE},

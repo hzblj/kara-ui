@@ -1,3 +1,3 @@
-import {Showcase} from '../../../src/showcase'
+import {HomeScreen} from '../../../src/home'
 
-export default Showcase
+export default HomeScreen

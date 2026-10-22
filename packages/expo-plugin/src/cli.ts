@@ -17,8 +17,9 @@ const USAGE = `Usage: kara-icons <source> [--out <file>]
  */
 export const main = (args: string[]): number => {
   const outIndex = args.indexOf('--out')
-  const out = outIndex === -1 ? 'kara-icons.d.ts' : args[outIndex + 1]
-  const source = args.find((arg, index) => !arg.startsWith('--') && index !== outIndex + 1)
+  const outValueIndex = outIndex === -1 ? -1 : outIndex + 1
+  const out = outIndex === -1 ? 'kara-icons.d.ts' : args[outValueIndex]
+  const source = args.find((arg, index) => !arg.startsWith('--') && index !== outValueIndex)
 
   if (!source || !out || args.includes('--help')) {
     console.log(USAGE)

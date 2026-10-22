@@ -1,6 +1,8 @@
 import {iconResourceName} from '@hzblj/kara-native'
+import {useAppTheme} from '@hzblj/kara-theme'
 import {NativeTabs} from 'expo-router/unstable-native-tabs'
-import {Children, isValidElement} from 'react'
+import {Children, isValidElement, useMemo} from 'react'
+import {Platform} from 'react-native'
 
 import type {TabsComponent, TabsProps, TabsScreenProps} from './tabs.types'
 
@@ -32,13 +34,47 @@ const renderTrigger = ({hidden, icon, name, selectedIcon, testID, title}: TabsSc
   )
 }
 
-const TabsRoot = ({children, minimizeBehavior = 'never'}: TabsProps) => (
-  <NativeTabs minimizeBehavior={minimizeBehavior}>
-    {Children.map(children, child =>
-      isValidElement<TabsScreenProps>(child) && child.type === TabsScreen ? renderTrigger(child.props) : child
-    )}
-  </NativeTabs>
-)
+/**
+ * The bar in the theme's colours. iOS keeps the system's glass bar and only takes the accent for the selected item;
+ * Android's Material bar would otherwise colour itself from the wallpaper's dynamic scheme, whatever the theme says —
+ * so the container, the active indicator, icons, labels and ripple are all set from tokens.
+ */
+const useTabBarColors = () => {
+  const theme = useAppTheme()
+
+  return useMemo(() => {
+    const fontFamily = theme.typography.labelMedium.fontFamily
+    const tintColor = theme.color('content.accent')
+
+    if (Platform.OS !== 'android') {
+      return {labelStyle: {fontFamily}, tintColor}
+    }
+
+    return {
+      backgroundColor: theme.color('surface.primary'),
+      iconColor: {default: theme.color('content.secondary'), selected: tintColor},
+      indicatorColor: theme.color('fill.accent.base'),
+      labelStyle: {
+        default: {color: theme.color('content.secondary'), fontFamily},
+        selected: {color: theme.color('content.primary'), fontFamily},
+      },
+      rippleColor: theme.color('fill.accent.base'),
+      tintColor,
+    }
+  }, [theme])
+}
+
+const TabsRoot = ({children, minimizeBehavior = 'never'}: TabsProps) => {
+  const colors = useTabBarColors()
+
+  return (
+    <NativeTabs minimizeBehavior={minimizeBehavior} {...colors}>
+      {Children.map(children, child =>
+        isValidElement<TabsScreenProps>(child) && child.type === TabsScreen ? renderTrigger(child.props) : child
+      )}
+    </NativeTabs>
+  )
+}
 
 /**
  * Native bottom tabs — a SwiftUI `TabView` on iOS and a Material navigation bar on Android, both

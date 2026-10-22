@@ -13,7 +13,7 @@ and `@hzblj/kara-native` — through their entry points only.
 | `src/atoms/rn-*` | The React Native tier — `RnView`, `RnText`, `RnIcon`, `RnScrollView`, `RnFlatList`, `RnSectionList`. Plain RN views with the same `sx` surface, for rows that host native views. |
 | `src/atoms/glass-view/` | A React Native-tier atom over the native module: iOS 26 Liquid Glass around RN children (a translucent capsule elsewhere). |
 | `src/atoms/flash-list/` | The default list. Recycles and absolutely positions cells, which an `@expo/ui` host does not survive — use `RnFlatList`/`RnSectionList` when rows contain native atoms. |
-| `src/molecules/` | Label, LabeledContent, ListItem, Link, SearchBar, EmptyState, Collapsible, Pager, RadioGroup, Stepper, Tooltip — and over the native module: NavigationBar, ScrollEdgeContainer, RnTooltip. |
+| `src/molecules/` | Label, LabeledContent, ListItem (and `RnListItem`, its React Native-tier row for long lists), Link, SearchBar, EmptyState, Collapsible, Pager, RadioGroup, Stepper, Tooltip — and over the native module: NavigationBar, ScrollEdgeContainer, RnTooltip. |
 | `src/organisms/` | Sheet (TrueSheet with a native header: `Sheet.Header`, `Sheet.ScrollView`, `useSheetScroll`), ActionSheet, Alert, Menu, Form, SwipeActions, Snackbar — and over the native module: ContextMenu (long-press on React Native content, with a custom preview on iOS), FabMenu. (`Tabs` lives in `@hzblj/kara-router`, behind the `@hzblj/kara-ui/router` entry, so the main entry never imports expo-router.) |
 | `src/templates/screen/` | `Screen` — the full-bleed native host every screen starts with. |
 | `src/host-context.tsx` | `HostBoundary` + `useHostGuard`: dev warning when a native atom renders outside `Screen`/`Island`. |
@@ -110,6 +110,14 @@ which is what lets `index.ts` export everything on both platforms. `isLiquidGlas
 **Never name a native prop after a React Native style key** (`width`, `backgroundColor`, `shadowColor`…):
 Fabric reads it as layout or style. Prefix it (`bubbleWidth`). A new native view needs a pod install / Gradle
 sync and a native rebuild of the app; a new `.ios.tsx`/`.android.tsx` caller needs Metro `--clear`.
+
+## Ripples
+
+**An Android ripple only stops at rounded corners if a parent clips it.** `android_ripple` is drawn as the pressable's
+foreground, which its own `overflow: hidden` does not clip. A shaped pressable splits its style with `splitForRipple`
+(`src/ripple-clip.ts`): the shape, background and outer layout on an outer clipping view, the padding and content layout
+on the pressable inside. Compose stacks avoid the problem by ordering: `use-stack-modifiers.ts` puts `clickable` after
+the clip and background and before the padding, so the ripple fills the shape edge to edge.
 
 ## Sheets
 

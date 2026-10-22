@@ -7,7 +7,7 @@ import {RnText} from './rn-text'
 const VARIANTS = Object.keys(textStyles) as TextVariant[]
 
 const meta = {
-  args: {children: 'Příšerně žluťoučký kůň úpěl ďábelské ódy'},
+  args: {children: 'The quick brown fox jumps over the lazy dog'},
   argTypes: {
     align: {control: 'radio', options: ['left', 'center', 'right']},
     color: {

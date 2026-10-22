@@ -5,7 +5,8 @@ import type {MenuAction} from '../menu'
 /**
  * A context menu on a React Native subtree — a card in a list, say — opened by a long press. iOS: a
  * `UIContextMenuInteraction`, with an optional React Native `preview` lifted while the menu is open and a callback for
- * a tap on it. Android: a Material dropdown under the subtree. The trigger is ordinary React Native layout, so it
+ * a tap on it. Android, where Material has no lifted preview: a ripple and the long-press haptic, then a Material
+ * dropdown where the finger is, with the trigger highlighted while it is open. The trigger is ordinary React Native layout, so it
  * needs no `Screen` or `Island`.
  */
 export type ContextMenuProps = ResponsiveViewSx & {

@@ -1,3 +1,4 @@
+import type {SpaceSize} from '@hzblj/kara-theme'
 import type {ReactNode} from 'react'
 import type {IconName} from '../../atoms/icon'
 
@@ -10,6 +11,8 @@ export type LabeledContentProps = {
   icon?: IconName
   label: string
   onPress?: () => void
+  /** Horizontal padding inside the row — inside its press area too, so Android's ripple reaches the card's edges. */
+  px?: SpaceSize
   testID?: string
   value?: string
 }

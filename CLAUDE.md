@@ -17,7 +17,7 @@ Every package has its own `CLAUDE.md` — read that one before touching it.
 | `packages/router/` | `@hzblj/kara-router` | `Tabs` and `navigationTheme`, apart so nothing else imports expo-router. |
 | `packages/expo-plugin/` | `@hzblj/kara-expo-plugin` | The optional config plugin (`iosSemanticColors`), compiled for Node. |
 | `packages/kara-ui/` | `@hzblj/kara-ui` | The umbrella consumers install: re-exports only, the public entry points, the npm README. |
-| `apps/example/` | — | The example app: Showcase, Gallery, on-device Storybook. Runs every package from **source**. Private. |
+| `apps/example/` | — | The example app: Home, the component catalogue, the design pages, on-device Storybook. Runs every package from **source**. Private. |
 | `scripts/` | — | `fallback-declarations.mjs` (a per-package build step) and `pack-check.mjs` (tarballs + a throwaway consumer). |
 | `.changeset/`, `.github/workflows/` | — | Release notes (`yarn changeset`), CI (biome, typecheck, pack check) and the changesets → npm release. |
 
@@ -78,8 +78,8 @@ chrome draws are internal (`packages/native/glyphs.json`).
 **Native views need a host.** `@expo/ui`-backed atoms only render inside `<Screen>` or `<Island>`; outside one they
 silently disappear (dev warns via `useHostGuard`).
 
-**Every component has a story beside it**, mounted by `apps/example/.rnstorybook`, and a section in the example's
-Gallery.
+**Every component has a story beside it**, mounted by `apps/example/.rnstorybook`, and a page in the example's
+component catalogue (`apps/example/src/catalog`).
 
 Code style is Biome-enforced (`@hzblj/biome-config`): 2 spaces, 120 cols, single quotes, no semicolons, sorted imports
 and object keys. Named exports and `const` arrow functions everywhere; `type` over `interface`.
