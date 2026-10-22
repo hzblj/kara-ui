@@ -1,0 +1,174 @@
+@import "tailwindcss";
+@source "../src";
+
+/*
+ * The site's tokens: zyplot's neutral scale with kara's own accent — `orange[11]` of the library's palette, the colour
+ * every kara control is tinted with by default. Small accent text takes a darker step of the same orange in light mode,
+ * where #ff5700 on white would not reach a readable contrast.
+ */
+@theme static {
+  --font-inter: var(--font-kara-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+
+  --color-gray-0: #ffffff;
+  --color-gray-1: #fcfcfc;
+  --color-gray-2: #fafafa;
+  --color-gray-3: #f5f5f5;
+  --color-gray-4: #ebebeb;
+  --color-gray-5: #d9d9d9;
+  --color-gray-6: #cccccc;
+  --color-gray-7: #bfbfbf;
+  --color-gray-9: #a6a6a6;
+  --color-gray-11: #8c8c8c;
+  --color-gray-12: #808080;
+  --color-gray-14: #666666;
+  --color-gray-15: #595959;
+  --color-gray-17: #404040;
+  --color-gray-18: #333333;
+  --color-gray-20: #212121;
+  --color-gray-21: #171717;
+  --color-gray-22: #0a0a0a;
+  --color-gray-23: #000000;
+
+  --color-orange-7: #d23100;
+  --color-orange-9: #f33b00;
+  --color-orange-10: #ff4500;
+  --color-orange-11: #ff5700;
+  --color-orange-14: #ff7d4f;
+  --color-orange-16: #ffa689;
+  --color-orange-20: #ffe8e1;
+  --color-green-8: #00a546;
+  --color-red-12: #ff133c;
+  --color-red-13: #ff354e;
+
+  --color-surface-base: var(--color-gray-2);
+  --color-surface-primary: var(--color-gray-0);
+  --color-surface-secondary: var(--color-gray-1);
+  --color-surface-tertiary: var(--color-gray-3);
+  --color-surface-elevated: var(--color-gray-0);
+
+  --color-content-primary: var(--color-gray-23);
+  --color-content-secondary: var(--color-gray-14);
+  --color-content-tertiary: var(--color-gray-12);
+  --color-content-quaternary: var(--color-gray-9);
+  --color-content-accent: var(--color-orange-7);
+  --color-content-destructive: var(--color-red-12);
+  --color-content-on-accent: var(--color-gray-0);
+  --color-content-success: var(--color-green-8);
+
+  --color-border-primary: var(--color-gray-6);
+  --color-border-secondary: var(--color-gray-4);
+  --color-border-tertiary: var(--color-gray-3);
+  --color-border-focus: var(--color-orange-11);
+
+  --color-fill-secondary-primary: var(--color-gray-1);
+  --color-fill-secondary-hover: var(--color-gray-3);
+  --color-fill-secondary-pressed: var(--color-gray-4);
+  --color-fill-accent-primary: var(--color-orange-11);
+  --color-fill-accent-hover: var(--color-orange-10);
+  --color-fill-accent-pressed: var(--color-orange-9);
+  --color-fill-accent-soft: var(--color-orange-20);
+
+  /* What a device frame shows before its image arrives: each platform's own screen background. */
+  --color-stage-ios: #f2f2f7;
+  --color-stage-android: #fff8f6;
+
+  --shadow-card-default: 0 1px 2px #0000000a, 0 12px 36px #0000000f;
+  --shadow-card-elevated: 0 2px 6px #0000000f, 0 24px 64px #00000014;
+  --shadow-btn-default: 0 1px 2px #0000001f;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant android (&:where([data-platform="android"], [data-platform="android"] *));
+
+.dark {
+  --color-surface-base: var(--color-gray-22);
+  --color-surface-primary: var(--color-gray-21);
+  --color-surface-secondary: var(--color-gray-21);
+  --color-surface-tertiary: var(--color-gray-20);
+  --color-surface-elevated: var(--color-gray-20);
+
+  --color-content-primary: var(--color-gray-0);
+  --color-content-secondary: var(--color-gray-11);
+  --color-content-tertiary: var(--color-gray-14);
+  --color-content-quaternary: var(--color-gray-15);
+  --color-content-accent: var(--color-orange-14);
+  --color-content-destructive: var(--color-red-13);
+
+  --color-border-primary: var(--color-gray-17);
+  --color-border-secondary: var(--color-gray-18);
+  --color-border-tertiary: var(--color-gray-20);
+  --color-border-focus: var(--color-orange-14);
+
+  --color-fill-secondary-primary: var(--color-gray-20);
+  --color-fill-secondary-hover: var(--color-gray-18);
+  --color-fill-secondary-pressed: var(--color-gray-17);
+  --color-fill-accent-soft: #ff57001f;
+
+  --color-stage-ios: #000000;
+  --color-stage-android: #1a110f;
+
+  --shadow-card-default: 0 1px 2px #00000052, 0 12px 36px #00000066;
+  --shadow-card-elevated: 0 2px 6px #00000052, 0 24px 64px #0000007a;
+  --shadow-btn-default: 0 1px 2px #00000066;
+}
+
+html {
+  background: var(--color-surface-base);
+  color: var(--color-content-primary);
+  color-scheme: light;
+  font-family: var(--font-inter);
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+::selection {
+  background: #ff570033;
+}
+
+/* One focus ring for every link and control, in the accent, only for the keyboard. */
+:where(a, button, [role="tab"]):focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+.shiki {
+  margin: 0;
+  background: transparent !important;
+}
+
+.shiki code {
+  display: block;
+  width: fit-content;
+}
+
+.shiki span {
+  font-style: var(--shiki-light-font-style, normal);
+  font-weight: var(--shiki-light-font-weight, inherit);
+  text-decoration: var(--shiki-light-text-decoration, none);
+}
+
+html.dark .shiki,
+html.dark .shiki span {
+  color: var(--shiki-dark) !important;
+  font-style: var(--shiki-dark-font-style, normal) !important;
+  font-weight: var(--shiki-dark-font-weight, inherit) !important;
+  text-decoration: var(--shiki-dark-text-decoration, none) !important;
+}
+
+/* The landing page's strip of components (only under `motion-safe:`): two copies of a row, slid by one. */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

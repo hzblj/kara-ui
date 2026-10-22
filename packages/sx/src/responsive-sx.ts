@@ -5,8 +5,7 @@ import type {ViewSx} from './view-sx.types'
 /**
  * Layout keys only, and deliberately so: a wider screen wants a different gap, padding or column
  * count — not a different colour. `bg`, `shadow`, the radii, `opacity`, the transforms and both
- * platform buckets therefore stay scalar. Every key admitted here is one more that `flattenSx` walks
- * on every render, for a kind of change a design system should not be making anyway.
+ * platform buckets therefore stay scalar.
  *
  * `Partial` because this is a subset by design; what the `satisfies` buys is the other direction — a
  * key renamed in `SxCore` stops compiling here instead of silently going non-responsive.

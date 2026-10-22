@@ -119,8 +119,12 @@ const PRODUCT: NavigationBarItem[] = [
   {onPress: noop, separated: true, type: 'close'},
 ]
 
+/**
+ * The card a bar sits on. Not clipped on iOS: a pressed glass item swells past the bar, and a clip would cut it off —
+ * Android's top app bar is drawn flat and stays inside the corners only when clipped.
+ */
 const Bar = ({children}: {children: React.ReactNode}) => (
-  <Box bg="surface.primary" borderRadius="large" overflow="hidden">
+  <Box bg="surface.primary" borderRadius="large" overflow={Platform.OS === 'android' ? 'hidden' : undefined}>
     {children}
   </Box>
 )

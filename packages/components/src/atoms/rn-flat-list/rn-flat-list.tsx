@@ -7,14 +7,11 @@ import type {RnFlatListProps} from './rn-flat-list.types'
 const NO_SX = {}
 
 /**
- * Flat list built on React Native's own `VirtualizedList` rather than FlashList.
- *
- * FlashList is the default for lists in this codebase and should stay that way for data rows — reach
- * for this only for the case it cannot serve: content that hosts native views. FlashList positions its
- * rows absolutely and recycles their cells, and an `@expo/ui` host survives neither — the hosted view
- * ends up drawn where the layout no longer is. `VirtualizedList` renders its cells in normal flow
- * inside a scroll view, using blank spacers for the range it has not rendered, so a hosted view stays
- * exactly where the layout put it. This is `SectionList`'s reason to exist too, without the sections.
+ * kara's list for React Native content: React Native's own `VirtualizedList`, styled through `sx`. It renders its
+ * cells in normal flow inside a scroll view, with blank spacers for the range it has not rendered, so a row that hosts
+ * native views keeps them where the layout put it. A recycling list (absolutely positioned, reused cells) cannot
+ * promise that — an `@expo/ui` host survives neither, and draws where the layout no longer is — which is why kara
+ * ships none.
  */
 export const RnFlatList = <TItem,>({content, data, renderItem, ...props}: RnFlatListProps<TItem>) => {
   const [style, rest] = useSplitSx(props as Record<string, unknown>)
@@ -23,6 +20,9 @@ export const RnFlatList = <TItem,>({content, data, renderItem, ...props}: RnFlat
   return (
     <RNFlatList<TItem>
       data={data}
+      // Android clips by default, and a host is measured after its first layout — at zero height it counts as
+      // off-screen, is detached, and its native view never comes back.
+      removeClippedSubviews={false}
       renderItem={renderItem}
       {...rest}
       contentContainerStyle={content === undefined ? undefined : contentStyle}

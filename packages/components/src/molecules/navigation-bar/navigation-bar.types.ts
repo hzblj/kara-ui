@@ -3,6 +3,7 @@ import type {ReactNode, Ref} from 'react'
 import type {IconName} from '../../atoms/icon'
 
 type NavigationBarItemBase = {
+  /** Called when the item is pressed. */
   onPress: () => void
   /**
    * iOS 26: neighbouring items on one side share a glass capsule; this gives the item its own. A close next to
@@ -29,10 +30,15 @@ export type NavigationBarSearchRef = {
 
 /** A search field in place of the title — iOS only for now; Android keeps the title. */
 export type NavigationBarSearch = {
+  /** Every edit of the field's text. */
   onChangeText: (text: string) => void
+  /** The field gained or lost focus. */
   onFocusChange?: (focused: boolean) => void
+  /** Shown while the field is empty. */
   placeholder: string
+  /** Imperative `clear`. */
   ref?: Ref<NavigationBarSearchRef>
+  /** Test identifier, forwarded to the native search field. */
   testID?: string
 }
 
@@ -52,7 +58,9 @@ export type NavigationBarProps = {
   leadingItems?: NavigationBarItem[]
   /** Replaces the title with a search field (iOS). */
   search?: NavigationBarSearch
+  /** Test identifier, forwarded to the native bar. iOS only — Android ignores it. */
   testID?: string
+  /** The bar's title. */
   title?: string
   /** `center` by default — iOS's own; `leading` is Material's top app bar. */
   titleAlignment?: NavigationBarTitleAlignment

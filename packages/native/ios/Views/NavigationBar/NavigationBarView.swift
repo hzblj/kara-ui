@@ -112,8 +112,38 @@ public final class NavigationBarView: ExpoView, UISearchBarDelegate {
     super.layoutSubviews()
     let height = min(bar.sizeThatFits(bounds.size).height, bounds.height)
     bar.frame = CGRect(x: 0, y: (bounds.height - height) / 2, width: bounds.width, height: height)
+    centerItemRow()
     updateTitleMaxWidth()
   }
+
+  /// iOS 26's bar is 54 pt with its 44 pt row of glass items at the top, so centring the bar left the title and the
+  /// items 5 pt high. It is the row that goes in the middle of this view — found by its glass platters, or by the title
+  /// when there are none (and below iOS 26, where the row fills the bar and nothing moves). What of the bar overhangs
+  /// then is its empty, transparent bottom.
+  private func centerItemRow() {
+    bar.layoutIfNeeded()
+    guard let row = firstDescendant(of: bar, named: "PlatterView") ?? firstDescendant(of: bar, named: "HostedViewWrapper")
+    else {
+      return
+    }
+    let offset = bounds.midY - row.convert(row.bounds, to: self).midY
+    if abs(offset) > 0.5 {
+      bar.frame.origin.y += offset
+    }
+  }
+
+  private func firstDescendant(of view: UIView, named suffix: String) -> UIView? {
+    for subview in view.subviews {
+      if NSStringFromClass(type(of: subview)).hasSuffix(suffix) {
+        return subview
+      }
+      if let found = firstDescendant(of: subview, named: suffix) {
+        return found
+      }
+    }
+    return nil
+  }
+
 
   func setTitle(_ title: String?) {
     titleView.label.text = title

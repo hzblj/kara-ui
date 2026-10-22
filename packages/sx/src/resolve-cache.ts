@@ -1,5 +1,6 @@
 import type {Theme} from '@hzblj/kara-theme'
 
+import {presentKeys} from './present-keys'
 import {valueKey} from './value-key'
 
 type StyleResolver<TProps, TStyle> = (props: TProps, theme: Theme) => TStyle
@@ -48,6 +49,22 @@ const identity = (value: object): string => {
   return id
 }
 
+const themeKeys = new WeakMap<Theme, string>()
+
+/** The theme's part of every key — worked out once per theme object, which the provider memoises, not per resolve. */
+const themeKey = (theme: Theme): string => {
+  const existing = themeKeys.get(theme)
+
+  if (existing) {
+    return existing
+  }
+
+  const key = `${theme.dark ? 'd' : 'l'}${identity(theme.resolver)}${identity(theme.palette)}`
+  themeKeys.set(theme, key)
+
+  return key
+}
+
 export const createSxCache = <TProps extends Record<string, unknown>, TStyle, TInput = TProps>(
   keys: readonly (keyof TProps & string)[],
   resolver: StyleResolver<TProps, TStyle>
@@ -56,14 +73,10 @@ export const createSxCache = <TProps extends Record<string, unknown>, TStyle, TI
   const keySet = new Set<string>(keys)
 
   const cacheKey = (props: TProps, theme: Theme) => {
-    let key = `${theme.dark ? 'd' : 'l'}${identity(theme.resolver)}${identity(theme.palette)}`
+    let key = themeKey(theme)
 
-    for (const name of keys) {
-      const value = props[name]
-
-      if (value !== undefined) {
-        key += `|${name}:${valueKey(value)}`
-      }
+    for (const name of presentKeys(props, keySet)) {
+      key += `|${name}:${valueKey(props[name])}`
     }
 
     return key

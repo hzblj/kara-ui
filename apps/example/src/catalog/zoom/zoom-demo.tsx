@@ -77,7 +77,7 @@ const PhotoCard = ({photo, settings}: PhotoCardProps) => {
   const open = () =>
     router.push({
       params: {...settings, id: photo.id, [ZOOM_TRANSITION_PARAM]: sourceId},
-      pathname: '/components/zoom/[id]',
+      pathname: '/photo/[id]',
     })
 
   const actions = useMemo<MenuAction[]>(
@@ -126,7 +126,7 @@ export const ZoomTransitionDemo = () => {
       <Section
         caption={
           Platform.OS === 'ios'
-            ? 'Tap a photo and it grows into its page; swipe down or from the edge and it shrinks back into the card. Press and hold for the menu — a tap on the preview zooms it in as well.'
+            ? 'Tap a photo and it grows into a full-screen page; drag it down, or tap the close, and it shrinks back into the card. Press and hold for the menu — a tap on the preview zooms it in as well.'
             : 'Tap a photo and it grows into its page; go back and it shrinks into the card again.'
         }
       >

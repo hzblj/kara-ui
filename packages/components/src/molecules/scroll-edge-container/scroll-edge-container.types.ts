@@ -17,12 +17,15 @@ export type ScrollEdgeContainerProps = ResponsiveViewSx & {
    * content begins below the top bar and scrolls under it. On by default.
    */
   automaticInsets?: boolean
+  /** Laid over the scroll view's bottom edge on iOS; stacked below it on Android, where it wants a background. */
   bottomBar?: ReactNode
   /** Exactly one React Native scroll view — `RnScrollView`, `RnFlatList`, `RnSectionList`. */
   children: ReactElement<ScrollEdgeScrollableProps>
   /** iOS 26: how hard the edge cuts. `soft` by default. */
   effect?: ScrollEdgeEffect
+  /** Test identifier, forwarded to the container view. */
   testID?: string
+  /** Laid over the scroll view's top edge on iOS; stacked above it on Android, where it wants a background. */
   topBar?: ReactNode
 }
 

@@ -10,12 +10,14 @@ import type {ReactNode} from 'react'
  * the children is one too many: on iOS it becomes an empty row of its own.
  */
 export type ListProps = {
+  /** The rows — native views, one row each. */
   children: ReactNode
   /**
    * Enables pull-to-refresh. Async on purpose — see `ScrollViewProps.onRefresh`: the spinner runs
    * until the promise settles, so neither platform needs a `refreshing` flag kept in sync by hand.
    */
   onRefresh?: () => Promise<void>
+  /** Test identifier, forwarded to the native view on iOS — Android ignores it. */
   testID?: string
 }
 

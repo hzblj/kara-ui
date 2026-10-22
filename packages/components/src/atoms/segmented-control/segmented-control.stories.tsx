@@ -15,7 +15,8 @@ const meta = {
   component: SegmentedControl,
   parameters: {
     notes:
-      'A `UISegmentedControl` / Material segmented button. It brings its own host, so it renders outside `Screen` and `Island` as well.',
+      "kara's own `UISegmentedControl` on iOS, Material segmented buttons on Android — the selected segment in the " +
+      'accent on both. It needs no `Screen` or `Island`.',
   },
   render: ControlledSegmentedControl,
   title: 'Atoms/SegmentedControl',

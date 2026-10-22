@@ -1,7 +1,35 @@
 # @hzblj/kara-native
 
-The `KaraUI` native module of kara-ui (Swift and Kotlin) and its bindings.
+[![npm version][npm-badge]][npm-url]
+[![License: MIT][license-badge]][license-url]
 
-Install [`@hzblj/kara-ui`](https://www.npmjs.com/package/@hzblj/kara-ui) instead — this is one of its building blocks.
+[npm-badge]: https://img.shields.io/npm/v/@hzblj/kara-native?labelColor=27272a&color=ff5700&label=%40hzblj%2Fkara-native
+[npm-url]: https://www.npmjs.com/package/@hzblj/kara-native
+[license-badge]: https://img.shields.io/badge/license-MIT-ff5700?labelColor=27272a
+[license-url]: https://github.com/hzblj/kara-ui/blob/main/LICENSE
 
-MIT
+<a href="https://kara.janblazej.dev"><img src="https://kara.janblazej.dev/og.png" alt="Kara — native UI for Expo: real SwiftUI and Jetpack Compose views" width="720"></a>
+
+The `KaraUI` native module of [Kara UI](https://kara.janblazej.dev) — a native-first design system for Expo.
+
+> **Install [`@hzblj/kara-ui`](https://www.npmjs.com/package/@hzblj/kara-ui) instead.** This package is one of its
+> building blocks and is autolinked through it; its raw views are re-exported from `@hzblj/kara-ui/swift-ui` and
+> `@hzblj/kara-ui/jetpack-compose`.
+
+## What's inside
+
+- **An Expo module in Swift and Kotlin** — what `@expo/ui` does not cover: Liquid Glass, the scroll edge effect, a
+  context menu with a preview, tooltips, the navigation bar, swipe actions, the zoom transition and native icons.
+- **Haptics** — UIKit's feedback generators on iOS and `HapticFeedbackConstants` on Android, never a vibrator buzz.
+- **SwiftUI and Compose modifiers** registered into `@expo/ui`.
+- **Raw bindings** — the `/swift-ui` and `/jetpack-compose` entries, for building your own components.
+
+## Documentation
+
+- [Entry points](https://kara.janblazej.dev/docs/installation#entry-points)
+- [Haptics](https://kara.janblazej.dev/docs/haptics)
+
+## License
+
+MIT © Jan Blazej. Third-party code and assets are listed in
+[`THIRD_PARTY_NOTICES.md`](https://github.com/hzblj/kara-ui/blob/main/packages/native/THIRD_PARTY_NOTICES.md).

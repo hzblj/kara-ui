@@ -1,7 +1,13 @@
 import type {ReactNode} from 'react'
 
+/**
+ * A progress bar or ring, tinted `fill.accent.primary` — SwiftUI `ProgressView` / Compose's
+ * `LinearProgressIndicator` and `CircularProgressIndicator`.
+ */
 export type ProgressProps = {
+  /** A circular indicator instead of a bar. Off by default. */
   circular?: boolean
+  /** Between `0` and `1`. Leave it unset for an indeterminate indicator. */
   value?: number
 }
 

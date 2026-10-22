@@ -22,12 +22,22 @@ export type ButtonStyleName =
  */
 export type ButtonControlSize = 'extraLarge' | 'large' | 'mini' | 'regular' | 'small'
 
+/** A text button — SwiftUI `Button` on iOS, Material's filled button (outlined for `glass`) on Android. */
 export type ButtonProps = {
+  /**
+   * Replaces the style the variant picks — `borderedProminent` for `accent` and `destructive`, `bordered` for
+   * `secondary`, `glass` for `glass`. iOS only — Android ignores it.
+   */
   buttonStyle?: ButtonStyleName
+  /** SwiftUI's control size. `large` by default. iOS only — Android ignores it. */
   controlSize?: ButtonControlSize
+  /** Draws the button in its disabled colours and stops it responding to presses. */
   disabled?: boolean
+  /** The button's text. */
   label: string
+  /** Called when the button is pressed. */
   onPress?: () => void
+  /** Test identifier, forwarded to the native view. */
   testID?: string
   /**
    * Overrides the variant's own tint. A prominent style takes it as the fill and picks a contrasting
@@ -35,7 +45,9 @@ export type ButtonProps = {
    * the stock `.glass` style — see the iOS implementation.
    */
   tint?: ColorToken
+  /** The look. `accent` by default. Material has no glass, so on Android `glass` is an outlined button. */
   variant?: ButtonVariant
+  /** Stretches the button to the full width it is offered. On by default. */
   wide?: boolean
 }
 

@@ -2,7 +2,6 @@ import {
   Box,
   Collapsible,
   Divider,
-  FlashList,
   Form,
   HStack,
   Island,
@@ -24,7 +23,7 @@ import {Platform} from 'react-native'
 
 import {Section} from '../../ui'
 import type {CatalogEntry} from '../catalog.types'
-import {KARA_MODULE, NATIVE, REACT_NATIVE} from './tags'
+import {KARA_MODULE, NATIVE} from './tags'
 
 const StacksDemo = () => (
   <>
@@ -144,24 +143,6 @@ const CollapsibleDemo = () => {
   )
 }
 
-type Row = {id: string; title: string}
-
-const ROWS: Row[] = Array.from({length: 200}, (_, index) => ({id: String(index), title: `Message ${index + 1}`}))
-
-const renderRow = ({item}: {item: Row}) => (
-  <Box borderBottomWidth={1} borderColor="border.tertiary" px="s16" py="s12">
-    <RnText variant="body">{item.title}</RnText>
-  </Box>
-)
-
-const FlashListDemo = () => (
-  <Section caption="Two hundred rows, recycled — for long lists of React Native content.">
-    <Box bg="surface.primary" borderRadius="large" h={280} overflow="hidden">
-      <FlashList data={ROWS} keyExtractor={row => row.id} nestedScrollEnabled renderItem={renderRow} />
-    </Box>
-  </Section>
-)
-
 const SCROLL_ROWS = Array.from({length: 24}, (_, index) => `Row ${index + 1}`)
 
 const ScrollEdgeContainerDemo = () => (
@@ -232,14 +213,6 @@ export const LAYOUT: CatalogEntry[] = [
     name: 'Collapsible',
     summary: 'Content that expands under its label.',
     tags: NATIVE,
-  },
-  {
-    code: '<FlashList data={rows} renderItem={renderRow} />',
-    Demo: FlashListDemo,
-    id: 'flash-list',
-    name: 'FlashList',
-    summary: 'A fast list for long React Native content.',
-    tags: REACT_NATIVE,
   },
   {
     code: '<ScrollEdgeContainer topBar={<Toolbar />}>\n  <RnScrollView>{content}</RnScrollView>\n</ScrollEdgeContainer>',

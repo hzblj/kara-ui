@@ -1,0 +1,33 @@
+# The first row opens toward the leading edge and closes, then the second toward the trailing one — each swipe short
+# of a full one, which would run the edge's first action on iOS instead of leaving the row open. The rows sit where the
+# stage puts them, which is not the same height on the two platforms. (Inline, twice: Maestro parses a sub-flow's
+# coordinates before it substitutes env into them.)
+appId: com.hzblj.karaui.example
+---
+- startRecording: ${VIDEO}
+- runFlow: {file: pause.yaml, env: {MS: 800}}
+- runFlow:
+    when: {platform: iOS}
+    commands:
+      - swipe: {start: '80%,47%', end: '40%,47%', duration: 700}
+      - runFlow: {file: pause.yaml, env: {MS: 1400}}
+      - takeScreenshot: ${STILL}
+      - swipe: {start: '35%,47%', end: '90%,47%', duration: 600}
+      - runFlow: {file: pause.yaml, env: {MS: 900}}
+      - swipe: {start: '15%,57%', end: '60%,57%', duration: 700}
+      - runFlow: {file: pause.yaml, env: {MS: 1400}}
+      - swipe: {start: '70%,57%', end: '10%,57%', duration: 600}
+      - runFlow: {file: pause.yaml, env: {MS: 1000}}
+- runFlow:
+    when: {platform: Android}
+    commands:
+      - swipe: {start: '80%,42%', end: '40%,42%', duration: 700}
+      - runFlow: {file: pause.yaml, env: {MS: 1400}}
+      - takeScreenshot: ${STILL}
+      - swipe: {start: '35%,42%', end: '90%,42%', duration: 600}
+      - runFlow: {file: pause.yaml, env: {MS: 900}}
+      - swipe: {start: '15%,48%', end: '60%,48%', duration: 700}
+      - runFlow: {file: pause.yaml, env: {MS: 1400}}
+      - swipe: {start: '70%,48%', end: '10%,48%', duration: 600}
+      - runFlow: {file: pause.yaml, env: {MS: 1000}}
+- stopRecording

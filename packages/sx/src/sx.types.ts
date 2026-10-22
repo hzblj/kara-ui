@@ -11,32 +11,55 @@ export type SxDimension = `${number}%` | number
  * has to fake or ignore goes to `IosSx`, `AndroidSx` or `ViewSx` instead.
  */
 export type SxCore = {
+  /** The background colour, a palette token. */
   bg?: ColorToken
+  /** A Gaussian blur over the whole box, its radius in points. */
   blur?: number
+  /** The stroke colour, with `borderWidth`. */
   borderColor?: ColorToken
+  /** Rounds the corners — and clips the content, the background and the stroke to them. */
   borderRadius?: RadiiSize
+  /** A stroke inside the edge, in points. */
   borderWidth?: number
+  /** A fixed height, in points. */
   h?: number
+  /** The least height, in points. */
   minH?: number
+  /** The least width, in points. */
   minW?: number
+  /** Moves the box sideways after layout, in points — its neighbours stay where they were. */
   offsetX?: number
+  /** Moves the box up or down after layout, in points — its neighbours stay where they were. */
   offsetY?: number
+  /** How opaque the whole box is, an opacity token. */
   opacity?: OpacitySize
+  /** Padding on every side. A side or an axis of its own wins over it. */
   p?: SpaceSize
+  /** Bottom padding. */
   pb?: SpaceSize
+  /** Left padding — the leading edge, on the native surface. */
   pl?: SpaceSize
+  /** Right padding — the trailing edge, on the native surface. */
   pr?: SpaceSize
+  /** Top padding. */
   pt?: SpaceSize
+  /** Left and right padding. */
   px?: SpaceSize
+  /** Top and bottom padding. */
   py?: SpaceSize
   /** Clockwise, in degrees. */
   rotate?: number
   /** Uniform, or per axis — an omitted axis stays at 1. */
   scale?: number | {x?: number; y?: number}
+  /** One of the theme's shadows — a drop, an inset highlight and a hairline ring, as the token defines. */
   shadow?: ShadowName
+  /** Takes all the height the parent offers. */
   tall?: boolean
+  /** A fixed width, in points. */
   w?: number
+  /** Takes all the width the parent offers. */
   wide?: boolean
+  /** Draws the box above or below its siblings, a z-index token. */
   zIndex?: ZIndexSize
 }
 
@@ -68,8 +91,11 @@ export type RedactionReason = 'invalidated' | 'placeholder' | 'privacy'
 export type IosSx = Bucket<{
   /** Width over height, fitted within the proposed size. The escape hatch covers `fill`. */
   aspectRatio?: number
+  /** Brightens (positive) or darkens (negative) the box, from -1 to 1. */
   brightness?: number
+  /** Clips the content to the box's frame. */
   clipped?: boolean
+  /** Inverts every colour in the box. */
   colorInvert?: boolean
   /**
    * Sizes the box relative to the nearest container: split it into `count` columns `spacing` apart
@@ -89,7 +115,9 @@ export type IosSx = Bucket<{
   }
   /** Cascades to every control in the subtree, the SwiftUI environment way. */
   controlSize?: 'extraLarge' | 'large' | 'mini' | 'regular' | 'small'
+  /** Scales the contrast: 1 leaves it, 0 is flat grey, above 1 sharpens it. */
   contrast?: number
+  /** Holds the box at its ideal size on these axes, whatever its parent proposes. */
   fixedSize?: 'both' | 'horizontal' | 'vertical'
   /**
    * Liquid Glass: a bare variant, or the full config. `tint` takes a theme token, and without a
@@ -104,6 +132,7 @@ export type IosSx = Bucket<{
         tint?: ColorToken
         variant: GlassVariant
       }
+  /** Drains the colour, from 0 (none) to 1 (fully grey). */
   grayscale?: number
   /** Invisible, but still taking up its layout space — unlike not rendering the box at all. */
   hidden?: boolean
@@ -122,6 +151,7 @@ export type IosSx = Bucket<{
       }
   /** Who gets space first when the parent runs short — *not* a proportional flex weight. */
   layoutPriority?: number
+  /** Turns brightness into transparency: dark becomes clear, light stays opaque. */
   luminanceToAlpha?: boolean
   /** Escape hatch, appended last. Pass a stable array — a fresh one every render defeats the memo. */
   modifiers?: IosModifier[]
@@ -132,6 +162,7 @@ export type IosSx = Bucket<{
    * combining several is escape-hatch territory.
    */
   redacted?: RedactionReason
+  /** Scales the saturation: 1 leaves it, 0 is grey, above 1 intensifies it. */
   saturation?: number
   /** Cascades to the controls and icons in the subtree. */
   tint?: ColorToken

@@ -37,9 +37,9 @@ const meta = {
   ],
   parameters: {
     notes:
-      'The list to reach for when rows host native views — every row here is its own `Island`. It renders cells ' +
-      'in normal flow inside a scroll view, so a hosted view stays where the layout put it, which is exactly ' +
-      'what FlashList’s recycling cannot promise. For plain data rows, use `FlashList`.',
+      'kara’s list for React Native content — every row here is its own `Island`. It renders cells in normal ' +
+      'flow inside a scroll view, so a hosted view stays where the layout put it, which no recycling list ' +
+      'can promise.',
   },
   title: 'Atoms/RnFlatList',
 } satisfies Meta<typeof RnFlatList<DemoRow>>

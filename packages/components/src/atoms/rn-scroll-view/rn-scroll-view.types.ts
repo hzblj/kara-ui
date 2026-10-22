@@ -13,9 +13,13 @@ import type {ScrollViewAxis} from '../scroll-view'
  */
 export type RnScrollViewProps = ResponsiveViewSx &
   Omit<RNScrollViewProps, 'contentContainerStyle' | 'horizontal' | 'style'> & {
+    /** The scroll direction. `vertical` by default. */
     axis?: ScrollViewAxis
+    /** The scrolling content. */
     children?: ReactNode
+    /** Styles the scrolling content container — padding and gap belong here. */
     content?: ResponsiveViewSx
+    /** Shows the scroll indicators. On by default. */
     showsIndicators?: boolean
   }
 

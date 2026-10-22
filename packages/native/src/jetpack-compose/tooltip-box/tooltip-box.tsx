@@ -15,6 +15,7 @@ type NativeTooltipBoxProps = {
   maxWidth?: number
   onDismissRequest?: (event: NativeSyntheticEvent<{reason: TooltipBoxDismissReason}>) => void
   onShown?: () => void
+  plain?: boolean
 }
 
 const NativeTooltipBox = requireKaraView<NativeTooltipBoxProps>('TooltipBoxView')

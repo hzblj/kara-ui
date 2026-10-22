@@ -7,6 +7,9 @@ import {haptics} from '../../haptics'
 import {useHostGuard} from '../../host-context'
 import type {SwitchComponent, SwitchProps} from './switch.types'
 
+/** Stands in for a missing handler: Material drops its 48dp touch target without one, and the switch moves. */
+const NOOP = () => undefined
+
 /**
  * Material's switch, tinted with the accent like SwiftUI's toggle. With a label it is a full-width row — label at the
  * start, switch at the end — and the whole row toggles, the way a Material settings row does. A flip plays
@@ -35,7 +38,7 @@ export const Switch: SwitchComponent = ({disabled = false, label, onValueChange,
         checkedTrackColor: theme.color('fill.accent.primary'),
       }}
       enabled={!disabled}
-      onCheckedChange={onValueChange ? toggle : undefined}
+      onCheckedChange={onValueChange ? toggle : NOOP}
       value={value}
     />
   )

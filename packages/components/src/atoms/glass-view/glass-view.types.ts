@@ -12,6 +12,7 @@ export type GlassViewProps = ResponsiveViewSx & {
   children?: ReactNode
   /** Swells toward the finger on touch, carrying the children with it. Wrap the view in a `Pressable` for the press. */
   interactive?: boolean
+  /** Test identifier, forwarded to the view. */
   testID?: string
   /** Tints the material. Unset leaves it clear. */
   tint?: ColorToken

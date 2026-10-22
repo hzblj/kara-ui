@@ -16,15 +16,13 @@ import {
   Pressable,
   RnText,
   SwipeActions,
-  Text,
   VStack,
 } from '@hzblj/kara-ui'
 import {useMemo, useState} from 'react'
-import {Platform} from 'react-native'
 
 import {Section} from '../../ui'
 import type {CatalogEntry} from '../catalog.types'
-import {IOS_ONLY, KARA_MODULE, NATIVE, REACT_NATIVE} from './tags'
+import {KARA_MODULE, NATIVE, REACT_NATIVE} from './tags'
 
 const noop = () => undefined
 
@@ -173,33 +171,56 @@ const ContextMenuDemo = () => (
   </Section>
 )
 
-const SwipeActionsDemo = () =>
-  Platform.OS === 'ios' ? (
-    <Section caption="Swipe a row left or right.">
-      <Island matchContents={false} style={{height: 200}}>
+const ORDERS = [
+  {id: '1024', subtitle: 'Shipped · arrives Friday'},
+  {id: '1025', subtitle: 'Packing'},
+  {id: '1026', subtitle: 'Delivered on Monday'},
+]
+
+const SwipeActionsDemo = () => {
+  const [orders, setOrders] = useState(ORDERS)
+  const [pinned, setPinned] = useState<string | null>(null)
+
+  return (
+    <Section caption="Swipe a row left to delete or share it, right to pin it. One row stays open at a time.">
+      <Island matchContents={false} style={{height: 240}}>
         <List>
-          <SwipeActions>
-            <ListItem subtitle="Swipe left to delete" title="Order #1024" />
-            <SwipeActions.Actions>
-              <Button label="Delete" variant="destructive" />
-            </SwipeActions.Actions>
-          </SwipeActions>
-          <SwipeActions>
-            <ListItem subtitle="Swipe right to pin" title="Order #1025" />
-            <SwipeActions.Actions allowsFullSwipe={false} edge="leading">
-              <Button label="Pin" variant="secondary" />
-            </SwipeActions.Actions>
-          </SwipeActions>
+          {orders.map(order => (
+            <SwipeActions
+              key={order.id}
+              leading={[
+                {
+                  icon: 'star',
+                  label: pinned === order.id ? 'Unpin' : 'Pin',
+                  onPress: () => setPinned(current => (current === order.id ? null : order.id)),
+                },
+              ]}
+              trailing={[
+                {
+                  destructive: true,
+                  icon: 'trash',
+                  label: 'Delete',
+                  onPress: () => setOrders(current => current.filter(entry => entry.id !== order.id)),
+                },
+                {icon: 'share', label: 'Share', onPress: noop},
+              ]}
+            >
+              <ListItem
+                subtitle={pinned === order.id ? `Pinned · ${order.subtitle}` : order.subtitle}
+                title={`Order #${order.id}`}
+              />
+            </SwipeActions>
+          ))}
         </List>
       </Island>
-    </Section>
-  ) : (
-    <Section caption="SwiftUI has swipe actions and Compose does not, so on Android the row stays and the actions do not appear.">
-      <Island>
-        <Text color="content.secondary">Available on iOS.</Text>
-      </Island>
+      {orders.length < ORDERS.length ? (
+        <Island>
+          <Button label="Bring the orders back" onPress={() => setOrders(ORDERS)} variant="secondary" wide />
+        </Island>
+      ) : null}
     </Section>
   )
+}
 
 const PressableDemo = () => {
   const [count, setCount] = useState(0)
@@ -289,12 +310,12 @@ export const ACTIONS: CatalogEntry[] = [
     tags: KARA_MODULE,
   },
   {
-    code: '<SwipeActions>\n  <ListItem title="Order #1024" />\n  <SwipeActions.Actions>\n    <Button label="Delete" variant="destructive" />\n  </SwipeActions.Actions>\n</SwipeActions>',
+    code: "<SwipeActions trailing={[{destructive: true, icon: 'trash', label: 'Delete', onPress: remove}]}>\n  <ListItem title=\"Order #1024\" />\n</SwipeActions>",
     Demo: SwipeActionsDemo,
     id: 'swipe-actions',
     name: 'SwipeActions',
     summary: 'Buttons revealed by swiping a list row.',
-    tags: IOS_ONLY,
+    tags: NATIVE,
   },
   {
     code: '<Pressable haptic onPress={open} p="s16">\n  <RnText>Anything</RnText>\n</Pressable>',

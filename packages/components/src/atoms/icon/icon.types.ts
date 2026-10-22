@@ -18,12 +18,20 @@ type DeclaredIconName = keyof KaraIcons & string
  */
 export type IconName = [DeclaredIconName] extends [never] ? string : DeclaredIconName
 
+/**
+ * One of the app's icons, in a host — SwiftUI `Image` from the asset catalog on iOS, Material's `Icon` with the vector
+ * drawable on Android. `RnIcon` draws the same asset outside one.
+ */
 export type IconProps = {
   /** What a screen reader says. Unset, the icon is decorative and hidden from it. */
   accessibilityLabel?: string
+  /** The icon's tint. `content.primary` by default. */
   color?: ColorToken
+  /** Which of the app's icons — a key of `KaraIcons`. */
   name: IconName
+  /** Its width and height, a spacing token. `s24` by default. */
   size?: SpaceSize
+  /** Test identifier, forwarded to the native view on iOS — Android ignores it. */
   testID?: string
 }
 

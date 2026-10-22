@@ -21,7 +21,7 @@ import {Platform} from 'react-native'
 
 import {Section} from '../../ui'
 import type {CatalogEntry} from '../catalog.types'
-import {IOS_ONLY, NATIVE, REACT_NATIVE} from './tags'
+import {IOS_ONLY, KARA_MODULE, NATIVE, REACT_NATIVE} from './tags'
 
 const SwitchDemo = () => {
   const [wifi, setWifi] = useState(true)
@@ -260,7 +260,7 @@ export const SELECTION: CatalogEntry[] = [
     id: 'segmented-control',
     name: 'SegmentedControl',
     summary: 'Switches between a few views of the same thing.',
-    tags: REACT_NATIVE,
+    tags: KARA_MODULE,
   },
   {
     code: '<Picker options={sizes} value={size} onValueChange={setSize} />',

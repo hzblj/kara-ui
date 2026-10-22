@@ -9,9 +9,11 @@ import type {MenuAction} from '../menu'
  * of a SwiftUI `Menu`. A native atom — it renders inside `<Screen>` or `<Island>`.
  */
 export type FabMenuProps = {
+  /** The actions the button unfolds into. */
   actions: MenuAction[]
   /** The closed button's icon — one of the app's. A plus by default. */
   icon?: IconName
+  /** Test identifier, forwarded to the SwiftUI `Menu`. iOS only — Android ignores it. */
   testID?: string
 }
 

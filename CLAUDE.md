@@ -17,24 +17,27 @@ Every package has its own `CLAUDE.md` — read that one before touching it.
 | `packages/router/` | `@hzblj/kara-router` | `Tabs`, `navigationTheme` and `ZoomTransition`, apart so nothing else imports expo-router. |
 | `packages/expo-plugin/` | `@hzblj/kara-expo-plugin` | The optional config plugin (`iosSemanticColors`), compiled for Node. |
 | `packages/kara-ui/` | `@hzblj/kara-ui` | The umbrella consumers install: re-exports only, the public entry points, the npm README. |
-| `apps/example/` | — | The example app: Home, the component catalogue, the design pages, on-device Storybook. Runs every package from **source**. Private. |
+| `apps/example/` | — | The example app: Home, the component catalogue, the design pages, on-device Storybook, and the website's shot harness (`app/shot/[id]`, `scripts/capture-shots.sh`). Runs every package from **source**. Private. |
+| `apps/website/` | — | The site and docs (Next.js): landing page, guides, a page per component with its iOS and Android captures and props tables generated from the library's types. Private. |
 | `scripts/` | — | `fallback-declarations.mjs` (a per-package build step) and `pack-check.mjs` (tarballs + a throwaway consumer). |
 | `.changeset/`, `.github/workflows/` | — | Release notes (`yarn changeset`), CI (biome, typecheck, pack check) and the changesets → npm release. |
 
 Dependencies point one way: `theme` ← `sx` ← `components` ← `router`, with `native` beside `theme` (a pure platform
 layer) and `kara-ui` on top of all of them. Nothing imports upwards, and nothing reaches past another package's
-`exports`. All packages are versioned together (`fixed` in `.changeset/config.json`). A website is planned as a second
-app under `apps/`.
+`exports`. All packages are versioned together (`fixed` in `.changeset/config.json`). The website reads the packages'
+sources at build time but imports none of them.
 
 ## Commands
 
 ```bash
 yarn ios / yarn android      # run the example (dev client)
 yarn prebuild                # clean `expo prebuild` of the example — after native or config changes
+yarn site                    # the website, on http://localhost:4300
+yarn shots                   # photograph and record every component for the website (simulator + emulator)
 yarn typecheck               # turbo: tsc per workspace, iOS and Android resolutions both
 yarn lint                    # turbo: biome + tsc
 yarn biome:fix               # apply safe lint/format fixes
-yarn build                   # turbo, in dependency order: bob (JS) + tsc (declarations) per package
+yarn build                   # turbo, in dependency order: bob (JS) + tsc (declarations) per package (not the website)
 yarn pack:check              # pack every package as npm will get it and type-check a throwaway consumer
 yarn changeset               # describe a change for the next release
 ```
@@ -78,8 +81,10 @@ chrome draws are internal (`packages/native/glyphs.json`).
 **Native views need a host.** `@expo/ui`-backed atoms only render inside `<Screen>` or `<Island>`; outside one they
 silently disappear (dev warns via `useHostGuard`).
 
-**Every component has a story beside it**, mounted by `apps/example/.rnstorybook`, and a page in the example's
-component catalogue (`apps/example/src/catalog`).
+**Every component has a story beside it**, mounted by `apps/example/.rnstorybook`, a page in the example's
+component catalogue (`apps/example/src/catalog`), and a page on the website — a scene in `apps/example/src/shots` to
+photograph and an entry in `apps/website/src/docs/components/registry.ts`. Its props table is its JSDoc: document props
+in the `*.types.ts`.
 
 Code style is Biome-enforced (`@hzblj/biome-config`): 2 spaces, 120 cols, single quotes, no semicolons, sorted imports
 and object keys. Named exports and `const` arrow functions everywhere; `type` over `interface`.

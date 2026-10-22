@@ -1,0 +1,8 @@
+# A beat for the viewer to take in what just happened: Maestro has no sleep, so it waits for something that never
+# appears and lets the wait run out.
+appId: com.hzblj.karaui.example
+---
+- extendedWaitUntil:
+    visible: '__kara_never__'
+    timeout: ${MS || 1000}
+    optional: true

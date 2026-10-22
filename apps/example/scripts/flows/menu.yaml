@@ -1,0 +1,12 @@
+appId: com.hzblj.karaui.example
+---
+- startRecording: ${VIDEO}
+- runFlow: {file: pause.yaml, env: {MS: 800}}
+- tapOn: 'More options'
+- runFlow: {file: pause.yaml, env: {MS: 1200}}
+- takeScreenshot: ${STILL}
+- runFlow: {file: pause.yaml, env: {MS: 1000}}
+# Outside the menu, which dismisses it on both platforms.
+- tapOn: {point: '50%,12%'}
+- runFlow: {file: pause.yaml, env: {MS: 1200}}
+- stopRecording

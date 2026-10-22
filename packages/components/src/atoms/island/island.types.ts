@@ -1,7 +1,9 @@
 import type {ReactNode} from 'react'
 import type {StyleProp, ViewStyle} from 'react-native'
 
+/** A host for native atoms in a React Native layout — the SwiftUI / Compose `Host` an `@expo/ui` tree mounts into. */
 export type IslandProps = {
+  /** The native views it hosts. */
   children?: ReactNode
   /**
    * Sizes the island's height to its native content while the width still comes from the parent, which
@@ -15,7 +17,9 @@ export type IslandProps = {
    * hangs the main thread as soon as the views lay out on screen.
    */
   matchContents?: boolean
+  /** A React Native style for the host view — its size and placement. It needs a height when `matchContents` is off. */
   style?: StyleProp<ViewStyle>
+  /** Test identifier, forwarded to the host view on iOS — Android ignores it. */
   testID?: string
 }
 

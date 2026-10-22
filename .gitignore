@@ -38,6 +38,10 @@ apps/example/android/
 *.pem
 *.orig.*
 
+# Next.js (the website)
+.next/
+next-env.d.ts
+
 # Metro
 .metro-health-check*
 
@@ -64,3 +68,6 @@ Thumbs.db
 
 # pack-check scratch
 .pack-check/
+
+# Python bytecode from the shot scripts
+__pycache__/

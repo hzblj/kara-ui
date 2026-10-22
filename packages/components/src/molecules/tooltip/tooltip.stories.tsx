@@ -24,7 +24,7 @@ const meta = {
   args: {
     children: null,
     onDismiss: () => undefined,
-    text: 'A popover on iOS, a TooltipBox on Android',
+    text: 'A popover on iOS, a plain tooltip on Android',
     visible: false,
   },
   component: Tooltip,

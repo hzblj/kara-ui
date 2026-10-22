@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -68,6 +69,9 @@ private val ContentBottomPadding = 8.dp
 private val ContentHorizontalPadding = 16.dp
 private val TextSpacing = 4.dp
 private val ActionInset = 4.dp
+private val PlainMinHeight = 24.dp
+private val PlainHorizontalPadding = 8.dp
+private val PlainVerticalPadding = 4.dp
 
 data class TooltipBoxProps(
   val isPresented: MutableState<Boolean> = mutableStateOf(false),
@@ -75,7 +79,9 @@ data class TooltipBoxProps(
   val actionsAlignment: MutableState<String> = mutableStateOf("end"),
   val maxWidth: MutableState<Float?> = mutableStateOf(null),
   val boundaryInsetTop: MutableState<Float> = mutableStateOf(0f),
-  val boundaryInsetBottom: MutableState<Float> = mutableStateOf(0f)
+  val boundaryInsetBottom: MutableState<Float> = mutableStateOf(0f),
+  /** Material's plain tooltip — a small bubble of `text` alone, centred above the anchor — instead of the rich one. */
+  val plain: MutableState<Boolean> = mutableStateOf(false)
 ) : ComposeProps
 
 open class TooltipDismissRequestEvent(
@@ -88,6 +94,8 @@ open class TooltipDismissRequestEvent(
  * paddings, where the M3 kit has the action at the end, 12/4/4/8 dp around the texts and a 40 dp action row. The
  * `action` slot takes any Compose buttons; the view only aligns them and switches
  * `LocalMinimumInteractiveComponentSize` off, because the 48 dp touch target added 4 dp above and below the row.
+ * `plain` swaps all of that for Material's plain tooltip — its shape, colours and 8/4 dp padding around `text` alone,
+ * centred above the anchor — and keeps the control.
  *
  * Controlled, like the iOS tooltip: it never hides itself. Passing `onDismissRequest` stops Material from dismissing
  * on its own, and it reports `outside` or `anchorHidden` instead. The popup is not focusable, so any touch outside —
@@ -121,6 +129,7 @@ class TooltipBoxView(context: Context, appContext: AppContext) :
     val maxWidth by props.maxWidth
     val insetTop by props.boundaryInsetTop
     val insetBottom by props.boundaryInsetBottom
+    val plain by props.plain
 
     val density = LocalDensity.current
     val hostView = LocalView.current
@@ -131,17 +140,18 @@ class TooltipBoxView(context: Context, appContext: AppContext) :
     val textSlot = findChildSlotView(this@TooltipBoxView, "text")
     val actionSlot = findChildSlotView(this@TooltipBoxView, "action")
 
-    val positionProvider = remember(density) {
-      BelowEndPositionProvider(
-        spacing = with(density) { AnchorSpacing.roundToPx() },
-        margin = with(density) { WindowMargin.roundToPx() }
-      )
+    val positionProvider = remember(density, plain) {
+      val spacing = with(density) { AnchorSpacing.roundToPx() }
+      val margin = with(density) { WindowMargin.roundToPx() }
+      if (plain) AboveCenterPositionProvider(spacing, margin) else BelowEndPositionProvider(spacing, margin)
     }
 
     LaunchedEffect(isPresented) {
       if (isPresented) {
         hasRequestedDismiss = false
         tooltipState.show()
+      } else if (tooltipState.isVisible) {
+        tooltipState.dismiss()
       }
     }
 
@@ -176,29 +186,47 @@ class TooltipBoxView(context: Context, appContext: AppContext) :
     TooltipBox(
       positionProvider = positionProvider,
       tooltip = {
-        Surface(
-          modifier = Modifier.widthIn(max = maxWidth?.dp ?: TooltipDefaults.richTooltipMaxWidth),
-          shape = TooltipDefaults.richTooltipContainerShape,
-          color = containerColor.composeOrNull ?: TooltipDefaults.richTooltipColors().containerColor,
-          shadowElevation = ContainerElevation
-        ) {
-          Column(modifier = Modifier.padding(top = ContentTopPadding, bottom = ContentBottomPadding)) {
-            Column(
-              modifier = Modifier.padding(horizontal = ContentHorizontalPadding),
-              verticalArrangement = Arrangement.spacedBy(TextSpacing)
+        if (plain) {
+          Surface(
+            modifier = Modifier
+              .widthIn(max = maxWidth?.dp ?: TooltipDefaults.plainTooltipMaxWidth)
+              .heightIn(min = PlainMinHeight),
+            shape = TooltipDefaults.plainTooltipContainerShape,
+            color = containerColor.composeOrNull ?: TooltipDefaults.plainTooltipContainerColor,
+            contentColor = TooltipDefaults.plainTooltipContentColor
+          ) {
+            Box(
+              modifier = Modifier.padding(horizontal = PlainHorizontalPadding, vertical = PlainVerticalPadding),
+              contentAlignment = Alignment.CenterStart
             ) {
-              titleSlot?.renderSlot()
               textSlot?.renderSlot()
             }
-            actionSlot?.let { slot ->
-              Box(
-                modifier = Modifier
-                  .fillMaxWidth()
-                  .padding(top = TextSpacing, start = ActionInset, end = ActionInset),
-                contentAlignment = if (actionsAlignment == "start") Alignment.CenterStart else Alignment.CenterEnd
+          }
+        } else {
+          Surface(
+            modifier = Modifier.widthIn(max = maxWidth?.dp ?: TooltipDefaults.richTooltipMaxWidth),
+            shape = TooltipDefaults.richTooltipContainerShape,
+            color = containerColor.composeOrNull ?: TooltipDefaults.richTooltipColors().containerColor,
+            shadowElevation = ContainerElevation
+          ) {
+            Column(modifier = Modifier.padding(top = ContentTopPadding, bottom = ContentBottomPadding)) {
+              Column(
+                modifier = Modifier.padding(horizontal = ContentHorizontalPadding),
+                verticalArrangement = Arrangement.spacedBy(TextSpacing)
               ) {
-                CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides Dp.Unspecified) {
-                  slot.renderSlot()
+                titleSlot?.renderSlot()
+                textSlot?.renderSlot()
+              }
+              actionSlot?.let { slot ->
+                Box(
+                  modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = TextSpacing, start = ActionInset, end = ActionInset),
+                  contentAlignment = if (actionsAlignment == "start") Alignment.CenterStart else Alignment.CenterEnd
+                ) {
+                  CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides Dp.Unspecified) {
+                    slot.renderSlot()
+                  }
                 }
               }
             }
@@ -234,6 +262,25 @@ private class AnchorTracker {
     val bounds = coordinates.boundsInWindow()
     val center: Offset = bounds.center
     return center.y in top..bottom && center.x >= visibleRect.left && center.x <= visibleRect.right
+  }
+}
+
+/** Centred above the anchor, as Material places a plain tooltip — but kept inside the window, and below when no room. */
+private class AboveCenterPositionProvider(
+  private val spacing: Int,
+  private val margin: Int
+) : PopupPositionProvider {
+  override fun calculatePosition(
+    anchorBounds: IntRect,
+    windowSize: IntSize,
+    layoutDirection: LayoutDirection,
+    popupContentSize: IntSize
+  ): IntOffset {
+    val preferredX = anchorBounds.center.x - popupContentSize.width / 2
+    val maxX = maxOf(windowSize.width - margin - popupContentSize.width, margin)
+    val above = anchorBounds.top - spacing - popupContentSize.height
+    val y = if (above >= margin) above else anchorBounds.bottom + spacing
+    return IntOffset(preferredX.coerceIn(margin, maxX), y)
   }
 }
 

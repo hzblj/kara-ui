@@ -12,7 +12,7 @@
   "bugs": {
     "url": "https://github.com/hzblj/kara-ui/issues"
   },
-  "homepage": "https://github.com/hzblj/kara-ui/tree/main/packages/components#readme",
+  "homepage": "https://kara.janblazej.dev/docs/components",
   "keywords": [
     "react-native",
     "expo",
@@ -67,7 +67,6 @@
   "peerDependencies": {
     "@expo/ui": "~57.0.0",
     "@lodev09/react-native-true-sheet": ">=3.11.0",
-    "@shopify/flash-list": ">=2.0.0",
     "expo": "~57.0.0",
     "expo-image": "*",
     "react": "*",
@@ -77,7 +76,6 @@
   "devDependencies": {
     "@expo/ui": "~57.0.18",
     "@lodev09/react-native-true-sheet": "3.11.18",
-    "@shopify/flash-list": "^2.3.2",
     "@storybook/react-native": "^10.6.0",
     "@types/react": "~19.2.18",
     "expo": "~57.0.22",
