@@ -11,6 +11,7 @@ component. Autolinked into any app that installs `@hzblj/kara-ui` (a transitive 
 | `ios/KaraUIModule.swift` | Only composes the module: functions, `OnCreate` (modifier registration), one `<View>.definition()` per view. |
 | `ios/Views/<Component>/` | `<Name>View.swift`, its records/helpers and `<Name>View+Definition.swift` (events and props). |
 | `ios/Modifiers/` | SwiftUI modifiers registered into `@expo/ui`'s registry: `scaledFont`, `underline`, `counterBadge`. |
+| `ios/Fabric/` | Runtime fixes to React Native's own component views, installed from `OnCreate`: `OpacityVisibilitySync`. |
 | `android/src/main/java/expo/modules/kara/ui/` | `KaraUIModule.kt` plus one package per component (`fab`, `icon`, `modifiers`, `ripple`, `tooltip`, `topappbar`). |
 | `src/swift-ui/`, `src/jetpack-compose/` | `requireKaraView` bindings and typed wrappers per view, the modifiers' JS side. The `/swift-ui` and `/jetpack-compose` entries. |
 | `ios/Views/Icon/`, `android/.../icon/` | `IconView` (UIKit `UIImageView` / Android `ImageView`, the React Native tier) and Android's `DrawableIconView` (Compose `Icon`, inside a host): an app icon by asset/resource name, or an SF Symbol. |
@@ -37,6 +38,14 @@ pod install / Gradle sync. Swift/Kotlin are not type-checked by `yarn typecheck`
 the plugin's `kara_icon_*` in the app's own catalog and resources, and Gradle merges the module's `kara_glyph_*`
 drawables into the same place. An iOS asset catalog shipped by this pod would not build (two `Assets.car`), which is
 why app icons are generated into the app and iOS glyphs are SF Symbols.
+
+**React Native opacity reaches UIKit through `OpacityVisibilitySync`.** Fabric writes `opacity` to `layer.opacity`,
+past `alpha`, so a subtree mounted under a view at opacity 0 (Legend List containers before their first layout,
+fades from 0) stayed hidden for UIKit, and Liquid Glass in it never rendered — the first row of a list opened from
+cache lost its glass. The module wraps `RCTViewComponentView`'s `updateProps:oldProps:`, `invalidateLayer` and
+`prepareForRecycle` and replays a change across UIKit's 0.01 threshold through `alpha`. That is why `GlassView` sets
+its effect at once and never waits for its ancestors. Check the three selectors after a React Native upgrade. To
+debug missing glass, compare `isInHiddenAncestor` in the effect view's `_ivarDescription` (lldb) with a working one.
 
 **The module name `KaraUI` is also the Swift module name.** An app whose Xcode target is named `KaraUI` would collide;
 that is why the example is called "Kara Example".
