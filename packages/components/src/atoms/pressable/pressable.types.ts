@@ -4,13 +4,15 @@ import type {ReactNode} from 'react'
 import type {Haptic} from '../../haptics'
 
 /**
- * React Native's `Pressable`, styled through `sx` like a `Box`: it springs down to 96% while pressed and takes
- * touches 8 points past its edges. The React Native tier — it needs no host.
+ * React Native's `Pressable`, styled through `sx` like a `Box`, taking touches 8 points past its edges. The press is
+ * each platform's own: iOS springs it down to 96%; Android draws Material's ripple over the content, clipped to the
+ * pressable's shape — give it the `borderRadius` of what it wraps (`full` around a `GlassView`). The React Native
+ * tier — it needs no host.
  */
 export type PressableProps = ResponsiveViewSx & {
   /** The pressable content. */
   children?: ReactNode
-  /** Ignores presses — no `onPress`, no haptic, no spring. */
+  /** Ignores presses — no `onPress`, no haptic, no spring or ripple. */
   disabled?: boolean
   /** Played on press. `true` is a `light` impact; a name picks the haptic, e.g. `selection` for a choice. */
   haptic?: boolean | Haptic

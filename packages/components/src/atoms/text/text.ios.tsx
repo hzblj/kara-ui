@@ -10,17 +10,25 @@ import {
   underline,
 } from '@expo/ui/swift-ui/modifiers'
 import {scaledFont} from '@hzblj/kara-native/swift-ui'
+import {type FrameAlignment, useSxModifiers} from '@hzblj/kara-sx'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
 
 import {useHostGuard} from '../../host-context'
-import type {TextComponent, TextProps} from './text.types'
+import type {TextAlign, TextComponent, TextProps} from './text.types'
 
 const ALIGNMENT = {
   center: 'center',
   left: 'leading',
   right: 'trailing',
 } as const
+
+/** Where a frame larger than the text — `wide`, `w`, `h` — puts it: on the side its lines align to, centred vertically. */
+const FRAME_ALIGNMENT = {
+  center: 'center',
+  left: 'leading',
+  right: 'trailing',
+} as const satisfies Record<TextAlign, FrameAlignment>
 
 export const Text: TextComponent = ({
   align,
@@ -31,10 +39,13 @@ export const Text: TextComponent = ({
   testID,
   transform,
   variant = 'body',
+  ...sx
 }: TextProps) => {
   useHostGuard('Text')
   const theme = useAppTheme()
   const style = theme.typography[variant]
+  // After the text's own modifiers: the font and colour belong to the glyphs, the padding and frame to the box around.
+  const sxModifiers = useSxModifiers(sx, FRAME_ALIGNMENT[align ?? 'left'])
 
   const modifiers = useMemo(() => {
     const list: ModifierConfig[] = [
@@ -65,8 +76,8 @@ export const Text: TextComponent = ({
       list.push(lineLimit(numberOfLines))
     }
 
-    return list
-  }, [align, color, decoration, numberOfLines, style, theme, transform])
+    return [...list, ...sxModifiers]
+  }, [align, color, decoration, numberOfLines, style, sxModifiers, theme, transform])
 
   return (
     <SwiftUIText modifiers={modifiers} testID={testID}>

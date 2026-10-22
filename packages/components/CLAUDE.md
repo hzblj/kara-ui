@@ -53,6 +53,13 @@ what SwiftUI and Compose both honour. `Box` and the `Rn*` tier take `ResponsiveV
 the React Native style keys (`flexDirection`, `gap`, margins, flex, per-corner radii). Reaching for
 `gap` on a `VStack` does not compile; it wants `spacing`.
 
+**Where `sx` goes: anything with a box to lay out.** Every container (the stacks, `Surface`, `Card`, the scroll
+views, `GlassView`, `BlurView`, `Pressable`, `Sheet`, `ContextMenu`), `Text` and `RnText`, and the React Native views
+that have to be sized in Yoga (`Image` is `sx(expo-image)`, `Island` takes `h`). Controls and glyphs — `Button`,
+`Switch`, `Icon`, `Avatar`, `ActivityIndicator` — take none: their size is a token prop, the stack around them places
+them, and their look is the design system's. A component sized by props uses the `sx` names (`Skeleton`'s `w`, `h`,
+`borderRadius`).
+
 ## Stories
 
 Every component here has a `*.stories.tsx` beside it, and Storybook is wired up in `apps/example`

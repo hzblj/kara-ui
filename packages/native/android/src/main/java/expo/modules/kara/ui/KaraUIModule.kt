@@ -4,6 +4,7 @@ import android.graphics.Color
 import expo.modules.kara.ui.fab.FloatingActionButtonMenuItemView
 import expo.modules.kara.ui.fab.FloatingActionButtonMenuView
 import expo.modules.kara.ui.fab.ToggleFloatingActionButtonView
+import expo.modules.kara.ui.blur.BackdropBlurView
 import expo.modules.kara.ui.haptics.Haptic
 import expo.modules.kara.ui.haptics.Haptics
 import expo.modules.kara.ui.icon.DrawableIconView
@@ -70,6 +71,30 @@ class KaraUIModule : Module() {
 
     View(TooltipBoxView::class) {
       Events("onShown", "onDismissRequest")
+    }
+
+    View(BackdropBlurView::class) {
+      Prop("cornerRadius") { view: BackdropBlurView, radius: Float ->
+        view.cornerRadius = radius * view.resources.displayMetrics.density
+      }
+      Prop("glassTint") { view: BackdropBlurView, color: Color? ->
+        view.tint = color?.toArgb() ?: Color.TRANSPARENT
+      }
+      Prop("fallbackTint") { view: BackdropBlurView, color: Color? ->
+        view.fallbackTint = color?.toArgb() ?: Color.TRANSPARENT
+      }
+      Prop("hairlineColor") { view: BackdropBlurView, color: Color? ->
+        view.borderColor = color?.toArgb() ?: Color.TRANSPARENT
+      }
+      Prop("hairlineWidth") { view: BackdropBlurView, width: Float ->
+        view.borderWidth = width * view.resources.displayMetrics.density
+      }
+      Prop("blurRadius") { view: BackdropBlurView, radius: Float ->
+        view.blurRadius = radius * view.resources.displayMetrics.density
+      }
+      Prop("saturation") { view: BackdropBlurView, saturation: Float? ->
+        view.saturation = saturation ?: 1f
+      }
     }
 
     View(RippleConfigurationView::class)

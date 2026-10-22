@@ -42,7 +42,7 @@ const StacksScene: Scene = () => (
 )
 
 const IslandScene: Scene = () => (
-  <Island matchContents={false} style={{height: 120}}>
+  <Island h={120} matchContents={false}>
     <VStack bg="surface.primary" borderRadius="large" p="s16" spacing="s12" wide>
       <Text variant="labelMedium">Native layout, React Native inside:</Text>
       <RnView>
@@ -58,7 +58,7 @@ const IslandScene: Scene = () => (
 
 /** Tall enough for all three rows and the grouped list's own insets above and below them. */
 const ListScene: Scene = () => (
-  <Island matchContents={false} style={{height: 292}}>
+  <Island h={292} matchContents={false}>
     <List>
       <ListItem icon="user" onPress={noop} subtitle="Name, email, password" title="Account" />
       <ListItem icon="notification" onPress={noop} subtitle="Orders, offers" title="Notifications" />
@@ -143,7 +143,7 @@ const PAGES = [
 ] as const
 
 const PagerScene: Scene = ({step}) => (
-  <Island matchContents={false} style={{height: 220}}>
+  <Island h={220} matchContents={false}>
     <Pager indicators onPageChange={noop} page={step}>
       {PAGES.map(page => (
         <VStack align="center" bg={page.bg} borderRadius="large" key={page.title} tall wide>

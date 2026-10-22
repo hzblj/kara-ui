@@ -46,10 +46,10 @@ const ActivityIndicatorScene: Scene = () => (
 
 const SkeletonRow = () => (
   <Box flexDirection="row" gap="s12">
-    <Skeleton borderRadius="full" height={48} width={48} />
+    <Skeleton borderRadius="full" h={48} w={48} />
     <Box flex={1} gap="s8" justify="center">
-      <Skeleton height={14} width={140} />
-      <Skeleton height={14} />
+      <Skeleton h={14} w={140} />
+      <Skeleton h={14} />
     </Box>
   </Box>
 )

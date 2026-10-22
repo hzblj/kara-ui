@@ -1,5 +1,6 @@
+import {useSplitSx} from '@hzblj/kara-sx'
 import {MAX_FONT_SCALE, useAppTheme} from '@hzblj/kara-theme'
-import {Text as RNText, useWindowDimensions} from 'react-native'
+import {Text as RNText, type TextStyle, useWindowDimensions} from 'react-native'
 
 import type {RnTextComponent, RnTextProps} from './rn-text.types'
 
@@ -10,6 +11,8 @@ export const RnText: RnTextComponent = ({
   ...props
 }: RnTextProps) => {
   const theme = useAppTheme()
+  // A view style, which a text accepts whole — only React Native's types disagree, on `userSelect`'s width.
+  const [sx, rest] = useSplitSx(props) as [TextStyle, Record<string, unknown>]
   const {fontScale} = useWindowDimensions()
   const style = theme.typography[variant]
 
@@ -26,8 +29,8 @@ export const RnText: RnTextComponent = ({
   return (
     <RNText
       maxFontSizeMultiplier={MAX_FONT_SCALE}
-      style={[style, {color: theme.color(color), lineHeight, textAlign: align}]}
-      {...props}
+      style={[style, sx, {color: theme.color(color), lineHeight, textAlign: align}]}
+      {...rest}
     />
   )
 }

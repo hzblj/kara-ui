@@ -4,11 +4,16 @@ import {Box} from '../box'
 import {ActivityIndicator} from './activity-indicator'
 
 const meta = {
-  argTypes: {size: {control: 'radio', options: ['small', 'large']}},
+  argTypes: {
+    color: {control: 'select', options: ['fill.accent.primary', 'content.primary', 'content.secondary']},
+    size: {control: 'radio', options: ['small', 'large']},
+  },
   component: ActivityIndicator,
   parameters: {
     notes:
-      'React Native’s own spinner, pre-tinted with `fill.accent.primary`. For a native determinate bar reach for `Progress` instead.',
+      'UIKit’s spinner on iOS, Material 3’s expressive loading indicator on Android — its shapes morph as it ' +
+      'turns. Tinted `fill.accent.primary` unless `color` says otherwise; it needs no host. For how far along ' +
+      'something is, use `Progress`.',
   },
   title: 'Atoms/ActivityIndicator',
 } satisfies Meta<typeof ActivityIndicator>

@@ -73,6 +73,8 @@ type ViewMarginSx = {
 type ViewLayoutSx = {
   bottom?: SxDimension
   display?: ViewStyle['display']
+  /** All four edges at once, so `position="absolute" inset={0}` fills the parent. A side of its own wins over it. */
+  inset?: SxDimension
   left?: SxDimension
   overflow?: ViewStyle['overflow']
   position?: ViewStyle['position']

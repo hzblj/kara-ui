@@ -5,7 +5,7 @@ import {useAnimatedStyle, useSharedValue, withRepeat, withTiming} from 'react-na
 import {ABox} from '../box'
 import type {SkeletonComponent, SkeletonProps} from './skeleton.types'
 
-export const Skeleton: SkeletonComponent = ({borderRadius = 'small', height, testID, width}: SkeletonProps) => {
+export const Skeleton: SkeletonComponent = ({borderRadius = 'small', h, testID, w}: SkeletonProps) => {
   const pulse = useSharedValue<number>(opacity.o40)
 
   useEffect(() => {
@@ -18,11 +18,11 @@ export const Skeleton: SkeletonComponent = ({borderRadius = 'small', height, tes
     <ABox
       bg="fill.quaternary"
       borderRadius={borderRadius}
-      h={height}
+      h={h}
       style={rStyle}
       testID={testID}
-      w={width}
-      wide={width === undefined}
+      w={w}
+      wide={w === undefined}
     />
   )
 }

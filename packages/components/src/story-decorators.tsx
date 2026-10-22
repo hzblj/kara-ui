@@ -25,12 +25,10 @@ export const insideIsland: Decorator = Story => (
  * is a native view with no intrinsic height of its own, like `ScrollView` or `Pager`, which an island
  * measuring its contents would collapse to nothing.
  */
-export const insideIslandOfHeight = (height: number): Decorator => {
-  const style = {height}
-
-  return Story => (
-    <Island matchContents={false} style={style}>
+export const insideIslandOfHeight =
+  (height: number): Decorator =>
+  Story => (
+    <Island h={height} matchContents={false}>
       <Story />
     </Island>
   )
-}

@@ -1,3 +1,4 @@
+import type {ResponsiveSx} from '@hzblj/kara-sx'
 import type {ColorToken, TextVariant} from '@hzblj/kara-theme'
 import type {ReactNode} from 'react'
 
@@ -7,8 +8,12 @@ export type TextDecoration = 'none' | 'strikethrough' | 'underline'
 
 export type TextTransform = 'lowercase' | 'uppercase'
 
-/** SwiftUI `Text` / Compose `Text` in a theme typography variant — a native atom; outside a host, use `RnText`. */
-export type TextProps = {
+/**
+ * SwiftUI `Text` / Compose `Text` in a theme typography variant — a native atom; outside a host, use `RnText`. It takes
+ * the native `sx` surface too: padding, a frame (`wide` lines it up by `align`), a background, and the `ios` bucket's
+ * `contentTransition`, `animation` and `monospacedDigit` for a number that changes in place.
+ */
+export type TextProps = ResponsiveSx & {
   /**
    * How its lines align. iOS reads `left` and `right` as leading and trailing, so they flip in a right-to-left
    * layout; Android keeps them as they are.

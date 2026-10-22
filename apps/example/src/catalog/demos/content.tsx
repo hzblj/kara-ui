@@ -1,6 +1,8 @@
 import {
   Avatar,
   Badge,
+  type BlurMaterial,
+  BlurView,
   Box,
   Button,
   Card,
@@ -9,6 +11,7 @@ import {
   HStack,
   Icon,
   type IconName,
+  Image,
   Island,
   Label,
   LabeledContent,
@@ -24,6 +27,7 @@ import {useState} from 'react'
 
 import {InsetDivider, Section} from '../../ui'
 import type {CatalogEntry} from '../catalog.types'
+import {PHOTOS} from '../zoom/photos'
 import {KARA_MODULE, NATIVE, REACT_NATIVE} from './tags'
 
 const TextDemo = () => (
@@ -172,15 +176,36 @@ const SurfaceDemo = () => (
   </Section>
 )
 
+const MATERIALS: BlurMaterial[] = ['ultraThin', 'thin', 'regular', 'thick', 'ultraThick']
+
+const BlurViewDemo = () => (
+  <Section caption="The five system materials over a photo — iOS's own blur, Android's backdrop blur under a Material tonal surface as thick as the material.">
+    <Box borderRadius="large" gap="s8" overflow="hidden" p="s16">
+      <Image
+        cachePolicy="memory-disk"
+        contentFit="cover"
+        inset={0}
+        position="absolute"
+        source={{uri: PHOTOS[1]?.uri}}
+      />
+      {MATERIALS.map(material => (
+        <BlurView borderRadius="medium" key={material} material={material} px="s16" py="s12">
+          <RnText variant="labelMedium">{material}</RnText>
+        </BlurView>
+      ))}
+    </Box>
+  </Section>
+)
+
 const GlassViewDemo = () => (
-  <Section caption="Liquid Glass around React Native content on iOS 26, a translucent capsule elsewhere. Interactive glass reacts to touch.">
+  <Section caption="Liquid Glass around React Native content on iOS 26, frosted glass on Android — what lies behind, blurred. Pressed, iOS glass swells and Android ripples.">
     <Box bg="fill.accent.primary" borderRadius="large" flexDirection="row" gap="s12" p="s24">
       <GlassView px="s16" py="s8">
         <RnText color="content.on.bg" variant="labelMedium">
           Glass
         </RnText>
       </GlassView>
-      <Pressable onPress={() => undefined}>
+      <Pressable borderRadius="full" onPress={() => undefined}>
         <GlassView interactive px="s16" py="s8">
           <RnText color="content.on.bg" pointerEvents="none" variant="labelMedium">
             Interactive
@@ -270,6 +295,14 @@ export const CONTENT: CatalogEntry[] = [
     name: 'Surface',
     summary: 'A coloured, rounded background — plain or glass.',
     tags: NATIVE,
+  },
+  {
+    code: '<BlurView material="thin" borderRadius="large" p="s16">\n  <RnText>On the material</RnText>\n</BlurView>',
+    Demo: BlurViewDemo,
+    id: 'blur-view',
+    name: 'BlurView',
+    summary: 'The system materials — sheets, bars and HUDs are made of them.',
+    tags: KARA_MODULE,
   },
   {
     code: '<GlassView interactive px="s16" py="s8">\n  <RnText>Glass</RnText>\n</GlassView>',

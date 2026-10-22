@@ -78,7 +78,7 @@ const IslandDemo = () => (
       </Island>
     </Section>
     <Section caption="RnView carries React Native content back into a native layout." title="RnView">
-      <Island matchContents={false} style={{height: 96}}>
+      <Island h={96} matchContents={false}>
         <VStack bg="surface.primary" borderRadius="large" p="s12" spacing="s8" wide>
           <Text variant="footnote">Three React Native boxes:</Text>
           <RnView>
@@ -96,7 +96,7 @@ const IslandDemo = () => (
 
 const ListDemo = () => (
   <Section caption="A list scrolls, so it needs a height — here, the island’s.">
-    <Island matchContents={false} style={{height: 240}}>
+    <Island h={240} matchContents={false}>
       <List>
         <ListItem icon="user" onPress={() => undefined} subtitle="Name, email, password" title="Account" />
         <ListItem icon="notification" onPress={() => undefined} subtitle="Orders, offers" title="Notifications" />
@@ -146,7 +146,7 @@ const CollapsibleDemo = () => {
 const SCROLL_ROWS = Array.from({length: 24}, (_, index) => `Row ${index + 1}`)
 
 const ScrollEdgeContainerDemo = () => (
-  <Section caption="Scroll it: on iOS 26 the content blurs softly under the bars.">
+  <Section caption="Scroll it: on iOS 26 the content blurs softly under the bars; on Android they fill, as a Material top app bar does.">
     <Box borderRadius="large" h={300} overflow="hidden">
       <ScrollEdgeContainer
         bottomBar={

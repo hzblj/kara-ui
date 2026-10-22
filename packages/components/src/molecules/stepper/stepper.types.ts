@@ -5,10 +5,7 @@ import type {ReactNode} from 'react'
  * two icon buttons in a row. A native atom — it renders inside `<Screen>` or `<Island>`.
  */
 export type StepperProps = {
-  /**
-   * The leading text. iOS shows only the label, not the value — put the value in it if it should be seen. Android
-   * shows the value between its buttons.
-   */
+  /** The leading text. The value is shown too — before the control on iOS, between the buttons on Android. */
   label: string
   /** The highest value. When unset, Android has no upper limit and iOS stops at `100`. */
   max?: number

@@ -1,5 +1,6 @@
 import {Text as ComposeText} from '@expo/ui/jetpack-compose'
 import {testID as testIdModifier} from '@expo/ui/jetpack-compose/modifiers'
+import {useSxModifiers} from '@hzblj/kara-sx'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
 
@@ -32,11 +33,16 @@ export const Text: TextComponent = ({
   testID,
   transform,
   variant = 'body',
+  ...sx
 }: TextProps) => {
   useHostGuard('Text')
   const theme = useAppTheme()
   const style = theme.typography[variant]
-  const modifiers = useMemo(() => (testID ? [testIdModifier(testID)] : undefined), [testID])
+  const sxModifiers = useSxModifiers(sx)
+  const modifiers = useMemo(
+    () => (testID ? [...sxModifiers, testIdModifier(testID)] : sxModifiers),
+    [sxModifiers, testID]
+  )
 
   return (
     <ComposeText

@@ -162,7 +162,7 @@ const ContextMenuScene: Scene = () => (
 
 /** The flow swipes the first row open toward the leading edge, then the second toward the trailing one. */
 const SwipeActionsScene: Scene = () => (
-  <Island matchContents={false} style={{height: 200}}>
+  <Island h={200} matchContents={false}>
     <List>
       <SwipeActions
         trailing={[

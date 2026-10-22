@@ -33,6 +33,7 @@ public class KaraUIModule: Module {
       UnderlineModifier.register()
     }
 
+    BlurView.definition()
     ContextMenuView.definition()
     ContextMenuPreviewView.definition()
     ContextMenuExclusionView.definition()

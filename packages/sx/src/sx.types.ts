@@ -89,6 +89,15 @@ export type RedactionReason = 'invalidated' | 'placeholder' | 'privacy'
  * a type error — a design system degrades gracefully instead of forcing every call site to branch.
  */
 export type IosSx = Bucket<{
+  /**
+   * Animates what changes in the subtree whenever `value` does — SwiftUI's `.animation(_:value:)`, the pairing a
+   * `contentTransition` needs to play at all. `curve` is `default` unless set; `duration` is in seconds.
+   */
+  animation?: {
+    curve?: 'bouncy' | 'default' | 'easeIn' | 'easeInOut' | 'easeOut' | 'linear' | 'smooth' | 'snappy' | 'spring'
+    duration?: number
+    value: boolean | number
+  }
   /** Width over height, fitted within the proposed size. The escape hatch covers `fill`. */
   aspectRatio?: number
   /** Brightens (positive) or darkens (negative) the box, from -1 to 1. */
@@ -155,6 +164,8 @@ export type IosSx = Bucket<{
   luminanceToAlpha?: boolean
   /** Escape hatch, appended last. Pass a stable array — a fresh one every render defeats the memo. */
   modifiers?: IosModifier[]
+  /** Digits of one width, so a number that changes does not shift what follows it. */
+  monospacedDigit?: boolean
   /** Redacts only when an ancestor applies the `privacy` reason — inert on its own. */
   privacySensitive?: boolean
   /**

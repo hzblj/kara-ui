@@ -47,6 +47,7 @@ const VIEW_ONLY_KEY_RECORD = {
   flexDirection: true,
   gap: true,
   grow: true,
+  inset: true,
   justify: true,
   left: true,
   m: true,
@@ -156,6 +157,7 @@ const flexStyle = (sx: ViewSx): ViewStyle => ({
 const layoutStyle = (sx: ViewSx): ViewStyle => ({
   bottom: sx.bottom,
   display: sx.display,
+  inset: sx.inset,
   left: sx.left,
   overflow: sx.overflow,
   position: sx.position,
