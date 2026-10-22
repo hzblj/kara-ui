@@ -1,5 +1,24 @@
 # @hzblj/kara-router
 
+## 0.4.0
+
+### Minor Changes
+
+- [`6e7903a`](https://github.com/hzblj/kara-ui/commit/6e7903afa3d3442e04a48a6e24399f9f03559a03) Thanks [@hzblj](https://github.com/hzblj)! - Android polish, and a new `RnListItem`.
+
+  - `ContextMenu` on Android is a proper long-press menu: a ripple and the long-press haptic, then a Material dropdown where the finger is, with the actions' icons and the trigger highlighted while it is open. The ripple and highlight stay inside rounded corners.
+  - A pressable `HStack`, `VStack` or `ZStack` ripples across its whole shape, padding included; `ListItem` and `LabeledContent` take `px` so a row in a card can carry the card's padding inside its press area.
+  - `ListItem` keeps its chevron when the subtitle fills the line.
+  - `Tabs` take the theme's colours: on Android the bar, active indicator, icons, labels and ripple come from tokens instead of the wallpaper scheme; on iOS the selected item takes the accent.
+  - New `RnListItem`: `ListItem`'s row in the React Native tier, cheap to mount by the dozen, with a full-row ripple on Android and a highlight on iOS.
+
+### Patch Changes
+
+- Updated dependencies [[`6e7903a`](https://github.com/hzblj/kara-ui/commit/6e7903afa3d3442e04a48a6e24399f9f03559a03)]:
+  - @hzblj/kara-components@0.4.0
+  - @hzblj/kara-theme@0.4.0
+  - @hzblj/kara-native@0.4.0
+
 ## 0.3.0
 
 ### Patch Changes

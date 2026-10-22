@@ -1,5 +1,11 @@
 # @hzblj/kara-expo-plugin
 
+## 0.4.0
+
+### Patch Changes
+
+- [`6e7903a`](https://github.com/hzblj/kara-ui/commit/6e7903afa3d3442e04a48a6e24399f9f03559a03) Thanks [@hzblj](https://github.com/hzblj)! - `npx kara-icons ./assets/icons` works without `--out` — it used to skip the folder and print its usage.
+
 ## 0.3.0
 
 ## 0.2.1
