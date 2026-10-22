@@ -1,5 +1,14 @@
 # @hzblj/kara-components
 
+## 0.4.1
+
+### Patch Changes
+
+- Updated dependencies [[`d14bdd3`](https://github.com/hzblj/kara-ui/commit/d14bdd37bede9fef80f4d3af4621ea5d60b2b16b)]:
+  - @hzblj/kara-native@0.4.1
+  - @hzblj/kara-theme@0.4.1
+  - @hzblj/kara-sx@0.4.1
+
 ## 0.4.0
 
 ### Minor Changes
