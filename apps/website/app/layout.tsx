@@ -6,6 +6,7 @@ import type {Metadata, Viewport} from 'next'
 import localFont from 'next/font/local'
 import type {ReactNode} from 'react'
 
+import {GoogleAnalytics} from '../src/analytics/google-analytics'
 import {homeMetadata} from '../src/seo/metadata'
 import {HERO_HEADLINE, HERO_LEDE, REPOSITORY_URL, SITE_NAME, SITE_URL} from '../src/site'
 import {HEAD_SCRIPT} from '../src/theme/theme'
@@ -76,9 +77,10 @@ export default function RootLayout({children}: Readonly<{children: ReactNode}>) 
       <body className="font-inter">
         {children}
         <ThemeSync />
-        {/* Vercel's, cookieless: page views and Core Web Vitals, nothing that needs a consent banner. */}
+        {/* Vercel's page views and Core Web Vitals, and Google Analytics beside them. */}
         <Analytics />
         <SpeedInsights />
+        <GoogleAnalytics />
       </body>
     </html>
   )
