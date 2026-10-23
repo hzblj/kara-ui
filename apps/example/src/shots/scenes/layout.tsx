@@ -5,6 +5,7 @@ import {
   Form,
   HStack,
   Island,
+  LabeledContent,
   List,
   ListItem,
   Pager,
@@ -15,7 +16,6 @@ import {
   Spacer,
   Switch,
   Text,
-  TextField,
   VStack,
 } from '@hzblj/kara-ui'
 import {Platform} from 'react-native'
@@ -80,7 +80,8 @@ const ListItemScene: Scene = () => (
 )
 
 /** SwiftUI's form scrolls like a list and needs a height; Android's is a column of cards that sizes itself. */
-const FORM_ISLAND = Platform.OS === 'ios' ? {matchContents: false, style: {height: 280}} : {}
+// The 4:3 band's height on the simulator: a SwiftUI `Form` scrolls inside whatever it is given, so it gets all of it.
+const FORM_ISLAND = Platform.OS === 'ios' ? {h: 300, matchContents: false} : {}
 
 const FormScene: Scene = () => (
   <Island {...FORM_ISLAND}>
@@ -90,7 +91,7 @@ const FormScene: Scene = () => (
         <Switch label="Offers" value={false} />
       </Form.Section>
       <Form.Section title="Profile">
-        <TextField label="Display name" />
+        <LabeledContent label="Display name" value="Anna Novak" />
       </Form.Section>
     </Form>
   </Island>

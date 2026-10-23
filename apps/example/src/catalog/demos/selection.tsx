@@ -178,7 +178,7 @@ const TextFieldDemo = () => (
       <VStack spacing="s16" wide>
         <TextField label="Email" />
         <TextField label="Password" secure />
-        <TextField error label="Postcode" />
+        <TextField defaultValue="110" error="A postcode has five digits." label="Postcode" />
         <TextField disabled label="Country" />
       </VStack>
     </Island>

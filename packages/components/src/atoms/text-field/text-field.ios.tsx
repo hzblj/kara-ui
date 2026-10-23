@@ -45,7 +45,8 @@ export const TextField: TextFieldComponent = ({
 }: TextFieldProps) => {
   useHostGuard('TextField')
   const text = useNativeState(defaultValue)
-  const tone = TONE[toneOf(disabled, error)]
+  const tone = TONE[toneOf(disabled, Boolean(error))]
+  const message = tone === TONE.error && typeof error === 'string' && error ? error : undefined
 
   const sxModifiers = useSxModifiers({
     bg: tone.bg,
@@ -85,6 +86,11 @@ export const TextField: TextFieldComponent = ({
           text={text}
         />
       )}
+      {message ? (
+        <Text color="content.destructive" variant="footnote">
+          {message}
+        </Text>
+      ) : null}
     </VStack>
   )
 }

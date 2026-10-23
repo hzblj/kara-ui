@@ -139,7 +139,7 @@ const TextFieldScene: Scene = ({step}) => {
       <VStack spacing="s16" wide>
         <TextField defaultValue={typed} key={typed} label="Email" />
         <TextField label="Password" secure />
-        <TextField error label="Postcode" />
+        <TextField defaultValue="110" error="A postcode has five digits." label="Postcode" />
       </VStack>
     </Island>
   )

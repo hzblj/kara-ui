@@ -6,7 +6,8 @@ import type {SurfaceComponent, SurfaceProps} from './surface.types'
 export const Surface: SurfaceComponent = ({children, glass = false, testID, ...sx}: SurfaceProps) => {
   useHostGuard('Surface')
 
-  const modifiers = useSxModifiers({borderRadius: 'large', p: 's16', ...sx})
+  // `surface.primary` unless told otherwise, as Material's `Surface` is on Android — without it a plain one drew nothing.
+  const modifiers = useSxModifiers({bg: 'surface.primary', borderRadius: 'large', p: 's16', ...sx})
   const content = (
     <VStack alignment="leading" modifiers={modifiers} testID={testID}>
       {children}

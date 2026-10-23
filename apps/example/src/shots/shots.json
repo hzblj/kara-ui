@@ -1,6 +1,6 @@
 {
   "action-sheet": {"frame": {"android": "bottom", "ios": "center"}, "steps": [3200, 1400]},
-  "activity-indicator": {},
+  "activity-indicator": {"crossfade": {"android": 500}, "period": {"android": 4000, "ios": 800}},
   "alert": {"steps": [3200, 1400]},
   "avatar": {},
   "badge": {},

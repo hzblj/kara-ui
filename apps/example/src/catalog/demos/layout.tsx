@@ -107,7 +107,7 @@ const ListDemo = () => (
 )
 
 /** SwiftUI's form scrolls like a list and needs a height; Android's is a column of cards that sizes itself. */
-const FORM_ISLAND = Platform.OS === 'ios' ? {matchContents: false, style: {height: 400}} : {}
+const FORM_ISLAND = Platform.OS === 'ios' ? {h: 400, matchContents: false} : {}
 
 const FormDemo = () => (
   <Section>

@@ -12,6 +12,7 @@ export const GLYPHS = {
   chevronDown: {android: 'kara_glyph_chevron_down', ios: 'chevron.down'},
   chevronRight: {android: 'kara_glyph_chevron_right', ios: 'chevron.right'},
   close: {android: 'kara_glyph_close', ios: 'xmark'},
+  error: {android: 'kara_glyph_error', ios: 'exclamationmark.circle'},
   minus: {android: 'kara_glyph_minus', ios: 'minus'},
   plus: {android: 'kara_glyph_plus', ios: 'plus'},
   search: {android: 'kara_glyph_search', ios: 'magnifyingglass'},

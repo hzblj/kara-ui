@@ -9,8 +9,12 @@ export type TextFieldProps = {
   defaultValue?: string
   /** Stops editing and dims the field. On iOS it outranks `error`. */
   disabled?: boolean
-  /** Marks the field invalid: a destructive outline and label. */
-  error?: boolean
+  /**
+   * Marks the field invalid: a destructive outline and label. A message is shown under the field as well — on Android
+   * as Material's supporting text, beside its error icon — so the error never rests on colour alone; Material's error
+   * colour is a pale red in dark mode. `true` marks it without a message.
+   */
+  error?: boolean | string
   /** Shown above the field, in `labelMedium`. */
   label?: string
   /** Wraps the text and grows the field to fit it. iOS ignores it when `secure`. */

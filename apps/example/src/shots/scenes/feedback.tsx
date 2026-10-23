@@ -78,8 +78,9 @@ const AlertScene: Scene = ({step}) => {
 
   return (
     <Island>
-      <VStack wide>
-        <Button label="Delete account" variant="destructive" wide />
+      {/* Not `wide`: the dialog covers the button it came from whole, rather than leaving its ends showing. */}
+      <VStack align="center" wide>
+        <Button label="Delete account" variant="destructive" wide={false} />
         <Alert
           confirmLabel="Delete"
           destructive
