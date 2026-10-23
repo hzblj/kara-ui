@@ -398,14 +398,17 @@ export const COMPONENTS: ComponentDoc[] = [
     code: `<VStack spacing="s16" wide>
   <TextField label="Email" onChangeText={setEmail} />
   <TextField label="Password" secure />
-  <TextField error label="Postcode" />
+  <TextField defaultValue="110" error="A postcode has five digits." label="Postcode" />
 </VStack>`,
     exports: ['TextField'],
     group: 'selection',
     host: 'native',
     id: 'text-field',
     name: 'TextField',
-    notes: ['Uncontrolled: start it with `defaultValue` and read changes from `onChangeText`.'],
+    notes: [
+      'Uncontrolled: start it with `defaultValue` and read changes from `onChangeText`.',
+      'Give `error` a message and it shows under the field — Material’s supporting text with its error icon on Android — so an error never rests on colour alone.',
+    ],
     renders: {android: 'Compose OutlinedTextField', ios: 'SwiftUI TextField / SecureField'},
     summary: 'Text input with a label, for secure entry and errors too.',
     types: ['TextFieldProps'],
@@ -848,8 +851,11 @@ export const COMPONENTS: ComponentDoc[] = [
     host: 'native',
     id: 'progress',
     name: 'Progress',
-    notes: ['Leave `value` unset for the indeterminate spinner; pass 0–1 for a determinate bar.'],
-    renders: {android: 'Compose Linear / CircularProgressIndicator', ios: 'SwiftUI ProgressView'},
+    notes: [
+      'Leave `value` unset for the indeterminate spinner; pass 0–1 for a determinate bar or ring.',
+      'A ring with a value is a SwiftUI capacity `Gauge` on iOS — a circular `ProgressView` there ignores its value and spins.',
+    ],
+    renders: {android: 'Compose Linear / CircularProgressIndicator', ios: 'SwiftUI ProgressView / Gauge'},
     summary: 'How far along something is — or that it is still going.',
     types: ['ProgressProps'],
   },

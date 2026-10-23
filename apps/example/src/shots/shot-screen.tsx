@@ -10,7 +10,7 @@ import {LAYOUT_SCENES} from './scenes/layout'
 import {NAVIGATION_SCENES} from './scenes/navigation'
 import {PRIMITIVE_SCENES} from './scenes/primitives'
 import {SELECTION_SCENES} from './scenes/selection'
-import type {Scene, SceneId, ShotConfig} from './shot.types'
+import type {PerPlatform, Scene, SceneId, ShotConfig} from './shot.types'
 import shots from './shots.json'
 import {Ticker} from './ticker'
 import {usePhase, useStep} from './use-timeline'
@@ -57,9 +57,14 @@ const useQuietLogBox = () => {
 
 type TimelineProps = {config: Pick<ShotConfig, 'period' | 'steps'>; playing: boolean; Scene: Scene}
 
+const onThisPlatform = <TValue,>(value: PerPlatform<TValue> | undefined): TValue | undefined =>
+  typeof value === 'object' && value !== null
+    ? (value as {android?: TValue; ios?: TValue})[Platform.OS as 'ios']
+    : value
+
 const Timeline = ({config, playing, Scene}: TimelineProps) => {
   const step = useStep(playing, config.steps)
-  const phase = usePhase(playing, config.period)
+  const phase = usePhase(playing, onThisPlatform(config.period))
 
   return <Scene phase={phase} step={step} />
 }

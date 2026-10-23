@@ -54,6 +54,13 @@ the config plugin means `yarn prebuild` and a native run, not a Metro reload.
 exactly one loop, so it repeats without a seam — whatever the shot shows must return to its first state by the end of
 its `steps` (or `period`). Overlays open through `useOpened`, after their host has mounted.
 
+**A loop with no period of its own fades shut.** Material's loading indicator never repeats exactly; its shot sets
+`crossfade`, and the recording's end dissolves into its start. `period` and `crossfade` can differ per platform.
+
+**`shots.py check` after every run.** Besides missing files it reports a blank still (the dev client's grey) and two
+shots with one picture (a deep link the app dropped, so both show the same screen). The capture waits for the home
+screen after every cold start — Android reads it from the window — because a link sent while the bundle loads is lost.
+
 **Shots need a prepared device.** Metro running, the example installed on a booted simulator and an attached emulator,
 the dev menu's welcome dismissed and its floating tools button switched off once on each, the simulator in `en_US`.
 

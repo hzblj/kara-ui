@@ -1,6 +1,7 @@
 import {Column, Text as ComposeText, OutlinedTextField, useNativeState} from '@expo/ui/jetpack-compose'
 import {useSxModifiers} from '@hzblj/kara-sx'
 import {useAppTheme} from '@hzblj/kara-theme'
+import {Glyph} from '../../glyph'
 import {useHostGuard} from '../../host-context'
 import type {TextFieldComponent, TextFieldProps} from './text-field.types'
 
@@ -17,12 +18,14 @@ export const TextField: TextFieldComponent = ({
   const theme = useAppTheme()
   const value = useNativeState(defaultValue)
   const modifiers = useSxModifiers({wide: true})
+  const invalid = Boolean(error)
+  const message = typeof error === 'string' && error ? error : undefined
 
   return (
     <Column verticalArrangement={{spacedBy: 4}}>
       {label ? (
         <ComposeText
-          color={theme.colorString(error ? 'content.destructive' : 'content.secondary')}
+          color={theme.colorString(invalid ? 'content.destructive' : 'content.secondary')}
           style={theme.typography.labelMedium}
         >
           {label}
@@ -30,7 +33,7 @@ export const TextField: TextFieldComponent = ({
       ) : null}
       <OutlinedTextField
         enabled={!disabled}
-        isError={error}
+        isError={invalid}
         modifiers={modifiers}
         onValueChange={onChangeText}
         singleLine={!multiline}
@@ -41,7 +44,20 @@ export const TextField: TextFieldComponent = ({
         }}
         value={value}
         visualTransformation={secure ? 'password' : 'none'}
-      />
+      >
+        {invalid ? (
+          <OutlinedTextField.TrailingIcon>
+            <Glyph color="content.destructive" name="error" />
+          </OutlinedTextField.TrailingIcon>
+        ) : null}
+        {message ? (
+          <OutlinedTextField.SupportingText>
+            <ComposeText color={theme.colorString('content.destructive')} style={theme.typography.footnote}>
+              {message}
+            </ComposeText>
+          </OutlinedTextField.SupportingText>
+        ) : null}
+      </OutlinedTextField>
     </Column>
   )
 }

@@ -2,15 +2,17 @@
 """The capture script's image side: what to shoot, and turning a raw device frame into what the website serves.
 
   shots.py list [--only a,b] [--platform ios|android]
-      One line per shot, separated by `|`: id, frame, kind (still|steps|period|flow), loop length in ms, url, flow, and
-      how long to wait for the network before the still, in ms.
+      One line per shot, separated by `|`: id, frame, kind (still|steps|period|flow), loop length in ms, url, flow,
+      how long to wait for the network before the still, in ms, and how long the loop's end fades into its start, in ms.
   shots.py still <raw.png> <out.webp> --frame center|bottom|screen
       Crops the frame out of a device screenshot, converts it to sRGB and writes the website's WebP.
   shots.py settled <a.png> <b.png>
       Exit 0 when two screenshots are the same screen at rest, 1 when something still moved between them.
   shots.py check <media dir>
-      Lists every capture that is missing or broken — a still, or a recording shorter than a second — as
-      `platform appearance id what`, and exits 1 when there is any.
+      Lists every capture that is missing or broken — a still that is missing, blank or the same picture as another
+      shot's, or a recording shorter than a second — as `platform appearance id what`, and exits 1 when there is any.
+  shots.py blank <shot.png>
+      Exit 0 when a screenshot is one flat colour: the dev client's grey before the bundle has run.
   shots.py banner <shot.png>
       Exit 0 when the dev client's blue "Refreshing…" / "Bundling…" bar is across the top of the screen.
 """
@@ -22,7 +24,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from PIL import Image, ImageChops, ImageCms
+from PIL import Image, ImageChops, ImageCms, ImageStat
 
 SHOTS = Path(__file__).resolve().parent.parent / "src" / "shots" / "shots.json"
 
@@ -47,14 +49,21 @@ def shot_list(only: set[str], platform: str | None) -> None:
         elif "steps" in config:
             kind, loop = "steps", sum(config["steps"])
         elif "period" in config:
-            kind, loop = "period", config["period"]
+            # Per platform too, for a native animation whose cycle the platforms disagree on (a spinner).
+            period = config["period"]
+            kind, loop = "period", period.get(platform or "ios", 0) if isinstance(period, dict) else period
         else:
             kind, loop = "still", 0
         frame = config.get("frame", "center")
         # A frame can differ per platform — an iOS 26 action sheet is a popover in the middle, Android's a bottom sheet.
         if isinstance(frame, dict):
             frame = frame.get(platform or "ios", "center")
-        fields = [shot_id, frame, kind, str(loop), config.get("url", ""), config.get("flow", ""), str(config.get("settle", 0))]
+        # A loop with no period of its own (Material's loading indicator) is closed by fading its end into its start.
+        crossfade = config.get("crossfade", 0)
+        if isinstance(crossfade, dict):
+            crossfade = crossfade.get(platform or "ios", 0)
+        fields = [shot_id, frame, kind, str(loop), config.get("url", ""), config.get("flow", ""), str(config.get("settle", 0)),
+                  str(crossfade)]
         # Not tabs: the shell's `read` collapses a run of whitespace separators, and with them every empty field.
         print("|".join(fields))
 
@@ -107,6 +116,15 @@ def banner(shot: Path) -> bool:
     return blue >= len(pixels) * 0.5
 
 
+def blank(shot: Path) -> bool:
+    """No shot is one flat colour; the dev client is, while the bundle loads."""
+    return ImageStat.Stat(Image.open(shot).convert("L").resize((120, 260))).stddev[0] < 2
+
+
+def thumbprint(still: Path) -> list[int]:
+    return list(Image.open(still).convert("L").resize((32, 24)).getdata())
+
+
 def pillarboxed(video: Path) -> bool:
     """
     The last second's frame with black edge columns where the stage is not black: a recording of the wrong aspect,
@@ -155,14 +173,20 @@ def motion(video: Path, lead: float, tail: float) -> tuple[float, float]:
 def check(media: Path) -> bool:
     shots = json.loads(SHOTS.read_text())
     problems = []
+    stills: dict[tuple[str, str], list[tuple[str, list[int]]]] = {}
     for shot_id, config in sorted(shots.items()):
         for platform in config.get("platforms", ["ios", "android"]):
             flows = config.get("flowPlatforms", ["ios", "android"])
             moves = ("flow" in config and platform in flows) or "steps" in config or "period" in config
             for appearance in ("light", "dark"):
                 folder = media / platform / appearance
-                if not (folder / f"{shot_id}.webp").is_file():
+                still = folder / f"{shot_id}.webp"
+                if not still.is_file():
                     problems.append(f"{platform} {appearance} {shot_id} still")
+                elif blank(still):
+                    problems.append(f"{platform} {appearance} {shot_id} still blank")
+                else:
+                    stills.setdefault((platform, appearance), []).append((shot_id, thumbprint(still)))
                 if moves:
                     video = folder / f"{shot_id}.mp4"
                     length = 0.0
@@ -180,6 +204,12 @@ def check(media: Path) -> bool:
                         problems.append(f"{platform} {appearance} {shot_id} video")
                     elif pillarboxed(video):
                         problems.append(f"{platform} {appearance} {shot_id} video pillarboxed")
+    # Two shots with one picture: a deep link that arrived before the app could take it, so both show the same screen.
+    for (platform, appearance), prints in stills.items():
+        for index, (first, a) in enumerate(prints):
+            for second, b in prints[index + 1:]:
+                if sum(abs(x - y) for x, y in zip(a, b)) / len(a) < 0.5:
+                    problems.append(f"{platform} {appearance} {first} still same as {second}")
     for problem in problems:
         print(problem)
     return not problems
@@ -213,6 +243,9 @@ def main() -> None:
     bar = commands.add_parser("banner")
     bar.add_argument("shot", type=Path)
 
+    flat = commands.add_parser("blank")
+    flat.add_argument("shot", type=Path)
+
     args = parser.parse_args()
     if args.command == "list":
         shot_list({value for value in args.only.split(",") if value}, args.platform)
@@ -225,6 +258,8 @@ def main() -> None:
         print(f"{start:.2f} {length:.2f}")
     elif args.command == "banner":
         sys.exit(0 if banner(args.shot) else 1)
+    elif args.command == "blank":
+        sys.exit(0 if blank(args.shot) else 1)
     else:
         sys.exit(0 if settled(args.first, args.second) else 1)
 

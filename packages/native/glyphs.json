@@ -4,6 +4,7 @@
   "chevronDown": {"ios": "chevron.down", "material": "keyboard_arrow_down"},
   "chevronRight": {"ios": "chevron.right", "material": "chevron_right"},
   "close": {"ios": "xmark", "material": "close"},
+  "error": {"ios": "exclamationmark.circle", "material": "error"},
   "minus": {"ios": "minus", "material": "remove"},
   "plus": {"ios": "plus", "material": "add"},
   "search": {"ios": "magnifyingglass", "material": "search"}

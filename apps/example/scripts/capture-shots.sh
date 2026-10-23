@@ -217,8 +217,36 @@ prepare() {
 	fi
 
 	echo "  waiting for the ${platform} app to come up..."
-	sleep 20
+	wait_for_app "$platform"
 	settle "$platform" "${WORK}/launched.png"
+}
+
+# The home screen's call to action (src/home): once it is in the window, the bundle has run.
+HOME_MARK="Explore components"
+
+# A cold start lasts as long as the bundle takes, and a long run makes that longer; a deep link sent before it has run
+# is dropped, and the shot shows the home screen or the dev client's grey instead. Android waits until the home screen's
+# text is in the window; iOS, which shows no hierarchy, for a frame that is not flat.
+wait_for_app() {
+	local platform="$1" probe="${WORK}/probe.png"
+
+	if [ "$platform" = ios ]; then
+		sleep 20
+	else
+		sleep 5
+	fi
+	for _ in $(seq 60); do
+		if [ "$platform" = android ]; then
+			adb -s "$EMULATOR" shell uiautomator dump /sdcard/kara-window.xml > /dev/null 2>&1
+			adb -s "$EMULATOR" shell cat /sdcard/kara-window.xml 2> /dev/null | grep -q "$HOME_MARK" && return 0
+		else
+			shoot ios "$probe"
+			python3 scripts/shots.py blank "$probe" || return 0
+		fi
+		sleep 2
+	done
+	echo "  WARNING: the ${platform} app never came up" >&2
+	STATUS=1
 }
 
 record_start() {
@@ -247,7 +275,7 @@ record_stop() {
 
 # encode <raw.mp4> <out.mp4> <frame> <start s> <length s>
 encode() {
-	local raw="$1" out="$2" frame="$3" start="$4" length="$5" crop
+	local raw="$1" out="$2" frame="$3" start="$4" length="$5" fade="${6:-0}" crop
 
 	case "$frame" in
 	screen) crop="scale=480:-2:flags=lanczos" ;;
@@ -257,7 +285,20 @@ encode() {
 	mkdir -p "$(dirname "$out")"
 	# Both recorders write a variable frame rate — nothing while the screen holds still — so the cut is made after
 	# \`fps\` has filled those stretches in: seeking the input would start at the first frame that moved.
-	ffmpeg -y -v error -i "$raw" -ss "$start" -t "$length" -vf "${crop},fps=30,format=yuv420p" \
+	if [ "$fade" = 0 ]; then
+		ffmpeg -y -v error -i "$raw" -ss "$start" -t "$length" -vf "${crop},fps=30,format=yuv420p" \
+			-c:v libx264 -preset slow -crf 26 -an -movflags +faststart "$out"
+		return
+	fi
+	# An animation with no period of its own: the cut starts `fade` seconds in, and its last `fade` seconds dissolve into
+	# the first `fade` of the recording — so the loop's last frame is the frame before its first.
+	local graph
+	graph="$(python3 -c "s, l, f = $start, $length, $fade
+print(f'[0:v]${crop},fps=30,format=yuv420p,split[a][b];'
+      f'[a]trim=start={s + f}:end={s + l + f},setpts=PTS-STARTPTS,fps=30[main];'
+      f'[b]trim=start={s}:end={s + f},setpts=PTS-STARTPTS,fps=30[head];'
+      f'[main][head]xfade=transition=fade:duration={f}:offset={l - f},format=yuv420p[out]')")"
+	ffmpeg -y -v error -i "$raw" -filter_complex "$graph" -map "[out]" \
 		-c:v libx264 -preset slow -crf 26 -an -movflags +faststart "$out"
 }
 
@@ -292,10 +333,11 @@ capture_still() {
 # Records two loops' worth and keeps exactly one, from after the scene has mounted: a timeline is periodic, so a cut one
 # loop long repeats without a seam wherever it starts. A loop under three seconds is kept twice over.
 capture_loop() {
-	local platform="$1" id="$2" frame="$3" loop_ms="$4" target="$5"
-	local raw="${WORK}/loop.mp4" length warmup=3 recorded
+	local platform="$1" id="$2" frame="$3" loop_ms="$4" target="$5" fade_ms="${6:-0}"
+	local raw="${WORK}/loop.mp4" length warmup=3 recorded fade
 
 	length="$(python3 -c "loop = $loop_ms / 1000; print(round(loop * max(1, -(-3 // loop)), 3))")"
+	fade="$(python3 -c "print($fade_ms / 1000)")"
 	# A recorder under load now and then hands back a file with next to nothing in it: check what came back covers the
 	# cut, and record again if it does not.
 	for attempt in 1 2 3; do
@@ -305,11 +347,11 @@ capture_loop() {
 		clear_banner "$platform"
 		record_start "$platform" "$raw"
 		open_path "$platform" "$(path_for "$id" "" 1)"
-		sleep "$(python3 -c "print($warmup + $length + 1.5)")"
+		sleep "$(python3 -c "print($warmup + $length + $fade + 1.5)")"
 		record_stop "$platform" "$raw"
 		recorded="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$raw" 2> /dev/null || echo 0)"
-		if python3 -c "import sys; sys.exit(0 if float('${recorded:-0}' or 0) >= $warmup + $length else 1)" 2> /dev/null; then
-			encode "$raw" "$target" "$frame" "$warmup" "$length"
+		if python3 -c "import sys; sys.exit(0 if float('${recorded:-0}' or 0) >= $warmup + $length + $fade else 1)" 2> /dev/null; then
+			encode "$raw" "$target" "$frame" "$warmup" "$length" "$fade"
 			break
 		fi
 		echo "    ${platform}/${id}: the recording came back ${recorded:-empty}s long (attempt ${attempt})" >&2
@@ -378,7 +420,7 @@ for APPEARANCE in $APPEARANCES; do
 		dir="${OUT_DIR}/${platform}/${APPEARANCE}"
 
 		# On its own descriptor: adb and Maestro read standard input, and would swallow the rest of the list.
-		while IFS='|' read -r -u 3 id frame kind loop url flow settle_ms; do
+		while IFS='|' read -r -u 3 id frame kind loop url flow settle_ms fade_ms; do
 			if [ "$kind" = flow ]; then
 				capture_flow "$platform" "$id" "$frame" "$url" "$flow" "${dir}/${id}.webp" "${dir}/${id}.mp4"
 				echo "  ${id} (flow)"
@@ -386,7 +428,7 @@ for APPEARANCE in $APPEARANCES; do
 			fi
 			[ "$STILLS" = 1 ] && capture_still "$platform" "$id" "$frame" "$url" "${dir}/${id}.webp" "$settle_ms"
 			if [ "$VIDEOS" = 1 ] && [ "$kind" != still ]; then
-				capture_loop "$platform" "$id" "$frame" "$loop" "${dir}/${id}.mp4"
+				capture_loop "$platform" "$id" "$frame" "$loop" "${dir}/${id}.mp4" "$fade_ms"
 				echo "  ${id} (still and loop)"
 			else
 				echo "  ${id}"

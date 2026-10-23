@@ -28,7 +28,7 @@ export const Secure: Story = {args: {label: 'Password', secure: true}}
 
 export const Multiline: Story = {args: {label: 'Notes', multiline: true}}
 
-export const WithError: Story = {args: {error: true, label: 'With error'}}
+export const WithError: Story = {args: {defaultValue: '110', error: 'A postcode has five digits.', label: 'Postcode'}}
 
 export const Disabled: Story = {args: {disabled: true, label: 'Disabled'}}
 
@@ -37,7 +37,7 @@ export const AllStates: Story = {
     <VStack spacing="s12" wide>
       <TextField label="Label" />
       <TextField label="Secure" secure />
-      <TextField error label="With error" />
+      <TextField defaultValue="110" error="A postcode has five digits." label="Postcode" />
       <TextField disabled label="Disabled" />
     </VStack>
   ),

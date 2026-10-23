@@ -47,7 +47,14 @@ const useTabBarColors = () => {
     const tintColor = theme.color('content.accent')
 
     if (Platform.OS !== 'android') {
-      return {labelStyle: {fontFamily}, tintColor}
+      // A colour for both states, not only `tintColor`: Expo Router tints an asset-catalog icon only when the state has
+      // an icon colour and lets the unselected state's mode decide both — with the selected one alone, both icons kept
+      // the SVG's own black, even selected, even in dark mode. Unselected takes the label colour, as UIKit's own does.
+      return {
+        iconColor: {default: theme.color('content.primary'), selected: tintColor},
+        labelStyle: {fontFamily},
+        tintColor,
+      }
     }
 
     return {

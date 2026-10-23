@@ -25,8 +25,16 @@ export type SceneId = Exclude<ShotId, RouteShotId>
 
 export type ShotFrame = 'bottom' | 'center' | 'screen'
 
+/** One value for both platforms, or one each. */
+export type PerPlatform<TValue> = TValue | {android?: TValue; ios?: TValue}
+
 /** How a shot is captured — read by `scripts/capture-shots.sh` as well as by the harness. */
 export type ShotConfig = {
+  /**
+   * For motion with no period of its own (Material's loading indicator): how long, in milliseconds, the recording's end
+   * dissolves into its start, so the loop still has no seam.
+   */
+  crossfade?: PerPlatform<number>
   /**
    * Which part of the screen is kept: a 4:3 band through the middle (default), at the bottom, or the whole screen —
    * or one of those per platform.
@@ -36,8 +44,8 @@ export type ShotConfig = {
   flow?: string
   /** The platforms the flow is written for — both by default. Elsewhere the shot is a still. */
   flowPlatforms?: readonly ('android' | 'ios')[]
-  /** Continuous motion: the length of one loop, in milliseconds. */
-  period?: number
+  /** Continuous motion: the length of one loop, in milliseconds — per platform when their animations differ. */
+  period?: PerPlatform<number>
   /** Extra time, in milliseconds, for the network before the still — a remote photo arriving late looks settled. */
   settle?: number
   /** Which platforms have this component. Both by default. */
