@@ -1,8 +1,7 @@
+import type {Haptic} from '@hzblj/expo-rich-haptics'
 import type {AccessibilityProps, MotionProps, ResponsiveViewSx} from '@hzblj/kara-sx'
 import type {OpacitySize} from '@hzblj/kara-theme'
 import type {ReactNode} from 'react'
-
-import type {Haptic} from '../../haptics'
 
 /** How the content answers a press: it eases down, it dims, or it stays still. */
 export type PressEffect = 'none' | 'opacity' | 'scale'

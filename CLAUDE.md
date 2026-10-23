@@ -24,7 +24,8 @@ Every package has its own `CLAUDE.md` — read that one before touching it.
 
 Dependencies point one way: `theme` ← `sx` ← `components` ← `router`, with `native` beside `theme` (a pure platform
 layer that `sx` and `components` both use) and `kara-ui` on top of all of them. Nothing imports upwards, and nothing reaches past another package's
-`exports`. All packages are versioned together (`fixed` in `.changeset/config.json`). The website reads the packages'
+`exports`. Haptics are not in this repo: `components` depends on `@hzblj/expo-rich-haptics`, released from its own
+repo (`hzblj/expo-rich-haptics`, next to this one as `../expo-rich-haptics`). All packages are versioned together (`fixed` in `.changeset/config.json`). The website reads the packages'
 sources at build time but imports none of them.
 
 ## Commands

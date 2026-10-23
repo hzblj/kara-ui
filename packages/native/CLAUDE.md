@@ -13,7 +13,7 @@ component. Autolinked into any app that installs `@hzblj/kara-ui` (a transitive 
 | `ios/Modifiers/` | SwiftUI modifiers registered into `@expo/ui`'s registry: `scaledFont`, `underline`, `counterBadge`. |
 | `android/.../modifiers/` | Compose modifiers registered into `@expo/ui`'s registry: `underline`, and `karaAccessibility` (content and state descriptions, a role or heading, the click action's label, merging or clearing descendants), which `@hzblj/kara-sx` maps the accessibility props onto. `@expo/ui`'s own `semantics` carries only a content description. |
 | `ios/Fabric/` | Runtime fixes to React Native's own component views, installed from `OnCreate`: `OpacityVisibilitySync`. |
-| `android/src/main/java/expo/modules/kara/ui/` | `KaraUIModule.kt` plus one package per component (`blur`, `colorpicker`, `fab`, `haptics`, `icon`, `modifiers`, `ripple`, `swipe`, `tooltip`, `topappbar`, `zoomtransition`). |
+| `android/src/main/java/expo/modules/kara/ui/` | `KaraUIModule.kt` plus one package per component (`blur`, `colorpicker`, `fab`, `icon`, `modifiers`, `ripple`, `swipe`, `tooltip`, `topappbar`, `zoomtransition`). |
 | `src/swift-ui/`, `src/jetpack-compose/` | `requireKaraView` bindings and typed wrappers per view, the modifiers' JS side. The `/swift-ui` and `/jetpack-compose` entries. |
 | `ios/Views/Icon/`, `android/.../icon/` | `IconView` (UIKit `UIImageView` / Android `ImageView`, the React Native tier) and Android's `DrawableIconView` (Compose `Icon`, inside a host): an app icon by asset/resource name, or an SF Symbol. |
 | `src/icons.ts` | `iconResourceName(name)` → `kara_icon_<name>`, the name the config plugin gives an app icon on both platforms. Mirrors the plugin's own copy, which runs in Node. |
@@ -25,7 +25,6 @@ component. Autolinked into any app that installs `@hzblj/kara-ui` (a transitive 
 | `android/.../colorpicker/` | `ColorWellView`: the colour picker Compose lacks, in the iOS picker's shape. A well with a rainbow ring opens a Material bottom sheet with three tabs (a 12 × 10 grid of swatches, a spectrum with the hues top to bottom, tints to the left and shades to the right, as iOS draws it, RGB sliders), an opacity slider with `supportsOpacity`, and the colour with its hex at the foot. Its own HSVA state leads while the sheet is open, so a grey keeps its hue; every change goes out as `onValueChange` (`#RRGGBB`, or `#RRGGBBAA` with opacity). No library: those on offer draw a wheel, and the maintained one needs a newer Kotlin than Expo builds with. |
 | `android/.../swipe/` | `SwipeActionsBoxView`: the swipe actions Compose lacks, ported from Footshop's. `AnchoredDraggableState` with three rests (closed, leading, trailing), each edge's slot measured and anchored at its width; the actions draw only in the strip the row has vacated and fade in; a tap on an open row closes it. Controlled by `openEdge`, reported by `onOpenChange`. |
 | `ios/Views/ZoomTransition/`, `android/.../zoomtransition/` | The zoom push behind `ZoomTransition` (`@hzblj/kara-router`): iOS 18's `preferredTransition = .zoom`, Material's `MaterialContainerTransform` on Android. Source, target and enabler views tied by an identifier through one registry of weak views; `reverseZoomTransition` (Android) plays the way back. See "Zoom transition" below. |
-| `ios/Haptics/`, `android/.../haptics/`, `src/haptics.ts` | `playHaptic` / `prepareHaptic`: synchronous module functions that hop to the main thread. Each `Haptic` name maps to one of UIKit's feedback generators, and to a chain of `HapticFeedbackConstants` on Android. `HAPTICS` lists the names. |
 | `src/availability.ts` | `isLiquidGlassAvailable` / `isScrollEdgeEffectAvailable` — one native call, cached; `false` on Android. |
 | `src/require-view.ts` | `requireKaraView` — lazy, so a view one platform lacks fails only when rendered there, never on import. |
 
@@ -55,12 +54,8 @@ cache lost its glass. The module wraps `RCTViewComponentView`'s `updateProps:old
 its effect at once and never waits for its ancestors. Check the three selectors after a React Native upgrade. To
 debug missing glass, compare `isInHiddenAncestor` in the effect view's `_ivarDescription` (lldb) with a working one.
 
-**Haptics never touch `Vibrator`.** Android plays `View.performHapticFeedback` on the current activity's decor view;
-each name is a chain of constants, newest first — Android 14's say what happened (`TOGGLE_ON`, `SEGMENT_TICK`…), the
-older ones stand in where the OS lacks one or the device answers `false`. A vibrator pattern would feel the same on
-every phone and ignore the user's touch-feedback setting. iOS uses UIKit's feedback generators, not Core Haptics, for
-the same reason: they follow the System Haptics setting. A new name goes into all three — the Swift enum, the Kotlin
-enum and `HAPTICS` — or the native side rejects it.
+**Haptics are not here.** They live in `@hzblj/expo-rich-haptics`, a package of its own in its own repo
+(`hzblj/expo-rich-haptics`), which `@hzblj/kara-components` depends on. Change them there and release them there.
 
 **The module name `KaraUI` is also the Swift module name.** An app whose Xcode target is named `KaraUI` would collide;
 that is why the example is called "Kara Example".

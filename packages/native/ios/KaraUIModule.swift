@@ -12,20 +12,6 @@ public class KaraUIModule: Module {
       return false
     }
 
-    // Synchronous and fire-and-forget: the call returns at once and the feedback plays on the next main-queue turn,
-    // with no promise for JS to settle.
-    Function("playHaptic") { (haptic: Haptic, intensity: Double?) in
-      DispatchQueue.main.async {
-        Haptics.play(haptic, intensity: intensity)
-      }
-    }
-
-    Function("prepareHaptic") { (haptic: Haptic) in
-      DispatchQueue.main.async {
-        Haptics.prepare(haptic)
-      }
-    }
-
     // Synchronous: a transition asks while it builds its style, once per name and appearance (cached in JS).
     Function("resolveSystemColor") { (names: [String], dark: Bool) -> String? in
       SystemColors.hex(names, dark: dark)

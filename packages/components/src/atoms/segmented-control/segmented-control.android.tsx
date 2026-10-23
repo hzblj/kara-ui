@@ -1,9 +1,9 @@
 import {Host, SegmentedButton, SingleChoiceSegmentedButtonRow, Text} from '@expo/ui/jetpack-compose'
 import {fillMaxWidth, testID as testIdModifier, weight} from '@expo/ui/jetpack-compose/modifiers'
+import {haptics} from '@hzblj/expo-rich-haptics'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useCallback, useMemo} from 'react'
 
-import {haptics} from '../../haptics'
 import type {SegmentedControlComponent, SegmentedControlProps} from './segmented-control.types'
 
 const MATCH_HEIGHT_ONLY = {horizontal: false, vertical: true}

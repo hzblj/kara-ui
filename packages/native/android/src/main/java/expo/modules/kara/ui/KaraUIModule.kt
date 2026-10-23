@@ -6,8 +6,6 @@ import expo.modules.kara.ui.fab.FloatingActionButtonMenuView
 import expo.modules.kara.ui.fab.ToggleFloatingActionButtonView
 import expo.modules.kara.ui.blur.BackdropBlurView
 import expo.modules.kara.ui.colorpicker.ColorWellView
-import expo.modules.kara.ui.haptics.Haptic
-import expo.modules.kara.ui.haptics.Haptics
 import expo.modules.kara.ui.icon.DrawableIconView
 import expo.modules.kara.ui.icon.IconView
 import expo.modules.kara.ui.modifiers.ACCESSIBILITY_MODIFIER
@@ -39,12 +37,6 @@ class KaraUIModule : Module() {
     OnDestroy {
       ModifierRegistry.unregister(ACCESSIBILITY_MODIFIER)
       ModifierRegistry.unregister(UNDERLINE_MODIFIER)
-    }
-
-    // Synchronous and fire-and-forget, like on iOS. `intensity` is iOS-only: a system haptic has no amplitude, and
-    // the vibrator that has one is what this module never falls back to.
-    Function("playHaptic") { haptic: Haptic, _: Double? ->
-      Haptics.play(appContext, haptic)
     }
 
     // Each compose view is its own ExpoComposeView subclass — not a `ComposeFunctionHolder`.

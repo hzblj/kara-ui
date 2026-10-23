@@ -1,8 +1,8 @@
 import {Slider as ComposeSlider} from '@expo/ui/jetpack-compose'
+import {haptics} from '@hzblj/expo-rich-haptics'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useCallback, useEffect, useRef} from 'react'
 
-import {haptics} from '../../haptics'
 import {useHostGuard} from '../../host-context'
 import type {SliderComponent, SliderProps} from './slider.types'
 

@@ -1,9 +1,9 @@
 import {Switch as ComposeSwitch, Row, Text} from '@expo/ui/jetpack-compose'
 import {clickable, fillMaxWidth} from '@expo/ui/jetpack-compose/modifiers'
+import {haptics} from '@hzblj/expo-rich-haptics'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useCallback, useMemo} from 'react'
 
-import {haptics} from '../../haptics'
 import {useHostGuard} from '../../host-context'
 import type {SwitchComponent, SwitchProps} from './switch.types'
 

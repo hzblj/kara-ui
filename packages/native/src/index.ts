@@ -1,6 +1,5 @@
 export * from './availability'
 export * from './glyphs'
-export * from './haptics'
 export * from './icons'
 export * from './require-view'
 export * from './system-color'

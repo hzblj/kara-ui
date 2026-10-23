@@ -20,14 +20,12 @@ The `KaraUI` native module of [Kara UI](https://www.kara.janblazej.dev), a nativ
 
 - **An Expo module in Swift and Kotlin**, for what `@expo/ui` does not cover: Liquid Glass, the scroll edge effect, a
   context menu with a preview, tooltips, the navigation bar, swipe actions, the zoom transition and native icons.
-- **Haptics**: UIKit's feedback generators on iOS and `HapticFeedbackConstants` on Android, never a vibrator buzz.
 - **SwiftUI and Compose modifiers** registered into `@expo/ui`.
 - **Raw bindings**: the `/swift-ui` and `/jetpack-compose` entries, for building your own components.
 
 ## Documentation
 
 - [Entry points](https://www.kara.janblazej.dev/docs/installation#entry-points)
-- [Haptics](https://www.kara.janblazej.dev/docs/haptics)
 
 ## License
 

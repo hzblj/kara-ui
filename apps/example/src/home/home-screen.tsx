@@ -1,10 +1,10 @@
+import {haptics} from '@hzblj/expo-rich-haptics'
 import {
   Badge,
   Box,
   Button,
   Divider,
   HStack,
-  haptics,
   Icon,
   Island,
   Label,

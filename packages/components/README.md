@@ -22,7 +22,8 @@ The components of [Kara UI](https://www.kara.janblazej.dev), a native-first desi
 - **`Screen` and `Island`**: the hosts native views render in.
 - **The React Native tier**: `RnView`, `RnText`, `RnScrollView` and the rest are plain React Native views with the
   same `sx` props, for long lists and for content around the native islands.
-- **Haptics**: the platform's own feedback, named for what happened.
+- **Haptics** where the platform's own control has none, through
+  [`@hzblj/expo-rich-haptics`](https://github.com/hzblj/expo-rich-haptics).
 
 ## Documentation
 

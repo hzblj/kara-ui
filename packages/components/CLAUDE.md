@@ -18,7 +18,6 @@ and `@hzblj/kara-native` — through their entry points only.
 | `src/templates/screen/` | `Screen` — the full-bleed native host every screen starts with. |
 | `src/host-context.tsx` | `HostBoundary` + `useHostGuard`: dev warning when a native atom renders outside `Screen`/`Island`. |
 | `src/story-decorators.tsx` | `insideIsland` / `insideIslandOfHeight` — the host a story mounts its subject in. Internal: not exported from `index.ts`. |
-| `src/haptics/` | `haptics` (a function per `Haptic`, `play`, `prepare`, `setEnabled`) and `useHapticFeedback` — the public face of the native module's haptics, and the only way components play one. |
 | `src/use-refresh-state.ts` | Bridges SwiftUI's promise-driven `refreshable` and Compose's controlled `PullToRefreshBox` into one async `onRefresh`. |
 
 ## Component shape
@@ -158,7 +157,9 @@ animation kara drives (`Collapsible`'s turn, `Stepper`'s `numericText`) reads th
 controls play none, so on Android `Switch` plays `toggleOn`/`toggleOff`, a stepped `Slider` ticks at every stop,
 `SegmentedControl` plays `selection` for a new segment and `ContextMenu` its long press. On iOS `UISwitch` has none,
 and iOS 26's slider and segmented control play their own — adding one would double it. Every component haptic goes
-through `haptics`, so `haptics.setEnabled(false)` silences it too; a `Pressable` with `haptic` prepares it on press-in.
+through `haptics` from `@hzblj/expo-rich-haptics` (a package of its own, in its own repo, and a dependency here), so
+`haptics.setEnabled(false)` silences it too; a `Pressable` with `haptic` prepares it on press-in. kara no longer
+exports `haptics`, `useHapticFeedback` or the `Haptic` type: an app imports them from that package.
 
 **Haptics are felt, not seen.** The simulator and the emulator play nothing; check a change on a device.
 
