@@ -22,7 +22,7 @@ export const GUIDES = {
     title: 'Components',
   },
   haptics: {
-    description: 'The platform’s own haptic feedback, named for what happened.',
+    description: 'The platform’s own haptic feedback, named for what happened, and patterns of your own.',
     href: '/docs/haptics',
     title: 'Haptics',
   },

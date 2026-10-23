@@ -210,7 +210,7 @@ export const installation: Guide = {
         <Table
           columns={['Import', 'What it holds']}
           rows={[
-            ['`@hzblj/kara-ui`', 'Every component, the `sx` engine, the theme and the haptics.'],
+            ['`@hzblj/kara-ui`', 'Every component, the `sx` engine and the theme.'],
             [
               '`@hzblj/kara-ui/router`',
               '`Tabs`, `navigationTheme`, `ZoomTransition`: everything that needs Expo Router.',

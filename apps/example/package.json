@@ -19,6 +19,7 @@
   "dependencies": {
     "@expo/ui": "~57.0.18",
     "@gorhom/bottom-sheet": "^5.2.14",
+    "@hzblj/expo-rich-haptics": "^0.1.0",
     "@hzblj/kara-ui": "workspace:*",
     "@lodev09/react-native-true-sheet": "3.11.18",
     "@react-native-community/datetimepicker": "9.1.0",

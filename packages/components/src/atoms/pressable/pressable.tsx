@@ -1,3 +1,4 @@
+import {haptics} from '@hzblj/expo-rich-haptics'
 import {
   type AnimatableKey,
   accessibilityProps,
@@ -13,7 +14,6 @@ import {useCallback, useMemo} from 'react'
 import {Platform, Pressable as RNPressable, type ViewStyle} from 'react-native'
 import Animated, {useAnimatedStyle, useSharedValue, withSpring, withTiming} from 'react-native-reanimated'
 
-import {haptics} from '../../haptics'
 import {splitForRipple} from '../../ripple-clip'
 import type {PressableComponent, PressableProps} from './pressable.types'
 

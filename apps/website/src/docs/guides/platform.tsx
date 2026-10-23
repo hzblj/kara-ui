@@ -88,17 +88,26 @@ export const icons: Guide = {
   id: 'icons',
 }
 
-const HAPTICS_USAGE = `import {haptics, useHapticFeedback} from '@hzblj/kara-ui'
+const HAPTICS_INSTALL = 'npx expo install @hzblj/expo-rich-haptics'
+
+const HAPTICS_USAGE = `import {haptics, useHapticFeedback} from '@hzblj/expo-rich-haptics'
 
 haptics.success()                   // a name you know: one function per haptic
 haptics.play(haptic)                // a name that arrives as data
-haptics.light({intensity: 0.6})     // impacts scale on iOS
+haptics.light({intensity: 0.6})     // impacts scale
 haptics.prepare('selection')        // iOS: warm the Taptic Engine as a gesture begins
-haptics.setEnabled(userPreference)  // silences every kara haptic, the components' own too
+haptics.setEnabled(userPreference)  // silences every haptic, kara's components' own too
 
 // Plays on every change of a value, never on mount.
 useHapticFeedback(selectedIndex, 'selection')
 useHapticFeedback(count, (previous, next) => (next > previous ? 'tick' : false))`
+
+const HAPTICS_PATTERN = `const heartbeat: HapticPattern = [
+  {primitive: 'thud'},
+  {at: 140, intensity: 0.6, primitive: 'thud'},
+]
+
+haptics.play(heartbeat)`
 
 export const haptics: Guide = {
   Content: () => (
@@ -106,12 +115,18 @@ export const haptics: Guide = {
       <Hero id="haptics" kicker="Core concepts" title="Haptics">
         <P>
           {
-            'The platform’s own feedback, named for what happened: UIKit’s feedback generators on iOS, the system’s haptic feedback constants on Android, never a raw vibration. Both follow the user’s system setting, and every call is synchronous.'
+            'kara plays its haptics through [@hzblj/expo-rich-haptics](https://github.com/hzblj/expo-rich-haptics), a package of its own that any Expo app can use. Names play the platform’s own feedback: UIKit’s feedback generators on iOS, the system’s haptic feedback constants on Android. Patterns of your own play Android’s haptic primitives, which iOS builds with Core Haptics. Never a raw vibration, and every call is synchronous.'
           }
         </P>
       </Hero>
 
       <Section id="usage" title="Usage">
+        <P>
+          {
+            'kara depends on the package, so its components play haptics with nothing to set up. To play them yourself, add it to the app, so your calls and kara’s share one `setEnabled`.'
+          }
+        </P>
+        <CodeBlock code={HAPTICS_INSTALL} language="bash" />
         <CodeBlock code={HAPTICS_USAGE} language="ts" />
         <Callout>
           {'Haptics are felt, not seen: the simulator and the emulator play nothing. Check them on a device.'}
@@ -125,22 +140,33 @@ export const haptics: Guide = {
             ['`selection`', 'A choice changed: a segment, a chip, a picker row.'],
             ['`tick`', 'One step of a continuous gesture: a slider detent, a scrubbed value.'],
             ['`toggleOn`, `toggleOff`', 'A switch flipped.'],
-            [
-              '`success`, `warning`, `error`',
-              'How a task ended. Android has no warning of its own and plays a rejection.',
-            ],
+            ['`success`, `warning`, `error`', 'How a task ended.'],
             ['`longPress`, `dragStart`', 'A long press was recognised; an item lifted to be dragged.'],
             ['`thresholdActivate`, `thresholdDeactivate`', 'A gesture crossed its commit point, or went back over it.'],
             ['`keyPress`', 'A key of the app’s own keypad.'],
             [
               '`soft`, `light`, `medium`, `rigid`, `heavy`',
-              'A collision none of the names above describes. `intensity` scales them on iOS.',
+              'A collision none of the names above describes. `intensity` scales them.',
             ],
           ]}
         />
         <P>
           {
             'On Android the names that came with Android 14 fall back to the nearest older feedback, so every name plays on every version.'
+          }
+        </P>
+      </Section>
+
+      <Section id="patterns" title="Patterns">
+        <P>
+          {
+            'A pattern is a list of events on one timeline: a primitive (`click`, `tick`, `lowTick`, `thud`, `spin`, `quickRise`, `slowRise`, `quickFall`), when it starts in milliseconds and how strong it is. Each Android device plays the primitives as its manufacturer tuned them; iOS builds the same ones from Core Haptics events.'
+          }
+        </P>
+        <CodeBlock code={HAPTICS_PATTERN} language="ts" />
+        <P>
+          {
+            'The [package’s README](https://github.com/hzblj/expo-rich-haptics#readme) has every primitive, and what each platform plays where a device lacks one.'
           }
         </P>
       </Section>
@@ -158,6 +184,7 @@ export const haptics: Guide = {
     {id: 'haptics', label: 'Haptics'},
     {id: 'usage', label: 'Usage'},
     {id: 'names', label: 'Haptics'},
+    {id: 'patterns', label: 'Patterns'},
     {id: 'components', label: 'In the components'},
   ],
   id: 'haptics',

@@ -1,4 +1,4 @@
-import {HAPTICS} from '@hzblj/kara-native'
+import {HAPTICS} from '@hzblj/expo-rich-haptics'
 import type {Meta, StoryObj} from '@storybook/react-native'
 import {fn} from 'storybook/test'
 
