@@ -37,8 +37,19 @@ import {
   unredacted,
   zIndex as zIndexModifier,
 } from '@expo/ui/swift-ui/modifiers'
-import {opacity, radii, resolvePaletteColor, resolveShadow, type Theme, zIndex} from '@hzblj/kara-theme'
+import {
+  duration as durations,
+  opacity,
+  radii,
+  resolvePaletteColor,
+  resolveShadow,
+  springPhysics,
+  type Theme,
+  zIndex,
+} from '@hzblj/kara-theme'
 import type {ColorValue} from 'react-native'
+import type {SxAnimateConfig} from './motion.types'
+import {animatedValue, nativeAnimate} from './native-animate'
 import type {FrameAlignment, IosSx, Sx} from './sx.types'
 import {sxPadding} from './sx-padding'
 
@@ -303,7 +314,51 @@ const iosModifiers = (ios: IosSx | undefined, theme: Theme, box: BoxShape): Modi
   return modifiers
 }
 
-export const sxToModifiers = (sx: Sx, theme: Theme, alignment: FrameAlignment = 'topLeading'): ModifierConfig[] => {
+/**
+ * `animate` as a SwiftUI animation. A spring token is `.spring(response:dampingFraction:)`, the same physics as
+ * Reanimated's; `smoothOut` is `.smooth(duration:)`, the no-bounce spring SwiftUI reaches for, which starts as fast and
+ * settles as long; the other curves are SwiftUI's own timings, since `@expo/ui` takes no bézier.
+ */
+const swiftAnimation = (config: SxAnimateConfig) => {
+  const seconds = durations[config.duration ?? 'fast'] / 1000
+  let curve: ReturnType<typeof Animation.smooth>
+
+  if (config.spring) {
+    const {dampingRatio, response} = springPhysics(config.spring)
+    curve = Animation.spring({dampingFraction: dampingRatio, response})
+  } else if (config.easing === 'inOut') {
+    curve = Animation.easeInOut({duration: seconds})
+  } else if (config.easing === 'out') {
+    curve = Animation.easeOut({duration: seconds})
+  } else if (config.easing === 'linear') {
+    curve = Animation.linear({duration: seconds})
+  } else {
+    curve = Animation.smooth({duration: seconds})
+  }
+
+  return config.delay ? curve.delay(config.delay / 1000) : curve
+}
+
+/**
+ * `.animation(_:value:)` animates every change in the view whenever `value` changes, so the value is the covered keys
+ * folded into a number: a change of one of them animates, a change of anything else alone does not.
+ */
+const animateModifier = (sx: Sx, reduced: boolean): ModifierConfig | undefined => {
+  const native = nativeAnimate(sx, reduced)
+
+  if (!native || native.keys.size === 0) {
+    return undefined
+  }
+
+  return animation(swiftAnimation(native.config), animatedValue(sx, native.keys))
+}
+
+export const sxToModifiers = (
+  sx: Sx,
+  theme: Theme,
+  alignment: FrameAlignment = 'topLeading',
+  reduced = false
+): ModifierConfig[] => {
   const modifiers: ModifierConfig[] = []
   const boxPadding = sxPadding(sx)
   const box = boxShape(sx)
@@ -330,6 +385,13 @@ export const sxToModifiers = (sx: Sx, theme: Theme, alignment: FrameAlignment = 
   modifiers.push(...shadowModifiers(sx, theme, box))
   modifiers.push(...effectModifiers(sx))
   modifiers.push(...iosModifiers(sx.ios, theme, box))
+
+  // Last, so it covers everything before it: the frame, the background, the strokes and the effects.
+  const animated = animateModifier(sx, reduced)
+
+  if (animated) {
+    modifiers.push(animated)
+  }
 
   return modifiers
 }

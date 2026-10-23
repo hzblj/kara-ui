@@ -26,6 +26,11 @@ public class KaraUIModule: Module {
       }
     }
 
+    // Synchronous: a transition asks while it builds its style, once per name and appearance (cached in JS).
+    Function("resolveSystemColor") { (names: [String], dark: Bool) -> String? in
+      SystemColors.hex(names, dark: dark)
+    }
+
     OnCreate {
       OpacityVisibilitySync.install()
       CounterBadgeModifier.register()

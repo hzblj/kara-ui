@@ -2,6 +2,8 @@ import type {ModifierConfig as AndroidModifier} from '@expo/ui/jetpack-compose/m
 import type {ModifierConfig as IosModifier} from '@expo/ui/swift-ui/modifiers'
 import type {ColorToken, OpacitySize, RadiiSize, ShadowName, SpaceSize, ZIndexSize} from '@hzblj/kara-theme'
 
+import type {SxAnimate} from './motion.types'
+
 /** A length React Native accepts: absolute points, or a percentage of the parent. */
 export type SxDimension = `${number}%` | number
 
@@ -222,6 +224,13 @@ export type AndroidSx = Bucket<{
  */
 export type Sx = SxCore & {
   android?: AndroidSx
+  /**
+   * Carries a change of the keys it covers over to the new value, natively: SwiftUI's `.animation(_:value:)` on iOS,
+   * animated `graphicsLayer` values, a `background` animation spec and `animateContentSize` on Android. Takes what a
+   * `Box`'s `animate` takes: `true` (`fast`, `smoothOut`), a duration or spring token, or the full config. With motion
+   * reduced only the colours and `opacity` animate.
+   */
+  animate?: SxAnimate
   ios?: IosSx
 }
 

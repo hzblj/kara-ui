@@ -1,7 +1,65 @@
+import type {MotionPreset} from '@hzblj/kara-sx'
 import type {Meta, StoryObj} from '@storybook/react-native'
+import {useState} from 'react'
 
+import {Pressable} from '../pressable'
 import {RnText} from '../rn-text'
 import {Box} from './box'
+
+const PRESETS: readonly MotionPreset[] = ['fade', 'fadeUp', 'fadeDown', 'scale']
+
+const Replay = ({label, onPress}: {label: string; onPress: () => void}) => (
+  <Pressable alignSelf="flex-start" bg="fill.tertiary" borderRadius="full" onPress={onPress} px="s16" py="s8">
+    <RnText variant="labelMedium">{label}</RnText>
+  </Pressable>
+)
+
+const EnteringDemo = () => {
+  const [round, setRound] = useState(0)
+
+  return (
+    <Box gap="s12">
+      <Box flexDirection="row" gap="s8">
+        {PRESETS.map(preset => (
+          <Box
+            align="center"
+            aspectRatio={1}
+            bg="fill.accent.primary"
+            borderRadius="medium"
+            entering={preset}
+            flex={1}
+            justify="center"
+            key={`${preset}-${round}`}
+          >
+            <RnText color="content.on.accent" variant="caption">
+              {preset}
+            </RnText>
+          </Box>
+        ))}
+      </Box>
+      <Replay label="Play again" onPress={() => setRound(value => value + 1)} />
+    </Box>
+  )
+}
+
+const AnimateDemo = () => {
+  const [on, setOn] = useState(false)
+
+  return (
+    <Box gap="s12">
+      <Box
+        animate
+        bg={on ? 'fill.accent.primary' : 'fill.tertiary'}
+        borderRadius="large"
+        h={64}
+        offsetX={on ? 48 : 0}
+        rotate={on ? 8 : 0}
+        w={64}
+      />
+      <Replay label="Toggle" onPress={() => setOn(value => !value)} />
+    </Box>
+  )
+}
 
 const meta = {
   component: Box,
@@ -9,7 +67,8 @@ const meta = {
     notes:
       'A React Native `View` wearing the `sx` props: the escape hatch for layout a native stack cannot ' +
       'express. It takes `ResponsiveViewSx`, the wider of the two surfaces: `flexDirection`, `gap`, margins, ' +
-      'flex and per-corner radii all work here and on none of the native atoms.',
+      'flex and per-corner radii all work here and on none of the native atoms. It takes the motion props too: ' +
+      '`entering`, `exiting`, `layout`, `animate` or an animated `style` make it an `Animated.View` by itself.',
   },
   title: 'Atoms/Box',
 } satisfies Meta<typeof Box>
@@ -89,3 +148,7 @@ export const RowWithGap: Story = {
     </Box>
   ),
 }
+
+export const Entering: Story = {render: () => <EnteringDemo />}
+
+export const Animate: Story = {render: () => <AnimateDemo />}

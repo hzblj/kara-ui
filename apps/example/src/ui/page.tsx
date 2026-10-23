@@ -25,12 +25,14 @@ type SectionProps = {
   /** A line under the content — what to notice, or where the platforms differ. */
   caption?: string
   children: ReactNode
+  /** Moves into place when a section above it changes height, its caption too: for a page whose demos resize. */
+  layout?: boolean
   title?: string
 }
 
 /** A titled block of a page, in the style of a grouped list's header and footer. */
-export const Section = ({caption, children, title}: SectionProps) => (
-  <Box gap="s8">
+export const Section = ({caption, children, layout, title}: SectionProps) => (
+  <Box gap="s8" layout={layout}>
     {title ? (
       <RnText color="content.secondary" variant="footnoteMedium">
         {title.toUpperCase()}
@@ -38,9 +40,11 @@ export const Section = ({caption, children, title}: SectionProps) => (
     ) : null}
     {children}
     {caption ? (
-      <RnText color="content.tertiary" variant="footnote">
-        {caption}
-      </RnText>
+      <Box layout={layout}>
+        <RnText color="content.tertiary" variant="footnote">
+          {caption}
+        </RnText>
+      </Box>
     ) : null}
   </Box>
 )

@@ -72,6 +72,7 @@
     {
       "includes": [
         "packages/components/src/host-context.tsx",
+        "packages/sx/src/animated-twin.ts",
         "packages/components/src/platform-support.ts",
         "scripts/**",
         "packages/expo-plugin/src/cli.ts",

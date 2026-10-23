@@ -7,11 +7,13 @@ import {
   Island,
   List,
   ListItem,
+  Pressable,
   RnScrollView,
   RnText,
   RnView,
   ScrollEdgeContainer,
   Spacer,
+  Stagger,
   Switch,
   Text,
   TextField,
@@ -23,7 +25,7 @@ import {Platform} from 'react-native'
 
 import {Section} from '../../ui'
 import type {CatalogEntry} from '../catalog.types'
-import {KARA_MODULE, NATIVE} from './tags'
+import {KARA_MODULE, NATIVE, REACT_NATIVE} from './tags'
 
 const StacksDemo = () => (
   <>
@@ -173,6 +175,58 @@ const ScrollEdgeContainerDemo = () => (
   </Section>
 )
 
+const ORDER_LINES = ['Linen shirt', 'Canvas tote', 'Wool socks, 2 pairs', 'Leather belt']
+
+const MORE_LINES = ['Gift wrap', 'Card with a message', 'Spare laces']
+
+const StaggerDemo = () => {
+  const [round, setRound] = useState(0)
+  const [more, setMore] = useState(false)
+  const lines = more ? [...ORDER_LINES, ...MORE_LINES] : ORDER_LINES
+
+  return (
+    <>
+      <Section
+        caption="Each line arrives a step after the one above it. The three added together take turns among themselves."
+        title="Your order"
+      >
+        <Stagger gap="s8" key={round} layout>
+          {lines.map(line => (
+            <Box bg="surface.primary" borderRadius="medium" key={line} px="s16" py="s12">
+              <RnText variant="body">{line}</RnText>
+            </Box>
+          ))}
+        </Stagger>
+        <Box flexDirection="row" gap="s8">
+          <Pressable
+            bg="fill.tertiary"
+            borderRadius="full"
+            onPress={() => setRound(value => value + 1)}
+            px="s16"
+            py="s8"
+          >
+            <RnText variant="labelMedium">Play again</RnText>
+          </Pressable>
+          <Pressable bg="fill.tertiary" borderRadius="full" onPress={() => setMore(value => !value)} px="s16" py="s8">
+            <RnText variant="labelMedium">{more ? 'Fewer' : 'Add three'}</RnText>
+          </Pressable>
+        </Box>
+      </Section>
+      <Section caption="Any preset, slower steps, or the last child first." title="Your own timing">
+        <Stagger entering="scale" from="end" gap="s8" interval="micro" key={round} row>
+          {['S', 'M', 'L', 'XL'].map(size => (
+            <Box bg="fill.accent.base" borderRadius="medium" center key={size} size={48}>
+              <RnText color="content.accent" variant="labelMedium">
+                {size}
+              </RnText>
+            </Box>
+          ))}
+        </Stagger>
+      </Section>
+    </>
+  )
+}
+
 export const LAYOUT: CatalogEntry[] = [
   {
     code: '<VStack spacing="s8">\n  <Text>Order #1024</Text>\n  <Text>Shipped</Text>\n</VStack>',
@@ -221,5 +275,13 @@ export const LAYOUT: CatalogEntry[] = [
     name: 'ScrollEdgeContainer',
     summary: 'Bars over a scroll view, with the iOS 26 scroll edge effect under them.',
     tags: KARA_MODULE,
+  },
+  {
+    code: '<Stagger gap="s8">\n  {lines.map(line => <OrderLine key={line.id} line={line} />)}\n</Stagger>',
+    Demo: StaggerDemo,
+    id: 'stagger',
+    name: 'Stagger',
+    summary: 'Children that arrive one after another.',
+    tags: REACT_NATIVE,
   },
 ]

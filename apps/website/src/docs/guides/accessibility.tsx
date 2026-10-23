@@ -15,16 +15,9 @@ const PROPS_USAGE = `<HStack accessibilityHint="open the order" onPress={openOrd
 <Text accessibilityRole="header" variant="title2">Orders</Text>
 <Icon name="info" /> {/* no label: decorative, hidden from both readers */}`
 
-const MOTION_USAGE = `import {duration, easing, useReducedMotion} from '@hzblj/kara-ui'
+const MOTION_USAGE = `import {timing, useReducedMotion} from '@hzblj/kara-ui'
 import {useEffect} from 'react'
-import {Easing, ReduceMotion, useSharedValue, withTiming} from 'react-native-reanimated'
-
-// Arriving: \`fast\` on \`smoothOut\`.
-const POP = {
-  duration: duration.fast,
-  easing: Easing.bezier(...easing.smoothOut),
-  reduceMotion: ReduceMotion.Never, // honoured below already
-}
+import {useSharedValue, withTiming} from 'react-native-reanimated'
 
 const Badge = ({count}: {count: number}) => {
   const reduced = useReducedMotion()
@@ -36,7 +29,8 @@ const Badge = ({count}: {count: number}) => {
     }
 
     scale.value = 0.8
-    scale.value = withTiming(1, POP)
+    // Arriving: \`fast\` on \`smoothOut\`, with Reanimated's own check off: honoured above already
+    scale.value = withTiming(1, timing('fast'))
   }, [count, reduced, scale])
   // ...
 }`
@@ -115,6 +109,8 @@ export const accessibility: Guide = {
         <Table
           columns={['Component', 'Motion', 'With motion reduced']}
           rows={[
+            ['`entering`, `exiting`, `Stagger`', 'the motion preset', 'every preset fades'],
+            ['`animate`', 'colours, opacity and the transform', 'only the colours and the opacity'],
             ['`Pressable`', 'eases down to `pressedScale`', 'dims to `pressedOpacity` instead'],
             ['`Snackbar`', '`slide` or `scale` in and out', 'fades'],
             ['`Skeleton`', 'pulses', 'holds still'],
@@ -132,7 +128,7 @@ export const accessibility: Guide = {
       <Section id="your-motion" title="Your own animations">
         <P>
           {
-            '`useReducedMotion()` says whether motion is reduced, by the device or by the provider. Time an animation with the [duration and easing tokens](/docs/tokens#durations), picked by what the motion does: `fast` and `smoothOut` for something arriving, `quick` for it leaving. Pass `ReduceMotion.Never` once you have honoured the preference yourself, because Reanimated reads the setting only at launch and never hears of the provider’s.'
+            'The [motion props](/docs/motion) honour the setting by themselves. For an animation of your own, `useReducedMotion()` says whether motion is reduced, by the device or by the provider. Time it with the [duration and easing tokens](/docs/tokens#durations), picked by what the motion does: `fast` and `smoothOut` for something arriving, `quick` for it leaving. `timing(size, curve)` is that as a `withTiming` config, with Reanimated’s own check off (`ReduceMotion.Never`): Reanimated reads the setting only at launch and never hears of the provider’s, so honour it yourself first.'
           }
         </P>
         <CodeBlock code={MOTION_USAGE} language="tsx" />

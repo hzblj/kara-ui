@@ -36,6 +36,8 @@ export type Tokens = {
   opacity: [string, number][]
   radii: [string, number][]
   spacing: [string, number][]
+  /** Each spring's perceptual duration (ms) and bounce. */
+  springs: [string, {bounce: number; duration: number}][]
   textStyles: TextStyleDoc[]
 }
 
@@ -155,6 +157,7 @@ const build = (): Tokens => {
   const {opacity} = constants('primitives/opacity.ts')
   const {duration} = constants('primitives/duration.ts')
   const {easing} = constants('primitives/easing.ts')
+  const {springs} = constants('primitives/spring.ts')
   const {breakpoints} = constants('primitives/breakpoints.ts')
   const {textStyles} = constants('primitives/typography.ts')
   const colors = Object.entries(palette as Record<string, Value>)
@@ -169,6 +172,9 @@ const build = (): Tokens => {
     opacity: entries(opacity),
     radii: entries(radii).sort((first, second) => first[1] - second[1]),
     spacing: entries(spacing),
+    springs: (Object.entries(springs as Record<string, {bounce: number; duration: number}>) as Tokens['springs']).sort(
+      (first, second) => first[1].duration - second[1].duration
+    ),
     textStyles: Object.entries(textStyles as Record<string, Omit<TextStyleDoc, 'name'>>)
       .map(([name, style]) => ({...style, name}))
       .sort((first, second) => second.fontSize - first.fontSize || first.name.localeCompare(second.name)),

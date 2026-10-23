@@ -30,6 +30,7 @@ type ViewOnlyKey = Exclude<keyof ViewSx, keyof StyleSx>
 
 const VIEW_ONLY_KEY_RECORD = {
   ...CORNER_KEY_RECORD,
+  absolute: true,
   align: true,
   alignContent: true,
   alignSelf: true,
@@ -41,8 +42,10 @@ const VIEW_ONLY_KEY_RECORD = {
   borderStyle: true,
   borderTopWidth: true,
   bottom: true,
+  center: true,
   columnGap: true,
   display: true,
+  fill: true,
   flex: true,
   flexDirection: true,
   gap: true,
@@ -62,8 +65,10 @@ const VIEW_ONLY_KEY_RECORD = {
   overflow: true,
   position: true,
   right: true,
+  row: true,
   rowGap: true,
   shrink: true,
+  size: true,
   top: true,
   wrap: true,
 } as const satisfies Record<ViewOnlyKey, true>
@@ -86,13 +91,23 @@ const space = (token: SpaceKey | undefined) => (token === undefined ? undefined 
 
 const radius = (token: RadiiToken | undefined) => (token === undefined ? undefined : radii[token])
 
+type StyleTarget = Record<string, unknown>
+
 /**
- * Left to `sxToStyle`'s single `borderRadius` unless a corner or edge prop is present —
- * emitting per-corner keys unconditionally would shadow it with `undefined`.
+ * Writes a value only when there is one. A resolved style carries the keys a call site set and no others: written as
+ * `undefined`, the forty-odd keys a `Box` could set would each be walked by React Native on every mount (a list mounts
+ * many), and could shadow a key an earlier step had written.
  */
-const cornerRadiiStyle = (sx: ViewSx): ViewStyle => {
+const put = (style: StyleTarget, key: string, value: unknown) => {
+  if (value !== undefined) {
+    style[key] = value
+  }
+}
+
+/** Left to `sxToStyle`'s single `borderRadius` unless a corner or edge prop is present. */
+const putCornerRadii = (style: StyleTarget, sx: ViewSx) => {
   if (!CORNER_KEYS.some(key => sx[key] !== undefined)) {
-    return {}
+    return
   }
 
   const all = radius(sx.borderRadius)
@@ -101,79 +116,128 @@ const cornerRadiiStyle = (sx: ViewSx): ViewStyle => {
   const right = radius(sx.borderRightRadius)
   const top = radius(sx.borderTopRadius)
 
-  return {
-    borderBottomLeftRadius: radius(sx.borderBottomLeftRadius) ?? bottom ?? left ?? all,
-    borderBottomRightRadius: radius(sx.borderBottomRightRadius) ?? bottom ?? right ?? all,
-    borderTopLeftRadius: radius(sx.borderTopLeftRadius) ?? top ?? left ?? all,
-    borderTopRightRadius: radius(sx.borderTopRightRadius) ?? top ?? right ?? all,
-  }
+  put(style, 'borderBottomLeftRadius', radius(sx.borderBottomLeftRadius) ?? bottom ?? left ?? all)
+  put(style, 'borderBottomRightRadius', radius(sx.borderBottomRightRadius) ?? bottom ?? right ?? all)
+  put(style, 'borderTopLeftRadius', radius(sx.borderTopLeftRadius) ?? top ?? left ?? all)
+  put(style, 'borderTopRightRadius', radius(sx.borderTopRightRadius) ?? top ?? right ?? all)
 }
 
-const marginStyle = (sx: ViewSx): ViewStyle => {
+const putMargins = (style: StyleTarget, sx: ViewSx) => {
   const all = space(sx.m)
   const x = space(sx.mx)
   const y = space(sx.my)
 
-  return {
-    marginBottom: space(sx.mb) ?? y ?? all,
-    marginLeft: space(sx.ml) ?? x ?? all,
-    marginRight: space(sx.mr) ?? x ?? all,
-    marginTop: space(sx.mt) ?? y ?? all,
+  put(style, 'marginBottom', space(sx.mb) ?? y ?? all)
+  put(style, 'marginLeft', space(sx.ml) ?? x ?? all)
+  put(style, 'marginRight', space(sx.mr) ?? x ?? all)
+  put(style, 'marginTop', space(sx.mt) ?? y ?? all)
+}
+
+type MarginKey = 'm' | 'mb' | 'ml' | 'mr' | 'mt' | 'mx' | 'my'
+
+/** The shorthands, which write several style properties at once and give way to the keys they stand in for. */
+type ShorthandKey = 'absolute' | 'center' | 'fill' | 'row' | 'size'
+
+/**
+ * The view-only keys that map one to one onto a style property. A `Record` held to every view-only key but the corners
+ * and the margins (which cascade), so a key added to `ViewSx` and forgotten here refuses to compile rather than
+ * resolve to nothing. `minH`/`minW` and `zIndex` are `sxToStyle`'s.
+ */
+const DIRECT = {
+  align: 'alignItems',
+  alignContent: 'alignContent',
+  alignSelf: 'alignSelf',
+  aspectRatio: 'aspectRatio',
+  basis: 'flexBasis',
+  borderBottomWidth: 'borderBottomWidth',
+  borderLeftWidth: 'borderLeftWidth',
+  borderRightWidth: 'borderRightWidth',
+  borderStyle: 'borderStyle',
+  borderTopWidth: 'borderTopWidth',
+  bottom: 'bottom',
+  columnGap: 'columnGap',
+  display: 'display',
+  flex: 'flex',
+  flexDirection: 'flexDirection',
+  gap: 'gap',
+  grow: 'flexGrow',
+  inset: 'inset',
+  justify: 'justifyContent',
+  left: 'left',
+  maxH: 'maxHeight',
+  maxW: 'maxWidth',
+  overflow: 'overflow',
+  position: 'position',
+  right: 'right',
+  rowGap: 'rowGap',
+  shrink: 'flexShrink',
+  top: 'top',
+  wrap: 'flexWrap',
+} as const satisfies Record<Exclude<ViewOnlyKey, keyof ViewRadiiSx | MarginKey | ShorthandKey>, keyof ViewStyle>
+
+const DIRECT_ENTRIES = Object.entries(DIRECT) as [keyof typeof DIRECT, string][]
+
+/** The gaps take spacing tokens; every other direct key is the style value itself. */
+const SPACED = new Set<string>(['columnGap', 'gap', 'rowGap'])
+
+/** `grow` and `shrink` read `true` as 1 and `false` as 0; `wrap` reads them as `wrap` and `nowrap`. */
+const directValue = (key: keyof typeof DIRECT, value: unknown): unknown => {
+  if (typeof value !== 'boolean') {
+    return SPACED.has(key) ? space(value as SpaceKey) : value
+  }
+
+  if (key === 'wrap') {
+    return value ? 'wrap' : 'nowrap'
+  }
+
+  return value ? 1 : 0
+}
+
+/** Written before the direct keys, so any key a shorthand stands in for overrides it. */
+const putShorthands = (style: StyleTarget, sx: ViewSx) => {
+  if (sx.row) {
+    style.flexDirection = 'row'
+  }
+
+  if (sx.center) {
+    style.alignItems = 'center'
+    style.justifyContent = 'center'
+  }
+
+  if (sx.fill) {
+    style.flex = 1
+  }
+
+  if (sx.absolute) {
+    style.position = 'absolute'
+    style.inset = 0
+  }
+
+  if (sx.size !== undefined) {
+    // `w` and `h` (and `wide` and `tall`) were written by `sxToStyle` already and win.
+    style.width ??= sx.size
+    style.height ??= sx.size
   }
 }
 
-const borderStyle = (sx: ViewSx): ViewStyle => ({
-  borderBottomWidth: sx.borderBottomWidth,
-  borderLeftWidth: sx.borderLeftWidth,
-  borderRightWidth: sx.borderRightWidth,
-  borderStyle: sx.borderStyle,
-  borderTopWidth: sx.borderTopWidth,
-})
+export const viewSxToStyle = (sx: ViewSx, theme: Theme): ViewStyle => {
+  const style = sxToStyle(sx, theme) as StyleTarget
 
-/** `minH`/`minW` are `sxToStyle`'s, and naming them here would shadow it with `undefined`. */
-const sizingStyle = (sx: ViewSx): ViewStyle => ({
-  aspectRatio: sx.aspectRatio,
-  maxHeight: sx.maxH,
-  maxWidth: sx.maxW,
-})
+  putShorthands(style, sx)
 
-const flexStyle = (sx: ViewSx): ViewStyle => ({
-  alignContent: sx.alignContent,
-  alignItems: sx.align,
-  alignSelf: sx.alignSelf,
-  columnGap: space(sx.columnGap),
-  flex: sx.flex,
-  flexBasis: sx.basis,
-  flexDirection: sx.flexDirection,
-  flexGrow: sx.grow,
-  flexShrink: sx.shrink,
-  flexWrap: sx.wrap,
-  gap: space(sx.gap),
-  justifyContent: sx.justify,
-  rowGap: space(sx.rowGap),
-})
+  for (const [key, property] of DIRECT_ENTRIES) {
+    const value = sx[key]
 
-/** `zIndex` is `sxToStyle`'s too, for the same reason as `minH`/`minW` above. */
-const layoutStyle = (sx: ViewSx): ViewStyle => ({
-  bottom: sx.bottom,
-  display: sx.display,
-  inset: sx.inset,
-  left: sx.left,
-  overflow: sx.overflow,
-  position: sx.position,
-  right: sx.right,
-  top: sx.top,
-})
+    if (value !== undefined) {
+      style[property] = directValue(key, value)
+    }
+  }
 
-export const viewSxToStyle = (sx: ViewSx, theme: Theme): ViewStyle => ({
-  ...sxToStyle(sx, theme),
-  ...cornerRadiiStyle(sx),
-  ...marginStyle(sx),
-  ...borderStyle(sx),
-  ...sizingStyle(sx),
-  ...flexStyle(sx),
-  ...layoutStyle(sx),
-})
+  putCornerRadii(style, sx)
+  putMargins(style, sx)
+
+  return style as ViewStyle
+}
 
 /**
  * `split` hands back a `ResponsiveViewSx`, because that is what a component's props hold — `resolve`

@@ -1,11 +1,14 @@
 import {
+  type AnimationSpec,
   align,
   alpha,
   animateContentSize,
+  animated,
   type BuiltinShape,
   background,
   blur,
   clip,
+  spring as composeSpring,
   defaultMinSize,
   dropShadow,
   fillMaxHeight,
@@ -20,14 +23,27 @@ import {
   padding,
   rotate,
   Shapes,
+  tween,
   weight,
   width as widthModifier,
   wrapContentHeight,
   wrapContentWidth,
   zIndex as zIndexModifier,
 } from '@expo/ui/jetpack-compose/modifiers'
-import {opacity, radii, resolvePaletteColor, resolveShadow, type Theme, zIndex} from '@hzblj/kara-theme'
+import {
+  duration as durations,
+  type EasingName,
+  opacity,
+  radii,
+  resolvePaletteColor,
+  resolveShadow,
+  springPhysics,
+  type Theme,
+  zIndex,
+} from '@hzblj/kara-theme'
 import type {ColorValue} from 'react-native'
+import type {AnimatableKey, SxAnimateConfig} from './motion.types'
+import {type NativeAnimate, nativeAnimate} from './native-animate'
 import type {AndroidSx, FrameAlignment, Sx} from './sx.types'
 import {sxPadding} from './sx-padding'
 
@@ -78,6 +94,72 @@ const effectModifiers = (sx: Sx): ModifierConfig[] => {
 
   if (sx.opacity) {
     modifiers.push(alpha(opacity[sx.opacity]))
+  }
+
+  if (sx.zIndex) {
+    modifiers.push(zIndexModifier(zIndex[sx.zIndex]))
+  }
+
+  return modifiers
+}
+
+/** Compose's own curves: the nearest to each token, since a `tween` here takes no bézier of its own. */
+const TWEEN_EASING = {
+  inOut: 'fastOutSlowIn',
+  linear: 'linear',
+  out: 'linearOutSlowIn',
+  smoothOut: 'linearOutSlowIn',
+} as const satisfies Record<EasingName, string>
+
+/**
+ * `animate` as a Compose animation spec. A spring token is `spring(dampingRatio, stiffness)`, the same physics as on
+ * iOS; `smoothOut` is a no-bounce spring over its duration, as SwiftUI's `.smooth` is; the other curves are tweens.
+ * A spring has no delay in Compose, so `delay` applies to the tweens only.
+ */
+const composeSpec = (config: SxAnimateConfig): AnimationSpec => {
+  if (config.spring) {
+    const {dampingRatio, stiffness} = springPhysics(config.spring)
+
+    return composeSpring({dampingRatio, stiffness})
+  }
+
+  const milliseconds = durations[config.duration ?? 'fast']
+  const easing = config.easing ?? 'smoothOut'
+
+  if (easing === 'smoothOut') {
+    const omega = (2 * Math.PI * 1000) / milliseconds
+
+    return composeSpring({dampingRatio: 1, stiffness: omega * omega})
+  }
+
+  return tween({delayMillis: config.delay, durationMillis: milliseconds, easing: TWEEN_EASING[easing]})
+}
+
+const SIZE_KEYS = new Set<AnimatableKey>(['h', 'maxH', 'maxW', 'minH', 'minW', 'w'])
+
+/** A covered value animates to where it is going; one `animate` does not cover is set as it is. */
+const toward = (value: number, key: AnimatableKey, native: NativeAnimate, spec: AnimationSpec) =>
+  native.keys.has(key) ? animated(value, spec) : value
+
+/**
+ * The transforms and the opacity of an animated box, in one `graphicsLayer` whose values Compose animates itself. It
+ * stands in for `offset`, `rotate`, `alpha` and the scale layer of a box at rest, at the same place in the chain.
+ */
+const animatedEffectModifiers = (sx: Sx, native: NativeAnimate, spec: AnimationSpec): ModifierConfig[] => {
+  const scale = typeof sx.scale === 'number' ? {x: sx.scale, y: sx.scale} : (sx.scale ?? {})
+  const modifiers: ModifierConfig[] = [
+    graphicsLayer({
+      alpha: toward(sx.opacity ? opacity[sx.opacity] : 1, 'opacity', native, spec),
+      rotationZ: toward(sx.rotate ?? 0, 'rotate', native, spec),
+      scaleX: toward(scale.x ?? 1, 'scale', native, spec),
+      scaleY: toward(scale.y ?? 1, 'scale', native, spec),
+      translationX: toward(sx.offsetX ?? 0, 'offsetX', native, spec),
+      translationY: toward(sx.offsetY ?? 0, 'offsetY', native, spec),
+    }),
+  ]
+
+  if (sx.blur !== undefined) {
+    modifiers.push(blur(sx.blur))
   }
 
   if (sx.zIndex) {
@@ -145,12 +227,25 @@ const androidModifiers = (android: AndroidSx | undefined): ModifierConfig[] => {
   return modifiers
 }
 
-export const sxToModifiers = (sx: Sx, theme: Theme, _alignment: FrameAlignment = 'topLeading'): ModifierConfig[] => {
+export const sxToModifiers = (
+  sx: Sx,
+  theme: Theme,
+  _alignment: FrameAlignment = 'topLeading',
+  reduced = false
+): ModifierConfig[] => {
   const modifiers: ModifierConfig[] = []
   const shape = shapeOf(sx)
   const shadow = sx.shadow ? resolveShadow(theme, sx.shadow) : undefined
   const geometry = shadow?.geometry
   const shadowColors = shadow?.colors
+  const native = nativeAnimate(sx, reduced)
+  const spec = native ? composeSpec(native.config) : undefined
+
+  // Before the size modifiers it animates: placed after them, it would only see the size they already settled on.
+  if (native && spec && [...native.keys].some(key => SIZE_KEYS.has(key))) {
+    const physics = spec.$type === 'spring' ? spec : {dampingRatio: 1, stiffness: undefined}
+    modifiers.push(animateContentSize(physics.dampingRatio, physics.stiffness))
+  }
 
   if (sx.wide) {
     modifiers.push(fillMaxWidth())
@@ -189,7 +284,8 @@ export const sxToModifiers = (sx: Sx, theme: Theme, _alignment: FrameAlignment =
   }
 
   if (sx.bg) {
-    modifiers.push(background(theme.color(sx.bg)))
+    const animatesBg = native?.keys.has('bg') && spec
+    modifiers.push(background(theme.color(sx.bg), animatesBg ? {animationSpec: spec} : undefined))
   }
 
   if (geometry?.inset && shadowColors?.inset) {
@@ -217,7 +313,7 @@ export const sxToModifiers = (sx: Sx, theme: Theme, _alignment: FrameAlignment =
     )
   }
 
-  modifiers.push(...effectModifiers(sx))
+  modifiers.push(...(native && spec ? animatedEffectModifiers(sx, native, spec) : effectModifiers(sx)))
   modifiers.push(...androidModifiers(sx.android))
 
   return modifiers

@@ -51,8 +51,11 @@ const identity = (value: object): string => {
 
 const themeKeys = new WeakMap<Theme, string>()
 
-/** The theme's part of every key — worked out once per theme object, which the provider memoises, not per resolve. */
-const themeKey = (theme: Theme): string => {
+/**
+ * The theme's part of every key — worked out once per theme object, which the provider memoises, not per resolve.
+ * Exported for the modifier caches, which key the same way.
+ */
+export const themeKey = (theme: Theme): string => {
   const existing = themeKeys.get(theme)
 
   if (existing) {
@@ -96,6 +99,12 @@ export const createSxCache = <TProps extends Record<string, unknown>, TStyle, TI
       }
 
       const style = resolver(props, theme)
+
+      // Shared from here on: whatever wrote into it would restyle every view with the same `sx`.
+      if (__DEV__) {
+        Object.freeze(style)
+      }
+
       cache.set(key, style)
 
       return style

@@ -17,7 +17,7 @@ the value's business, and reading `content.accent` should not require knowing.
 
 | Path | What it is |
 | --- | --- |
-| `src/primitives/` | The scales: `colors`, `spacing` (`s0`…`s96`), `radii`, `shadows`, `opacity`, `zIndex`, `typography` (`textStyles`, `FontsConfig`, `resolveTypography`, `fontFace`), `duration` (transitions.dev's scale, named by what the motion does: `micro` 80 ms to `verySlow` 500 ms, plus `stagger` and `none`), `easing` (`smoothOut`, `inOut`, `out`, `linear` as bézier points), `breakpoints`, `color-source`. |
+| `src/primitives/` | The scales: `colors`, `spacing` (`s0`…`s96`), `radii`, `shadows`, `opacity`, `zIndex`, `typography` (`textStyles`, `FontsConfig`, `resolveTypography`, `fontFace`), `duration` (transitions.dev's scale, named by what the motion does: `micro` 80 ms to `verySlow` 500 ms, plus `stagger` and `none`), `easing` (`smoothOut`, `inOut`, `out`, `linear` as bézier points), `springs` (SwiftUI's set: `interactive`, `smooth`, `snappy`, `bouncy`, a perceptual duration and a bounce each; `springPhysics(name)` is the mass, stiffness and damping every platform runs), `breakpoints`, `color-source`. |
 | `src/primitives/color-source.ts` | The three kinds an entry can be: `native({ios?, android?, light?, dark?})`, `adaptive({light, dark, highContrast*})`, or a plain hex. Plus `MAX_CONTRAST_SURFACE` / `MAX_CONTRAST_CONTENT` and `defaultMaterialSeed`. |
 | `src/primitives/shadows.ts` | `shadowGeometry` as a nested scale; `ShadowName` is derived from it as a dotted path (`btn.accent`, `card`), and `ShadowTreeOf` gives the palette the same shape so the two cannot drift. |
 | `src/primitives/breakpoints.ts` | `BREAKPOINT_ORDER` (sm→xl) and `breakpointFor(width)`; `Breakpoint` derives from the array so the scale and the cascade order cannot drift. |
@@ -116,6 +116,11 @@ and the OS scales it.
 `MAX_DYNAMIC_TYPE_SIZE` caps growth on the SwiftUI hosts and `MAX_FONT_SCALE` — derived from it, not
 hand-picked — caps the React Native tier, so the two stop in the same place. Capping rather than opting out
 is Apple's guidance: a capped layout still answers the setting.
+
+**One spring is one curve everywhere.** `springPhysics` is the only place a spring token becomes physics, and every path
+reads it: Reanimated's `withSpring` and layout transitions, the CSS `linear()` an `animate` samples, SwiftUI's
+`.spring(response:dampingFraction:)` and Compose's `spring(dampingRatio, stiffness)`. Never hand Reanimated a perceptual
+`duration` for one: its own formula would draw a different curve from the other three.
 
 **Motion is picked by usage, and reduced by the user.** A component takes a duration by what the motion does
 (arriving `fast`, leaving `quick`, a touch `micro`), never by the number it used to have, and `smoothOut` unless it is a

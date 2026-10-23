@@ -159,6 +159,65 @@ const Curve = ({points: [x1 = 0, y1 = 0, x2 = 1, y2 = 1]}: {points: number[]}) =
   )
 }
 
+/**
+ * A spring's step response, drawn like `Curve`: the same physics the library runs (mass 1, stiffness from the response,
+ * damping from the bounce), over the time it takes to rest. A bounce shows as the line rising past the top and back.
+ */
+const SpringCurve = ({bounce, duration}: {bounce: number; duration: number}) => {
+  const W = 72
+  const H = 44
+  const omega = (2 * Math.PI * 1000) / duration
+  const zeta = 1 - bounce
+  const position = (t: number) => {
+    if (zeta >= 1) {
+      return 1 - Math.exp(-omega * t) * (1 + omega * t)
+    }
+
+    const damped = omega * Math.sqrt(1 - zeta * zeta)
+
+    return 1 - Math.exp(-zeta * omega * t) * (Math.cos(damped * t) + ((zeta * omega) / damped) * Math.sin(damped * t))
+  }
+  // Drawn over 1.5 times the perceptual duration, the span Reanimated gives a spring to rest in.
+  const span = (duration * 1.5) / 1000
+  const at = (x: number, y: number) => `${(x * W).toFixed(1)} ${((1 - y / 1.25) * H).toFixed(1)}`
+  const path = Array.from({length: 49}, (_, index) => {
+    const x = index / 48
+
+    return `${index === 0 ? 'M' : 'L'}${at(x, position(x * span))}`
+  }).join(' ')
+
+  return (
+    <svg aria-hidden="true" className="overflow-visible" height={H} viewBox={`0 0 ${W} ${H}`} width={W}>
+      <rect className="fill-none stroke-border-secondary" height={H} rx="4" width={W} />
+      <path className="stroke-content-quaternary" d={`M${at(0, 1)} L${at(1, 1)}`} />
+      <path className="fill-none stroke-fill-accent-primary" d={path} strokeLinecap="round" strokeWidth="2" />
+    </svg>
+  )
+}
+
+const Springs = ({entries}: {entries: [string, {bounce: number; duration: number}][]}) => (
+  <div className={s.wrap()}>
+    <table className={s.table()}>
+      <Head columns={['Token', 'Duration / bounce', '']} />
+      <tbody>
+        {entries.map(([name, spring]) => (
+          <tr key={name}>
+            <td className={s.cell()}>
+              <code className={s.code()}>{name}</code>
+            </td>
+            <td className={s.cell()}>
+              <span className={s.muted()}>{`${spring.duration} ms / ${spring.bounce}`}</span>
+            </td>
+            <td className={s.cell()}>
+              <SpringCurve {...spring} />
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+)
+
 const Easings = ({entries}: {entries: [string, number[]][]}) => (
   <div className={s.wrap()}>
     <table className={s.table()}>
@@ -223,7 +282,7 @@ const Typography = () => (
 
 export const tokens: Guide = {
   Content: () => {
-    const {breakpoints, durations, easings, opacity, radii, spacing} = readTokens()
+    const {breakpoints, durations, easings, opacity, radii, spacing, springs} = readTokens()
     const longest = Math.max(...durations.map(([, value]) => value))
 
     return (
@@ -311,6 +370,15 @@ export const tokens: Guide = {
           <Easings entries={easings} />
         </Section>
 
+        <Section id="springs" title="Springs">
+          <P>
+            {
+              'What a finger drives, and what should keep its speed when another change interrupts it, moves on a spring: SwiftUI’s set, each a perceptual duration and a bounce. `interactive` follows a finger, `smooth` settles content into place with no bounce, `snappy` is a quick, decided change with a touch of one, `bouncy` an emphasised moment. One token is the same curve everywhere: `spring(\'snappy\')` for `withSpring`, `animate="snappy"`, `layout="smooth"`, a preset’s `spring`, SwiftUI’s `.spring` and Compose’s `spring()`. See [Motion](/docs/motion).'
+            }
+          </P>
+          <Springs entries={springs} />
+        </Section>
+
         <Section id="breakpoints" title="Breakpoints">
           <P>{'For responsive layout values, mobile first. `base` is everything narrower than `sm`.'}</P>
           <Scale entries={breakpoints} unit=" pt" />
@@ -327,6 +395,7 @@ export const tokens: Guide = {
     {id: 'opacity', label: 'Opacity'},
     {id: 'durations', label: 'Durations'},
     {id: 'easing', label: 'Easing'},
+    {id: 'springs', label: 'Springs'},
     {id: 'breakpoints', label: 'Breakpoints'},
   ],
   id: 'tokens',

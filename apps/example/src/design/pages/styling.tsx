@@ -52,6 +52,31 @@ export const StylingPage = () => (
         </Box>
       </Box>
     </Section>
+    <Section
+      caption="The everyday layouts have a word of their own, and each gives way to the key it stands for."
+      title="Shorthands"
+    >
+      <Box gap="s8">
+        <Box gap="s8" row wrap>
+          {['row', 'wrap', 'gap="s8"'].map(label => (
+            <Box bg="fill.tertiary" borderRadius="full" key={label} px="s12" py="s6">
+              <RnText variant="footnote">{label}</RnText>
+            </Box>
+          ))}
+        </Box>
+        <Box bg="fill.quaternary" borderRadius="medium" h={96} overflow="hidden">
+          <Box absolute bg="fill.accent.base" m="s12" />
+          <Box center fill>
+            <Box bg="fill.accent.primary" borderRadius="full" center size={40}>
+              <RnText color="content.on.accent" variant="footnoteMedium">
+                40
+              </RnText>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+      <CodeBlock code={'<Box row wrap gap="s8" />\n<Box absolute />\n<Box center fill />\n<Box center size={40} />'} />
+    </Section>
     <Section caption="Layout props take a value per breakpoint, too." title="Responsive">
       <CodeBlock code={"<Box p={{base: 's16', md: 's32'}} />"} />
     </Section>

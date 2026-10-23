@@ -73,11 +73,23 @@ export const sxToStyle = (sx: StyleSx, theme: Theme): ViewStyle => {
   const style: ViewStyle = {...shadowStyle(sx, theme)}
   const padding = sxPadding(sx)
 
+  // Only the sides that resolved: a side written as `undefined` is a key React Native still walks on every mount.
   if (padding) {
-    style.paddingTop = padding.top
-    style.paddingBottom = padding.bottom
-    style.paddingLeft = padding.leading
-    style.paddingRight = padding.trailing
+    if (padding.top !== undefined) {
+      style.paddingTop = padding.top
+    }
+
+    if (padding.bottom !== undefined) {
+      style.paddingBottom = padding.bottom
+    }
+
+    if (padding.leading !== undefined) {
+      style.paddingLeft = padding.leading
+    }
+
+    if (padding.trailing !== undefined) {
+      style.paddingRight = padding.trailing
+    }
   }
 
   if (sx.wide) {
