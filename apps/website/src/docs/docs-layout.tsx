@@ -7,6 +7,9 @@ import {Wordmark} from '../ui/wordmark'
 import {DocsNav, SupportLinks} from './docs-nav'
 import {docsStyles} from './docs-styles'
 import {NAV} from './pages'
+import {SearchDialog} from './search/search-dialog'
+import {SEARCH_INDEX} from './search/search-index'
+import {SearchTrigger} from './search/search-trigger'
 
 const styles = docsStyles()
 
@@ -24,6 +27,7 @@ export const DocsLayout = ({children}: {children: ReactNode}) => (
     <header className={styles.mobileHeader()}>
       <Brand />
       <div className={styles.mobileHeaderActions()}>
+        <SearchTrigger variant="icon" />
         <ThemeToggle />
         <MobileNav>
           <DocsNav groups={NAV} label="Documentation menu" />
@@ -39,13 +43,19 @@ export const DocsLayout = ({children}: {children: ReactNode}) => (
     </div>
 
     <aside className={styles.sidebar()}>
+      {/* Held at the top while the navigation scrolls under it: the brand, and the search beneath. */}
       <div className={styles.sidebarTop()}>
-        <Brand />
+        <div className={styles.sidebarBrandRow()}>
+          <Brand />
+        </div>
+        <SearchTrigger />
       </div>
       <DocsNav groups={NAV} label="Documentation" />
       <SupportLinks />
     </aside>
 
     {children}
+
+    <SearchDialog entries={SEARCH_INDEX} />
   </div>
 )

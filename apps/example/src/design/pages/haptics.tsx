@@ -72,7 +72,7 @@ const Quantity = () => {
 export const HapticsPage = () => (
   <>
     <Section
-      caption="Tap to feel each one. Silent in the simulator and the emulator — haptics need a device."
+      caption="Tap to feel each one. Silent in the simulator and the emulator: haptics need a device."
       title="Choices and steps"
     >
       <Tiles names={['selection', 'tick']} />
@@ -101,7 +101,7 @@ export const HapticsPage = () => (
     >
       <Controls />
     </Section>
-    <Section caption="useHapticFeedback plays on every change of a value — up ticks, down is soft." title="On a change">
+    <Section caption="useHapticFeedback plays on every change of a value: up ticks, down is soft." title="On a change">
       <Quantity />
     </Section>
     <Section caption="The Haptics switch on Home is wired to setEnabled." title="In use">

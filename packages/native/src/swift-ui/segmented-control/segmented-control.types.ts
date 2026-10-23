@@ -16,7 +16,7 @@ export type SegmentedControlProps = {
   /** The tapped segment's `value`. The pill moves at once and goes back unless `selectedValue` follows. */
   onValueChange: (value: string) => void
   options: SegmentedControlOption[]
-  /** The selected pill's corner radius, in points — best effort, see the view. The system pill when unset. */
+  /** The selected pill's corner radius, in points (best effort; see the view). The system pill when unset. */
   pillCornerRadius?: number
   /** Controlled: the `value` of the selected option. */
   selectedValue: string

@@ -9,13 +9,13 @@ export type SheetDetent = 'auto' | number
 
 /**
  * `center` is iOS's own, `leading` Material's. `large` puts the title above the content in a large face, and once
- * that scrolls under the bar the bar's own title fades in — centred on iOS, leading on Android.
+ * that scrolls under the bar the bar's own title fades in (centred on iOS, leading on Android).
  */
 export type SheetTitleStyle = 'center' | 'large' | 'leading'
 
 /**
  * The sheet's header: a `NavigationBar` with the title and items, and anything else that should stay put above the
- * content (`children` — a segmented control, a search hint). On iOS 26 a scrollable sheet's content scrolls under it
+ * content (`children`: a segmented control, a search hint). On iOS 26 a scrollable sheet's content scrolls under it
  * with the system's scroll edge effect; elsewhere it sits above the content.
  */
 export type SheetHeaderProps = {
@@ -27,11 +27,11 @@ export type SheetHeaderProps = {
   leadingItems?: NavigationBarItem[]
   /** A search field in place of the title (iOS). */
   search?: NavigationBarSearch
-  /** The title — in the bar, or above the content with a `large` `titleStyle`. */
+  /** The title: in the bar, or above the content with a `large` `titleStyle`. */
   title?: string
   /** `center` by default. */
   titleStyle?: SheetTitleStyle
-  /** In screen order, toward the trailing edge — the close item, by convention. */
+  /** In screen order, toward the trailing edge: the close item, by convention. */
   trailingItems?: NavigationBarItem[]
 }
 
@@ -39,14 +39,14 @@ export type SheetHeaderProps = {
 export type SheetRef = {
   /** Dismisses it without calling `onDismiss`, which reports the user's dismissals only. */
   dismiss: () => Promise<void>
-  /** Presents at a detent — the first by default. */
+  /** Presents at a detent, the first by default. */
   present: (detentIndex?: number) => Promise<void>
   /** Moves to another detent. */
   resize: (detentIndex: number) => Promise<void>
 }
 
 /**
- * A native sheet — `UISheetPresentationController` on iOS, Material's bottom sheet on Android — with an optional
+ * A native sheet (`UISheetPresentationController` on iOS, Material's bottom sheet on Android) with an optional
  * native header (`<Sheet.Header>` as a direct child). The React Native tier: it needs no host, and must not sit inside
  * one; native atoms in its content go in an `Island`.
  */
@@ -55,7 +55,7 @@ export type SheetProps = {
   bg?: ColorToken
   /** The content. A `<Sheet.Header>` among the direct children becomes the native header instead. */
   children: ReactNode
-  /** Where the sheet can rest, smallest first. `['auto']` — fit the content — by default. */
+  /** Where the sheet can rest, smallest first. `['auto']` (fit the content) by default. */
   detents?: SheetDetent[]
   /** Dims what is behind. On by default. */
   dimmed?: boolean
@@ -67,9 +67,9 @@ export type SheetProps = {
   footer?: ReactElement
   /** The drag handle. On by default. */
   grabber?: boolean
-  /** The user dismissed it — `visible` going false does not call this. */
+  /** The user dismissed it; `visible` going false does not call this. */
   onDismiss: () => void
-  /** The sheet moved to another detent — its index in `detents`. */
+  /** The sheet moved to another detent: its index in `detents`. */
   onDetentChange?: (detentIndex: number) => void
   /** The sheet finished presenting. */
   onPresent?: () => void
@@ -77,7 +77,7 @@ export type SheetProps = {
   ref?: Ref<SheetRef>
   /**
    * The content is a scroll view (`<Sheet.ScrollView>`) the sheet drives: dragging past its top resizes the sheet,
-   * and a header scrolls with the iOS 26 edge effect. Off by default — set it with a scrolling body.
+   * and a header scrolls with the iOS 26 edge effect. Off by default; set it with a scrolling body.
    */
   scrollable?: boolean
   /** Test identifier, forwarded to the native sheet. */
@@ -92,7 +92,7 @@ export type SheetScrollHandler = (event: NativeSyntheticEvent<NativeScrollEvent>
 export type SheetScrollContextValue = {
   /** Render it first in the content. `null` unless the header's `titleStyle` is `large`. */
   largeTitle: ReactNode
-  /** Forward the scroll view's scroll events to it — it tracks the large title. Unset when there is none. */
+  /** Forward the scroll view's scroll events to it; it tracks the large title. Unset when there is none. */
   onScroll?: SheetScrollHandler
   /** The room an overlaid header takes, to add to the content's top padding. `0` where the header sits above it. */
   topInset: number
@@ -105,7 +105,7 @@ export type SheetScrollContextValue = {
 export type SheetScrollViewProps = Pick<ScrollViewProps, 'keyboardShouldPersistTaps'> & {
   /** The scrolling content, after the large title if there is one. */
   children: ReactNode
-  /** Styles the scrolling content — padding and gap belong here, as with `RnScrollView`. */
+  /** Styles the scrolling content: padding and gap belong here, as with `RnScrollView`. */
   content?: ResponsiveViewSx
   /** Called on every scroll event, after the sheet's own listener. */
   onScroll?: SheetScrollHandler

@@ -1,0 +1,16 @@
+# Holds each pressable in turn, top to bottom: the card springs down, the row dims, and the button answers the
+# platform's own way (a spring on iOS, the ripple on Android, which ripples under the other two as well). A swipe that
+# barely moves is a press held for its duration, which Maestro's long press does not let us choose. The rows sit at the
+# same heights on both platforms.
+appId: com.hzblj.karaui.example
+---
+- startRecording: ${VIDEO}
+- runFlow: {file: pause.yaml, env: {MS: 1200}}
+- takeScreenshot: ${STILL}
+- swipe: {start: '40%,41%', end: '41%,41%', duration: 900}
+- runFlow: {file: pause.yaml, env: {MS: 700}}
+- swipe: {start: '40%,51%', end: '41%,51%', duration: 900}
+- runFlow: {file: pause.yaml, env: {MS: 700}}
+- swipe: {start: '40%,60%', end: '41%,60%', duration: 900}
+- runFlow: {file: pause.yaml, env: {MS: 1300}}
+- stopRecording

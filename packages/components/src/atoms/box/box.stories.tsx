@@ -7,7 +7,7 @@ const meta = {
   component: Box,
   parameters: {
     notes:
-      'A React Native `View` wearing the `sx` props — the escape hatch for layout a native stack cannot ' +
+      'A React Native `View` wearing the `sx` props: the escape hatch for layout a native stack cannot ' +
       'express. It takes `ResponsiveViewSx`, the wider of the two surfaces: `flexDirection`, `gap`, margins, ' +
       'flex and per-corner radii all work here and on none of the native atoms.',
   },
@@ -50,10 +50,10 @@ export const Borders: Story = {
   render: () => (
     <Box gap="s8">
       <Box borderBottomWidth={1} borderColor="border.secondary.muted" pb="s8" wide>
-        <RnText variant="labelMedium">borderBottomWidth 1 — a one-sided divider</RnText>
+        <RnText variant="labelMedium">borderBottomWidth 1 (a one-sided divider)</RnText>
       </Box>
       <Box borderColor="content.accent" borderLeftWidth={3} pl="s8" wide>
-        <RnText variant="labelMedium">borderLeftWidth 3 — a quote rule</RnText>
+        <RnText variant="labelMedium">borderLeftWidth 3 (a quote rule)</RnText>
       </Box>
       <Box borderColor="fill.quaternary" borderRadius="medium" borderStyle="dashed" borderWidth={1} p="s12" wide>
         <RnText variant="labelMedium">borderStyle dashed</RnText>

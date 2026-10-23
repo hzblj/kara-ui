@@ -19,8 +19,8 @@ const meta = {
   parameters: {
     notes:
       'Carries a React Native subtree back *into* a native host. Two rules come with it: the child must be a ' +
-      'view and never bare text — a raw string has no component view and takes the app down at the host ' +
-      'boundary — and the island around it must have `matchContents` off with an explicit height, or the two ' +
+      'view and never bare text (a raw string has no component view and takes the app down at the host ' +
+      'boundary), and the island around it must have `matchContents` off with an explicit height, or the two ' +
       'measurement passes chase each other until the main thread hangs.',
   },
   title: 'Atoms/RnView',

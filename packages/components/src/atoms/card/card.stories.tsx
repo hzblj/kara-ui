@@ -10,7 +10,7 @@ const meta = {
   decorators: [insideIsland],
   parameters: {
     notes:
-      'Carries `surface.primary`, the `card` shadow and a large radius on both platforms — pass `sx` to override any of them.',
+      'Carries `surface.primary`, the `card` shadow and a large radius on both platforms. Pass `sx` to override any of them.',
   },
   title: 'Atoms/Card',
 } satisfies Meta<typeof Card>

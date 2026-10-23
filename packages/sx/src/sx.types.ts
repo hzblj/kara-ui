@@ -6,7 +6,7 @@ import type {ColorToken, OpacitySize, RadiiSize, ShadowName, SpaceSize, ZIndexSi
 export type SxDimension = `${number}%` | number
 
 /**
- * The keys all three targets — SwiftUI modifiers, Compose modifiers and React Native styles — can
+ * The keys all three targets (SwiftUI modifiers, Compose modifiers and React Native styles) can
  * express with the same meaning. A key only belongs here if all three honour it; anything one of them
  * has to fake or ignore goes to `IosSx`, `AndroidSx` or `ViewSx` instead.
  */
@@ -17,7 +17,7 @@ export type SxCore = {
   blur?: number
   /** The stroke colour, with `borderWidth`. */
   borderColor?: ColorToken
-  /** Rounds the corners — and clips the content, the background and the stroke to them. */
+  /** Rounds the corners, and clips the content, the background and the stroke to them. */
   borderRadius?: RadiiSize
   /** A stroke inside the edge, in points. */
   borderWidth?: number
@@ -27,9 +27,9 @@ export type SxCore = {
   minH?: number
   /** The least width, in points. */
   minW?: number
-  /** Moves the box sideways after layout, in points — its neighbours stay where they were. */
+  /** Moves the box sideways after layout, in points. Its neighbours stay where they were. */
   offsetX?: number
-  /** Moves the box up or down after layout, in points — its neighbours stay where they were. */
+  /** Moves the box up or down after layout, in points. Its neighbours stay where they were. */
   offsetY?: number
   /** How opaque the whole box is, an opacity token. */
   opacity?: OpacitySize
@@ -37,9 +37,9 @@ export type SxCore = {
   p?: SpaceSize
   /** Bottom padding. */
   pb?: SpaceSize
-  /** Left padding — the leading edge, on the native surface. */
+  /** Left padding: the leading edge, on the native surface. */
   pl?: SpaceSize
-  /** Right padding — the trailing edge, on the native surface. */
+  /** Right padding: the trailing edge, on the native surface. */
   pr?: SpaceSize
   /** Top padding. */
   pt?: SpaceSize
@@ -49,9 +49,9 @@ export type SxCore = {
   py?: SpaceSize
   /** Clockwise, in degrees. */
   rotate?: number
-  /** Uniform, or per axis — an omitted axis stays at 1. */
+  /** Uniform, or per axis. An omitted axis stays at 1. */
   scale?: number | {x?: number; y?: number}
-  /** One of the theme's shadows — a drop, an inset highlight and a hairline ring, as the token defines. */
+  /** One of the theme's shadows: a drop, an inset highlight and a hairline ring, as the token defines. */
   shadow?: ShadowName
   /** Takes all the height the parent offers. */
   tall?: boolean
@@ -67,8 +67,8 @@ export type SxCore = {
 export type GlassVariant = 'clear' | 'identity' | 'regular'
 
 /**
- * Every declared value in a platform bucket is a primitive — or one flat object of primitives, for
- * modifiers that take several settings at once — because `sxKey` identifies an `sx` by flattening
+ * Every declared value in a platform bucket is a primitive (or one flat object of primitives, for
+ * modifiers that take several settings at once) because `sxKey` identifies an `sx` by flattening
  * its values into a string, one level deep. Anything deeper would collapse to `[object Object]` and
  * two different configs would share a cache entry. `modifiers` is the sole exception, keyed by
  * identity.
@@ -86,12 +86,12 @@ export type RedactionReason = 'invalidated' | 'placeholder' | 'privacy'
 
 /**
  * SwiftUI modifiers with no honest Compose counterpart. Setting these on Android is inert rather than
- * a type error — a design system degrades gracefully instead of forcing every call site to branch.
+ * a type error: a design system degrades gracefully instead of forcing every call site to branch.
  */
 export type IosSx = Bucket<{
   /**
-   * Animates what changes in the subtree whenever `value` does — SwiftUI's `.animation(_:value:)`, the pairing a
-   * `contentTransition` needs to play at all. `curve` is `default` unless set; `duration` is in seconds.
+   * Animates what changes in the subtree whenever `value` does. This is SwiftUI's `.animation(_:value:)`, the pairing
+   * a `contentTransition` needs to play at all. `curve` is `default` unless set; `duration` is in seconds.
    */
   animation?: {
     curve?: 'bouncy' | 'default' | 'easeIn' | 'easeInOut' | 'easeOut' | 'linear' | 'smooth' | 'snappy' | 'spring'
@@ -108,7 +108,7 @@ export type IosSx = Bucket<{
   colorInvert?: boolean
   /**
    * Sizes the box relative to the nearest container: split it into `count` columns `spacing` apart
-   * and span `span` of them — SwiftUI's stand-in for a fractional width, which its `frame` lacks.
+   * and span `span` of them. It is SwiftUI's stand-in for a fractional width, which its `frame` lacks.
    */
   containerRelativeFrame?: {
     alignment?: FrameAlignment
@@ -143,13 +143,13 @@ export type IosSx = Bucket<{
       }
   /** Drains the colour, from 0 (none) to 1 (fully grey). */
   grayscale?: number
-  /** Invisible, but still taking up its layout space — unlike not rendering the box at all. */
+  /** Invisible, but still taking up its layout space, unlike not rendering the box at all. */
   hidden?: boolean
   /** In degrees. */
   hueRotation?: number
-  /** The height SwiftUI prefers when nothing constrains it — what `fixedSize` resolves to. */
+  /** The height SwiftUI prefers when nothing constrains it, which is what `fixedSize` resolves to. */
   idealH?: number
-  /** The width SwiftUI prefers when nothing constrains it — what `fixedSize` resolves to. */
+  /** The width SwiftUI prefers when nothing constrains it, which is what `fixedSize` resolves to. */
   idealW?: number
   /** `true` extends into every safe area; the config narrows which regions and edges. */
   ignoreSafeArea?:
@@ -158,18 +158,18 @@ export type IosSx = Bucket<{
         edges?: 'all' | 'bottom' | 'horizontal' | 'leading' | 'top' | 'trailing' | 'vertical'
         regions?: 'all' | 'container' | 'keyboard'
       }
-  /** Who gets space first when the parent runs short — *not* a proportional flex weight. */
+  /** Who gets space first when the parent runs short, *not* a proportional flex weight. */
   layoutPriority?: number
   /** Turns brightness into transparency: dark becomes clear, light stays opaque. */
   luminanceToAlpha?: boolean
-  /** Escape hatch, appended last. Pass a stable array — a fresh one every render defeats the memo. */
+  /** Escape hatch, appended last. Pass a stable array: a fresh one every render defeats the memo. */
   modifiers?: IosModifier[]
   /** Digits of one width, so a number that changes does not shift what follows it. */
   monospacedDigit?: boolean
-  /** Redacts only when an ancestor applies the `privacy` reason — inert on its own. */
+  /** Redacts only when an ancestor applies the `privacy` reason, and is inert on its own. */
   privacySensitive?: boolean
   /**
-   * Redacts this subtree — `placeholder` is SwiftUI's built-in skeleton. One reason here;
+   * Redacts this subtree. `placeholder` is SwiftUI's built-in skeleton. One reason here;
    * combining several is escape-hatch territory.
    */
   redacted?: RedactionReason
@@ -183,7 +183,7 @@ export type IosSx = Bucket<{
 
 /** Compose modifiers with no honest SwiftUI counterpart. Inert on iOS, by the same argument. */
 export type AndroidSx = Bucket<{
-  /** This box's own placement inside a `ZStack` parent — Compose's per-child `Modifier.align`. */
+  /** This box's own placement inside a `ZStack` parent (Compose's per-child `Modifier.align`). */
   align?:
     | 'bottom'
     | 'bottomCenter'
@@ -207,7 +207,7 @@ export type AndroidSx = Bucket<{
   fillMaxWidth?: number
   imePadding?: boolean
   matchParentSize?: boolean
-  /** Escape hatch, appended last. Pass a stable array — a fresh one every render defeats the memo. */
+  /** Escape hatch, appended last. Pass a stable array: a fresh one every render defeats the memo. */
   modifiers?: AndroidModifier[]
   /** Proportional share of the leftover space in a Row or Column, the way `flexGrow` behaves. */
   weight?: number
@@ -218,7 +218,7 @@ export type AndroidSx = Bucket<{
 /**
  * The native modifier surface: what SwiftUI and Compose can both express, plus a bucket each for what
  * only one of them can. Both buckets exist on both platforms so a component's shared `*.types.ts`
- * contract — and the `contract.check.ts` that holds the two implementations to it — stays one type.
+ * contract (and the `contract.check.ts` that holds the two implementations to it) stays one type.
  */
 export type Sx = SxCore & {
   android?: AndroidSx
@@ -226,8 +226,8 @@ export type Sx = SxCore & {
 }
 
 /**
- * `SxCore` for the React Native style path, which — unlike the SwiftUI/Compose modifiers, where a
- * frame needs concrete points — can size a view as a percentage of its parent. Deliberately built
+ * `SxCore` for the React Native style path, which (unlike the SwiftUI/Compose modifiers, where a
+ * frame needs concrete points) can size a view as a percentage of its parent. Deliberately built
  * from `SxCore` and not `Sx`: React Native styles are identical on both platforms, so the `ios` and
  * `android` buckets would have nothing to resolve into and would silently swallow whatever was passed.
  */

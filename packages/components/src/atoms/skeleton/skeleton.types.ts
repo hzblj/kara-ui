@@ -3,8 +3,8 @@ import type {RadiiSize} from '@hzblj/kara-theme'
 import type {ReactNode} from 'react'
 
 /**
- * A loading placeholder that pulses in `fill.quaternary` — a React Native view, so it needs no host. Sized with the
- * `sx` names: `w`, `h`, `borderRadius`.
+ * A loading placeholder that pulses in `fill.quaternary`. It is a React Native view, so it needs no host. Sized with
+ * the `sx` names: `w`, `h`, `borderRadius`.
  */
 export type SkeletonProps = {
   /** The corner radius. `small` by default. */

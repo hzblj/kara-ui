@@ -9,7 +9,7 @@ export type PickerOption = {
 }
 
 /**
- * A single choice from a list — a SwiftUI wheel picker on iOS, Material's exposed dropdown on Android. It brings its
+ * A single choice from a list: a SwiftUI wheel picker on iOS, Material's exposed dropdown on Android. It brings its
  * own host, so it renders outside `Screen` and `Island` as well.
  */
 export type PickerProps = {

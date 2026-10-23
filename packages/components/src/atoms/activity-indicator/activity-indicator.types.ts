@@ -4,7 +4,7 @@ import type {ReactNode} from 'react'
 export type ActivityIndicatorSize = 'large' | 'small'
 
 /**
- * That something is loading, for as long as it takes — UIKit's spinner on iOS, Material 3's expressive
+ * That something is loading, for as long as it takes: UIKit's spinner on iOS, Material 3's expressive
  * `LoadingIndicator` on Android, its shapes morphing as it turns. A React Native view on iOS and a host of its own on
  * Android, so it renders anywhere. For how far along something is, use `Progress`.
  */

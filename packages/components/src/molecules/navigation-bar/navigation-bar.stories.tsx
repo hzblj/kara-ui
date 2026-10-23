@@ -12,10 +12,10 @@ const meta = {
   component: NavigationBar,
   parameters: {
     notes:
-      'For a header that is not a navigation screen — `Sheet.Header` is built on it. iOS: a standalone ' +
+      'For a header that is not a navigation screen (`Sheet.Header` is built on it). iOS: a standalone ' +
       '`UINavigationBar`, so the items are real bar items; on iOS 26 neighbours share one glass capsule, and ' +
       '`separated` gives an item its own. Android: Material’s top app bar (`separated` has no counterpart there). ' +
-      'Items go where they are put — a close works on either side. `search` replaces the title on iOS only.',
+      'Items go where they are put: a close works on either side. `search` replaces the title on iOS only.',
   },
   title: 'Molecules/NavigationBar',
 } satisfies Meta<typeof NavigationBar>

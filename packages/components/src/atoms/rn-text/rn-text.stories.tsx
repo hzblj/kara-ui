@@ -19,7 +19,7 @@ const meta = {
   component: RnText,
   parameters: {
     notes:
-      'The React Native half of `Text` — same tokens, same variants, but a real RN text node. Use it outside a host; inside one, use `Text`.',
+      'The React Native half of `Text`: same tokens, same variants, but a real RN text node. Use it outside a host; inside one, use `Text`.',
   },
   title: 'Atoms/RnText',
 } satisfies Meta<typeof RnText>

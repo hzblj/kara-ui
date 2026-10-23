@@ -6,7 +6,7 @@ import type {IconName} from '../../atoms/icon'
  * `action` takes a `Button` so the state can offer a way out.
  */
 export type EmptyStateProps = {
-  /** Under the text — a `Button`, say. */
+  /** Under the text: a `Button`, say. */
   action?: ReactNode
   /** A second line under the title, in the secondary colour. */
   description?: string

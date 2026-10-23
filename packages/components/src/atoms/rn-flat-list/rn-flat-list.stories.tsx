@@ -37,7 +37,7 @@ const meta = {
   ],
   parameters: {
     notes:
-      'kara’s list for React Native content — every row here is its own `Island`. It renders cells in normal ' +
+      'kara’s list for React Native content: every row here is its own `Island`. It renders cells in normal ' +
       'flow inside a scroll view, so a hosted view stays where the layout put it, which no recycling list ' +
       'can promise.',
   },

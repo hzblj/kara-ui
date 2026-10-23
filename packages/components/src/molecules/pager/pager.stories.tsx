@@ -39,7 +39,7 @@ const meta = {
     notes:
       'Pages are addressed by index, not by name: Compose’s pager is index-native while SwiftUI’s tab values are ' +
       'strings, and synthesising the string from a child’s position is the lossless direction. `pageSpacing` and ' +
-      '`scrollEnabled` are Android-only — a page-style SwiftUI `TabView` has no gap, and can only be disabled ' +
+      '`scrollEnabled` are Android-only: a page-style SwiftUI `TabView` has no gap, and can only be disabled ' +
       'as a whole.',
   },
   render: ControlledPager,

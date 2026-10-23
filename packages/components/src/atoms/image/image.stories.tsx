@@ -11,7 +11,7 @@ const meta = {
   parameters: {
     notes:
       '`expo-image` with the `sx` props and the design system’s own 100ms linear fade already applied, so a ' +
-      'loaded image never pops in. It needs the network — offline the frame stays empty, which is the component ' +
+      'loaded image never pops in. It needs the network: offline the frame stays empty, which is the component ' +
       'working as intended rather than a broken story.',
   },
   title: 'Atoms/Image',

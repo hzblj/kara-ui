@@ -95,7 +95,7 @@ const IslandDemo = () => (
 )
 
 const ListDemo = () => (
-  <Section caption="A list scrolls, so it needs a height — here, the island’s.">
+  <Section caption="A list scrolls, so it needs a height: here, the island’s.">
     <Island h={240} matchContents={false}>
       <List>
         <ListItem icon="user" onPress={() => undefined} subtitle="Name, email, password" title="Account" />

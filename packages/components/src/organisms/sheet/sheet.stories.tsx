@@ -51,7 +51,7 @@ const meta = {
   component: Sheet,
   parameters: {
     notes:
-      'The React Native tier: no host, and never inside one — native atoms in the content go in an `Island`. ' +
+      'The React Native tier: no host, and never inside one. Native atoms in the content go in an `Island`. ' +
       '`<Sheet.Header>` (a direct child) is a native bar with a title and items; `<Sheet.ScrollView>` is the body of ' +
       'a `scrollable` sheet. On iOS 26 a scrollable sheet’s content scrolls under the header with the soft edge ' +
       'effect, and a `large` title fades into the bar once it has scrolled away.',

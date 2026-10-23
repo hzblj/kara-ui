@@ -21,7 +21,7 @@ const meta = {
     notes:
       'A native `List` / `LazyColumn`, so its rows must be native too. `onRefresh` is async by design: the ' +
       'spinner runs until the promise settles, which is what SwiftUI’s `refreshable` expects and what ' +
-      'Compose’s controlled indicator is driven from — neither needs a `refreshing` flag kept in sync by hand.',
+      'Compose’s controlled indicator is driven from; neither needs a `refreshing` flag kept in sync by hand.',
   },
   title: 'Atoms/List',
 } satisfies Meta<typeof List>

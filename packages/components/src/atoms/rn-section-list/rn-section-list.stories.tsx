@@ -59,7 +59,7 @@ const meta = {
   ],
   parameters: {
     notes:
-      'Sticky headers default to off here, unlike React Native, where they are on for vertical lists — a header ' +
+      'Sticky headers default to off here, unlike React Native, where they are on for vertical lists: a header ' +
       'that detaches and floats over the content is a deliberate effect, not something a list should do unasked.',
   },
   title: 'Atoms/RnSectionList',

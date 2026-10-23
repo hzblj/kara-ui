@@ -69,8 +69,9 @@ const TypeCell = ({type}: {type: string}) => {
 const Defaults = ({member}: {member: ApiMember}) => {
   const {android, ios} = member.defaults
 
+  // No default: an empty cell, the way the column reads at a glance.
   if (!android && !ios) {
-    return <span className={s.defaults()}>—</span>
+    return null
   }
 
   if (android === ios) {

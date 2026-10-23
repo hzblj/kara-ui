@@ -5,7 +5,7 @@ import type {IconName} from '../../atoms/icon'
 /** One action of a `Menu`, an `ActionSheet`, a `ContextMenu` or a `FabMenu`. */
 export type MenuAction = {
   /**
-   * Draws the action in the destructive colour — the system's destructive role on iOS. `FabMenu` ignores it on
+   * Draws the action in the destructive colour (the system's destructive role on iOS). `FabMenu` ignores it on
    * Android.
    */
   destructive?: boolean
@@ -22,7 +22,7 @@ export type MenuAction = {
 
 /**
  * A text button that opens a list of actions: a SwiftUI `Menu` on iOS, a Material dropdown anchored to it on Android.
- * A native atom — it renders inside `<Screen>` or `<Island>`.
+ * A native atom: it renders inside `<Screen>` or `<Island>`.
  */
 export type MenuProps = {
   /** The menu's actions, top to bottom. */

@@ -113,13 +113,19 @@ const DatePickerScene: Scene = () => (
   </Box>
 )
 
+/**
+ * A whole-screen shot, because the picker's sheet needs the room: the rows sit in the middle of the screen, where a
+ * stage would put them, and the flow opens the second one's sheet.
+ */
 const ColorPickerScene: Scene = () => (
-  <Island>
-    <VStack bg="surface.primary" borderRadius="large" p="s16" spacing="s8" wide>
-      <ColorPicker label="Accent" onValueChange={noop} value="#FF5700" />
-      <ColorPicker label="With opacity" onValueChange={noop} supportsOpacity value="#4F46E5" />
-    </VStack>
-  </Island>
+  <Box bg="surface.base" flex={1} justify="center" px="s24">
+    <Island>
+      <VStack bg="surface.primary" borderRadius="large" p="s16" spacing="s8" wide>
+        <ColorPicker label="Accent" onValueChange={noop} value="#FF5700" />
+        <ColorPicker label="With opacity" onValueChange={noop} supportsOpacity value="#4F46E5" />
+      </VStack>
+    </Island>
+  </Box>
 )
 
 const EMAIL = 'you@example.com'

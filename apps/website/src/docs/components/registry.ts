@@ -90,7 +90,7 @@ export const COMPONENTS: ComponentDoc[] = [
     host: 'native',
     id: 'icon-button',
     name: 'IconButton',
-    notes: ['`name` is one of your own icons — see Icons.'],
+    notes: ['`name` is one of your own icons (see Icons).'],
     renders: {android: 'Compose IconButton', ios: 'SwiftUI Button'},
     summary: 'A button that is just an icon, for toolbars and compact rows.',
     types: ['IconButtonProps'],
@@ -117,7 +117,7 @@ export const COMPONENTS: ComponentDoc[] = [
     id: 'fab-menu',
     name: 'FabMenu',
     notes: [
-      'Android: Material 3 Expressive’s FAB menu — the button turns into a close and the actions rise above it as pills.',
+      'Android: Material 3 Expressive’s FAB menu, where the button turns into a close and the actions rise above it as pills.',
       'iOS: the same round button as the label of a SwiftUI `Menu`.',
     ],
     renders: {android: 'Material 3 FloatingActionButtonMenu', ios: 'SwiftUI Menu'},
@@ -165,7 +165,7 @@ export const COMPONENTS: ComponentDoc[] = [
     name: 'ActionSheet',
     notes: [
       'Controlled: `visible` opens it, and `onDismiss` is where you set it back to `false`.',
-      'iOS is a SwiftUI confirmation dialog — on iOS 26 a popover over its host — which may hide the title and draws no icons. Android is Material’s bottom-sheet menu, each action’s icon before its label.',
+      'iOS is a SwiftUI confirmation dialog (on iOS 26, a popover over its host), which may hide the title and draws no icons. Android is Material’s bottom-sheet menu, each action’s icon before its label.',
     ],
     renders: {android: 'Sheet with a list of actions', ios: 'SwiftUI confirmationDialog'},
     summary: 'Actions that slide up from the bottom of the screen.',
@@ -224,7 +224,7 @@ export const COMPONENTS: ComponentDoc[] = [
       'A row of a `List`: SwiftUI only offers swipe actions there.',
       'iOS 26 draws each action as a round button in its tint with the label under it, the way Mail does. Compose has no swipe actions, so Android has kara’s own: the row slides on an anchored drag, and filled icon buttons with their labels under them show in the strip it leaves.',
       'One row is open at a time, and a tap on an open row closes it. A press closes the row before the action runs.',
-      '`allowsFullSwipe` (on by default) runs the edge’s first action on a swipe all the way across — iOS only.',
+      '`allowsFullSwipe` (on by default) runs the edge’s first action on a swipe all the way across. iOS only.',
     ],
     renders: {android: 'Anchored drag (kara)', ios: 'SwiftUI swipeActions'},
     summary: 'Buttons revealed by swiping a list row.',
@@ -240,7 +240,8 @@ export const COMPONENTS: ComponentDoc[] = [
     id: 'pressable',
     name: 'Pressable',
     notes: [
-      'The press is each platform’s own: iOS springs it to 96 % while held; Android draws Material’s ripple over the content, clipped to the pressable’s shape — give it the `borderRadius` of what it wraps (`full` around a `GlassView`).',
+      'The press is each platform’s own by default: iOS springs it to 96 % while held; Android draws Material’s ripple over the content, clipped to the pressable’s shape, so give it the `borderRadius` of what it wraps (`full` around a `GlassView`).',
+      '`pressEffect` picks the same answer on both: `scale` (to `pressedScale`), `opacity` (to `pressedOpacity`) or `none`. Android keeps its ripple on top unless `ripple` is off.',
       'It takes touches 8 points past its edges.',
       '`haptic` is `true` for a light impact, or any haptic by name. iOS prepares it on press-in.',
     ],
@@ -320,7 +321,7 @@ export const COMPONENTS: ComponentDoc[] = [
     id: 'stepper',
     name: 'Stepper',
     notes: [
-      'Without `min` and `max`, iOS stops at 0 and 100 and Android has no limits — set both.',
+      'Without `min` and `max`, iOS stops at 0 and 100 and Android has no limits, so set both.',
       'iOS steps in whole numbers.',
     ],
     renders: {android: 'Compose row with minus and plus buttons', ios: 'SwiftUI Stepper'},
@@ -339,7 +340,7 @@ export const COMPONENTS: ComponentDoc[] = [
     id: 'segmented-control',
     name: 'SegmentedControl',
     notes: [
-      'The selected segment is in the accent on both platforms — on iOS through kara’s own `UISegmentedControl`, since neither the system control nor SwiftUI’s segmented picker lets the labels be coloured.',
+      'The selected segment is in the accent on both platforms: on iOS through kara’s own `UISegmentedControl`, since neither the system control nor SwiftUI’s segmented picker lets the labels be coloured.',
       'It needs no `Screen` or `Island`: iOS is a plain view, Android brings its own host. It takes the width it is given; the height is the platform’s.',
       '`onChange` fires for a new segment only. Android plays `selection`; iOS plays the control’s own feedback.',
     ],
@@ -375,7 +376,7 @@ export const COMPONENTS: ComponentDoc[] = [
     name: 'DatePicker',
     notes: [
       'iOS shows a compact field that opens the calendar; Android a field that opens Material’s date dialog.',
-      'It sizes itself to its value — put it at the end of a row, beside its label.',
+      'It sizes itself to its value; put it at the end of a row, beside its label.',
       'Android reports the date once the dialog is confirmed; iOS as it changes.',
     ],
     renders: {android: 'Material date picker dialog', ios: 'UIDatePicker, compact'},
@@ -389,9 +390,12 @@ export const COMPONENTS: ComponentDoc[] = [
     host: 'native',
     id: 'color-picker',
     name: 'ColorPicker',
-    notes: ['iOS only — Compose has no colour picker, and on Android it renders nothing (with a dev warning).'],
-    renders: {android: '—', ios: 'SwiftUI ColorPicker'},
-    summary: 'The system colour picker.',
+    notes: [
+      'Compose ships no colour picker, so Android gets kara’s own in the iOS picker’s shape: a well with a rainbow ring, and a sheet with a grid of swatches, a spectrum and RGB sliders.',
+      'With `supportsOpacity`, both add an opacity slider and report `#RRGGBBAA`; without it, `#RRGGBB`.',
+    ],
+    renders: {android: 'kara’s Compose well and sheet', ios: 'SwiftUI ColorPicker'},
+    summary: 'A colour from a grid, a spectrum or sliders.',
     types: ['ColorPickerProps'],
   },
   {
@@ -407,7 +411,7 @@ export const COMPONENTS: ComponentDoc[] = [
     name: 'TextField',
     notes: [
       'Uncontrolled: start it with `defaultValue` and read changes from `onChangeText`.',
-      'Give `error` a message and it shows under the field — Material’s supporting text with its error icon on Android — so an error never rests on colour alone.',
+      'Give `error` a message and it shows under the field (Material’s supporting text with its error icon on Android), so an error never rests on colour alone.',
     ],
     renders: {android: 'Compose OutlinedTextField', ios: 'SwiftUI TextField / SecureField'},
     summary: 'Text input with a label, for secure entry and errors too.',
@@ -460,10 +464,10 @@ export const COMPONENTS: ComponentDoc[] = [
     id: 'text',
     name: 'Text',
     notes: [
-      'Native text, inside a host. Outside one, use `RnText` — same variants, same colours.',
+      'Native text, inside a host. Outside one, use `RnText`: same variants, same colours.',
       'Every variant grows with Dynamic Type on iOS and font scale on Android.',
       'With `numberOfLines`, iOS ends the last line with an ellipsis; Android clips it.',
-      'It takes the native `sx` surface: padding, a background, a frame — `wide` puts the text on the side `align` names.',
+      'It takes the native `sx` surface: padding, a background, a frame. `wide` puts the text on the side `align` names.',
       'On iOS, `contentTransition` with `animation` rolls a number to its next value; Android shows the new one at once.',
     ],
     renders: {android: 'Compose Text', ios: 'SwiftUI Text'},
@@ -535,7 +539,7 @@ export const COMPONENTS: ComponentDoc[] = [
     id: 'icon',
     name: 'Icon',
     notes: [
-      'Your own SVGs, made native at prebuild by the config plugin — see Icons. The library ships no icon set.',
+      'Your own SVGs, made native at prebuild by the config plugin (see Icons). The library ships no icon set.',
       '`Icon` draws inside a host; `RnIcon` draws the same asset anywhere in React Native layout.',
     ],
     renders: {android: 'Compose Icon with a vector drawable', ios: 'SwiftUI Image from the asset catalog'},
@@ -551,7 +555,7 @@ export const COMPONENTS: ComponentDoc[] = [
     name: 'Image',
     notes: [
       '`expo-image`, with the design system’s 100 ms linear fade already applied, so a loaded image never pops in. It takes every `expo-image` prop.',
-      'It takes `Box`’s `sx` props for its own box: `w`, `h`, `aspectRatio`, `borderRadius`, `position` and `inset` — no `style` object needed.',
+      'It takes `Box`’s `sx` props for its own box: `w`, `h`, `aspectRatio`, `borderRadius`, `position` and `inset`. No `style` object needed.',
     ],
     renders: {android: 'expo-image', ios: 'expo-image'},
     summary: 'A remote or local image that fades in.',
@@ -570,7 +574,7 @@ export const COMPONENTS: ComponentDoc[] = [
     id: 'card',
     name: 'Card',
     notes: [
-      'Carries `surface.primary`, the `card` shadow and a large radius on both platforms — pass `sx` props to override any of them.',
+      'Carries `surface.primary`, the `card` shadow and a large radius on both platforms; pass `sx` props to override any of them.',
     ],
     renders: {android: 'Compose Column', ios: 'SwiftUI VStack'},
     summary: 'A raised container for one piece of content.',
@@ -589,10 +593,10 @@ export const COMPONENTS: ComponentDoc[] = [
     id: 'surface',
     name: 'Surface',
     notes: [
-      '`glass` reaches for iOS 26 glass and a Material 3 tonal surface on Android — the two do not look alike, and are not meant to.',
+      '`glass` reaches for iOS 26 glass and a Material 3 tonal surface on Android. The two do not look alike, and are not meant to.',
     ],
     renders: {android: 'Compose Surface', ios: 'SwiftUI VStack in a GlassEffectContainer'},
-    summary: 'A coloured, rounded background — plain or glass.',
+    summary: 'A coloured, rounded background, plain or glass.',
     types: ['SurfaceProps'],
   },
   {
@@ -609,13 +613,13 @@ export const COMPONENTS: ComponentDoc[] = [
     id: 'blur-view',
     name: 'BlurView',
     notes: [
-      'The five system materials, by SwiftUI’s names — `ultraThin`, `thin`, `regular`, `thick`, `ultraThick` — as a UIKit view on iOS: no host, cheap enough for a list cell.',
+      'The five system materials, by SwiftUI’s names (`ultraThin`, `thin`, `regular`, `thick`, `ultraThick`), as a UIKit view on iOS: no host, cheap enough for a list cell.',
       '`vibrancy` draws the content the way iOS draws its own on a material: its colour becomes the material’s vibrant one at that level, its alpha the mask. iOS only.',
       'Android has the same five, in its own terms: what lies behind, blurred and saturated (Android 12+), under a Material tonal surface that rises from `surface` to `surfaceContainerHighest` as the material thickens. Below Android 12 the surface alone, near-opaque.',
-      '`appearance` pins a material to light or dark whatever the app’s — Android draws the opposite one with Material’s inverse surface.',
+      '`appearance` pins a material to light or dark whatever the app’s; Android draws the opposite one with Material’s inverse surface.',
     ],
     renders: {android: 'Backdrop blur + tonal surface (kara)', ios: 'UIBlurEffect system materials'},
-    summary: 'The system materials — what sheets, bars, menus and HUDs are made of.',
+    summary: 'The system materials: what sheets, bars, menus and HUDs are made of.',
     types: ['BlurViewProps'],
   },
   {
@@ -630,14 +634,14 @@ export const COMPONENTS: ComponentDoc[] = [
     id: 'glass-view',
     name: 'GlassView',
     notes: [
-      'Liquid Glass on iOS 26, as a UIKit view — no host, so it is cheap enough for every cell of a list.',
-      'Android has frosted glass of its own: what lies behind the capsule, blurred (Android 12+), under a translucent tonal surface — or `tint` — and a light hairline; the blurred surfaces Android 16 gives its system UI. Below Android 12 the same colours are drawn near-opaque, so the content stays readable.',
+      'Liquid Glass on iOS 26, as a UIKit view: no host, so it is cheap enough for every cell of a list.',
+      'Android has frosted glass of its own: what lies behind the capsule, blurred (Android 12+), under a translucent tonal surface (or `tint`) and a light hairline; the blurred surfaces Android 16 gives its system UI. Below Android 12 the same colours are drawn near-opaque, so the content stays readable.',
       'Below iOS 26 it is a capsule of `tint`, or of the translucent glass fill.',
-      'Interactive glass swells toward the finger on iOS and carries its children; the press itself belongs to a `Pressable` around it — with `borderRadius="full"`, its Android ripple keeps to the capsule.',
+      'Interactive glass swells toward the finger on iOS and carries its children; the press itself belongs to a `Pressable` around it. With `borderRadius="full"`, its Android ripple keeps to the capsule.',
       'On Android each glass re-records what lies behind it before every frame: a few buttons cost nothing, but keep it out of the cells of a long list.',
     ],
-    renders: {android: 'Frosted glass — backdrop blur (kara)', ios: 'UIGlassEffect'},
-    summary: 'Glass around any React Native content — Liquid Glass on iOS, frosted on Android.',
+    renders: {android: 'Frosted glass: backdrop blur (kara)', ios: 'UIGlassEffect'},
+    summary: 'Glass around any React Native content: Liquid Glass on iOS, frosted on Android.',
     types: ['GlassViewProps'],
   },
   {
@@ -696,7 +700,7 @@ export const COMPONENTS: ComponentDoc[] = [
     name: 'Island',
     notes: [
       'Native views only render inside an `Island` or a `Screen`. Outside one they silently disappear (in development, a warning says so).',
-      'Sized to its content by default. Give it `matchContents={false}` and a height (`h`) when the content has none of its own — a `List`, a `Form`, a `Pager` — or contains an `RnView`.',
+      'Sized to its content by default. Give it `matchContents={false}` and a height (`h`) when the content has none of its own (a `List`, a `Form`, a `Pager`) or contains an `RnView`.',
       'It sits in React Native layout like a `Box` and takes the same `sx` props: `h`, `flex`, margins.',
       '`RnView` carries a React Native view back into a native layout.',
     ],
@@ -721,8 +725,8 @@ export const COMPONENTS: ComponentDoc[] = [
     id: 'screen',
     name: 'Screen',
     notes: [
-      'The full-bleed native host a screen starts with. Everything inside is native layout — for a React Native page with native islands, use `RnScrollView` and `Island` instead.',
-      'The background runs to the edges; the content keeps clear of the status bar wherever the screen covers it — SwiftUI’s safe area on iOS, measured by kara on Android, where the app is edge to edge.',
+      'The full-bleed native host a screen starts with. Everything inside is native layout. For a React Native page with native islands, use `RnScrollView` and `Island` instead.',
+      'The background runs to the edges; the content keeps clear of the status bar wherever the screen covers it: SwiftUI’s safe area on iOS, measured by kara on Android, where the app is edge to edge.',
     ],
     renders: {android: 'Compose Host filling the screen', ios: 'SwiftUI Host filling the screen'},
     summary: 'A whole screen of native views.',
@@ -741,7 +745,7 @@ export const COMPONENTS: ComponentDoc[] = [
     name: 'List',
     notes: [
       'A list scrolls, so it needs a height from outside: a `Screen`, or an `Island` with `matchContents={false}` and a height.',
-      'Rows are separated for you — a `Divider` among them is one too many.',
+      'Rows are separated for you; a `Divider` among them is one too many.',
       '`onRefresh` returns a promise; the spinner runs until it settles.',
     ],
     renders: {android: 'Compose LazyColumn', ios: 'SwiftUI List'},
@@ -757,7 +761,7 @@ export const COMPONENTS: ComponentDoc[] = [
     name: 'ListItem',
     notes: [
       'Passing `onPress` is what earns the row its chevron.',
-      '`RnListItem` is the same row in the React Native tier — no host, cheap to mount by the dozen.',
+      '`RnListItem` is the same row in the React Native tier: no host, cheap to mount by the dozen.',
     ],
     renders: {android: 'Compose Row', ios: 'SwiftUI HStack'},
     summary: 'A row with an icon, a title, a subtitle and a chevron.',
@@ -779,7 +783,7 @@ export const COMPONENTS: ComponentDoc[] = [
     id: 'form',
     name: 'Form',
     notes: [
-      'On iOS a form scrolls like a list and needs a height from outside. On Android it is a column of cards that sizes itself — inset from its container and with its titles indented to the cards’ content, like SwiftUI’s grouped form.',
+      'On iOS a form scrolls like a list and needs a height from outside. On Android it is a column of cards that sizes itself, inset from its container and with its titles indented to the cards’ content, like SwiftUI’s grouped form.',
     ],
     renders: {android: 'Compose cards', ios: 'SwiftUI Form'},
     summary: 'Grouped sections of settings and fields.',
@@ -832,9 +836,9 @@ export const COMPONENTS: ComponentDoc[] = [
     id: 'scroll-edge-container',
     name: 'ScrollEdgeContainer',
     notes: [
-      'iOS 26 gives both bars the system scroll edge effect — the progressive blur under content scrolling past them.',
+      'iOS 26 gives both bars the system scroll edge effect: the progressive blur under content scrolling past them.',
       'Below iOS 26 the bars are still inset, without the effect: check `isScrollEdgeEffectAvailable()` and give them a background.',
-      'Android does what a Material top app bar does on scroll: the bars stack above and below the scroll view, transparent at rest, and fill with `surface.secondary` (Material’s `surfaceContainer`) once content scrolls under the top one — the bottom one while there is more below. The scroll view keeps its own `onScroll`.',
+      'Android does what a Material top app bar does on scroll: the bars stack above and below the scroll view, transparent at rest, and fill with `surface.secondary` (Material’s `surfaceContainer`), the top one once content scrolls under it and the bottom one while there is more below. The scroll view keeps its own `onScroll`.',
     ],
     renders: {android: 'Material bars that fill on scroll', ios: 'UIScrollEdgeEffect'},
     summary: 'Bars over a scroll view, with each platform’s scroll edge under them.',
@@ -853,10 +857,10 @@ export const COMPONENTS: ComponentDoc[] = [
     name: 'Progress',
     notes: [
       'Leave `value` unset for the indeterminate spinner; pass 0–1 for a determinate bar or ring.',
-      'A ring with a value is a SwiftUI capacity `Gauge` on iOS — a circular `ProgressView` there ignores its value and spins.',
+      'A ring with a value is a SwiftUI capacity `Gauge` on iOS: a circular `ProgressView` there ignores its value and spins.',
     ],
     renders: {android: 'Compose Linear / CircularProgressIndicator', ios: 'SwiftUI ProgressView / Gauge'},
-    summary: 'How far along something is — or that it is still going.',
+    summary: 'How far along something is, or that it is still going.',
     types: ['ProgressProps'],
   },
   {
@@ -888,7 +892,7 @@ export const COMPONENTS: ComponentDoc[] = [
     host: 'rn',
     id: 'skeleton',
     name: 'Skeleton',
-    notes: ['Leave `width` unset and it fills the row — the usual shape for a line of text.'],
+    notes: ['Leave `width` unset and it fills the row, the usual shape for a line of text.'],
     renders: {android: 'Reanimated view', ios: 'Reanimated view'},
     summary: 'Pulsing placeholders for content on its way.',
     types: ['SkeletonProps'],
@@ -901,7 +905,7 @@ export const COMPONENTS: ComponentDoc[] = [
     id: 'snackbar',
     name: 'Snackbar',
     notes: [
-      'Pinned to the bottom of its parent, above everything in it. It shows while `visible` is true — hiding it after a while is yours to do.',
+      'Pinned to the bottom of its parent, above everything in it. It shows while `visible` is true; hiding it after a while is yours to do.',
     ],
     renders: {android: 'React Native', ios: 'React Native'},
     summary: 'A brief message at the bottom of the screen.',
@@ -939,7 +943,7 @@ export const COMPONENTS: ComponentDoc[] = [
     id: 'tooltip',
     name: 'Tooltip',
     notes: [
-      'Controlled on both platforms: `visible` shows it, `onDismiss` reports a dismissal — nothing else opens it, so wire a long press to `visible` if you want one.',
+      'Controlled on both platforms: `visible` shows it, `onDismiss` reports a dismissal. Nothing else opens it, so wire a long press to `visible` if you want one.',
       'Android draws Material’s plain tooltip in kara’s controlled `TooltipBox`, centred above the anchor and kept inside the window; any touch outside it, or the anchor scrolling away, dismisses it.',
     ],
     renders: {android: 'Material plain tooltip (kara)', ios: 'SwiftUI popover'},
@@ -962,7 +966,7 @@ export const COMPONENTS: ComponentDoc[] = [
     id: 'rn-tooltip',
     name: 'RnTooltip',
     notes: [
-      'Anchored below a React Native view and drawn above every sibling — the anchor needs no host.',
+      'Anchored below a React Native view and drawn above every sibling. The anchor needs no host.',
       'iOS keeps it through a scroll; Material dismisses it on any outside touch, the start of a scroll included.',
     ],
     renders: {android: 'Material rich tooltip', ios: 'kara’s UIKit tooltip'},
@@ -991,10 +995,10 @@ export const COMPONENTS: ComponentDoc[] = [
     id: 'sheet',
     name: 'Sheet',
     notes: [
-      'React Native tier, on TrueSheet: no host, and never inside one — native atoms in its content go in an `Island`.',
+      'React Native tier, on TrueSheet: no host, and never inside one. Native atoms in its content go in an `Island`.',
       '`Sheet.Header` is a slot, not a view: a direct child, built from `NavigationBar` into a real native header.',
       'On iOS 26 a scrollable sheet lays its header over the content, so `Sheet.ScrollView` pads by the header’s height.',
-      '`onDismiss` is the user’s dismissal only — setting `visible` to false dismisses without calling it.',
+      '`onDismiss` is the user’s dismissal only; setting `visible` to false dismisses without calling it.',
     ],
     renders: {
       android: 'TrueSheet with a Material top app bar',
@@ -1015,13 +1019,13 @@ export const COMPONENTS: ComponentDoc[] = [
     id: 'navigation-bar',
     name: 'NavigationBar',
     notes: [
-      'For a header that is not a navigation screen — `Sheet.Header` is built on it.',
+      'For a header that is not a navigation screen (`Sheet.Header` is built on it).',
       'iOS: a standalone `UINavigationBar`; on iOS 26 neighbours share one glass capsule, and `separated` gives an item its own.',
       'Android: Material’s top app bar. `search` replaces the title on iOS only.',
       'It places nothing: items go on the side and in the order you give them.',
     ],
     renders: {android: 'Material TopAppBar', ios: 'UINavigationBar'},
-    summary: 'A title with items on either side — a real navigation bar outside a navigation stack.',
+    summary: 'A title with items on either side: a real navigation bar outside a navigation stack.',
     types: ['NavigationBarProps'],
   },
   {
@@ -1071,7 +1075,7 @@ const zoomId = useZoomTransitionParam()
   <Photo />
 </ZoomTransition.Target>
 
-// the root layout — a full-screen modal, the way a gallery opens
+// the root layout: a full-screen modal, the way a gallery opens
 <Stack.Screen
   name="photo/[id]"
   options={withZoomTransition({headerShown: Platform.OS === 'android', presentation: 'fullScreenModal'})}
@@ -1091,7 +1095,7 @@ const zoomId = useZoomTransitionParam()
     notes: [
       'iOS 18: UIKit’s zoom transition, with the interactive dismissal. Below iOS 18 the push stays a slide. Android: Material’s container transform, both ways.',
       'Three pieces tied by one identifier, which travels in the route params.',
-      'The enabler renders first and unconditionally — behind a loading state, the push is already a slide.',
+      'The enabler renders first and unconditionally: behind a loading state, the push is already a slide.',
       'Zooming into a modal, give it no native header on iOS: a modal’s bar lives in a nested stack, which the zoom does not reach. Draw a close of your own; a drag down closes it too.',
       'Settings both platforms honour sit at the top; the rest is typed apart under `ios` and `android`.',
     ],
@@ -1112,7 +1116,7 @@ const zoomId = useZoomTransitionParam()
     id: 'box',
     name: 'Box',
     notes: [
-      'A React Native `View` wearing the `sx` props — for layout a native stack cannot express.',
+      'A React Native `View` wearing the `sx` props, for layout a native stack cannot express.',
       'It takes the wider of the two `sx` surfaces: `flexDirection`, `gap`, margins, flex and per-corner radii work here and on none of the native atoms.',
     ],
     renders: {android: 'React Native View', ios: 'React Native View'},
@@ -1128,7 +1132,7 @@ const zoomId = useZoomTransitionParam()
     name: 'RnText',
     notes: [
       'The same variants and colours as `Text`, for text outside a native host. It takes every React Native `Text` prop.',
-      'And `Box`’s `sx` props for its own box — margins, `flex`, padding — except `align`, which aligns its lines.',
+      'And `Box`’s `sx` props for its own box (margins, `flex`, padding), except `align`, which aligns its lines.',
     ],
     renders: {android: 'React Native Text', ios: 'React Native Text'},
     summary: 'React Native text in the type scale.',
@@ -1144,7 +1148,7 @@ const zoomId = useZoomTransitionParam()
     id: 'rn-scroll-view',
     name: 'RnScrollView',
     notes: [
-      'The scroll view a page full of `Island`s wants. Top-level `sx` styles the viewport, `content` the scrolling content — padding and gap belong there.',
+      'The scroll view a page full of `Island`s wants. Top-level `sx` styles the viewport, `content` the scrolling content; padding and gap belong there.',
     ],
     renders: {android: 'React Native ScrollView', ios: 'React Native ScrollView'},
     summary: 'A React Native scroll view with the `sx` props.',

@@ -14,13 +14,18 @@ const meta = {
     p: 's16',
     wide: true,
   },
-  argTypes: {haptic: {control: 'select', options: [false, true, ...HAPTICS]}},
+  argTypes: {
+    haptic: {control: 'select', options: [false, true, ...HAPTICS]},
+    pressEffect: {control: 'radio', options: ['scale', 'opacity', 'none']},
+    pressedOpacity: {control: 'select', options: ['o40', 'o60', 'o80']},
+  },
   component: Pressable,
   parameters: {
     notes:
-      'Scales to 0.96 while held and can play a haptic on press — `true` for a light impact, or any haptic by ' +
-      'name; iOS prepares it on press-in. Haptics need a device. Takes the full `ResponsiveViewSx` surface, so it ' +
-      'styles like a `Box`.',
+      'Presses the platform’s way by default: a spring to 0.96 on iOS, Material’s ripple on Android. `pressEffect` ' +
+      'picks `scale`, `opacity` or `none` on both, and Android keeps the ripple on top unless `ripple` is off. A ' +
+      'haptic can play on press: `true` for a light impact, or any haptic by name; iOS prepares it on press-in. ' +
+      'Takes the full `ResponsiveViewSx` surface, so it styles like a `Box`.',
   },
   render: args => (
     <Pressable {...args}>
@@ -37,6 +42,12 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {}
+
+export const Scale: Story = {args: {pressEffect: 'scale'}}
+
+export const Opacity: Story = {args: {pressEffect: 'opacity'}}
+
+export const RippleOnly: Story = {args: {pressEffect: 'none'}}
 
 export const WithHaptic: Story = {args: {haptic: true}}
 

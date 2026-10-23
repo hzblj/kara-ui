@@ -11,7 +11,7 @@ const meta = {
   component: ActivityIndicator,
   parameters: {
     notes:
-      'UIKit’s spinner on iOS, Material 3’s expressive loading indicator on Android — its shapes morph as it ' +
+      'UIKit’s spinner on iOS, Material 3’s expressive loading indicator on Android, whose shapes morph as it ' +
       'turns. Tinted `fill.accent.primary` unless `color` says otherwise; it needs no host. For how far along ' +
       'something is, use `Progress`.',
   },

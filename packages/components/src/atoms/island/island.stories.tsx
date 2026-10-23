@@ -10,7 +10,7 @@ const meta = {
   component: Island,
   parameters: {
     notes:
-      'The host every other native atom needs — a SwiftUI `Host` / Compose view that the `@expo/ui` tree is ' +
+      'The host every other native atom needs: a SwiftUI `Host` / Compose view that the `@expo/ui` tree is ' +
       'mounted into. Outside one, a native atom silently renders nothing and `useHostGuard` warns in dev. ' +
       'This story carries no host decorator of its own, because the subject *is* the host.',
   },
@@ -27,7 +27,7 @@ export const Default: Story = {
       <VStack bg="surface.primary" borderRadius="medium" p="s12" spacing="s4" wide>
         <Text variant="headingXs">Inside the island</Text>
         <Text color="content.secondary" variant="footnote">
-          matchContents on — the height follows the native content, the width comes from the parent.
+          matchContents on: the height follows the native content, the width comes from the parent.
         </Text>
       </VStack>
     </Island>

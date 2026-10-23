@@ -2,7 +2,7 @@ import type {ReactNode} from 'react'
 
 export type BadgeTone = 'accent' | 'destructive' | 'neutral' | 'success'
 
-/** A small status label in a capsule — a SwiftUI `HStack` in the tone's fill on iOS, Material's `Badge` on Android. */
+/** A small status label in a capsule: a SwiftUI `HStack` in the tone's fill on iOS, Material's `Badge` on Android. */
 export type BadgeProps = {
   /** The text inside. */
   label: string

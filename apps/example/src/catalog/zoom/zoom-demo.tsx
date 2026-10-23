@@ -127,7 +127,7 @@ export const ZoomTransitionDemo = () => {
       <Section
         caption={
           Platform.OS === 'ios'
-            ? 'Tap a photo and it grows into a full-screen page; drag it down, or tap the close, and it shrinks back into the card. Press and hold for the menu — a tap on the preview zooms it in as well.'
+            ? 'Tap a photo and it grows into a full-screen page; drag it down, or tap the close, and it shrinks back into the card. Press and hold for the menu; a tap on the preview zooms it in as well.'
             : 'Tap a photo and it grows into its page; go back and it shrinks into the card again.'
         }
       >

@@ -402,9 +402,11 @@ capture_flow() {
 		cut="$(python3 scripts/shots.py motion "${WORK}/flow-own.mp4")"
 		encode "${WORK}/flow-own.mp4" "$video_target" "$frame" "${cut% *}" "${cut#* }"
 	elif [ "$VIDEOS" = 1 ] && [ -s "${WORK}/flow.mp4" ]; then
-		local duration
-		duration="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "${WORK}/flow.mp4")"
-		encode "${WORK}/flow.mp4" "$video_target" "$frame" 0.2 "$(python3 -c "print(max(1, $duration - 0.4))")"
+		# Maestro's own recording, cut the same way: from just before the picture first moves to just after it stops,
+		# rather than the seconds Maestro spends starting and finishing around the flow.
+		local cut
+		cut="$(python3 scripts/shots.py motion "${WORK}/flow.mp4")"
+		encode "${WORK}/flow.mp4" "$video_target" "$frame" "${cut% *}" "${cut#* }"
 	fi
 }
 

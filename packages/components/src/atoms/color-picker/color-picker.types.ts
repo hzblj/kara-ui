@@ -1,11 +1,12 @@
 import type {ReactNode} from 'react'
 
 /**
- * The system colour picker. iOS only — Compose ships no equivalent, so on Android this
- * renders nothing and says so in dev. Branch on `Platform.OS` if the screen needs a fallback.
+ * A row with a label and a colour well that opens a picker: SwiftUI's `ColorPicker` on iOS. Compose ships none, so on
+ * Android it is kara's own, in the same shape: a well with a rainbow ring, and a sheet with a grid of swatches, a
+ * spectrum and RGB sliders.
  */
 export type ColorPickerProps = {
-  /** Text beside the colour well. */
+  /** Text beside the colour well, and the Android sheet's title. */
   label?: string
   /** Called with the colour the user picks. */
   onValueChange?: (color: string) => void

@@ -19,7 +19,7 @@ export const ShapesPage = () => (
       </Box>
     </Section>
     <Section
-      caption="Corners can be set together, by side, or one at a time — the more specific one wins."
+      caption="Corners can be set together, by side, or one at a time; the more specific one wins."
       title="Per corner"
     >
       <Box gap="s8">

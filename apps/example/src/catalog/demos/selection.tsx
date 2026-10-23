@@ -12,16 +12,14 @@ import {
   Slider,
   Stepper,
   Switch,
-  Text,
   TextField,
   VStack,
 } from '@hzblj/kara-ui'
 import {useState} from 'react'
-import {Platform} from 'react-native'
 
 import {Section} from '../../ui'
 import type {CatalogEntry} from '../catalog.types'
-import {IOS_ONLY, KARA_MODULE, NATIVE, REACT_NATIVE} from './tags'
+import {KARA_MODULE, NATIVE, REACT_NATIVE} from './tags'
 
 const SwitchDemo = () => {
   const [wifi, setWifi] = useState(true)
@@ -150,18 +148,10 @@ const DatePickerDemo = () => {
 const ColorPickerDemo = () => {
   const [color, setColor] = useState<string | null>('#FF5A1F')
 
-  if (Platform.OS !== 'ios') {
-    return (
-      <Section caption="SwiftUI has a colour picker and Compose does not.">
-        <Island>
-          <Text color="content.secondary">Available on iOS.</Text>
-        </Island>
-      </Section>
-    )
-  }
-
   return (
-    <Section caption={`Selected: ${color}`}>
+    <Section
+      caption={`Selected: ${color}. Tap a well: iOS opens its own picker, Android kara’s sheet in the same shape.`}
+    >
       <Island>
         <VStack bg="surface.primary" borderRadius="large" p="s16" spacing="s8" wide>
           <ColorPicker label="Accent" onValueChange={setColor} value={color} />
@@ -283,8 +273,8 @@ export const SELECTION: CatalogEntry[] = [
     Demo: ColorPickerDemo,
     id: 'color-picker',
     name: 'ColorPicker',
-    summary: 'The system colour picker.',
-    tags: IOS_ONLY,
+    summary: 'A colour from a grid, a spectrum or sliders.',
+    tags: NATIVE,
   },
   {
     code: '<TextField label="Email" onChangeText={setEmail} />',

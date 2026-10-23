@@ -8,9 +8,9 @@
 [license-badge]: https://img.shields.io/badge/license-MIT-ff5700?labelColor=27272a
 [license-url]: https://github.com/hzblj/kara-ui/blob/main/LICENSE
 
-<a href="https://www.kara.janblazej.dev"><img src="https://www.kara.janblazej.dev/og.png" alt="Kara — native UI for Expo: real SwiftUI and Jetpack Compose views" width="720"></a>
+<a href="https://www.kara.janblazej.dev"><img src="https://www.kara.janblazej.dev/og.png" alt="Kara, native UI for Expo: real SwiftUI and Jetpack Compose views" width="720"></a>
 
-The `KaraUI` native module of [Kara UI](https://www.kara.janblazej.dev) — a native-first design system for Expo.
+The `KaraUI` native module of [Kara UI](https://www.kara.janblazej.dev), a native-first design system for Expo.
 
 > **Install [`@hzblj/kara-ui`](https://www.npmjs.com/package/@hzblj/kara-ui) instead.** This package is one of its
 > building blocks and is autolinked through it; its raw views are re-exported from `@hzblj/kara-ui/swift-ui` and
@@ -18,11 +18,11 @@ The `KaraUI` native module of [Kara UI](https://www.kara.janblazej.dev) — a na
 
 ## What's inside
 
-- **An Expo module in Swift and Kotlin** — what `@expo/ui` does not cover: Liquid Glass, the scroll edge effect, a
+- **An Expo module in Swift and Kotlin**, for what `@expo/ui` does not cover: Liquid Glass, the scroll edge effect, a
   context menu with a preview, tooltips, the navigation bar, swipe actions, the zoom transition and native icons.
-- **Haptics** — UIKit's feedback generators on iOS and `HapticFeedbackConstants` on Android, never a vibrator buzz.
+- **Haptics**: UIKit's feedback generators on iOS and `HapticFeedbackConstants` on Android, never a vibrator buzz.
 - **SwiftUI and Compose modifiers** registered into `@expo/ui`.
-- **Raw bindings** — the `/swift-ui` and `/jetpack-compose` entries, for building your own components.
+- **Raw bindings**: the `/swift-ui` and `/jetpack-compose` entries, for building your own components.
 
 ## Documentation
 

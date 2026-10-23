@@ -6,7 +6,7 @@ export type TopAppBarTitleAlignment = 'center' | 'leading'
 export type TopAppBarItemType = 'back' | 'close' | 'icon'
 
 export type TopAppBarItem = {
-  /** A drawable resource name, for `icon` — `iconResourceName(name)` for an app icon. */
+  /** A drawable resource name, for `icon`. Use `iconResourceName(name)` for an app icon. */
   iconName?: string
   /** The icon's content description. */
   label: string

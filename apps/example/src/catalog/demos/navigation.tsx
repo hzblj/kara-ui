@@ -84,7 +84,7 @@ const SheetDemo = () => {
         <Sheet.Header leadingItems={closeItem} title="Filters" titleStyle="leading" />
         <Box pb="s32" px="s20">
           <RnText color="content.secondary" variant="body">
-            Items go wherever you put them — a close on the left works as well as on the right.
+            Items go wherever you put them: a close on the left works as well as on the right.
           </RnText>
         </Box>
       </Sheet>
@@ -177,7 +177,7 @@ export const NAVIGATION: CatalogEntry[] = [
     Demo: NavigationBarDemo,
     id: 'navigation-bar',
     name: 'NavigationBar',
-    summary: 'A title with items on either side — a real navigation bar outside a navigation stack.',
+    summary: 'A title with items on either side: a real navigation bar outside a navigation stack.',
     tags: KARA_MODULE,
   },
   {

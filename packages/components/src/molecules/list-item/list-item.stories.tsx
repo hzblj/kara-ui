@@ -10,7 +10,7 @@ const meta = {
   argTypes: {icon: {control: 'select', options: ['home', 'settings', 'star', 'notification', 'user']}},
   component: ListItem,
   decorators: [insideIsland],
-  parameters: {notes: 'Passing `onPress` is what earns the row its chevron — a row without one stays plain.'},
+  parameters: {notes: 'Passing `onPress` is what earns the row its chevron; a row without one stays plain.'},
   title: 'Molecules/ListItem',
 } satisfies Meta<typeof ListItem>
 

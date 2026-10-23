@@ -1,10 +1,10 @@
 import type {ReactNode} from 'react'
 import type {StyleProp, ViewStyle} from 'react-native'
 
-/** SwiftUI's `Material` thicknesses — UIKit's `systemUltraThinMaterial` to `systemChromeMaterial`. */
+/** SwiftUI's `Material` thicknesses (UIKit's `systemUltraThinMaterial` to `systemChromeMaterial`). */
 export type BlurMaterial = 'regular' | 'thick' | 'thin' | 'ultraThick' | 'ultraThin'
 
-/** The label levels, a fill and the separator — the vibrancy iOS draws its own content on materials with. */
+/** The label levels, a fill and the separator: the vibrancy iOS draws its own content on materials with. */
 export type BlurVibrancy = 'fill' | 'primary' | 'quaternary' | 'secondary' | 'separator' | 'tertiary'
 
 export type BlurViewProps = {

@@ -15,7 +15,7 @@ export const icons: Guide = {
       <Hero id="icons" kicker="Core concepts" title="Icons">
         <P>
           {
-            'kara ships no icon set and no icon font. Your app brings a folder of SVGs; the config plugin turns each one into an asset-catalog image on iOS and a vector drawable on Android at prebuild, and writes their names as a type — so `<Icon name="bolt" />` only compiles for an icon you have.'
+            'kara ships no icon set and no icon font. Your app brings a folder of SVGs; the config plugin turns each one into an asset-catalog image on iOS and a vector drawable on Android at prebuild, and writes their names as a type, so `<Icon name="bolt" />` only compiles for an icon you have.'
           }
         </P>
       </Hero>
@@ -35,7 +35,7 @@ export const icons: Guide = {
         />
         <P>
           {
-            'The names land in `kara-icons.d.ts` (the global `KaraIcons`) whenever the config is read — `expo start` included — so a new SVG type-checks at once. Commit that file so a fresh clone type-checks too. The native assets still need a prebuild.'
+            'The names land in `kara-icons.d.ts` (the global `KaraIcons`) whenever the config is read (`expo start` included), so a new SVG type-checks at once. Commit that file so a fresh clone type-checks too. The native assets still need a prebuild.'
           }
         </P>
       </Section>
@@ -43,7 +43,7 @@ export const icons: Guide = {
       <Section id="svg-rules" title="What an SVG may contain">
         <List
           items={[
-            'Single-colour `<path>`s only — the platform tints every icon, with `color` or the surrounding tint. Anything else fails the prebuild, naming the file.',
+            'Single-colour `<path>`s only: the platform tints every icon, with `color` or the surrounding tint. Anything else fails the prebuild, naming the file.',
             '`share.android.svg` replaces `share.svg` on Android (and `.ios.svg` on iOS), for the glyphs the platforms draw differently.',
           ]}
         />
@@ -58,12 +58,12 @@ export const icons: Guide = {
               'SwiftUI `Image` from the asset catalog, Compose `Icon` with the drawable',
               'Inside a `Screen` or `Island`',
             ],
-            ['`RnIcon`', 'A `UIImageView` / `ImageView` of the same asset', 'Anywhere — what a list row wants'],
+            ['`RnIcon`', 'A `UIImageView` / `ImageView` of the same asset', 'Anywhere, which is what a list row wants'],
           ]}
         />
         <P>
           {
-            'Every prop that takes an icon — `IconButton`, `Fab`, `ListItem`, `Label`, `LabeledContent`, `Link`, `EmptyState`, menu actions, `Tabs` — takes one of these names.'
+            'Every prop that takes an icon (`IconButton`, `Fab`, `ListItem`, `Label`, `LabeledContent`, `Link`, `EmptyState`, menu actions, `Tabs`) takes one of these names.'
           }
         </P>
       </Section>
@@ -71,7 +71,7 @@ export const icons: Guide = {
       <Section id="ci" title="Without Expo">
         <P>
           {
-            '`kara-icons` validates a folder and writes the declaration without a prebuild — for CI, or a project that has not added the plugin yet.'
+            '`kara-icons` validates a folder and writes the declaration without a prebuild: for CI, or a project that has not added the plugin yet.'
           }
         </P>
         <CodeBlock code="npx kara-icons ./assets/icons" language="bash" title="Terminal" />
@@ -106,7 +106,7 @@ export const haptics: Guide = {
       <Hero id="haptics" kicker="Core concepts" title="Haptics">
         <P>
           {
-            'The platform’s own feedback, named for what happened: UIKit’s feedback generators on iOS, the system’s haptic feedback constants on Android — never a raw vibration. Both follow the user’s system setting, and every call is synchronous.'
+            'The platform’s own feedback, named for what happened: UIKit’s feedback generators on iOS, the system’s haptic feedback constants on Android, never a raw vibration. Both follow the user’s system setting, and every call is synchronous.'
           }
         </P>
       </Hero>
@@ -114,7 +114,7 @@ export const haptics: Guide = {
       <Section id="usage" title="Usage">
         <CodeBlock code={HAPTICS_USAGE} language="ts" />
         <Callout>
-          {'Haptics are felt, not seen — the simulator and the emulator play nothing. Check them on a device.'}
+          {'Haptics are felt, not seen: the simulator and the emulator play nothing. Check them on a device.'}
         </Callout>
       </Section>
 
@@ -196,13 +196,13 @@ export const router: Guide = {
 
       <Section id="tabs" title="Tabs">
         <p>
-          <Inline text="Native tabs for a layout route, on Expo Router’s native tabs — see [Tabs](/docs/components/tabs)." />
+          <Inline text="Native tabs for a layout route, on Expo Router’s native tabs. See [Tabs](/docs/components/tabs)." />
         </p>
       </Section>
 
       <Section id="zoom-transition" title="ZoomTransition">
         <p>
-          <Inline text="A push that grows out of the view it was opened from and shrinks back into it — see [ZoomTransition](/docs/components/zoom-transition)." />
+          <Inline text="A push that grows out of the view it was opened from and shrinks back into it. See [ZoomTransition](/docs/components/zoom-transition)." />
         </p>
       </Section>
 

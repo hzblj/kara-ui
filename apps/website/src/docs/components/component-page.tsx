@@ -38,8 +38,8 @@ const PLATFORM_LABELS: Record<MediaPlatform, string> = {android: 'Android', ios:
 
 const HOST_LABELS: Record<ComponentDoc['host'], string> = {
   native: 'Renders in a Screen or an Island',
-  rn: 'React Native tier — renders anywhere',
-  self: 'Brings its own host — renders anywhere',
+  rn: 'React Native tier: renders anywhere',
+  self: 'Brings its own host: renders anywhere',
 }
 
 /** `SheetHeaderProps` on the Sheet page → `Sheet.Header`; the page's own props type → `Props`. */

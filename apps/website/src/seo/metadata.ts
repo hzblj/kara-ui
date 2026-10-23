@@ -37,7 +37,7 @@ export const pageMetadata = (
   page: SeoPage,
   {title = page.title, type = 'article'}: {title?: Metadata['title']; type?: 'article' | 'website'} = {}
 ): Metadata => {
-  const shareTitle = page.href === '/' ? `${SITE_NAME} — ${page.title}` : `${page.title} · ${SITE_NAME}`
+  const shareTitle = page.href === '/' ? `${SITE_NAME}: ${page.title}` : `${page.title} · ${SITE_NAME}`
   const image = {alt: shareTitle, height: 630, url: ogImageHref(page.href), width: 1200}
 
   return {
@@ -60,5 +60,5 @@ export const pageMetadata = (
 /** The home page: the longer lede for search, the headline in the title. */
 export const homeMetadata = pageMetadata(
   {...HOME_PAGE, description: HERO_LEDE},
-  {title: {absolute: `${SITE_NAME} — ${HERO_HEADLINE}`}, type: 'website'}
+  {title: {absolute: `${SITE_NAME}: ${HERO_HEADLINE}`}, type: 'website'}
 )

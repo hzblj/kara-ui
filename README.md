@@ -11,16 +11,19 @@
 [platforms-badge]: https://img.shields.io/badge/platforms-iOS%20%C2%B7%20Android-ff5700?labelColor=27272a
 [docs-url]: https://www.kara.janblazej.dev/docs
 
-<a href="https://www.kara.janblazej.dev"><img src="https://www.kara.janblazej.dev/og.png" alt="Kara — native UI for Expo: real SwiftUI and Jetpack Compose views" width="720"></a>
+<a href="https://www.kara.janblazej.dev"><img src="https://www.kara.janblazej.dev/og.png" alt="Kara, native UI for Expo: real SwiftUI and Jetpack Compose views" width="720"></a>
 
-A native-first design system for Expo. Kara's components render **real SwiftUI and Jetpack Compose views** — a
-`Switch` is a SwiftUI `Toggle` on iOS and a Material `Switch` on Android — styled through one token-typed `sx`
-surface. The platform's colours and typeface by default, yours through the theme.
+A native-first design system for Expo. Its components are **real SwiftUI and Jetpack Compose views**:
+[`@expo/ui`](https://docs.expo.dev/versions/latest/sdk/ui/)'s, and Kara's own native components where `@expo/ui` has
+none (swipe actions, blur materials, a tintable segmented control, navigation bars, a zoom transition). Over both sits
+the **`sx` engine**, one token-typed styling surface that resolves into SwiftUI modifiers, Compose modifiers or React
+Native styles, so every component takes the same spacing, colours, radii and type, and the whole set reads as one
+design system on iOS and Android. The platform's colours and typeface by default, yours through the theme.
 
 ## Documentation
 
-**[www.kara.janblazej.dev/docs](https://www.kara.janblazej.dev/docs)** — the guides, the design tokens, and every component
-photographed on iOS and Android, in light and dark.
+**[www.kara.janblazej.dev/docs](https://www.kara.janblazej.dev/docs)**: the guides, the design tokens, and every component
+on iOS and Android, in light and dark.
 
 ## Install
 
@@ -29,7 +32,7 @@ npx expo install @hzblj/kara-ui @expo/ui @lodev09/react-native-true-sheet \
   expo-image react-native-reanimated react-native-worklets
 ```
 
-Expo SDK 57 and a [development build](https://docs.expo.dev/develop/development-builds/introduction/) — Kara ships
+Expo SDK 57 and a [development build](https://docs.expo.dev/develop/development-builds/introduction/): Kara ships
 native code, so it does not run in Expo Go. The [installation guide](https://www.kara.janblazej.dev/docs/installation)
 covers the config plugin and the provider.
 
@@ -55,7 +58,7 @@ are plain React Native views with the same `sx` props.
 
 ## Packages
 
-[`@hzblj/kara-ui`](./packages/kara-ui) is the one to install — it re-exports the rest, which are published so its
+[`@hzblj/kara-ui`](./packages/kara-ui) is the one to install: it re-exports the rest, which are published so its
 types resolve.
 
 | Package | What it holds |

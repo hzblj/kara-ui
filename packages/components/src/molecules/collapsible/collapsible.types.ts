@@ -2,7 +2,7 @@ import type {ReactNode} from 'react'
 
 /**
  * A row that shows and hides its content: SwiftUI's `DisclosureGroup` on iOS; on Android a pressable row with a
- * chevron over an animated reveal. A native atom — it renders inside `<Screen>` or `<Island>`.
+ * chevron over an animated reveal. A native atom: it renders inside `<Screen>` or `<Island>`.
  */
 export type CollapsibleProps = {
   /** Shown while `expanded`. */

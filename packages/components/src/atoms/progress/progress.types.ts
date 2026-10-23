@@ -1,7 +1,7 @@
 import type {ReactNode} from 'react'
 
 /**
- * A progress bar or ring, tinted `fill.accent.primary` — SwiftUI `ProgressView` (a capacity `Gauge` for a ring with a
+ * A progress bar or ring, tinted `fill.accent.primary`: SwiftUI `ProgressView` (a capacity `Gauge` for a ring with a
  * value, which `ProgressView` cannot draw on iOS) / Compose's `LinearProgressIndicator` and `CircularProgressIndicator`.
  */
 export type ProgressProps = {

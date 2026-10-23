@@ -5,7 +5,7 @@ export type SwitchProps = {
   /** Stops the user flipping it, and dims it. */
   disabled?: boolean
   /**
-   * Shown beside the switch. On Android it makes a full-width row — label at the start, switch at the end — that
+   * Shown beside the switch. On Android it makes a full-width row (label at the start, switch at the end) that
    * toggles wherever it is tapped.
    */
   label?: string

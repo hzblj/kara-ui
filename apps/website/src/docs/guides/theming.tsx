@@ -28,7 +28,7 @@ const KINDS = `import {adaptive, native} from '@hzblj/kara-ui'
 // The platform's own colour, on both sides.
 native({android: 'surface', ios: 'systemGroupedBackgroundColor'})
 
-// iOS has a name for it, Android does not — so there the hexes are ours.
+// iOS has a name for it, Android does not, so there the hexes are ours.
 native({dark: '#3ddc84', ios: 'systemGreenColor', light: '#00a546'})
 
 // Ours on both platforms, still switched by the platform on iOS.
@@ -66,13 +66,13 @@ export const theming: Guide = {
       <Hero id="theming" kicker="Core concepts" title="Theming">
         <P>
           {
-            'The library’s palette is mostly references the platform resolves — UIKit semantic colours on iOS, Material 3 roles on Android — so kara looks native before you change anything. A theme overrides **values, never names**: the token set stays the library’s, and every `sx` prop and component keeps type-checking.'
+            'The library’s palette is mostly references the platform resolves (UIKit semantic colours on iOS, Material 3 roles on Android), so kara looks native before you change anything. A theme overrides **values, never names**: the token set stays the library’s, and every `sx` prop and component keeps type-checking.'
           }
         </P>
       </Hero>
 
       <Section id="define" title="A theme">
-        <P>{'`defineTheme` at module scope, so the config stays referentially stable — the `sx` caches key on it.'}</P>
+        <P>{'`defineTheme` at module scope, so the config stays referentially stable: the `sx` caches key on it.'}</P>
         <CodeBlock code={THEME} title="theme.ts" />
         <CodeBlock code={PROVIDER} title="app/_layout.tsx" />
         <Table
@@ -82,7 +82,7 @@ export const theming: Guide = {
             ['`fonts`', 'Your own typeface, by role and weight. Omitted, text is set in SF Pro and Roboto.'],
             [
               '`materialSeed`',
-              'The colour Android’s Material 3 scheme grows from — every Material role and Compose control. Defaults to the accent.',
+              'The colour Android’s Material 3 scheme grows from, and with it every Material role and Compose control. Defaults to the accent.',
             ],
             [
               '`dynamicColor`',
@@ -93,7 +93,7 @@ export const theming: Guide = {
       </Section>
 
       <Section id="colour-kinds" title="Three kinds of colour">
-        <P>{'An entry is one of three kinds, and the kind is the value — no call site ever knows which.'}</P>
+        <P>{'An entry is one of three kinds, and the kind is the value; no call site ever knows which.'}</P>
         <CodeBlock code={KINDS} language="ts" />
         <Callout>
           {
@@ -105,7 +105,7 @@ export const theming: Guide = {
       <Section id="appearance" title="Light and dark">
         <P>
           {
-            '`themePreference` is `system` by default. `light` and `dark` pin the app to one appearance — on the platform as well as in React, so `PlatformColor`s in the React Native tier and the SwiftUI and Compose hosts agree.'
+            '`themePreference` is `system` by default. `light` and `dark` pin the app to one appearance, on the platform as well as in React, so `PlatformColor`s in the React Native tier and the SwiftUI and Compose hosts agree.'
           }
         </P>
       </Section>
@@ -113,7 +113,7 @@ export const theming: Guide = {
       <Section id="fonts" title="Your own typeface">
         <P>
           {
-            'kara ships no fonts. Register your faces with `expo-font`, then name them by role — `display` for headings and the large sizes, `text` for the rest — and weight. A missing weight falls back to the role’s `regular`, then to the platform face. Every variant still grows with Dynamic Type.'
+            'kara ships no fonts. Register your faces with `expo-font`, then name them by role (`display` for headings and the large sizes, `text` for the rest) and weight. A missing weight falls back to the role’s `regular`, then to the platform face. Every variant still grows with Dynamic Type.'
           }
         </P>
         <CodeBlock code={FONTS} language="ts" />
@@ -122,7 +122,7 @@ export const theming: Guide = {
       <Section id="reading" title="Reading the theme">
         <P>
           {
-            '`useAppTheme()` returns the resolved theme. `theme.color(token)` is the one way to resolve a token — to a hex, or on iOS to an opaque `PlatformColor` for a system reference. `theme.dark`, `theme.typography` and `theme.dynamicColor` are there too.'
+            '`useAppTheme()` returns the resolved theme. `theme.color(token)` is the one way to resolve a token: to a hex, or on iOS to an opaque `PlatformColor` for a system reference. `theme.dark`, `theme.typography` and `theme.dynamicColor` are there too.'
           }
         </P>
         <CodeBlock code={READ} />
@@ -131,7 +131,7 @@ export const theming: Guide = {
       <Section id="semantic-colours" title="Redefining a UIKit colour">
         <P>
           {
-            'The theme changes what a token resolves to, not what UIKit’s colours are. To redefine a semantic colour app-wide — for every token that names it and every piece of UIKit — the config plugin writes it into the asset catalog at prebuild. Android has no equivalent: its roles come from the seed or the wallpaper.'
+            'The theme changes what a token resolves to, not what UIKit’s colours are. To redefine a semantic colour app-wide (for every token that names it and every piece of UIKit), the config plugin writes it into the asset catalog at prebuild. Android has no equivalent: its roles come from the seed or the wallpaper.'
           }
         </P>
         <CodeBlock code={SEMANTIC} language="ts" title="app.config.ts" />

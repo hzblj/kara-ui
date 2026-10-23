@@ -74,8 +74,13 @@
   --color-stage-android: #fff8f6;
 
   --shadow-card-default: 0 1px 2px #0000000a, 0 12px 36px #0000000f;
+  /* The resting shadow kept whole, with a soft lift composed under it: a card under the pointer rises without moving. */
+  --shadow-card-hover: 0 1px 2px #0000000a, 0 12px 36px #0000000f, 0 4px 24px -8px #00000017, 0 4px 12px -8px #00000017;
   --shadow-card-elevated: 0 2px 6px #0000000f, 0 24px 64px #00000014;
   --shadow-btn-default: 0 1px 2px #0000001f;
+
+  /* transitions.dev's smooth out: what moves inside a hovered card, and anything that changes position. */
+  --ease-smooth-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -109,6 +114,8 @@
   --color-stage-android: #1a110f;
 
   --shadow-card-default: 0 1px 2px #00000052, 0 12px 36px #00000066;
+  /* A shadow does not read on a dark page; there a hovered card's surface lifts a tone instead (`surface-tertiary`). */
+  --shadow-card-hover: 0 1px 2px #00000052, 0 12px 36px #00000066;
   --shadow-card-elevated: 0 2px 6px #00000052, 0 24px 64px #0000007a;
   --shadow-btn-default: 0 1px 2px #00000066;
 }

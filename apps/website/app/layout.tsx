@@ -48,7 +48,7 @@ export const metadata: Metadata = {
   other: {'github:repository': REPOSITORY_URL},
   publisher: 'hzblj',
   robots: {googleBot: {'max-image-preview': 'large', 'max-snippet': -1}},
-  title: {default: `${SITE_NAME} — ${HERO_HEADLINE}`, template: `%s · ${SITE_NAME}`},
+  title: {default: `${SITE_NAME}: ${HERO_HEADLINE}`, template: `%s · ${SITE_NAME}`},
   twitter: homeMetadata.twitter,
 }
 
@@ -70,7 +70,14 @@ const inter = localFont({
 
 export default function RootLayout({children}: Readonly<{children: ReactNode}>) {
   return (
-    <html className={inter.variable} data-platform="ios" lang="en" suppressHydrationWarning>
+    <html
+      className={inter.variable}
+      data-platform="ios"
+      // Next turns the stylesheet's smooth scrolling off for a route change and back on after, when it is told.
+      data-scroll-behavior="smooth"
+      lang="en"
+      suppressHydrationWarning
+    >
       <head>
         {/* Inline rather than `next/script`: this has to run before the body is parsed. */}
         <script dangerouslySetInnerHTML={{__html: HEAD_SCRIPT}} />

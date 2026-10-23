@@ -11,7 +11,7 @@ const meta = {
   decorators: [insideIsland],
   parameters: {
     notes:
-      'Eats the free space in a stack rather than adding a fixed gap — that is what `spacing` is for. `min` sets the floor it may never shrink below.',
+      'Eats the free space in a stack rather than adding a fixed gap (that is what `spacing` is for). `min` sets the floor it may never shrink below.',
   },
   title: 'Atoms/Spacer',
 } satisfies Meta<typeof Spacer>

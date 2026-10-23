@@ -13,7 +13,7 @@ const ControlledSearchBar = (args: SearchBarProps) => {
 const meta = {
   args: {value: ''},
   component: SearchBar,
-  parameters: {notes: 'React Native tier — it hosts nothing native, so it renders outside `Screen` and `Island` too.'},
+  parameters: {notes: 'React Native tier: it hosts nothing native, so it renders outside `Screen` and `Island` too.'},
   render: ControlledSearchBar,
   title: 'Molecules/SearchBar',
 } satisfies Meta<typeof SearchBar>

@@ -25,7 +25,7 @@ export const StylingPage = () => (
     <Section title="Borders">
       <Box gap="s12">
         <Box borderBottomWidth={1} borderColor="border.tertiary" pb="s8">
-          <RnText variant="subheadline">One side — a divider</RnText>
+          <RnText variant="subheadline">A divider on one side</RnText>
         </Box>
         <Box borderColor="content.accent" borderLeftWidth={3} pl="s12">
           <RnText variant="subheadline">A quote rule</RnText>

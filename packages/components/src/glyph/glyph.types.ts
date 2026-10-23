@@ -3,7 +3,7 @@ import type {ColorToken, SpaceSize} from '@hzblj/kara-theme'
 import type {ReactNode} from 'react'
 
 /**
- * One of the few glyphs kara's own components draw — a search field's magnifier, a row's chevron. Internal: apps draw
+ * One of the few glyphs kara's own components draw: a search field's magnifier, a row's chevron. Internal: apps draw
  * their own icons with `Icon` / `RnIcon`.
  */
 export type GlyphProps = {

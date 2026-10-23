@@ -12,7 +12,7 @@ const meta = {
   component: GlassView,
   parameters: {
     notes:
-      'Liquid Glass on iOS 26, as a UIKit view — no host, so it is cheap enough for every cell of a list. On Android ' +
+      'Liquid Glass on iOS 26, as a UIKit view: no host, so it is cheap enough for every cell of a list. On Android ' +
       'it is frosted glass: what lies behind, blurred and saturated (Android 12+), under a translucent tonal surface. ' +
       'Below iOS 26 it is a plain capsule of the tint (or the translucent glass fill). Interactive glass swells toward ' +
       'the finger on iOS; the press itself belongs to a `Pressable` around it, whose ripple keeps to the capsule on ' +

@@ -14,7 +14,7 @@ export type PaletteResolver = {
 }
 
 /**
- * The `variant` argument is what the app already settled on — stored preference folded in — so the Android side never
+ * The `variant` argument is what the app already settled on (stored preference folded in), so the Android side never
  * asks the OS a second time and disagrees with what iOS was told. `seedColor` is the theme's `materialSeed`, which
  * Android grows its Material scheme from (`undefined`: the wallpaper). iOS ignores both: its handles are variant-blind
  * and it has no generated scheme.

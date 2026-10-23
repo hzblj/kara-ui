@@ -15,7 +15,7 @@ const PAIRS = [
 export const TypographyPage = () => (
   <>
     <Section
-      caption="Set in the platform’s own face — SF Pro on iOS, Roboto on Android — unless your theme names one."
+      caption="Set in the platform’s own face (SF Pro on iOS, Roboto on Android) unless your theme names one."
       title="Type scale"
     >
       <Box bg="surface.primary" borderRadius="large" gap="s12" p="s16">

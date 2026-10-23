@@ -15,6 +15,8 @@ export type TooltipBoxProps = {
   maxWidth?: number
   onDismissRequest: (reason: TooltipBoxDismissReason) => void
   onShown?: () => void
-  /** Material's plain tooltip — `TooltipBox.Text` alone in a small bubble, centred above the anchor — not the rich one. */
+  /**
+   * Material's plain tooltip (`TooltipBox.Text` alone in a small bubble, centred above the anchor), not the rich one.
+   */
   plain?: boolean
 }

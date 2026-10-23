@@ -8,7 +8,7 @@ export type BackdropBlurViewProps = {
   children?: ReactNode
   /** The shape's corner radius, in dp. It clips the backdrop and the children. */
   cornerRadius?: number
-  /** Drawn instead of `tint` below Android 12, where there is no blur — opaque enough for the content to read. */
+  /** A tint opaque enough for the content to read, drawn instead of `tint` below Android 12, where there is no blur. */
   fallbackTint?: ColorValue
   /** Over the blur; its alpha is how much of it covers the backdrop. */
   glassTint?: ColorValue

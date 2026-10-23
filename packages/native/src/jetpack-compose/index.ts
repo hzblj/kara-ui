@@ -1,4 +1,5 @@
 export * from './backdrop-blur-view'
+export * from './color-well'
 export * from './drawable-icon'
 export * from './fab-menu'
 export * from './icon-view'

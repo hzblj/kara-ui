@@ -3,13 +3,13 @@ import type {ColorToken} from '@hzblj/kara-theme'
 import type {ReactNode} from 'react'
 
 /**
- * Glass around a React Native subtree, shaped as a capsule — the React Native tier, so it needs no host. iOS 26:
- * Liquid Glass. Android: frosted glass — what lies behind, blurred on Android 12+, under a translucent tonal surface
- * (or `tint`) and a hairline. iOS before 26 has no Liquid Glass and draws a capsule of `tint` instead, or of the glass
- * buttons' translucent fill (`btn.bg.glass.base`) when there is none.
+ * Glass around a React Native subtree, shaped as a capsule. It belongs to the React Native tier, so it needs no host.
+ * iOS 26: Liquid Glass. Android: frosted glass, made of what lies behind, blurred on Android 12+, under a translucent
+ * tonal surface (or `tint`) and a hairline. iOS before 26 has no Liquid Glass and draws a capsule of `tint` instead, or
+ * of the glass buttons' translucent fill (`btn.bg.glass.base`) when there is none.
  *
  * On Android each glass re-records what lies behind it before every frame: a few buttons cost nothing, but keep it out
- * of the cells of a long list — a plain `tint` reads as well there.
+ * of the cells of a long list. A plain `tint` reads as well there.
  */
 export type GlassViewProps = ResponsiveViewSx & {
   /** React Native views. Give them `pointerEvents="none"` when `interactive`, so the press reaches the `Pressable`. */

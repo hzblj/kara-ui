@@ -11,7 +11,7 @@ const meta = {
   decorators: [insideIsland],
   parameters: {
     notes:
-      'Uncontrolled on purpose — it seeds from `defaultValue` and reports through `onChangeText`, so neither platform has to round-trip every keystroke through JS.',
+      'Uncontrolled on purpose: it seeds from `defaultValue` and reports through `onChangeText`, so neither platform has to round-trip every keystroke through JS.',
   },
   title: 'Atoms/TextField',
 } satisfies Meta<typeof TextField>

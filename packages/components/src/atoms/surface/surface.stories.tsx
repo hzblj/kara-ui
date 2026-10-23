@@ -10,7 +10,7 @@ const meta = {
   decorators: [insideIsland],
   parameters: {
     notes:
-      '`glass` reaches for the iOS 26 `glassEffect` and a Material 3 tonal surface on Android — the two do not look alike, and are not meant to.',
+      '`glass` reaches for the iOS 26 `glassEffect` and a Material 3 tonal surface on Android. The two do not look alike, and are not meant to.',
   },
   title: 'Atoms/Surface',
 } satisfies Meta<typeof Surface>

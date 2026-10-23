@@ -56,11 +56,13 @@ export const docsStyles = tv({
     sidebar:
       'sticky top-0 left-0 flex h-screen flex-col overflow-y-auto border-r border-border-secondary px-6 pb-6 [scrollbar-color:var(--color-gray-5)_transparent] [scrollbar-width:thin] max-[820px]:hidden',
     sidebarBrand: 'flex min-w-0 items-baseline gap-2.5',
+    sidebarBrandRow: 'flex h-20 items-center',
     sidebarFooter: 'mt-auto grid gap-2.5 border-t border-border-secondary pt-5 text-[13px]',
     sidebarFooterLink:
       'inline-flex items-center gap-2 text-content-tertiary transition-colors hover:text-content-primary',
     sidebarFooterMark: 'size-4 shrink-0',
-    sidebarTop: 'mb-6 flex h-20 shrink-0 items-center',
+    sidebarTop:
+      'sticky top-0 z-10 -mx-6 mb-4 shrink-0 bg-surface-base px-6 pb-5 after:pointer-events-none after:absolute after:inset-x-0 after:top-full after:h-5 after:bg-gradient-to-b after:from-surface-base after:to-transparent',
     site: 'mx-auto grid min-h-screen max-w-[1320px] grid-cols-[248px_minmax(0,1fr)_208px] max-[1180px]:grid-cols-[248px_minmax(0,1fr)] max-[820px]:block',
     tab: 'cursor-pointer rounded-[7px] border border-transparent px-[11px] py-[7px] text-xs font-semibold transition-colors hover:bg-fill-secondary-hover hover:text-content-primary',
     tabActive: 'border-border-secondary bg-surface-elevated text-content-primary shadow-btn-default',

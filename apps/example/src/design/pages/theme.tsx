@@ -44,7 +44,7 @@ export const ThemePage = () => (
     >
       <AccentControl testID="theme-accent" />
     </Section>
-    <Section caption="Everything here — and across the app — follows along." title="Preview">
+    <Section caption="Everything here, and across the app, follows along." title="Preview">
       <Preview />
     </Section>
     <Section caption="Override values, never names: every token keeps type-checking." title="Your own theme">

@@ -13,7 +13,7 @@ export const componentsGuide: Guide = {
         <div className={styles.kicker()}>Gallery</div>
         <h1>Components</h1>
         <p>
-          {`${COMPONENTS.length} components. Each one is photographed on iOS and on Android, in the site’s light or dark — hover a card to see it move.`}
+          {`${COMPONENTS.length} components. Each one is shown on iOS and on Android, in the site’s light or dark. Hover a card to see it move.`}
         </p>
         <div className="mt-7 flex flex-wrap items-center gap-3">
           <PlatformSwitch />

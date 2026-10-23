@@ -27,7 +27,7 @@ const meta = {
   component: BlurView,
   parameters: {
     notes:
-      'The system materials — UIKit `system*Material` on iOS, with vibrancy for the content if asked; on Android what ' +
+      'The system materials: UIKit `system*Material` on iOS, with vibrancy for the content if asked; on Android what ' +
       'lies behind, blurred and saturated (Android 12+), under a Material tonal surface as thick as the material. No ' +
       'host: it is a plain view, cheap enough for a list cell.',
   },

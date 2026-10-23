@@ -7,7 +7,7 @@ const meta = {
   args: {h: 20, w: 160},
   argTypes: {borderRadius: {control: 'select', options: ['none', 'small', 'medium', 'large', 'full']}},
   component: Skeleton,
-  parameters: {notes: 'Leave `w` unset and it fills the row — that is the usual shape for a text placeholder.'},
+  parameters: {notes: 'Leave `w` unset and it fills the row, which is the usual shape for a text placeholder.'},
   title: 'Atoms/Skeleton',
 } satisfies Meta<typeof Skeleton>
 

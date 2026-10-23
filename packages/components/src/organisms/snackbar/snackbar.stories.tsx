@@ -31,7 +31,7 @@ const meta = {
   args: {message: 'Item deleted', visible: false},
   component: Snackbar,
   parameters: {
-    notes: 'React Native tier — an overlay drawn above the screen rather than a native control, so it needs no host.',
+    notes: 'React Native tier: an overlay drawn above the screen rather than a native control, so it needs no host.',
   },
   render: ControlledSnackbar,
   title: 'Organisms/Snackbar',

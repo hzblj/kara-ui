@@ -49,7 +49,7 @@ export const introduction: Guide = {
       <Hero id="introduction" kicker="Getting started" title="Native UI for Expo">
         <P>
           {
-            'kara is a design system for Expo whose components render **real SwiftUI and Jetpack Compose views** — a `Switch` is a SwiftUI `Toggle` on iOS and a Material `Switch` on Android — styled through one token-typed `sx` surface. Platform colours and the platform’s typeface by default; yours through the theme.'
+            'kara is a design system for Expo made of **real SwiftUI and Jetpack Compose views**: [@expo/ui](https://docs.expo.dev/versions/latest/sdk/ui/)’s, and kara’s own native components where @expo/ui has none (swipe actions, blur materials, a tintable segmented control, navigation bars, a zoom transition). Over both sits the **sx engine**, one token-typed styling surface that resolves into SwiftUI modifiers, Compose modifiers or React Native styles, so every component takes the same spacing, colours, radii and type, and the whole set reads as one design system on iOS and Android. The platform’s colours and typeface by default; yours through the theme.'
           }
         </P>
       </Hero>
@@ -63,7 +63,7 @@ export const introduction: Guide = {
         <CodeBlock code={FIRST_SCREEN} title="App.tsx" />
         <Callout>
           {
-            'kara needs a **development build** — its views are native code, so Expo Go cannot run them. iOS and Android, Expo SDK 57. There is no web target.'
+            'kara needs a **development build**: its views are native code, so Expo Go cannot run them. iOS and Android, Expo SDK 57. There is no web target.'
           }
         </Callout>
       </Section>
@@ -85,7 +85,7 @@ export const introduction: Guide = {
             ],
             [
               'React Native',
-              'React Native views — some backed by kara’s own UIKit and Compose views',
+              'React Native views, some backed by kara’s own UIKit and Compose views',
               'Anywhere',
               '`Box`, `RnText`, `Pressable`, `Sheet`, `ContextMenu`, `GlassView`',
             ],
@@ -110,7 +110,7 @@ export const introduction: Guide = {
             },
             {copy: 'Every prop that styles, and the tokens it takes.', href: '/docs/styling', title: 'Styling with sx'},
             {
-              copy: `All ${COMPONENTS.length}, photographed on both platforms.`,
+              copy: `All ${COMPONENTS.length}, on both platforms.`,
               href: '/docs/components',
               title: 'Components',
             },
@@ -159,7 +159,7 @@ export const installation: Guide = {
 
       <Section id="install" title="Install">
         <CodeBlock code={INSTALL_BLOCK} language="bash" title="Terminal" />
-        <P>{'For the router pieces — `Tabs`, `navigationTheme` and `ZoomTransition` — add Expo Router too:'}</P>
+        <P>{'For the router pieces (`Tabs`, `navigationTheme` and `ZoomTransition`), add Expo Router too:'}</P>
         <CodeBlock code="npx expo install expo-router" language="bash" title="Terminal" />
         <Table
           columns={['Peer', 'Why']}
@@ -192,7 +192,7 @@ export const installation: Guide = {
         <CodeBlock code={'npx expo prebuild\nnpx expo run:ios     # or run:android'} language="bash" title="Terminal" />
         <P>
           {
-            'A new SVG, a change to the plugin’s options or a kara upgrade with native changes all need a prebuild and a native run — not a Metro reload. See [Icons](/docs/icons).'
+            'A new SVG, a change to the plugin’s options or a kara upgrade with native changes all need a prebuild and a native run, not a Metro reload. See [Icons](/docs/icons).'
           }
         </P>
       </Section>
@@ -200,7 +200,7 @@ export const installation: Guide = {
       <Section id="provider" title="Provider">
         <P>
           {
-            '`KaraProvider` goes at the root, once. It carries the theme, the active breakpoint for responsive `sx`, and the appearance — pinned to light or dark on the platform too, so native and React Native views agree. With Expo Router, hand `navigationTheme(theme)` to its `ThemeProvider` so headers and tab bars take the same colours.'
+            '`KaraProvider` goes at the root, once. It carries the theme, the active breakpoint for responsive `sx`, and the appearance, pinned to light or dark on the platform too, so native and React Native views agree. With Expo Router, hand `navigationTheme(theme)` to its `ThemeProvider` so headers and tab bars take the same colours.'
           }
         </P>
         <CodeBlock code={LAYOUT} title="app/_layout.tsx" />
@@ -213,7 +213,7 @@ export const installation: Guide = {
             ['`@hzblj/kara-ui`', 'Every component, the `sx` engine, the theme and the haptics.'],
             [
               '`@hzblj/kara-ui/router`',
-              '`Tabs`, `navigationTheme`, `ZoomTransition` — everything that needs Expo Router.',
+              '`Tabs`, `navigationTheme`, `ZoomTransition`: everything that needs Expo Router.',
             ],
             ['`@hzblj/kara-ui/swift-ui`', 'kara’s raw SwiftUI and UIKit views, for building your own.'],
             ['`@hzblj/kara-ui/jetpack-compose`', 'kara’s raw Compose views.'],
@@ -264,7 +264,7 @@ export const hosts: Guide = {
       <Hero id="hosts" kicker="Core concepts" title="Screen and Island">
         <P>
           {
-            'A SwiftUI or Compose view only exists inside a native host. `Screen` is a whole screen of them; `Island` is one patch of native layout inside React Native. Outside either, a native component renders nothing — in development, `useHostGuard` warns which one it was.'
+            'A SwiftUI or Compose view only exists inside a native host. `Screen` is a whole screen of them; `Island` is one patch of native layout inside React Native. Outside either, a native component renders nothing; in development, `useHostGuard` warns which one it was.'
           }
         </P>
       </Hero>
@@ -286,7 +286,7 @@ export const hosts: Guide = {
         </P>
         <Callout>
           {
-            'Some native views have no height of their own — `List`, `Form` on iOS, `Pager`, `ScrollView`. In an island they need `matchContents={false}` and an explicit height, or they show nothing (Compose throws on an infinite height).'
+            'Some native views have no height of their own: `List`, `Form` on iOS, `Pager`, `ScrollView`. In an island they need `matchContents={false}` and an explicit height, or they show nothing (Compose throws on an infinite height).'
           }
         </Callout>
         <CodeBlock code={ISLAND_HEIGHT} />
@@ -317,7 +317,7 @@ export const hosts: Guide = {
           rows={[
             ['Native views, in a native screen', '`List` with `ListItem`s, in a `Screen`.'],
             [
-              'React Native content, many of them — hosts in them included',
+              'React Native content, many of them (hosts in them included)',
               '`RnFlatList` or `RnSectionList`: React Native’s own virtualized lists, cells in normal flow, so a hosted view stays where the layout put it. Bring your own recycling list for plain data rows if you need one; recycled cells move, which a host does not survive.',
             ],
             ['A handful that should not scroll', 'A `VStack` (native) or a `Box` (React Native).'],

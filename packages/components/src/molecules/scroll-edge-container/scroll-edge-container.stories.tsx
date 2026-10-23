@@ -20,7 +20,7 @@ const Bar = ({label}: {label: string}) => (
 const meta = {
   parameters: {
     notes:
-      'iOS 26 gives both bars the system scroll edge effect — the progressive blur under content scrolling past ' +
+      'iOS 26 gives both bars the system scroll edge effect: the progressive blur under content scrolling past ' +
       'them. Below iOS 26 the bars are still inset, without the effect (check `isScrollEdgeEffectAvailable()` and ' +
       'give them a background). Android has no effect and no `contentInset`, so the bars stack above and below the ' +
       'scroll view instead of over it.',

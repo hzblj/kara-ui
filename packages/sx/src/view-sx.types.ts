@@ -21,7 +21,7 @@ export type ViewRadiiSx = {
   borderTopRightRadius?: RadiiSize
 }
 
-/** Per-side widths draw only the edges you name — a one-sided hairline divider needs just one. */
+/** Per-side widths draw only the edges you name: a one-sided hairline divider needs just one. */
 type ViewBorderSx = {
   borderBottomWidth?: number
   borderLeftWidth?: number
@@ -30,7 +30,7 @@ type ViewBorderSx = {
   borderTopWidth?: number
 }
 
-/** `minW`/`minH` live in `StyleSx` — every target can express those, so they are not view-only. */
+/** `minW`/`minH` live in `StyleSx`: every target can express those, so they are not view-only. */
 type ViewSizingSx = {
   aspectRatio?: number
   maxH?: SxDimension
@@ -39,7 +39,7 @@ type ViewSizingSx = {
 
 /**
  * `grow` is deliberately React Native only. Compose's `weight` is the same proportional share of the
- * leftover space, but SwiftUI has no per-child weight at all — its nearest move is an infinite `maxWidth`,
+ * leftover space, but SwiftUI has no per-child weight at all; its nearest move is an infinite `maxWidth`,
  * which splits the space equally and ignores the ratio. So the modifier paths expose it as
  * `android={{weight}}` and `ios={{layoutPriority}}`, which is what each of them actually does.
  */

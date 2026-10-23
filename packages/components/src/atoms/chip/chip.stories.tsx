@@ -25,7 +25,7 @@ const SelectableChips = () => {
 const meta = {
   args: {label: 'react', onPress: fn()},
   component: Chip,
-  parameters: {notes: 'React Native tier — a filter pill, not a native control. Safe to render outside a host.'},
+  parameters: {notes: 'React Native tier: a filter pill, not a native control. Safe to render outside a host.'},
   title: 'Atoms/Chip',
 } satisfies Meta<typeof Chip>
 
