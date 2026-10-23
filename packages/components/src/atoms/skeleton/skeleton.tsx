@@ -1,9 +1,9 @@
+import {timing} from '@hzblj/kara-sx'
 import {duration, opacity, useReducedMotion} from '@hzblj/kara-theme'
 import {useEffect} from 'react'
 import {cancelAnimation, useAnimatedStyle, useSharedValue, withRepeat, withTiming} from 'react-native-reanimated'
 
-import {timing} from '../../motion'
-import {ABox} from '../box'
+import {Box} from '../box'
 import type {SkeletonComponent, SkeletonProps} from './skeleton.types'
 
 /** A breath, not a transition, so it sits off the scale: `slow` twice each way, at constant speed. */
@@ -28,7 +28,7 @@ export const Skeleton: SkeletonComponent = ({borderRadius = 'small', h, testID, 
   const rStyle = useAnimatedStyle(() => ({opacity: pulse.value}), [])
 
   return (
-    <ABox
+    <Box
       aria-hidden
       bg="fill.quaternary"
       borderRadius={borderRadius}

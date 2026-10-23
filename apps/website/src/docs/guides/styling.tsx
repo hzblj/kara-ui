@@ -13,7 +13,13 @@ const BUCKETS = `<HStack
   p="s16"
 />`
 
-const RESPONSIVE = `<Box flexDirection={{base: 'column', md: 'row'}} gap="s16" p={{base: 's16', md: 's32'}} />`
+const SHORTHANDS = `<Box row wrap gap="s8">{tags}</Box>             {/* flexDirection row, flexWrap wrap */}
+<Box center size={48} borderRadius="full" />   {/* centred children, a 48 pt square */}
+<Box absolute bg="fill.accent.base" />        {/* over its parent, all four edges at 0 */}
+<Box fill />                                   {/* flex: 1, the room left in its parent */}
+<Box grow shrink />                            {/* flexGrow 1, flexShrink 1 */}`
+
+const RESPONSIVE = `<Box gap="s16" p={{base: 's16', md: 's32'}} row={{base: false, md: true}} />`
 
 const OWN = `import {sx} from '@hzblj/kara-ui'
 import {Image as ExpoImage} from 'expo-image'
@@ -72,6 +78,13 @@ export const styling: Guide = {
             'The React Native tier (`Box`, `Pressable`, `GlassView`, the `Rn*` views) takes everything above except the buckets, plus the layout only a React Native style has. Lengths there may also be percentages: `w="50%"`.'
           }
         </P>
+        <h3>Shorthands</h3>
+        <P>
+          {
+            'The layouts written every day have a word of their own: `row`, `wrap`, `center`, `fill`, `absolute` and `size`, with `grow` and `shrink` taking `true`. Each one gives way to the key it stands in for, so `row flexDirection="column"` is a column, and `absolute top={16}` keeps its own top.'
+          }
+        </P>
+        <CodeBlock code={SHORTHANDS} />
         <h3>Flex</h3>
         <PropsTable name="ViewFlexSx" />
         <h3>Margins</h3>

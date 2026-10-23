@@ -1,4 +1,4 @@
-import type {AccessibilityProps, ResponsiveViewSx} from '@hzblj/kara-sx'
+import type {AccessibilityProps, MotionProps, ResponsiveViewSx} from '@hzblj/kara-sx'
 import type {OpacitySize} from '@hzblj/kara-theme'
 import type {ReactNode} from 'react'
 
@@ -12,9 +12,11 @@ export type PressEffect = 'none' | 'opacity' | 'scale'
  * presses its own way by default: iOS eases the content down to 96%, Android draws Material's ripple over it,
  * clipped to the pressable's shape. `pressEffect` picks the same answer on both, and Android keeps its ripple on top
  * unless `ripple` is off. Give it the `borderRadius` of what it wraps (`full` around a `GlassView`). Screen readers read
- * it as a button unless `accessibilityRole` names another role. The React Native tier: it needs no host.
+ * it as a button unless `accessibilityRole` names another role. It takes the motion props a `Box` does: `animate` a
+ * selected state's `bg`, or let it arrive with `entering`. The React Native tier: it needs no host.
  */
 export type PressableProps = ResponsiveViewSx &
+  Omit<MotionProps, 'animated'> &
   AccessibilityProps & {
     /** The pressable content. */
     children?: ReactNode

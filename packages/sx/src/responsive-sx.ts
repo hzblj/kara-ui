@@ -34,12 +34,15 @@ export const SX_RESPONSIVE_KEYS = Object.keys(SX_RESPONSIVE_KEY_RECORD) as reado
 /** The core keys plus what only the React Native style path has: margins, gaps, flex, sizing maxima. */
 const VIEW_RESPONSIVE_KEY_RECORD = {
   ...SX_RESPONSIVE_KEY_RECORD,
+  absolute: true,
   align: true,
   alignContent: true,
   alignSelf: true,
   basis: true,
+  center: true,
   columnGap: true,
   display: true,
+  fill: true,
   flex: true,
   flexDirection: true,
   gap: true,
@@ -54,8 +57,10 @@ const VIEW_RESPONSIVE_KEY_RECORD = {
   mt: true,
   mx: true,
   my: true,
+  row: true,
   rowGap: true,
   shrink: true,
+  size: true,
   wrap: true,
 } as const satisfies Partial<Record<keyof ViewSx, true>>
 

@@ -47,6 +47,12 @@ export const GUIDES = {
     href: '/docs',
     title: 'Introduction',
   },
+  motion: {
+    description:
+      'Arriving, leaving and changing state: motion presets, animated sx changes and Stagger, reduced with the user.',
+    href: '/docs/motion',
+    title: 'Motion',
+  },
   router: {
     description: 'Native tabs, the navigation theme and the zoom transition, from @hzblj/kara-ui/router.',
     href: '/docs/router',
@@ -89,6 +95,7 @@ export const NAV: NavGroup[] = [
     links: [
       link('hosts'),
       link('styling'),
+      link('motion'),
       link('theming'),
       link('tokens'),
       link('icons'),
@@ -114,6 +121,7 @@ export const READING_ORDER: DocsPage[] = [
   GUIDES.installation,
   GUIDES.hosts,
   GUIDES.styling,
+  GUIDES.motion,
   GUIDES.theming,
   GUIDES.tokens,
   GUIDES.icons,

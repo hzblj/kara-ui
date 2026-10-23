@@ -10,6 +10,7 @@ and `@hzblj/kara-native` — through their entry points only.
 | Path | What it is |
 | --- | --- |
 | `src/atoms/` | Primitives: Box, Text, Button, TextField, Switch, Checkbox, Slider, Picker, Icon, Image, the stacks (`VStack`/`HStack`/`ZStack`), Divider, Spacer, Surface, Card, Badge, Progress, Fab, Island, List, ScrollView. |
+| `src/atoms/stagger/` | `Stagger`: a `Box` whose children arrive one after another. Only the children new in a render take turns (a first batch, the next page), a single one added later arrives at once. A motion component child is cloned with the props, any other is wrapped in a `Box`. |
 | `src/atoms/rn-*` | The React Native tier — `RnView`, `RnText`, `RnIcon`, `RnScrollView`, `RnFlatList`, `RnSectionList`. Plain RN views with the same `sx` surface, for rows that host native views. |
 | `src/atoms/glass-view/` | A React Native-tier atom over the native module: iOS 26 Liquid Glass around RN children (a translucent capsule elsewhere). |
 | `src/molecules/` | Label, LabeledContent, ListItem (and `RnListItem`, its React Native-tier row for long lists), Link, SearchBar, EmptyState, Collapsible, Pager, RadioGroup, Stepper, Tooltip — and over the native module: NavigationBar, ScrollEdgeContainer, RnTooltip. |
@@ -131,9 +132,20 @@ readers. Native controls (`Button`, `Switch`, `Slider`, `TextField`…) are read
 
 ## Motion
 
-**Durations and curves are tokens, picked by what the motion does** (`src/motion.ts`'s `timing(size, curve)` for
-Reanimated): arriving `fast`, leaving `quick`, a touch `micro`, `smoothOut` unless it is a swap, a small fade or a loop.
-No springs with bounce. `timing` passes `ReduceMotion.Never`, because the component has honoured the preference first.
+**Durations, curves and springs are tokens, picked by what the motion does** (`timing(size, curve)` and
+`spring(name)` from `@hzblj/kara-sx` for Reanimated): arriving `fast`, leaving `quick`, a touch `micro`, `smoothOut`
+unless it is a swap, a small fade or a loop. What a finger drives is a spring, so it keeps its speed when interrupted:
+`Pressable` scales down on `interactive` and back on `smooth`. No bounce in a control; `bouncy` is for an emphasised
+moment. Both helpers pass `ReduceMotion.Never`, because the component has honoured the preference first.
+
+**Motion props are the engine's, not each component's.** `Box` (and every `sx()` component), `RnText`, `Pressable` and
+`Stagger` take `entering`, `exiting`, `layout` and `animate` and become Reanimated views by themselves; there is no
+`ABox`. A component that owns its `style` and wants them uses `useSplitSxMotion`, passes `motion.entering` / `exiting` /
+`layout` and `motion.style` to its Reanimated view, latches with `useAnimatedLatch` unless it is always animated, and
+marks itself with `markMotionComponent` so `Stagger` hands it the props instead of wrapping it.
+
+**`RnText` takes 0.01 pt off every line on iOS** (`LINE_HEIGHT_SLACK`). React Native draws a paragraph into the frame
+Yoga rounded, which can come back a hair short of the exact height of fixed-height lines, and the last line vanished.
 
 **Every animation answers `useReducedMotion()`.** With it on, nothing slides, scales, turns or loops; what needs a
 transition to read fades (`Pressable` dims instead of scaling, `Snackbar` fades, `Skeleton` holds still). Compose and

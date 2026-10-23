@@ -39,7 +39,7 @@ const meta = {
     notes:
       'React Native tier: an overlay drawn above the screen rather than a native control (iOS has none), so it ' +
       'needs no host. The action sits at the trailing end. `animation` is Material’s `scale` on Android and `slide` ' +
-      'on iOS unless set; `entering` / `exiting` take Reanimated animations of your own. `duration` and the ' +
+      'on iOS unless set; `entering` / `exiting` take a motion preset or a Reanimated animation of your own. `duration` and the ' +
       'dismiss button call `onDismiss`.',
   },
   render: ControlledSnackbar,

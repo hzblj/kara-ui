@@ -3,6 +3,7 @@
 declare global {
   interface KaraIcons {
     add: true
+    animation: true
     'arrow-left': true
     'arrow-right': true
     bolt: true

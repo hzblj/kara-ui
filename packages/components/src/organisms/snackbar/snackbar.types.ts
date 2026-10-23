@@ -1,8 +1,6 @@
+import type {SxEntryExit} from '@hzblj/kara-sx'
 import type {SpaceSize} from '@hzblj/kara-theme'
-import type {ComponentProps, ReactNode} from 'react'
-import type Animated from 'react-native-reanimated'
-
-type LayoutAnimation = ComponentProps<typeof Animated.View>['entering']
+import type {ReactNode} from 'react'
 
 /** How it comes and goes. */
 export type SnackbarAnimation = 'fade' | 'scale' | 'slide'
@@ -33,10 +31,10 @@ export type SnackbarProps = {
   dismissible?: boolean
   /** How long it stays up before `onDismiss` is called. `indefinite` by default: it never hides itself. */
   duration?: SnackbarDuration
-  /** A Reanimated entering animation of your own, e.g. `FadeInDown.springify()`. It wins over `animation`. */
-  entering?: LayoutAnimation
-  /** A Reanimated exiting animation of your own. It wins over `animation`. */
-  exiting?: LayoutAnimation
+  /** How it arrives instead: a motion preset (`'scale'`), or Reanimated's own, e.g. `FadeInDown.springify()`. It wins over `animation`. */
+  entering?: SxEntryExit
+  /** How it leaves instead: a motion preset, or Reanimated's own. It wins over `animation`. */
+  exiting?: SxEntryExit
   /** The message. */
   message: string
   /** Between the snackbar and its edge, a space token. `s24` by default; raise it above a tab bar. */

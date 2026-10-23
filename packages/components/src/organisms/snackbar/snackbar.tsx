@@ -1,24 +1,13 @@
-import {duration as durations, easing, spacing, useReducedMotion} from '@hzblj/kara-theme'
+import {type SxEntryExit, timing} from '@hzblj/kara-sx'
+import {spacing, useReducedMotion} from '@hzblj/kara-theme'
 import {useEffect, useRef} from 'react'
 import {AccessibilityInfo, Platform} from 'react-native'
-import {
-  Easing,
-  type EntryExitAnimationFunction,
-  FadeIn,
-  FadeInDown,
-  FadeInUp,
-  FadeOut,
-  FadeOutDown,
-  FadeOutUp,
-  ReduceMotion,
-  withTiming,
-} from 'react-native-reanimated'
+import {type EntryExitAnimationFunction, withTiming} from 'react-native-reanimated'
 
-import {ABox, Box} from '../../atoms/box'
+import {Box} from '../../atoms/box'
 import {Pressable} from '../../atoms/pressable'
 import {RnText} from '../../atoms/rn-text'
 import {RnGlyph} from '../../glyph'
-import {timing} from '../../motion'
 import type {SnackbarAnimation, SnackbarComponent, SnackbarDuration, SnackbarProps} from './snackbar.types'
 
 /** Material's `SnackbarDuration.Short` and `Long`. */
@@ -29,10 +18,9 @@ const PLATFORM_ANIMATION: SnackbarAnimation = Platform.OS === 'android' ? 'scale
 /** The close glyph at the label's height: an SF Symbol fills its box, Material's icon sits inside a padded one. */
 const CLOSE_SIZE = Platform.OS === 'ios' ? 's12' : 's16'
 
-const SMOOTH_OUT = Easing.bezier(...easing.smoothOut)
 const GROW = timing('quick')
 
-/** Material's snackbar enter: it fades in while it grows from 80 %, in 150 ms. */
+/** Material's snackbar enter: it fades in while it grows from 80 %, in 150 ms. Further than kara's `scale` preset. */
 const scaleIn: EntryExitAnimationFunction = () => {
   'worklet'
 
@@ -42,29 +30,21 @@ const scaleIn: EntryExitAnimationFunction = () => {
   }
 }
 
+type Transition = {entering: SxEntryExit; exiting: SxEntryExit}
+
 /**
- * The presets in and out: arriving in `fast`, leaving in `quick`, both on `smoothOut`. `ReduceMotion.Never`, because
- * `useReducedMotion` has already picked the fade by then, and a fade is what should still run.
+ * kara's motion presets, which arrive in `fast`, leave in `quick` and fade with motion reduced by themselves. A slide
+ * travels further than a preset's default: in from the edge it sits on, and back out toward it.
  */
 const TRANSITIONS = {
-  fade: {
-    entering: FadeIn.duration(durations.fast).easing(SMOOTH_OUT).reduceMotion(ReduceMotion.Never),
-    exiting: FadeOut.duration(durations.quick).easing(SMOOTH_OUT).reduceMotion(ReduceMotion.Never),
-  },
+  fade: {entering: 'fade', exiting: 'fade'},
   // Material's exit is a 75 ms fade: `micro`.
-  scale: {entering: scaleIn, exiting: FadeOut.duration(durations.micro).reduceMotion(ReduceMotion.Never)},
-  // Slide: in from the edge it sits on, and back out toward it.
-  slideBottom: {
-    entering: FadeInDown.duration(durations.fast).easing(SMOOTH_OUT).reduceMotion(ReduceMotion.Never),
-    exiting: FadeOutDown.duration(durations.quick).easing(SMOOTH_OUT).reduceMotion(ReduceMotion.Never),
-  },
-  slideTop: {
-    entering: FadeInUp.duration(durations.fast).easing(SMOOTH_OUT).reduceMotion(ReduceMotion.Never),
-    exiting: FadeOutUp.duration(durations.quick).easing(SMOOTH_OUT).reduceMotion(ReduceMotion.Never),
-  },
-}
+  scale: {entering: scaleIn, exiting: {duration: 'micro', preset: 'fade'}},
+  slideBottom: {entering: {distance: 's24', preset: 'fadeUp'}, exiting: {distance: 's24', preset: 'fadeDown'}},
+  slideTop: {entering: {distance: 's24', preset: 'fadeDown'}, exiting: {distance: 's24', preset: 'fadeUp'}},
+} as const satisfies Record<string, Transition>
 
-const transitionsFor = (animation: SnackbarAnimation, position: 'bottom' | 'top') => {
+const transitionsFor = (animation: SnackbarAnimation, position: 'bottom' | 'top'): Transition => {
   if (animation === 'slide') {
     return position === 'top' ? TRANSITIONS.slideTop : TRANSITIONS.slideBottom
   }
@@ -121,11 +101,11 @@ export const Snackbar: SnackbarComponent = ({
 
   const edge = position === 'top' ? {top: spacing[offset]} : {bottom: spacing[offset]}
   const hasTrailing = Boolean(actionLabel) || dismissible
-  // With motion reduced it only fades: nothing slides or grows.
-  const preset = transitionsFor(reduced ? 'fade' : animation, position)
+  // The presets fade with motion reduced by themselves; Material's scale is a worklet of its own, so it is picked out.
+  const preset = transitionsFor(reduced && animation === 'scale' ? 'fade' : animation, position)
 
   return (
-    <ABox
+    <Box
       align={actionOnNewLine ? 'stretch' : 'center'}
       bg="surface.high.contrast"
       borderRadius="medium"
@@ -161,6 +141,6 @@ export const Snackbar: SnackbarComponent = ({
           ) : null}
         </Box>
       ) : null}
-    </ABox>
+    </Box>
   )
 }

@@ -1,7 +1,7 @@
 {
   "name": "@hzblj/kara-sx",
   "version": "0.11.0",
-  "description": "The token-typed sx styling engine behind @hzblj/kara-ui: one surface resolved into SwiftUI modifiers, Compose modifiers or a React Native style, and the accessibility props translated the same way.",
+  "description": "The token-typed sx styling engine behind @hzblj/kara-ui: one surface resolved into SwiftUI modifiers, Compose modifiers or a React Native style, motion through Reanimated, and the accessibility props translated the same way.",
   "author": "Jan Blazej",
   "license": "MIT",
   "repository": {
@@ -65,7 +65,8 @@
   "peerDependencies": {
     "@expo/ui": "~57.0.0",
     "react": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "react-native-reanimated": ">=4.0.0"
   },
   "devDependencies": {
     "@expo/ui": "~57.0.18",
@@ -73,6 +74,8 @@
     "react": "19.2.3",
     "react-native": "0.86.3",
     "react-native-builder-bob": "^0.43.0",
+    "react-native-reanimated": "4.5.1",
+    "react-native-worklets": "0.10.1",
     "typescript": "~7.0.2"
   },
   "publishConfig": {

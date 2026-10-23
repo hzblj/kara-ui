@@ -4,6 +4,7 @@ import type {FC} from 'react'
 import {ColorsPage} from './pages/colors'
 import {HapticsPage} from './pages/haptics'
 import {IconsPage} from './pages/icons'
+import {MotionPage} from './pages/motion'
 import {ShadowsPage} from './pages/shadows'
 import {ShapesPage} from './pages/shapes'
 import {SpacingPage} from './pages/spacing'
@@ -39,6 +40,7 @@ export const DESIGN_PAGES: readonly DesignPage[] = [
   },
   {icon: 'shadow', id: 'shadows', Page: ShadowsPage, summary: 'Elevation as tokens', title: 'Shadows'},
   {icon: 'code', id: 'styling', Page: StylingPage, summary: 'The sx props, on any view', title: 'Styling'},
+  {icon: 'animation', id: 'motion', Page: MotionPage, summary: 'Arriving, leaving and changing', title: 'Motion'},
   {icon: 'star', id: 'icons', Page: IconsPage, summary: 'Your SVGs, drawn natively', title: 'Icons'},
   {icon: 'vibration', id: 'haptics', Page: HapticsPage, summary: 'Feedback named for what happened', title: 'Haptics'},
 ]

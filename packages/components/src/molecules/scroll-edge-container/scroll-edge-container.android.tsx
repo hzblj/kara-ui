@@ -1,10 +1,10 @@
+import {timing} from '@hzblj/kara-sx'
 import {opacity} from '@hzblj/kara-theme'
 import {cloneElement, type ReactNode, useCallback, useRef} from 'react'
 import type {LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent} from 'react-native'
 import {type SharedValue, useAnimatedStyle, useSharedValue, withTiming} from 'react-native-reanimated'
 
-import {ABox, Box} from '../../atoms/box'
-import {timing} from '../../motion'
+import {Box} from '../../atoms/box'
 import type {ScrollEdgeContainerComponent, ScrollEdgeContainerProps} from './scroll-edge-container.types'
 
 /** Less than a pixel scrolled is not scrolled — a fling settles a fraction away from the edge. */
@@ -24,7 +24,7 @@ const EdgeBar = ({children, filled}: Bar) => {
 
   return (
     <Box>
-      <ABox
+      <Box
         bg="surface.secondary"
         bottom={0}
         left={0}

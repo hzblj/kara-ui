@@ -913,7 +913,7 @@ export const COMPONENTS: ComponentDoc[] = [
     notes: [
       'Laid over an edge of its parent (`position`, the bottom by default) at `offset` from it, with the action at the trailing end. It shows while `visible` is true.',
       '`duration` (`short` 4 s, `long` 10 s, or milliseconds) and the `dismissible` close button call `onDismiss`; turning `visible` off is yours to do.',
-      'It comes in Material’s way on Android (a fade and a scale from 80 %) and slides from its edge on iOS, which has no snackbar of its own. `animation` picks one for both; `entering` / `exiting` take Reanimated animations of your own.',
+      'It comes in Material’s way on Android (a fade and a scale from 80 %) and slides from its edge on iOS, which has no snackbar of its own. `animation` picks one for both; `entering` / `exiting` take a [motion preset](/docs/motion) or a Reanimated animation of your own.',
     ],
     renders: {android: 'React Native', ios: 'React Native'},
     summary: 'A brief message at the bottom of the screen.',
@@ -1118,6 +1118,13 @@ const zoomId = useZoomTransitionParam()
   <Avatar initials="AN" />
   <RnText variant="headline">Anna Novak</RnText>
 </Box>`,
+    examples: [
+      {code: '<Box entering="fadeUp" exiting="fade">{notice}</Box>', title: 'Arriving and leaving'},
+      {
+        code: `<Box animate bg={selected ? 'fill.accent.base' : 'surface.primary'} scale={selected ? 1 : 0.98} />`,
+        title: 'A change of state, animated',
+      },
+    ],
     exports: ['Box'],
     group: 'primitives',
     host: 'rn',
@@ -1126,10 +1133,38 @@ const zoomId = useZoomTransitionParam()
     notes: [
       'A React Native `View` wearing the `sx` props, for layout a native stack cannot express.',
       'It takes the wider of the two `sx` surfaces: `flexDirection`, `gap`, margins, flex and per-corner radii work here and on none of the native atoms.',
+      'It is a Reanimated view by itself when it needs to be: `entering`, `exiting`, `layout`, `animate` or an animated `style` make it an `Animated.View` from its first frame, and without them it stays a plain `View`. See [Motion](/docs/motion).',
     ],
     renders: {android: 'React Native View', ios: 'React Native View'},
     summary: 'A styled React Native view.',
-    types: [],
+    types: ['MotionProps'],
+  },
+  {
+    code: `<Stagger gap="s8">
+  {lines.map(line => (
+    <Box bg="surface.primary" borderRadius="medium" key={line.id} p="s16">
+      <RnText>{line.title}</RnText>
+    </Box>
+  ))}
+</Stagger>`,
+    examples: [
+      {code: '<Stagger entering="scale" from="end" interval="micro">{sizes}</Stagger>', title: 'Your own timing'},
+      {code: '<Stagger exiting="fade" layout>{cartItems}</Stagger>', title: 'Making room when one leaves'},
+    ],
+    exports: ['Stagger'],
+    group: 'primitives',
+    host: 'rn',
+    id: 'stagger',
+    name: 'Stagger',
+    notes: [
+      'Each child takes `entering` a step (`interval`, 40 ms by default) after the one before it.',
+      'Only the children that arrive together take turns: the first ones, or the next page of a list. A single item added later arrives at once instead of after everything above it.',
+      'A `Box`, `RnText` or `Pressable` child takes the motion itself, so no view is added around it; any other child is wrapped in a `Box`.',
+      'With Reduce Motion on, every child fades, still one after another.',
+    ],
+    renders: {android: 'React Native View', ios: 'React Native View'},
+    summary: 'Children that arrive one after another.',
+    types: ['StaggerProps'],
   },
   {
     code: '<RnText color="content.secondary" variant="footnote">2 items</RnText>',

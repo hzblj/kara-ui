@@ -38,6 +38,11 @@ export const sxKey = (sx: Sx): string => {
     key += `|${name}:${valueKey(sx[name])}`
   }
 
+  // One level, like a bucket's configs: a config's `keys` list flattens to its names in order.
+  if (sx.animate !== undefined) {
+    key += `|animate:${valueKey(sx.animate)}`
+  }
+
   for (const name of SX_BUCKET_KEYS) {
     const bucket = sx[name]
 

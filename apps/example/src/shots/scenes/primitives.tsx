@@ -9,6 +9,7 @@ import {
   RnText,
   Screen,
   ScrollView,
+  Stagger,
   Switch,
   Text,
   TextField,
@@ -126,6 +127,26 @@ const ScreenScene: Scene = () => (
   </Screen>
 )
 
+const STAGGER_LINES = ['Linen shirt', 'Canvas tote', 'Wool socks, 2 pairs', 'Leather belt']
+
+/**
+ * Shown (the still), gone, then arriving one after another: the last step ends where the first began, shown, so the
+ * loop has no seam and the arrival plays inside it.
+ */
+const StaggerScene: Scene = ({step}) => (
+  <Box h={232}>
+    {step !== 1 ? (
+      <Stagger exiting="fade" gap="s8">
+        {STAGGER_LINES.map(line => (
+          <Box bg="surface.primary" borderRadius="medium" key={line} px="s16" py="s12">
+            <RnText variant="body">{line}</RnText>
+          </Box>
+        ))}
+      </Stagger>
+    ) : null}
+  </Box>
+)
+
 export const PRIMITIVE_SCENES = {
   box: BoxScene,
   'rn-flat-list': RnFlatListScene,
@@ -133,4 +154,5 @@ export const PRIMITIVE_SCENES = {
   'rn-text': RnTextScene,
   screen: ScreenScene,
   'scroll-view': ScrollViewScene,
+  stagger: StaggerScene,
 }

@@ -39,9 +39,13 @@ export const SX_CORE_KEYS = Object.keys(SX_CORE_KEY_RECORD) as readonly (keyof S
 const SX_BUCKET_KEY_RECORD = {
   android: true,
   ios: true,
-} as const satisfies Record<Exclude<keyof Sx, keyof SxCore>, true>
+} as const satisfies Record<Exclude<keyof Sx, keyof SxCore | 'animate'>, true>
 
 /** Kept apart from `SX_CORE_KEYS` so the React Native path can take the core without them. */
-export const SX_BUCKET_KEYS = Object.keys(SX_BUCKET_KEY_RECORD) as readonly Exclude<keyof Sx, keyof SxCore>[]
+export const SX_BUCKET_KEYS = Object.keys(SX_BUCKET_KEY_RECORD) as readonly Exclude<
+  keyof Sx,
+  keyof SxCore | 'animate'
+>[]
 
-export const SX_KEYS: readonly (keyof Sx)[] = [...SX_CORE_KEYS, ...SX_BUCKET_KEYS]
+/** Every key of the native surface: the core, `animate` and the two buckets. */
+export const SX_KEYS: readonly (keyof Sx)[] = [...SX_CORE_KEYS, 'animate', ...SX_BUCKET_KEYS]

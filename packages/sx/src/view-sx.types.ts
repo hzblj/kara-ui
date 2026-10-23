@@ -35,6 +35,8 @@ type ViewSizingSx = {
   aspectRatio?: number
   maxH?: SxDimension
   maxW?: SxDimension
+  /** Width and height at once: `size={48}` is a 48 pt square. `w` and `h` win over it. */
+  size?: SxDimension
 }
 
 /**
@@ -48,15 +50,24 @@ type ViewFlexSx = {
   alignContent?: ViewStyle['alignContent']
   alignSelf?: ViewStyle['alignSelf']
   basis?: SxDimension
+  /** Centres the children on both axes. `align` and `justify` win over it. */
+  center?: boolean
   columnGap?: SpaceSize
+  /** Takes the room left along its parent's axis: `flex: 1`. `flex` wins over it. */
+  fill?: boolean
   flex?: number
   flexDirection?: ViewStyle['flexDirection']
   gap?: SpaceSize
-  grow?: number
+  /** A share of the leftover space; `true` is 1. */
+  grow?: boolean | number
   justify?: ViewStyle['justifyContent']
+  /** Lays the children out in a row rather than a column. `flexDirection` wins over it. */
+  row?: boolean
   rowGap?: SpaceSize
-  shrink?: number
-  wrap?: ViewStyle['flexWrap']
+  /** How much it gives up when the room runs short; `true` is 1. */
+  shrink?: boolean | number
+  /** Lets the children wrap onto further lines; `true` is `wrap`. */
+  wrap?: boolean | ViewStyle['flexWrap']
 }
 
 /** Margins mirror the padding scale: `m` all round, `mx`/`my` per axis, `mt`/`mr`/`mb`/`ml` per side. */
@@ -71,6 +82,11 @@ type ViewMarginSx = {
 }
 
 type ViewLayoutSx = {
+  /**
+   * Out of the flow and over its parent, all four edges at 0: what an overlay, a scrim or a backdrop wants. A side of
+   * its own (`top`, `inset`…) wins, and so does `position`.
+   */
+  absolute?: boolean
   bottom?: SxDimension
   display?: ViewStyle['display']
   /** All four edges at once, so `position="absolute" inset={0}` fills the parent. A side of its own wins over it. */

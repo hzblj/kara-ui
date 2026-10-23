@@ -49,6 +49,7 @@
   "slider": {"period": 4200},
   "snackbar": {"steps": [3000, 1400]},
   "stacks": {},
+  "stagger": {"steps": [1200, 600, 2200]},
   "stepper": {"steps": [900, 900, 900, 900, 900, 900]},
   "surface": {},
   "swipe-actions": {"flow": "swipe-actions"},
