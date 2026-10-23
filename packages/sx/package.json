@@ -1,6 +1,6 @@
 {
   "name": "@hzblj/kara-sx",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "The token-typed sx styling engine behind @hzblj/kara-ui: one surface resolved into SwiftUI modifiers, Compose modifiers or a React Native style.",
   "author": "Jan Blazej",
   "license": "MIT",

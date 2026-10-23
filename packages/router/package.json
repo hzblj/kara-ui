@@ -1,6 +1,6 @@
 {
   "name": "@hzblj/kara-router",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "Expo Router pieces of @hzblj/kara-ui: native tabs, a navigation theme mapped from the active kara theme, and the zoom transition.",
   "author": "Jan Blazej",
   "license": "MIT",

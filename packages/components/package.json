@@ -1,6 +1,6 @@
 {
   "name": "@hzblj/kara-components",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "The atoms, molecules, organisms and templates of @hzblj/kara-ui — real SwiftUI and Jetpack Compose views through @expo/ui.",
   "author": "Jan Blazej",
   "license": "MIT",
