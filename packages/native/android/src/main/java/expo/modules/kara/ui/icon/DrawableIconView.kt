@@ -58,3 +58,8 @@ class DrawableIconView(context: Context, appContext: AppContext) :
     )
   }
 }
+
+/** A drawable by name in the app's resources, where kara's glyphs and the plugin's icons are both merged. */
+@SuppressLint("DiscouragedApi")
+internal fun resourceId(context: Context, name: String?): Int =
+  name?.let { context.resources.getIdentifier(it, "drawable", context.packageName) } ?: 0

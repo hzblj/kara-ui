@@ -1,4 +1,5 @@
 import ExpoModulesCore
+import ExpoZoomTransition
 import UIKit
 
 /**
@@ -19,7 +20,7 @@ import UIKit
  inside a horizontally scrolling row the clipping scroll view cut it off while it
  scaled up.
 
- With a `ZoomTransitionSourceView` inside the trigger and a custom preview, a tap on
+ With a `ZoomTransitionSourceView` (`@hzblj/expo-zoom-transition`) inside the trigger and a custom preview, a tap on
  the preview zooms the preview's photo straight into the pushed screen on iOS 18, the
  way the App Store expands one (see `previewPhotoOnScreen` and the commit below).
  */

@@ -1,6 +1,5 @@
 export * from './availability'
 export * from './glyphs'
-export * from './icons'
 export * from './require-view'
 export * from './system-color'
 export type {TextWeight} from './text-weight'

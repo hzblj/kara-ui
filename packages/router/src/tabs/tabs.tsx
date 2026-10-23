@@ -1,4 +1,4 @@
-import {iconResourceName} from '@hzblj/kara-native'
+import {iconResourceName} from '@hzblj/expo-native-icons'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {NativeTabs} from 'expo-router/unstable-native-tabs'
 import {Children, isValidElement, useMemo} from 'react'

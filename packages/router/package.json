@@ -59,6 +59,8 @@
     ]
   },
   "dependencies": {
+    "@hzblj/expo-native-icons": "^0.1.0",
+    "@hzblj/expo-zoom-transition": "^0.1.0",
     "@hzblj/kara-components": "workspace:^",
     "@hzblj/kara-native": "workspace:^",
     "@hzblj/kara-theme": "workspace:^"
@@ -66,7 +68,8 @@
   "peerDependencies": {
     "expo-router": "*",
     "react": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "react-native-screens": "*"
   },
   "devDependencies": {
     "@expo/ui": "~57.0.18",
@@ -77,6 +80,7 @@
     "react": "19.2.3",
     "react-native": "0.86.3",
     "react-native-builder-bob": "^0.43.0",
+    "react-native-screens": "~4.26.0",
     "storybook": "^10.6.0",
     "typescript": "~7.0.2"
   },

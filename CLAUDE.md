@@ -14,8 +14,8 @@ Every package has its own `CLAUDE.md` — read that one before touching it.
 | `packages/sx/` | `@hzblj/kara-sx` | The `sx` engine: one surface → SwiftUI modifiers, Compose modifiers or a React Native style. |
 | `packages/native/` | `@hzblj/kara-native` | The `KaraUI` Expo native module (Swift/Kotlin) and its raw bindings (`/swift-ui`, `/jetpack-compose`). |
 | `packages/components/` | `@hzblj/kara-components` | Atoms, molecules, organisms, `Screen` — and a story beside every component. |
-| `packages/router/` | `@hzblj/kara-router` | `Tabs`, `navigationTheme` and `ZoomTransition`, apart so nothing else imports expo-router. |
-| `packages/expo-plugin/` | `@hzblj/kara-expo-plugin` | The optional config plugin (`iosSemanticColors`), compiled for Node. |
+| `packages/router/` | `@hzblj/kara-router` | `Tabs`, `navigationTheme` and `ZoomTransition` (kara's tokens over `@hzblj/expo-zoom-transition`), apart so nothing else imports expo-router. |
+| `packages/expo-plugin/` | `@hzblj/kara-expo-plugin` | The optional config plugin (`icons`, handed to `@hzblj/expo-native-icons`, and `iosSemanticColors`), compiled for Node. |
 | `packages/kara-ui/` | `@hzblj/kara-ui` | The umbrella consumers install: re-exports only, the public entry points, the npm README. |
 | `apps/example/` | — | The example app: Home, the component catalogue, the design pages, on-device Storybook, and the website's shot harness (`app/shot/[id]`, `scripts/capture-shots.sh`). Runs every package from **source**. Private. |
 | `apps/website/` | — | The site and docs (Next.js): landing page, guides, a page per component with its iOS and Android captures and props tables generated from the library's types. Private. |
@@ -24,8 +24,11 @@ Every package has its own `CLAUDE.md` — read that one before touching it.
 
 Dependencies point one way: `theme` ← `sx` ← `components` ← `router`, with `native` beside `theme` (a pure platform
 layer that `sx` and `components` both use) and `kara-ui` on top of all of them. Nothing imports upwards, and nothing reaches past another package's
-`exports`. Haptics are not in this repo: `components` depends on `@hzblj/expo-rich-haptics`, released from its own
-repo (`hzblj/expo-rich-haptics`, next to this one as `../expo-rich-haptics`). All packages are versioned together (`fixed` in `.changeset/config.json`). The website reads the packages'
+`exports`. Three pieces live in their own repos, next to this one, and come from npm like any dependency:
+`@hzblj/expo-rich-haptics` (`../expo-rich-haptics`: haptics, which `components` depends on), `@hzblj/expo-native-icons`
+(`../expo-native-icons`: the icon plugin, `NativeIcon`, `iconResourceName`) and `@hzblj/expo-zoom-transition`
+(`../expo-zoom-transition`: the zoom transition, natively). A change there is released there first, then bumped here.
+All packages are versioned together (`fixed` in `.changeset/config.json`). The website reads the packages'
 sources at build time but imports none of them.
 
 ## Commands
@@ -75,8 +78,9 @@ number or hex does not type-check. Layout keys also take `{base, sm, md, lg, xl}
 You). Text is set in the platform's face (SF Pro / Roboto) unless the app names its own — the library ships no fonts.
 
 **Icons are the app's SVGs, never the library's.** `plugins: [['@hzblj/kara-ui', {icons: {source}}]]` turns every
-SVG into an iOS asset-catalog image and an Android vector drawable at prebuild, and writes `kara-icons.d.ts` (the
-global `KaraIcons`) whenever the config is read. No `@expo/vector-icons`, no icon font. The few glyphs kara's own
+SVG into an iOS asset-catalog image and an Android vector drawable at prebuild, and writes `native-icons.d.ts` (the
+global `NativeIcons`) whenever the config is read: `@hzblj/expo-native-icons` does the work, natively named
+`native_icon_<name>`. No `@expo/vector-icons`, no icon font. The few glyphs kara's own
 chrome draws are internal (`packages/native/glyphs.json`).
 
 **Native views need a host.** `@expo/ui`-backed atoms only render inside `<Screen>` or `<Island>`; outside one they

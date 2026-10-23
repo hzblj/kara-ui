@@ -1,6 +1,6 @@
 import {Button, Image, Label, SwipeActions as SwiftUISwipeActions} from '@expo/ui/swift-ui'
 import {tint} from '@expo/ui/swift-ui/modifiers'
-import {iconResourceName} from '@hzblj/kara-native'
+import {iconResourceName} from '@hzblj/expo-native-icons'
 import {useAppTheme} from '@hzblj/kara-theme'
 
 import {useHostGuard} from '../../host-context'

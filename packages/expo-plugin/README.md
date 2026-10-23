@@ -23,9 +23,12 @@ plugins: [['@hzblj/kara-ui', {icons: {source: './assets/icons'}}]]
 ## What's inside
 
 - **Native icons from your SVGs**: at prebuild, every SVG in the folder becomes an iOS asset-catalog image and an
-  Android vector drawable, and `kara-icons.d.ts` types their names (`bolt.svg` → `<Icon name="bolt" />`).
+  Android vector drawable, and `native-icons.d.ts` types their names (`bolt.svg` → `<Icon name="bolt" />`). The
+  work is [`@hzblj/expo-native-icons`](https://www.npmjs.com/package/@hzblj/expo-native-icons)'s; `icons` takes its
+  options.
 - **iOS semantic colours**: `iosSemanticColors` redefines a UIKit colour such as `labelColor` app-wide.
-- **`kara-icons`**: the same icon check without Expo, for CI; it ships as `@hzblj/kara-ui`'s bin.
+- **`kara-icons`**: the same icon check without Expo, for CI; it ships as `@hzblj/kara-ui`'s bin
+  (`native-icons` in `@hzblj/expo-native-icons`).
 
 ## Documentation
 

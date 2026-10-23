@@ -1,4 +1,4 @@
-import {iconResourceName} from '@hzblj/kara-native'
+import {iconResourceName} from '@hzblj/expo-native-icons'
 import {TopAppBar, type TopAppBarItem} from '@hzblj/kara-native/jetpack-compose'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useMemo} from 'react'

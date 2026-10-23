@@ -38,7 +38,8 @@ export default {
   plugins: [
     'expo-router',
     // The app's icons: every SVG in assets/icons becomes a native asset on both platforms at prebuild, and its name a
-    // type in kara-icons.d.ts. Built from packages/expo-plugin, which is why `yarn prebuild` builds the plugin first.
+    // type in native-icons.d.ts (@hzblj/expo-native-icons does it). Built from packages/expo-plugin, which is why
+    // `yarn prebuild` builds the plugin first.
     ['@hzblj/kara-ui', {icons: {source: './assets/icons'}}],
     [
       'expo-splash-screen',

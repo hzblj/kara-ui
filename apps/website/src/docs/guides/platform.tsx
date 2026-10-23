@@ -35,7 +35,7 @@ export const icons: Guide = {
         />
         <P>
           {
-            'The names land in `kara-icons.d.ts` (the global `KaraIcons`) whenever the config is read (`expo start` included), so a new SVG type-checks at once. Commit that file so a fresh clone type-checks too. The native assets still need a prebuild.'
+            'The names land in `native-icons.d.ts` (the global `NativeIcons`) whenever the config is read (`expo start` included), so a new SVG type-checks at once. Commit that file so a fresh clone type-checks too. The native assets still need a prebuild.'
           }
         </P>
       </Section>
@@ -58,12 +58,24 @@ export const icons: Guide = {
               'SwiftUI `Image` from the asset catalog, Compose `Icon` with the drawable',
               'Inside a `Screen` or `Island`',
             ],
-            ['`RnIcon`', 'A `UIImageView` / `ImageView` of the same asset', 'Anywhere, which is what a list row wants'],
+            [
+              '`RnIcon`',
+              'A `UIImageView` of the same asset, one Android view drawing the drawable',
+              'Anywhere, which is what a list row wants',
+            ],
           ]}
         />
         <P>
           {
             'Every prop that takes an icon (`IconButton`, `Fab`, `ListItem`, `Label`, `LabeledContent`, `Link`, `EmptyState`, menu actions, `Tabs`) takes one of these names.'
+          }
+        </P>
+      </Section>
+
+      <Section id="package" title="The package underneath">
+        <P>
+          {
+            'The plugin, the names and the React Native tier come from [@hzblj/expo-native-icons](https://www.npmjs.com/package/@hzblj/expo-native-icons), which kara installs with itself. It knows nothing about kara, so an app without it can use the same plugin and its `NativeIcon`. Natively, each icon is `native_icon_<name>`, with `-` turned into `_`.'
           }
         </P>
       </Section>
@@ -83,6 +95,7 @@ export const icons: Guide = {
     {id: 'setup', label: 'Set up'},
     {id: 'svg-rules', label: 'What an SVG may contain'},
     {id: 'tiers', label: 'Icon and RnIcon'},
+    {id: 'package', label: 'The package underneath'},
     {id: 'ci', label: 'Without Expo'},
   ],
   id: 'icons',

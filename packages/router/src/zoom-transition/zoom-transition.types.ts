@@ -93,7 +93,7 @@ export type ZoomTransitionEnablerProps = {
  * the regular slide. Android: Material's container transform from the source to the target, both ways.
  *
  * Three pieces, tied by one identifier: `Source` around the view on the screen you push from, `Enabler` and `Target`
- * on the pushed screen. Works with any Expo Router stack screen.
+ * on the pushed screen. Works with any Expo Router stack screen. `@hzblj/expo-zoom-transition` with the theme's tokens.
  */
 export type ZoomTransitionComponent = {
   /**

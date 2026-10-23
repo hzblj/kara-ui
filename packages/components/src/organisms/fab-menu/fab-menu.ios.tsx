@@ -1,5 +1,5 @@
 import {Button, Image, Label, Menu} from '@expo/ui/swift-ui'
-import {iconResourceName} from '@hzblj/kara-native'
+import {iconResourceName} from '@hzblj/expo-native-icons'
 
 import {Icon} from '../../atoms/icon'
 import {VStack} from '../../atoms/v-stack'

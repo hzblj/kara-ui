@@ -35,8 +35,5 @@ public class KaraUIModule: Module {
     ScrollViewZPositionView.definition()
     SegmentedControlView.definition()
     TooltipView.definition()
-    ZoomTransitionSourceView.definition()
-    ZoomTransitionTargetView.definition()
-    ZoomTransitionEnablerView.definition()
   }
 }

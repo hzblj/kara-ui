@@ -18,6 +18,8 @@ Pod::Spec.new do |s|
 
   s.dependency 'ExpoModulesCore'
   s.dependency 'ExpoUI'
+  # The context menu hands a tapped preview's photo to the zoom transition as its source.
+  s.dependency 'ExpoZoomTransition'
 
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',

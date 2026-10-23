@@ -47,7 +47,4 @@ dependencies {
   implementation 'androidx.lifecycle:lifecycle-runtime:2.10.0'
   implementation "androidx.graphics:graphics-shapes:1.1.0"
   implementation "androidx.core:core-ktx:1.17.0"
-  // The zoom transition is Material's container transform (`MaterialContainerTransform`), a View transition.
-  // react-native-screens depends on the same library, so an app links it already.
-  implementation "com.google.android.material:material:1.13.0"
 }

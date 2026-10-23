@@ -1,6 +1,6 @@
 import {Image} from '@expo/ui/swift-ui'
 import {accessibilityHidden, frame, accessibilityLabel as labelModifier, resizable} from '@expo/ui/swift-ui/modifiers'
-import {iconResourceName} from '@hzblj/kara-native'
+import {iconResourceName} from '@hzblj/expo-native-icons'
 import {spacing, useAppTheme} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
 

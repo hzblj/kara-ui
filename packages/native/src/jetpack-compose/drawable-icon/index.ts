@@ -8,7 +8,7 @@ export type DrawableIconProps = {
   iconColor?: ColorValue
   /** In dp. Unset keeps the drawable's own 24 dp. */
   iconSize?: number
-  /** A vector drawable resource — `kara_icon_*` (the app's icons) or `kara_glyph_*` (kara's own). */
+  /** A vector drawable resource — `native_icon_*` (the app's icons, `@hzblj/expo-native-icons`) or `kara_glyph_*` (kara's own). */
   resourceName: string
 }
 

@@ -87,6 +87,7 @@
     ]
   },
   "dependencies": {
+    "@hzblj/expo-native-icons": "^0.1.0",
     "@hzblj/kara-components": "workspace:^",
     "@hzblj/kara-expo-plugin": "workspace:^",
     "@hzblj/kara-native": "workspace:^",
@@ -102,10 +103,14 @@
     "expo-router": "*",
     "react": "*",
     "react-native": "*",
-    "react-native-reanimated": ">=4.0.0"
+    "react-native-reanimated": ">=4.0.0",
+    "react-native-screens": "*"
   },
   "peerDependenciesMeta": {
     "expo-router": {
+      "optional": true
+    },
+    "react-native-screens": {
       "optional": true
     }
   },
