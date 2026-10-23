@@ -1,5 +1,6 @@
 'use client'
 
+import {track} from '../../analytics/track'
 import {applyPlatform, type Platform} from '../../theme/theme'
 import {usePlatform} from '../../theme/use-root'
 import {cn} from '../../ui/utils'
@@ -27,7 +28,10 @@ export const PlatformSwitch = () => {
           aria-selected={active === platform.id}
           className={cn(styles.tab(), active === platform.id ? styles.tabActive() : styles.tabInactive())}
           key={platform.id}
-          onClick={() => applyPlatform(platform.id)}
+          onClick={() => {
+            applyPlatform(platform.id)
+            track('select_platform', {platform: platform.id})
+          }}
           role="tab"
           type="button"
         >

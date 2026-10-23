@@ -7,6 +7,7 @@ import localFont from 'next/font/local'
 import type {ReactNode} from 'react'
 
 import {GoogleAnalytics} from '../src/analytics/google-analytics'
+import {LinkTracking} from '../src/analytics/link-tracking'
 import {homeMetadata} from '../src/seo/metadata'
 import {HERO_HEADLINE, HERO_LEDE, REPOSITORY_URL, SITE_NAME, SITE_URL} from '../src/site'
 import {HEAD_SCRIPT} from '../src/theme/theme'
@@ -81,6 +82,7 @@ export default function RootLayout({children}: Readonly<{children: ReactNode}>) 
         <Analytics />
         <SpeedInsights />
         <GoogleAnalytics />
+        <LinkTracking />
       </body>
     </html>
   )

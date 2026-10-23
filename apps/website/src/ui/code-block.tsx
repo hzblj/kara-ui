@@ -18,7 +18,7 @@ export const CodeBlock = async ({code, language = 'tsx', title}: CodeBlockProps)
     <div className={styles.codeBlock()}>
       <div className={styles.codeBlockHeader()}>
         <span>{title ?? language}</span>
-        <CopyButton className={styles.codeCopy()} iconClassName="size-3.5" text={code} />
+        <CopyButton className={styles.codeCopy()} iconClassName="size-3.5" source="code_block" text={code} />
       </div>
       <div className={styles.codeBlockBody()} dangerouslySetInnerHTML={{__html: html}} />
     </div>
