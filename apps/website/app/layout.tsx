@@ -1,5 +1,7 @@
 import './styles.css'
 
+import {Analytics} from '@vercel/analytics/next'
+import {SpeedInsights} from '@vercel/speed-insights/next'
 import type {Metadata, Viewport} from 'next'
 import localFont from 'next/font/local'
 import type {ReactNode} from 'react'
@@ -74,6 +76,9 @@ export default function RootLayout({children}: Readonly<{children: ReactNode}>) 
       <body className="font-inter">
         {children}
         <ThemeSync />
+        {/* Vercel's, cookieless: page views and Core Web Vitals, nothing that needs a consent banner. */}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )

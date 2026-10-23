@@ -40,5 +40,9 @@ and CSS (`dark:`, `android:`) shows one of each pair — never React state, whic
 **Highlighting happens on the server.** `CodeBlock` and `highlight` run shiki at build time; a client component gets the
 HTML as a prop. Do not import shiki from a `'use client'` file.
 
+**Analytics are Vercel's, and cookieless.** `<Analytics />` (page views) and `<SpeedInsights />` (Core Web Vitals) sit
+in the root layout; they report only from a Vercel deployment, and only once each is enabled in the project's dashboard.
+Nothing here sets a tracking cookie, which is why the site has no consent banner — keep it that way.
+
 **`yarn tsc:check` is the type check**, with the monorepo's TypeScript — `next build` skips its own (`ignoreBuildErrors`),
 because it cannot drive TypeScript 7. `next typegen` writes the route types first.
