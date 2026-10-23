@@ -10,7 +10,7 @@ import type {FabMenuComponent, FabMenuProps} from './fab-menu.types'
 /** Matches `Fab`, so a screen can switch between the two without the button changing shape. */
 const FAB_SIZE = 56
 
-export const FabMenu: FabMenuComponent = ({actions, icon, testID}: FabMenuProps) => {
+export const FabMenu: FabMenuComponent = ({accessibilityLabel, actions, icon, testID}: FabMenuProps) => {
   useHostGuard('FabMenu')
 
   return (
@@ -25,7 +25,11 @@ export const FabMenu: FabMenuComponent = ({actions, icon, testID}: FabMenuProps)
           shadow="btn.accent"
           w={FAB_SIZE}
         >
-          {icon ? <Icon color="content.on.bg" name={icon} /> : <Glyph color="content.on.bg" name="plus" />}
+          {icon ? (
+            <Icon accessibilityLabel={accessibilityLabel} color="content.on.accent" name={icon} />
+          ) : (
+            <Glyph accessibilityLabel={accessibilityLabel} color="content.on.accent" name="plus" />
+          )}
         </VStack>
       }
       testID={testID}

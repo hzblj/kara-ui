@@ -6,6 +6,7 @@ import {
   glassEffect as glassEffectModifier,
   tint as tintModifier,
 } from '@expo/ui/swift-ui/modifiers'
+import {useAccessibilityModifiers} from '@hzblj/kara-sx'
 import {type ColorToken, useAppTheme} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
 import {useHostGuard} from '../../host-context'
@@ -29,6 +30,7 @@ const TINT_BY_VARIANT = {
 } as const satisfies Record<ButtonVariant, ColorToken | undefined>
 
 export const Button: ButtonComponent = ({
+  accessibilityHint,
   buttonStyle,
   controlSize = 'large',
   disabled = false,
@@ -59,8 +61,14 @@ export const Button: ButtonComponent = ({
   // A prominent style — and tinted glass — is coloured by the tint, so a caller's own tint picks the label on it.
   const content = tint && filled && !disabled ? contentOnTint(tint, theme) : tokens.content
 
+  const accessibilityModifiers = useAccessibilityModifiers({accessibilityHint})
+
   const modifiers = useMemo(() => {
-    const list = [buttonStyleModifier(glassTint ? 'plain' : style), controlSizeModifier(controlSize)]
+    const list = [
+      buttonStyleModifier(glassTint ? 'plain' : style),
+      controlSizeModifier(controlSize),
+      ...accessibilityModifiers,
+    ]
 
     if (glassTint) {
       list.push(
@@ -75,7 +83,7 @@ export const Button: ButtonComponent = ({
     }
 
     return list
-  }, [controlSize, disabled, glassTint, resolvedTint, style, theme])
+  }, [accessibilityModifiers, controlSize, disabled, glassTint, resolvedTint, style, theme])
 
   return (
     <SwiftUIButton modifiers={modifiers} onPress={onPress} testID={testID}>

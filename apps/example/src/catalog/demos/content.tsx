@@ -201,13 +201,13 @@ const GlassViewDemo = () => (
   <Section caption="Liquid Glass around React Native content on iOS 26, frosted glass on Android (what lies behind, blurred). Pressed, iOS glass swells and Android ripples.">
     <Box bg="fill.accent.primary" borderRadius="large" flexDirection="row" gap="s12" p="s24">
       <GlassView px="s16" py="s8">
-        <RnText color="content.on.bg" variant="labelMedium">
+        <RnText color="content.on.accent" variant="labelMedium">
           Glass
         </RnText>
       </GlassView>
       <Pressable borderRadius="full" onPress={() => undefined}>
         <GlassView interactive px="s16" py="s8">
-          <RnText color="content.on.bg" pointerEvents="none" variant="labelMedium">
+          <RnText color="content.on.accent" pointerEvents="none" variant="labelMedium">
             Interactive
           </RnText>
         </GlassView>

@@ -10,6 +10,11 @@ export type DocsPage = {
 
 /** The guides, in reading order — which is also the order the pager walks. */
 export const GUIDES = {
+  accessibility: {
+    description: 'VoiceOver, TalkBack and Reduce Motion: what the components do, and one set of props for the rest.',
+    href: '/docs/accessibility',
+    title: 'Accessibility and motion',
+  },
   changelog: {description: 'What changed in each release of kara.', href: '/docs/changelog', title: 'Changelog'},
   components: {
     description: 'Every component on iOS and Android, in light and dark.',
@@ -88,6 +93,7 @@ export const NAV: NavGroup[] = [
       link('tokens'),
       link('icons'),
       link('haptics'),
+      link('accessibility'),
       link('router'),
     ],
   },
@@ -112,6 +118,7 @@ export const READING_ORDER: DocsPage[] = [
   GUIDES.tokens,
   GUIDES.icons,
   GUIDES.haptics,
+  GUIDES.accessibility,
   GUIDES.router,
   GUIDES.components,
   ...COMPONENT_GROUPS.flatMap(group =>

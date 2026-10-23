@@ -11,6 +11,7 @@ component. Autolinked into any app that installs `@hzblj/kara-ui` (a transitive 
 | `ios/KaraUIModule.swift` | Only composes the module: functions, `OnCreate` (modifier registration), one `<View>.definition()` per view. |
 | `ios/Views/<Component>/` | `<Name>View.swift`, its records/helpers and `<Name>View+Definition.swift` (events and props). |
 | `ios/Modifiers/` | SwiftUI modifiers registered into `@expo/ui`'s registry: `scaledFont`, `underline`, `counterBadge`. |
+| `android/.../modifiers/` | Compose modifiers registered into `@expo/ui`'s registry: `underline`, and `karaAccessibility` (content and state descriptions, a role or heading, the click action's label, merging or clearing descendants), which `@hzblj/kara-sx` maps the accessibility props onto. `@expo/ui`'s own `semantics` carries only a content description. |
 | `ios/Fabric/` | Runtime fixes to React Native's own component views, installed from `OnCreate`: `OpacityVisibilitySync`. |
 | `android/src/main/java/expo/modules/kara/ui/` | `KaraUIModule.kt` plus one package per component (`blur`, `colorpicker`, `fab`, `haptics`, `icon`, `modifiers`, `ripple`, `swipe`, `tooltip`, `topappbar`, `zoomtransition`). |
 | `src/swift-ui/`, `src/jetpack-compose/` | `requireKaraView` bindings and typed wrappers per view, the modifiers' JS side. The `/swift-ui` and `/jetpack-compose` entries. |

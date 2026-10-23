@@ -27,7 +27,7 @@ export const NavigationBar: NavigationBarComponent = ({
 }: NavigationBarProps) => {
   const theme = useAppTheme()
   const font = theme.typography.headline
-  const color = theme.color(inverted ? 'content.on.bg' : 'content.primary')
+  const color = theme.color(inverted ? 'content.on.accent' : 'content.primary')
 
   const nativeLeadingItems = useMemo(() => leadingItems?.map(toNativeItem), [leadingItems])
   const nativeTrailingItems = useMemo(() => trailingItems?.map(toNativeItem), [trailingItems])

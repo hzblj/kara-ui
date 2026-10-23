@@ -19,8 +19,19 @@ export const LabeledContent: LabeledContentComponent = ({
   px,
   testID,
   value,
+  ...accessibility
 }: LabeledContentProps) => (
-  <HStack align="center" onPress={onPress} px={px} py="s8" spacing="s12" testID={testID} wide>
+  <HStack
+    accessible={children === undefined}
+    {...accessibility}
+    align="center"
+    onPress={onPress}
+    px={px}
+    py="s8"
+    spacing="s12"
+    testID={testID}
+    wide
+  >
     {icon ? <Icon color="content.secondary" name={icon} size="s20" /> : null}
     <Text variant="body">{label}</Text>
     <Spacer />

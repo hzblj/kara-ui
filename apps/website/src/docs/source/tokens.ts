@@ -31,6 +31,8 @@ export type Tokens = {
   breakpoints: [string, number][]
   colors: ColorTokenDoc[]
   durations: [string, number][]
+  /** Each curve's cubic-bézier control points. */
+  easings: [string, number[]][]
   opacity: [string, number][]
   radii: [string, number][]
   spacing: [string, number][]
@@ -132,7 +134,7 @@ const sourceOf = (value: Value): ColorSource | undefined => {
   return undefined
 }
 
-/** `{content: {on: {bg: …}}}` → `content.on.bg`. The shadow family has its own page section, so it stays out. */
+/** `{content: {on: {accent: …}}}` → `content.on.accent`. The shadow family has its own page section, so it stays out. */
 const flatten = (tree: Value, prefix = ''): ColorTokenDoc[] =>
   Object.entries(tree as Record<string, Value>).flatMap(([key, value]) => {
     const name = prefix ? `${prefix}.${key}` : key
@@ -152,6 +154,7 @@ const build = (): Tokens => {
   const {radii} = constants('primitives/radii.ts')
   const {opacity} = constants('primitives/opacity.ts')
   const {duration} = constants('primitives/duration.ts')
+  const {easing} = constants('primitives/easing.ts')
   const {breakpoints} = constants('primitives/breakpoints.ts')
   const {textStyles} = constants('primitives/typography.ts')
   const colors = Object.entries(palette as Record<string, Value>)
@@ -161,7 +164,8 @@ const build = (): Tokens => {
   return {
     breakpoints: entries(breakpoints).sort((first, second) => first[1] - second[1]),
     colors,
-    durations: entries(duration),
+    durations: entries(duration).sort((first, second) => first[1] - second[1]),
+    easings: Object.entries(easing as Record<string, number[]>),
     opacity: entries(opacity),
     radii: entries(radii).sort((first, second) => first[1] - second[1]),
     spacing: entries(spacing),

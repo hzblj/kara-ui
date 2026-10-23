@@ -9,6 +9,11 @@ import type {MenuAction} from '../menu'
  * label of a SwiftUI `Menu`. A native atom: it renders inside `<Screen>` or `<Island>`.
  */
 export type FabMenuProps = {
+  /**
+   * What VoiceOver and TalkBack say for the button, since an icon has no words of its own: "Create". Required for that
+   * reason.
+   */
+  accessibilityLabel: string
   /** The actions the button unfolds into. */
   actions: MenuAction[]
   /** The closed button's icon, one of the app's. A plus by default. */

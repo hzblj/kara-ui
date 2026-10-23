@@ -7,6 +7,8 @@ import type {ReactNode} from 'react'
  * their own icons with `Icon` / `RnIcon`.
  */
 export type GlyphProps = {
+  /** What a screen reader says. Unset, the glyph is decorative and hidden from it. */
+  accessibilityLabel?: string
   color?: ColorToken
   name: GlyphName
   size?: SpaceSize

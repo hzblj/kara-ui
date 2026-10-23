@@ -1,6 +1,6 @@
 import {Column, Surface as ComposeSurface, Shape} from '@expo/ui/jetpack-compose'
 import {testID as testIdModifier} from '@expo/ui/jetpack-compose/modifiers'
-import {useSxModifiers} from '@hzblj/kara-sx'
+import {splitAccessibility, useAccessibilityModifiers, useSxModifiers} from '@hzblj/kara-sx'
 import {radii, useAppTheme} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
 import {useHostGuard} from '../../host-context'
@@ -24,15 +24,17 @@ export const Surface: SurfaceComponent = ({
   px,
   py,
   testID,
-  ...sx
+  ...props
 }: SurfaceProps) => {
   useHostGuard('Surface')
+  const [accessibility, sx] = splitAccessibility(props)
 
   const theme = useAppTheme()
   const sxModifiers = useSxModifiers({...sx, bg: undefined})
+  const accessibilityModifiers = useAccessibilityModifiers(accessibility)
   const modifiers = useMemo(
-    () => (testID ? [...sxModifiers, testIdModifier(testID)] : sxModifiers),
-    [sxModifiers, testID]
+    () => [...sxModifiers, ...(testID ? [testIdModifier(testID)] : []), ...accessibilityModifiers],
+    [accessibilityModifiers, sxModifiers, testID]
   )
   const contentModifiers = useSxModifiers({p, pb, pl, pr, pt, px, py, wide: sx.wide})
 

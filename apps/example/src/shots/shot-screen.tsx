@@ -81,8 +81,8 @@ export const ShotScreen = () => {
   const config = CONFIGS[id]
   useQuietLogBox()
 
-  // A whole-screen shot is the scene itself, edge to edge — a `Screen` would have nothing to fill on a stage.
-  if (Scene && config?.frame === 'screen') {
+  // A whole-screen shot is the scene itself, edge to edge: a `Screen` would have nothing to fill on a stage.
+  if (Scene && onThisPlatform(config?.frame as PerPlatform<string> | undefined) === 'screen') {
     return <Scene phase={0} step={0} />
   }
 

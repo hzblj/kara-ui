@@ -1,5 +1,6 @@
 import {Host, LoadingIndicator} from '@expo/ui/jetpack-compose'
 import {fillMaxSize, testID as testIdModifier} from '@expo/ui/jetpack-compose/modifiers'
+import {useAccessibilityModifiers} from '@hzblj/kara-sx'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
 import {StyleSheet} from 'react-native'
@@ -17,12 +18,17 @@ const styles = StyleSheet.create({
  * anywhere and takes its place in the first frame.
  */
 export const ActivityIndicator: ActivityIndicatorComponent = ({
+  accessibilityLabel,
   color = 'fill.accent.primary',
   size = 'small',
   testID,
 }: ActivityIndicatorProps) => {
   const theme = useAppTheme()
-  const modifiers = useMemo(() => (testID ? [fillMaxSize(), testIdModifier(testID)] : [fillMaxSize()]), [testID])
+  const accessibilityModifiers = useAccessibilityModifiers({accessibilityLabel})
+  const modifiers = useMemo(
+    () => [fillMaxSize(), ...(testID ? [testIdModifier(testID)] : []), ...accessibilityModifiers],
+    [accessibilityModifiers, testID]
+  )
 
   return (
     <Host colorScheme={theme.dark ? 'dark' : 'light'} seedColor={theme.materialSeed} style={styles[size]}>

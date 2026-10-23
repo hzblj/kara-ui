@@ -1,6 +1,6 @@
 import {VStack as SwiftUIVStack} from '@expo/ui/swift-ui'
 import {onTapGesture} from '@expo/ui/swift-ui/modifiers'
-import {type FrameAlignment, useSxModifiers} from '@hzblj/kara-sx'
+import {type FrameAlignment, splitAccessibility, useAccessibilityModifiers, useSxModifiers} from '@hzblj/kara-sx'
 import {spacing} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
 import {useHostGuard} from '../../host-context'
@@ -18,13 +18,15 @@ export const VStack: VStackComponent = ({
   onPress,
   spacing: gap,
   testID,
-  ...sx
+  ...props
 }: VStackProps) => {
   useHostGuard('VStack')
+  const [accessibility, sx] = splitAccessibility(props)
   const sxModifiers = useSxModifiers(sx, ALIGNMENT[align])
+  const accessibilityModifiers = useAccessibilityModifiers(accessibility, onPress !== undefined)
   const modifiers = useMemo(
-    () => (onPress ? [...sxModifiers, onTapGesture(onPress)] : sxModifiers),
-    [onPress, sxModifiers]
+    () => [...sxModifiers, ...(onPress ? [onTapGesture(onPress)] : []), ...accessibilityModifiers],
+    [accessibilityModifiers, onPress, sxModifiers]
   )
 
   return (

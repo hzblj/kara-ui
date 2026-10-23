@@ -41,7 +41,7 @@ export const StylingPage = () => (
           <RnText variant="footnote">w="50%"</RnText>
         </Box>
         <Box align="center" aspectRatio={3} bg="fill.success.primary" borderRadius="small" justify="center">
-          <RnText color="content.on.bg" variant="footnoteMedium">
+          <RnText color="content.on.accent" variant="footnoteMedium">
             aspectRatio={3}
           </RnText>
         </Box>

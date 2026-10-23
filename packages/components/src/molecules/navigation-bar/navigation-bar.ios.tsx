@@ -38,7 +38,7 @@ export const NavigationBar: NavigationBarComponent = ({
   const theme = useAppTheme()
   const barRef = useRef<NavigationBarRef>(null)
   const font = theme.typography.headline
-  const color = theme.color(inverted ? 'content.on.bg' : 'content.primary')
+  const color = theme.color(inverted ? 'content.on.accent' : 'content.primary')
 
   useImperativeHandle(
     search?.ref,

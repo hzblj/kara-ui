@@ -43,7 +43,7 @@ export const Padded: Story = {
 export const Accent: Story = {
   render: () => (
     <Card bg="fill.accent.primary">
-      <Text color="content.on.bg" variant="headingXs">
+      <Text color="content.on.accent" variant="headingXs">
         bg fill.accent.primary
       </Text>
     </Card>

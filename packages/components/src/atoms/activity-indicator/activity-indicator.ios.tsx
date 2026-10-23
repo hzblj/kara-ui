@@ -5,11 +5,19 @@ import type {ActivityIndicatorComponent, ActivityIndicatorProps} from './activit
 
 /** React Native's spinner, which on iOS is UIKit's own `UIActivityIndicatorView`. */
 export const ActivityIndicator: ActivityIndicatorComponent = ({
+  accessibilityLabel,
   color = 'fill.accent.primary',
   size = 'small',
   testID,
 }: ActivityIndicatorProps) => {
   const theme = useAppTheme()
 
-  return <RNActivityIndicator color={theme.color(color)} size={size} testID={testID} />
+  return (
+    <RNActivityIndicator
+      accessibilityLabel={accessibilityLabel}
+      color={theme.color(color)}
+      size={size}
+      testID={testID}
+    />
+  )
 }

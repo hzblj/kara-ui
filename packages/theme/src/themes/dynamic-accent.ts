@@ -9,7 +9,7 @@ import type {Palette} from './palette'
 const DYNAMIC_ACCENT_ROLES = [
   ['border.accent', 'primary'],
   ['content.accent', 'primary'],
-  ['content.on.bg', 'onPrimary'],
+  ['content.on.accent', 'onPrimary'],
   ['fill.accent.base', 'primaryContainer'],
   ['fill.accent.disabled', 'surfaceContainerHighest'],
   ['fill.accent.primary', 'primary'],

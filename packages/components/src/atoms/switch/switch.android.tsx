@@ -34,7 +34,7 @@ export const Switch: SwitchComponent = ({disabled = false, label, onValueChange,
     <ComposeSwitch
       colors={{
         checkedBorderColor: theme.color('fill.accent.primary'),
-        checkedThumbColor: theme.color('content.on.bg'),
+        checkedThumbColor: theme.color('content.on.accent'),
         checkedTrackColor: theme.color('fill.accent.primary'),
       }}
       enabled={!disabled}

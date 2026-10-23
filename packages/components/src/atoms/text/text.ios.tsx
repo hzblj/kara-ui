@@ -10,7 +10,7 @@ import {
   underline,
 } from '@expo/ui/swift-ui/modifiers'
 import {scaledFont} from '@hzblj/kara-native/swift-ui'
-import {type FrameAlignment, useSxModifiers} from '@hzblj/kara-sx'
+import {type FrameAlignment, splitAccessibility, useAccessibilityModifiers, useSxModifiers} from '@hzblj/kara-sx'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
 
@@ -39,13 +39,15 @@ export const Text: TextComponent = ({
   testID,
   transform,
   variant = 'body',
-  ...sx
+  ...props
 }: TextProps) => {
   useHostGuard('Text')
   const theme = useAppTheme()
   const style = theme.typography[variant]
   // After the text's own modifiers: the font and colour belong to the glyphs, the padding and frame to the box around.
+  const [accessibility, sx] = splitAccessibility(props)
   const sxModifiers = useSxModifiers(sx, FRAME_ALIGNMENT[align ?? 'left'])
+  const accessibilityModifiers = useAccessibilityModifiers(accessibility)
 
   const modifiers = useMemo(() => {
     const list: ModifierConfig[] = [
@@ -76,8 +78,8 @@ export const Text: TextComponent = ({
       list.push(lineLimit(numberOfLines))
     }
 
-    return [...list, ...sxModifiers]
-  }, [align, color, decoration, numberOfLines, style, sxModifiers, theme, transform])
+    return [...list, ...sxModifiers, ...accessibilityModifiers]
+  }, [accessibilityModifiers, align, color, decoration, numberOfLines, style, sxModifiers, theme, transform])
 
   return (
     <SwiftUIText modifiers={modifiers} testID={testID}>

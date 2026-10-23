@@ -1,3 +1,8 @@
+/**
+ * Alpha, from clear to opaque, for `opacity` and after a colon on a colour token (`fill.accent.base:o50`). Tens, with
+ * the quarters and a step in from each end: `o5`–`o10` for a state layer or a faint tint, `o20`–`o40` for a quiet
+ * one, `o60`–`o80` for a dim or a scrim, `o85`–`o95` for a surface that is nearly solid.
+ */
 export const opacity = {
   o0: 0,
   o5: 0.05,

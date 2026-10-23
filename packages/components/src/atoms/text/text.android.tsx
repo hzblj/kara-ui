@@ -1,6 +1,6 @@
 import {Text as ComposeText} from '@expo/ui/jetpack-compose'
 import {testID as testIdModifier} from '@expo/ui/jetpack-compose/modifiers'
-import {useSxModifiers} from '@hzblj/kara-sx'
+import {splitAccessibility, useAccessibilityModifiers, useSxModifiers} from '@hzblj/kara-sx'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
 
@@ -33,15 +33,17 @@ export const Text: TextComponent = ({
   testID,
   transform,
   variant = 'body',
-  ...sx
+  ...props
 }: TextProps) => {
   useHostGuard('Text')
   const theme = useAppTheme()
   const style = theme.typography[variant]
+  const [accessibility, sx] = splitAccessibility(props)
   const sxModifiers = useSxModifiers(sx)
+  const accessibilityModifiers = useAccessibilityModifiers(accessibility)
   const modifiers = useMemo(
-    () => (testID ? [...sxModifiers, testIdModifier(testID)] : sxModifiers),
-    [sxModifiers, testID]
+    () => [...sxModifiers, ...(testID ? [testIdModifier(testID)] : []), ...accessibilityModifiers],
+    [accessibilityModifiers, sxModifiers, testID]
   )
 
   return (

@@ -1,8 +1,10 @@
+# The photo card is held for its menu: iOS lifts the photo's preview above it (a whole-screen shot there), Android opens
+# Material's menu under it. A tap at the top of the screen closes it again. The first pause lets the photo arrive.
 appId: com.hzblj.karaui.example
 ---
 - startRecording: ${VIDEO}
-- runFlow: {file: pause.yaml, env: {MS: 800}}
-- longPressOn: 'Air Max 90'
+- runFlow: {file: pause.yaml, env: {MS: 1400}}
+- longPressOn: 'Press and hold for options'
 - runFlow: {file: pause.yaml, env: {MS: 1600}}
 - takeScreenshot: ${STILL}
 - runFlow: {file: pause.yaml, env: {MS: 800}}

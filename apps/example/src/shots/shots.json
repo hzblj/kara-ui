@@ -12,7 +12,7 @@
   "chip": {"steps": [1000, 1000, 1000, 1000]},
   "collapsible": {"steps": [2200, 1800]},
   "color-picker": {"flow": "color-picker", "frame": "screen"},
-  "context-menu": {"flow": "context-menu", "platforms": ["ios", "android"]},
+  "context-menu": {"flow": "context-menu", "frame": "screen"},
   "date-picker": {},
   "empty-state": {},
   "fab": {},

@@ -12,13 +12,14 @@ export const Link: LinkComponent = ({
   testID,
   url,
   variant = 'body',
+  ...accessibility
 }: LinkProps) => {
   const open = () => {
     Linking.openURL(url).catch(() => undefined)
   }
 
   return (
-    <HStack align="center" onPress={open} spacing="s8" testID={testID}>
+    <HStack accessibilityRole="link" {...accessibility} align="center" onPress={open} spacing="s8" testID={testID}>
       {icon ? <Icon color={color} name={icon} size="s20" /> : null}
       <Text color={color} variant={variant}>
         {label}

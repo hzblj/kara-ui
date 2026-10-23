@@ -26,6 +26,7 @@ const s = styles()
 
 /** Types worth a link wherever they appear in a props table. */
 const REFERENCES: Record<string, string> = {
+  AccessibilityRole: '/docs/accessibility#platforms',
   ColorToken: '/docs/tokens#colours',
   DurationSize: '/docs/tokens#durations',
   Haptic: '/docs/haptics',
@@ -41,6 +42,7 @@ const REFERENCES: Record<string, string> = {
 }
 
 const EXTENDS: Record<string, string> = {
+  AccessibilityProps: 'the [accessibility props](/docs/accessibility#props)',
   ResponsiveSx: 'the [native `sx` props](/docs/styling#native)',
   ResponsiveViewSx: 'the [React Native `sx` props](/docs/styling#react-native)',
 }

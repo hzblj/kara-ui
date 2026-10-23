@@ -6,7 +6,7 @@ import {HStack} from '../h-stack'
 import {IconButton} from './icon-button'
 
 const meta = {
-  args: {name: 'add', onPress: fn()},
+  args: {accessibilityLabel: 'Add', name: 'add', onPress: fn()},
   argTypes: {
     name: {control: 'select', options: ['add', 'close', 'heart', 'lock', 'more', 'search', 'share', 'star', 'trash']},
   },
@@ -21,15 +21,15 @@ type Story = StoryObj<typeof meta>
 
 export const Playground: Story = {}
 
-export const Disabled: Story = {args: {disabled: true, name: 'lock'}}
+export const Disabled: Story = {args: {accessibilityLabel: 'Locked', disabled: true, name: 'lock'}}
 
 export const Row: Story = {
   render: () => (
     <HStack spacing="s8">
-      <IconButton name="add" />
-      <IconButton name="share" />
-      <IconButton name="trash" />
-      <IconButton disabled name="lock" />
+      <IconButton accessibilityLabel="Add" name="add" />
+      <IconButton accessibilityLabel="Share" name="share" />
+      <IconButton accessibilityLabel="Delete" name="trash" />
+      <IconButton accessibilityLabel="Locked" disabled name="lock" />
     </HStack>
   ),
 }

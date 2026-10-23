@@ -20,7 +20,7 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   render: args => (
     <ZStack {...args} bg="fill.accent.primary" borderRadius="medium" h={96} wide>
-      <Text color="content.on.bg" variant="headingXs">
+      <Text color="content.on.accent" variant="headingXs">
         over accent
       </Text>
     </ZStack>

@@ -23,7 +23,7 @@ Every package has its own `CLAUDE.md` — read that one before touching it.
 | `.changeset/`, `.github/workflows/` | — | Release notes (`yarn changeset`), CI (biome, typecheck, pack check) and the changesets → npm release. |
 
 Dependencies point one way: `theme` ← `sx` ← `components` ← `router`, with `native` beside `theme` (a pure platform
-layer) and `kara-ui` on top of all of them. Nothing imports upwards, and nothing reaches past another package's
+layer that `sx` and `components` both use) and `kara-ui` on top of all of them. Nothing imports upwards, and nothing reaches past another package's
 `exports`. All packages are versioned together (`fixed` in `.changeset/config.json`). The website reads the packages'
 sources at build time but imports none of them.
 
@@ -89,6 +89,11 @@ in the `*.types.ts`.
 **Docs copy has no em dashes.** Not in the website, the READMEs, the JSDoc in `*.types.ts` (it becomes the props
 tables), changesets (they become the changelog), story notes or the example's captions. Rewrite with a comma, a colon,
 parentheses or a second sentence; never swap in `-`, `–` or `--`. Code comments nobody reads on a page are exempt.
+
+**Accessibility and motion are the engine's, not each call site's.** Accessibility props (`accessibilityLabel`, `Hint`,
+`Role`, `Value`, `Hidden`, `accessible`) go through `@hzblj/kara-sx` to SwiftUI modifiers and Compose semantics; an
+icon-only control requires a label. Motion takes the `duration`/`easing` tokens by usage and honours `useReducedMotion`:
+nothing slides, scales, turns or loops with it on.
 
 Code style is Biome-enforced (`@hzblj/biome-config`): 2 spaces, 120 cols, single quotes, no semicolons, sorted imports
 and object keys. Named exports and `const` arrow functions everywhere; `type` over `interface`.

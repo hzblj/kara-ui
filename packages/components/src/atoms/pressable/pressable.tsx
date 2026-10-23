@@ -1,18 +1,21 @@
-import {useSplitSx} from '@hzblj/kara-sx'
-import {duration, opacity, useAppTheme, withOpacity} from '@hzblj/kara-theme'
+import {accessibilityProps, splitAccessibility, useSplitSx} from '@hzblj/kara-sx'
+import {opacity, useAppTheme, useReducedMotion, withOpacity} from '@hzblj/kara-theme'
 import {useCallback, useMemo} from 'react'
 import {Platform, Pressable as RNPressable, type ViewStyle} from 'react-native'
-import Animated, {useAnimatedStyle, useSharedValue, withSpring, withTiming} from 'react-native-reanimated'
+import Animated, {useAnimatedStyle, useSharedValue, withTiming} from 'react-native-reanimated'
 
 import {haptics} from '../../haptics'
+import {timing} from '../../motion'
 import {splitForRipple} from '../../ripple-clip'
 import type {PressableComponent, PressableProps} from './pressable.types'
 
-const SPRING = {damping: 20, stiffness: 400}
+/** The scale eases down and settles back a little slower, with no bounce: a press is not a toy. */
+const SCALE_IN = timing('quick')
+const SCALE_OUT = timing('fast')
 
-/** A dim comes in quickly and leaves a little slower, as UIKit's own highlight does. */
-const DIM_IN = {duration: duration.d100}
-const DIM_OUT = {duration: duration.d200}
+/** A dim comes in at once and leaves a little slower, as UIKit's own highlight does. */
+const DIM_IN = timing('micro', 'out')
+const DIM_OUT = timing('quick', 'out')
 
 const PLATFORM_EFFECT = Platform.OS === 'ios' ? 'scale' : 'none'
 
@@ -30,22 +33,27 @@ export const Pressable: PressableComponent = ({
   testID,
   ...props
 }: PressableProps) => {
-  const [resolved, rest] = useSplitSx(props)
+  const [accessibility, ownProps] = splitAccessibility(props)
+  const [resolved, rest] = useSplitSx(ownProps)
+  const reduced = useReducedMotion()
+  // With motion reduced the press still shows, and nothing moves: a scale dims instead.
+  const effect = reduced && pressEffect === 'scale' ? 'opacity' : pressEffect
   // 0 at rest, 1 held: one value drives whichever effect is picked, so a change of effect needs no second animation.
   const pressed = useSharedValue(0)
   const feedback = haptic === true ? 'light' : haptic || undefined
+  const a11y = accessibilityProps(accessibility, 'button')
   const dimmed = opacity[pressedOpacity]
 
   const theme = useAppTheme()
   const isAndroid = Platform.OS === 'android'
 
   const rStyle = useAnimatedStyle(() => {
-    if (pressEffect === 'scale') {
+    if (effect === 'scale') {
       return {transform: [{scale: 1 - (1 - pressedScale) * pressed.value}]}
     }
 
-    return pressEffect === 'opacity' ? {opacity: 1 - (1 - dimmed) * pressed.value} : {}
-  }, [dimmed, pressEffect, pressedScale])
+    return effect === 'opacity' ? {opacity: 1 - (1 - dimmed) * pressed.value} : {}
+  }, [dimmed, effect, pressedScale])
 
   // Android's press is Material's: a ripple over the content (the pressed state layer, `onSurface` at 10 %) clipped to
   // the shape by an outer view (`splitForRipple`). The effect, when there is one, moves that outer view, ripple and all.
@@ -63,20 +71,18 @@ export const Pressable: PressableComponent = ({
 
   // The finger is down: the Taptic Engine has until the release to wake, so the haptic lands with the press.
   const onPressIn = useCallback(() => {
-    if (pressEffect === 'scale') {
-      pressed.value = withSpring(1, SPRING)
-    } else if (pressEffect === 'opacity') {
-      pressed.value = withTiming(1, DIM_IN)
+    if (effect !== 'none') {
+      pressed.value = withTiming(1, effect === 'scale' ? SCALE_IN : DIM_IN)
     }
 
     if (feedback) {
       haptics.prepare(feedback)
     }
-  }, [feedback, pressEffect, pressed])
+  }, [effect, feedback, pressed])
 
   const onPressOut = useCallback(() => {
-    pressed.value = pressEffect === 'scale' ? withSpring(0, SPRING) : withTiming(0, DIM_OUT)
-  }, [pressEffect, pressed])
+    pressed.value = withTiming(0, effect === 'scale' ? SCALE_OUT : DIM_OUT)
+  }, [effect, pressed])
 
   const onPressWithHaptic = useCallback(() => {
     if (feedback) {
@@ -90,6 +96,7 @@ export const Pressable: PressableComponent = ({
     return (
       <Animated.View style={[androidStyle.outer, rStyle]}>
         <RNPressable
+          {...a11y}
           android_ripple={ripple}
           disabled={disabled}
           hitSlop={8}
@@ -108,6 +115,7 @@ export const Pressable: PressableComponent = ({
 
   return (
     <AnimatedPressable
+      {...a11y}
       disabled={disabled}
       hitSlop={8}
       onPress={onPressWithHaptic}

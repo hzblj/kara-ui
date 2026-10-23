@@ -24,5 +24,5 @@ export const withZoomTransition =
       return resolved
     }
 
-    return {animation: 'fade', animationDuration: duration.d300, ...resolved}
+    return {animation: 'fade', animationDuration: duration.medium, ...resolved}
   }

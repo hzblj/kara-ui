@@ -1,15 +1,16 @@
-import {duration, opacity} from '@hzblj/kara-theme'
+import {opacity} from '@hzblj/kara-theme'
 import {cloneElement, type ReactNode, useCallback, useRef} from 'react'
 import type {LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent} from 'react-native'
 import {type SharedValue, useAnimatedStyle, useSharedValue, withTiming} from 'react-native-reanimated'
 
 import {ABox, Box} from '../../atoms/box'
+import {timing} from '../../motion'
 import type {ScrollEdgeContainerComponent, ScrollEdgeContainerProps} from './scroll-edge-container.types'
 
 /** Less than a pixel scrolled is not scrolled — a fling settles a fraction away from the edge. */
 const EDGE_SLOP = 0.5
 
-const FILL = {duration: duration.d200}
+const FILL = timing('quick', 'out')
 
 type Bar = {children: ReactNode; filled: SharedValue<number>}
 

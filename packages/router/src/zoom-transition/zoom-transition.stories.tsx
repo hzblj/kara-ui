@@ -24,7 +24,7 @@ const meta = {
       '',
       '// the pushed screen',
       'const zoomId = useZoomTransitionParam()',
-      "<ZoomTransition.Enabler sourceIdentifier={zoomId} ios={{dismissGesture: 'vertical'}} android={{duration: 'd300'}} />",
+      "<ZoomTransition.Enabler sourceIdentifier={zoomId} ios={{dismissGesture: 'vertical'}} android={{duration: 'slow'}} />",
       "<ZoomTransition.Target identifier={zoomId} android={{borderRadius: 'large'}}>",
       '  <Photo />',
       '</ZoomTransition.Target>',

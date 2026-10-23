@@ -6,7 +6,7 @@ import type {PaletteResolver} from './system/palette-resolver.types'
 import type {Palette} from './themes/palette'
 
 /**
- * Every dotted path from a colour group down to a colour (`accent.primary`, `on.bg`). Derived from the group's
+ * Every dotted path from a colour group down to a colour (`accent.primary`, `on.accent`). Derived from the group's
  * own shape, so a colour added to the palette gets its token without a second edit. A system reference is a leaf
  * here like any other: it is a colour, just not one we can read.
  */

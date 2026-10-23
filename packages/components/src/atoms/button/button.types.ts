@@ -24,6 +24,8 @@ export type ButtonControlSize = 'extraLarge' | 'large' | 'mini' | 'regular' | 's
 
 /** A text button: SwiftUI `Button` on iOS, Material's filled button (outlined for `glass`) on Android. */
 export type ButtonProps = {
+  /** What pressing it does, when the label alone does not say. See `AccessibilityProps`. */
+  accessibilityHint?: string
   /**
    * Replaces the style the variant picks: `borderedProminent` for `accent` and `destructive`, `bordered` for
    * `secondary`, `glass` for `glass`. iOS only. Android ignores it.

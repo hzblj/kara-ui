@@ -81,28 +81,34 @@ export const COMPONENTS: ComponentDoc[] = [
   },
   {
     code: `<HStack spacing="s8">
-  <IconButton name="share" onPress={share} />
-  <IconButton name="heart" onPress={favourite} />
-  <IconButton disabled name="lock" />
+  <IconButton accessibilityLabel="Share" name="share" onPress={share} />
+  <IconButton accessibilityLabel="Add to favourites" name="heart" onPress={favourite} />
+  <IconButton accessibilityLabel="Locked" disabled name="lock" />
 </HStack>`,
     exports: ['IconButton'],
     group: 'actions',
     host: 'native',
     id: 'icon-button',
     name: 'IconButton',
-    notes: ['`name` is one of your own icons (see Icons).'],
+    notes: [
+      '`name` is one of your own icons (see Icons).',
+      '`accessibilityLabel` is required: an icon has nothing of its own for VoiceOver or TalkBack to say.',
+    ],
     renders: {android: 'Compose IconButton', ios: 'SwiftUI Button'},
     summary: 'A button that is just an icon, for toolbars and compact rows.',
     types: ['IconButtonProps'],
   },
   {
-    code: '<Fab name="add" onPress={create} />',
+    code: '<Fab accessibilityLabel="New post" name="add" onPress={create} />',
     exports: ['Fab'],
     group: 'actions',
     host: 'native',
     id: 'fab',
     name: 'Fab',
-    notes: ['A real screen pins it to the bottom trailing corner; the component itself sits wherever it is laid out.'],
+    notes: [
+      'A real screen pins it to the bottom trailing corner; the component itself sits wherever it is laid out.',
+      '`accessibilityLabel` is required: an icon has nothing of its own for VoiceOver or TalkBack to say.',
+    ],
     renders: {android: 'Compose FloatingActionButton', ios: 'SwiftUI Button, round and prominent'},
     summary: 'The screen’s primary action, floating above the content.',
     types: ['FabProps'],
@@ -110,7 +116,7 @@ export const COMPONENTS: ComponentDoc[] = [
   {
     code: `${ACTIONS}
 
-<FabMenu actions={actions} />`,
+<FabMenu accessibilityLabel="Create" actions={actions} />`,
     exports: ['FabMenu', 'type MenuAction'],
     group: 'actions',
     host: 'native',
@@ -232,7 +238,7 @@ export const COMPONENTS: ComponentDoc[] = [
   },
   {
     code: `<Pressable bg="fill.accent.primary" borderRadius="large" haptic onPress={open} p="s20">
-  <RnText color="content.on.bg" variant="headline">Press me</RnText>
+  <RnText color="content.on.accent" variant="headline">Press me</RnText>
 </Pressable>`,
     exports: ['Pressable'],
     group: 'actions',
@@ -240,7 +246,7 @@ export const COMPONENTS: ComponentDoc[] = [
     id: 'pressable',
     name: 'Pressable',
     notes: [
-      'The press is each platform’s own by default: iOS springs it to 96 % while held; Android draws Material’s ripple over the content, clipped to the pressable’s shape, so give it the `borderRadius` of what it wraps (`full` around a `GlassView`).',
+      'The press is each platform’s own by default: iOS eases it down to 96 % while held (with motion reduced, it dims); Android draws Material’s ripple over the content, clipped to the pressable’s shape, so give it the `borderRadius` of what it wraps (`full` around a `GlassView`).',
       '`pressEffect` picks the same answer on both: `scale` (to `pressedScale`), `opacity` (to `pressedOpacity`) or `none`. Android keeps its ripple on top unless `ripple` is off.',
       'It takes touches 8 points past its edges.',
       '`haptic` is `true` for a light impact, or any haptic by name. iOS prepares it on press-in.',
@@ -905,7 +911,9 @@ export const COMPONENTS: ComponentDoc[] = [
     id: 'snackbar',
     name: 'Snackbar',
     notes: [
-      'Pinned to the bottom of its parent, above everything in it. It shows while `visible` is true; hiding it after a while is yours to do.',
+      'Laid over an edge of its parent (`position`, the bottom by default) at `offset` from it, with the action at the trailing end. It shows while `visible` is true.',
+      '`duration` (`short` 4 s, `long` 10 s, or milliseconds) and the `dismissible` close button call `onDismiss`; turning `visible` off is yours to do.',
+      'It comes in Material’s way on Android (a fade and a scale from 80 %) and slides from its edge on iOS, which has no snackbar of its own. `animation` picks one for both; `entering` / `exiting` take Reanimated animations of your own.',
     ],
     renders: {android: 'React Native', ios: 'React Native'},
     summary: 'A brief message at the bottom of the screen.',

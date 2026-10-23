@@ -9,7 +9,7 @@ type ButtonTokens = {
 }
 
 const TOKENS = {
-  accent: {content: 'content.on.bg', fill: 'fill.accent.primary', shadow: 'btn.accent'},
+  accent: {content: 'content.on.accent', fill: 'fill.accent.primary', shadow: 'btn.accent'},
   destructive: {content: 'content.on.destructive', fill: 'fill.destructive.primary', shadow: 'btn.destructive'},
   glass: {content: 'content.primary', fill: 'btn.bg.glass.base', shadow: 'btn.glass'},
   secondary: {content: 'content.primary', fill: 'btn.bg.secondary.base', shadow: 'btn.secondary'},
@@ -81,4 +81,4 @@ const currentHex = (token: ColorToken, theme: Theme): unknown => {
  * content colour over a pale one (`fill.accent.base`) — the light container tokens pair with it in both appearances.
  */
 export const contentOnTint = (tint: ColorToken, theme: Theme): ColorToken =>
-  (luminance(currentHex(tint, theme)) ?? 0) > 0.4 ? 'content.primary' : 'content.on.bg'
+  (luminance(currentHex(tint, theme)) ?? 0) > 0.4 ? 'content.primary' : 'content.on.accent'

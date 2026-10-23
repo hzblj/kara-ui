@@ -22,14 +22,14 @@ const meta = {
   component: Pressable,
   parameters: {
     notes:
-      'Presses the platform’s way by default: a spring to 0.96 on iOS, Material’s ripple on Android. `pressEffect` ' +
+      'Presses the platform’s way by default: an ease down to 0.96 on iOS, Material’s ripple on Android. `pressEffect` ' +
       'picks `scale`, `opacity` or `none` on both, and Android keeps the ripple on top unless `ripple` is off. A ' +
       'haptic can play on press: `true` for a light impact, or any haptic by name; iOS prepares it on press-in. ' +
-      'Takes the full `ResponsiveViewSx` surface, so it styles like a `Box`.',
+      'With motion reduced, `scale` dims instead. Takes the full `ResponsiveViewSx` surface, so it styles like a `Box`.',
   },
   render: args => (
     <Pressable {...args}>
-      <RnText color="content.on.bg" variant="body">
+      <RnText color="content.on.accent" variant="body">
         Press me
       </RnText>
     </Pressable>

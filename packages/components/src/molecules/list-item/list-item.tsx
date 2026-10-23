@@ -14,8 +14,26 @@ import type {ListItemComponent, ListItemProps} from './list-item.types'
  */
 const TEXT_FILLS_ROW = {weight: 1}
 
-export const ListItem: ListItemComponent = ({icon, onPress, px, subtitle, testID, title}: ListItemProps) => (
-  <HStack align="center" onPress={onPress} px={px} py="s8" spacing="s12" testID={testID} wide>
+export const ListItem: ListItemComponent = ({
+  icon,
+  onPress,
+  px,
+  subtitle,
+  testID,
+  title,
+  ...accessibility
+}: ListItemProps) => (
+  <HStack
+    accessible
+    {...accessibility}
+    align="center"
+    onPress={onPress}
+    px={px}
+    py="s8"
+    spacing="s12"
+    testID={testID}
+    wide
+  >
     {icon ? <Icon color="content.secondary" name={icon} size="s20" /> : null}
     <VStack android={TEXT_FILLS_ROW} spacing="s2">
       <Text variant="body">{title}</Text>

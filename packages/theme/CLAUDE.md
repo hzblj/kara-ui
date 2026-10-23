@@ -17,7 +17,7 @@ the value's business, and reading `content.accent` should not require knowing.
 
 | Path | What it is |
 | --- | --- |
-| `src/primitives/` | The scales: `colors`, `spacing` (`s0`…`s96`), `radii`, `shadows`, `opacity`, `zIndex`, `typography` (`textStyles`, `FontsConfig`, `resolveTypography`, `fontFace`), `duration`, `breakpoints`, `color-source`. |
+| `src/primitives/` | The scales: `colors`, `spacing` (`s0`…`s96`), `radii`, `shadows`, `opacity`, `zIndex`, `typography` (`textStyles`, `FontsConfig`, `resolveTypography`, `fontFace`), `duration` (transitions.dev's scale, named by what the motion does: `micro` 80 ms to `verySlow` 500 ms, plus `stagger` and `none`), `easing` (`smoothOut`, `inOut`, `out`, `linear` as bézier points), `breakpoints`, `color-source`. |
 | `src/primitives/color-source.ts` | The three kinds an entry can be: `native({ios?, android?, light?, dark?})`, `adaptive({light, dark, highContrast*})`, or a plain hex. Plus `MAX_CONTRAST_SURFACE` / `MAX_CONTRAST_CONTENT` and `defaultMaterialSeed`. |
 | `src/primitives/shadows.ts` | `shadowGeometry` as a nested scale; `ShadowName` is derived from it as a dotted path (`btn.accent`, `card`), and `ShadowTreeOf` gives the palette the same shape so the two cannot drift. |
 | `src/primitives/breakpoints.ts` | `BREAKPOINT_ORDER` (sm→xl) and `breakpointFor(width)`; `Breakpoint` derives from the array so the scale and the cascade order cannot drift. |
@@ -26,7 +26,7 @@ the value's business, and reading `content.accent` should not require knowing.
 | `src/themes/palette.ts` | The palette — the source of truth; `Palette` is `typeof palette`. One file, because no entry in it chooses between appearances — the platform does, and where it cannot the resolver does from the active variant. |
 | `src/themes/rgba-palette.ts` | Mirrors every dimmable colour into `theme.rgba.*(opacitySize)`, each a call to `theme.color('<token>:oNN')`; UIKit semantic references are skipped, in the mirror and in `AlphaGroup` alike. |
 | `src/themes/dynamic-accent.ts` | `withDynamicAccent` — what `dynamicColor` does to the palette: the accent tokens' Android side handed to Material roles. |
-| `src/hooks/`, `src/provider/` | `BreakpointProvider` / `useBreakpoint`, `useAppearanceOverride`, and `KaraProvider` — breakpoint + theme + appearance override, the one root an app mounts. |
+| `src/hooks/`, `src/provider/` | `BreakpointProvider` / `useBreakpoint`, `useAppearanceOverride`, `ReducedMotionProvider` / `useReducedMotion`, and `KaraProvider` — breakpoint + reduced motion + theme + appearance override, the one root an app mounts. |
 | `src/system/` | `isDynamicColorSupported`, and `usePaletteResolver(variant, seedColor)` / `paletteResolver`, split `.ios`/`.android` with a `contract.check.ts`. The only place a platform colour API is touched: `PlatformColor` and `DynamicColorIOS` on one side, the Material scheme on the other. |
 | `src/theme-context.tsx` | `AppThemeProvider` joins the merged palette, the resolved typography and the seed to the platform resolver and the active variant; `useAppTheme` (defaults to the light default theme without a provider, built lazily). Apps mount it through `KaraProvider`. |
 | `src/utils/resolve-color.ts` | The resolver behind `theme.color` and `theme.colorString`, plus `resolvePaletteColor` and `withOpacity`. |
@@ -95,7 +95,7 @@ grow from `materialSeed`. The Android resolver re-reads the wallpaper when the a
 foreground and rebuilds only if it moved. `materialSeed: null` is the halfway house: wallpaper scheme,
 our own accent.
 
-**Content on a fill names the fill.** `content.on.bg` sits on the accent fill, `content.on.destructive`
+**Content on a fill names the fill.** `content.on.accent` sits on the accent fill, `content.on.destructive`
 on `fill.destructive.primary` — Material's `error`, which turns light in dark mode and so needs
 `onError` on Android rather than white.
 
@@ -116,6 +116,12 @@ and the OS scales it.
 `MAX_DYNAMIC_TYPE_SIZE` caps growth on the SwiftUI hosts and `MAX_FONT_SCALE` — derived from it, not
 hand-picked — caps the React Native tier, so the two stop in the same place. Capping rather than opting out
 is Apple's guidance: a capped layout still answers the setting.
+
+**Motion is picked by usage, and reduced by the user.** A component takes a duration by what the motion does
+(arriving `fast`, leaving `quick`, a touch `micro`), never by the number it used to have, and `smoothOut` unless it is a
+swap (`inOut`), a small fade (`out`) or a loop (`linear`). `useReducedMotion` is the device's Reduce Motion / Remove
+animations setting, followed live through `AccessibilityInfo`, unless `KaraProvider reduceMotion` pins it; with it on,
+nothing slides, scales, turns or loops, and what needs a transition fades.
 
 **Palette hexes must be `#rrggbb` or `#rrggbbaa`** — the only forms both native sides parse.
 
