@@ -10,13 +10,27 @@ const ACTIVE_LINE = 140
 
 type Heading = {id: string; label: string}
 
+/**
+ * Where a heading becomes the one being read: `ACTIVE_LINE` from the top, sliding down to the bottom edge over the
+ * page's last screen. The sections too short to reach the line before the page runs out still get their turn, and at
+ * the very end the last one on screen is active.
+ */
+const activeLine = () => {
+  const {clientHeight, scrollHeight} = document.documentElement
+  const remaining = scrollHeight - clientHeight - window.scrollY
+  const approach = Math.min(1, Math.max(0, 1 - remaining / clientHeight))
+
+  return ACTIVE_LINE + (clientHeight - ACTIVE_LINE) * approach
+}
+
 const activeIdFor = (headings: Heading[]) => {
+  const line = activeLine()
   let active = headings[0]?.id
 
   for (const heading of headings) {
     const element = document.getElementById(heading.id)
 
-    if (element && element.getBoundingClientRect().top <= ACTIVE_LINE) {
+    if (element && element.getBoundingClientRect().top <= line) {
       active = heading.id
     }
   }
@@ -50,14 +64,16 @@ export const DocsToc = ({headings}: {headings: Heading[]}) => {
       }
     }
 
+    const controller = new AbortController()
+    const {signal} = controller
+
     measure()
-    window.addEventListener('scroll', schedule, {passive: true})
-    window.addEventListener('resize', schedule)
+    window.addEventListener('scroll', schedule, {passive: true, signal})
+    window.addEventListener('resize', schedule, {signal})
 
     return () => {
+      controller.abort()
       cancelAnimationFrame(frame)
-      window.removeEventListener('scroll', schedule)
-      window.removeEventListener('resize', schedule)
     }
   }, [headings])
 

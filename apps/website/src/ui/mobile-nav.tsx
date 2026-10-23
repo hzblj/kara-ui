@@ -18,14 +18,15 @@ const mobileNav = tv({
       'flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-[9px] text-content-tertiary transition-colors hover:bg-fill-secondary-hover hover:text-content-primary',
     icon: 'size-4',
     panel:
-      'pointer-events-auto absolute right-0 top-0 flex h-full w-[min(320px,86vw)] flex-col overflow-y-auto border-l border-border-secondary bg-surface-base px-5 pb-8 pt-4 shadow-card-elevated transition-transform motion-reduce:transition-none [scrollbar-color:var(--color-gray-5)_transparent] [scrollbar-width:thin]',
+      'pointer-events-auto absolute right-0 top-0 flex h-full w-[min(320px,86vw)] flex-col overflow-y-auto overscroll-y-contain border-l border-border-secondary bg-surface-base px-5 pt-4 pb-[calc(2rem+env(safe-area-inset-bottom))] shadow-card-elevated transition-transform motion-reduce:transition-none [scrollbar-color:var(--color-gray-5)_transparent] [scrollbar-width:thin]',
     panelClosed: 'translate-x-full duration-200 ease-[cubic-bezier(.4,0,1,1)]',
     panelOpen: 'translate-x-0 duration-300 ease-[cubic-bezier(.2,.8,.2,1)]',
     panelTitle: 'text-[11px] font-bold uppercase tracking-[0.12em] text-content-tertiary',
     panelTop: 'mb-6 flex h-8 items-center justify-between',
     trigger:
       'flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-full border border-border-secondary bg-fill-secondary-primary text-content-secondary shadow-card-default transition-colors hover:bg-fill-secondary-hover hover:text-content-primary min-[821px]:hidden',
-    viewport: 'pointer-events-none fixed inset-0 z-[60] overflow-clip min-[821px]:hidden',
+    // The visible viewport (`dvh`): iOS lays a fixed `inset-0` under its toolbar, where the last links could not scroll out.
+    viewport: 'pointer-events-none fixed inset-x-0 top-0 z-[60] h-dvh overflow-clip min-[821px]:hidden',
   },
 })
 

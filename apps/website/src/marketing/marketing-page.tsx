@@ -6,8 +6,9 @@ import {ThemeToggle} from '../theme/theme-toggle'
 import {CopyButton} from '../ui/copy-button'
 import {ArrowRightIcon, GithubMark} from '../ui/icons'
 import {MobileNav} from '../ui/mobile-nav'
-import {KaraMark, Wordmark} from '../ui/wordmark'
+import {Wordmark} from '../ui/wordmark'
 import {ComponentStrip} from './component-strip'
+import {MarkBloom} from './mark-bloom'
 import {marketingStyles} from './marketing-styles'
 
 const styles = marketingStyles()
@@ -79,22 +80,25 @@ export const MarketingPage = () => (
         </div>
       </section>
 
-      <section className={styles.section()}>
+      <section>
         <header className={styles.sectionHeader()}>
           <h2>Every component, both platforms</h2>
         </header>
         <ComponentStrip />
-        <div className="mt-10 flex justify-center">
+        <div className={styles.sectionFooter()}>
           <Link className={styles.secondaryLink()} data-cta="browse_components" href="/docs/components">
             Browse them all
             <ArrowRightIcon className="size-4" />
           </Link>
         </div>
       </section>
+
+      <section aria-hidden="true" className={styles.markSection()}>
+        <MarkBloom className={styles.mark()} />
+      </section>
     </main>
 
     <footer className={styles.footer()}>
-      <KaraMark className={styles.footerMark()} />
       <div className={styles.footerInner()}>
         <div className={styles.footerBar()}>
           <span>{`© ${new Date().getFullYear()} hzblj · MIT`}</span>

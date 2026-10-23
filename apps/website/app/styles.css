@@ -81,6 +81,8 @@
 
   /* transitions.dev's smooth out: what moves inside a hovered card, and anything that changes position. */
   --ease-smooth-out: cubic-bezier(0.22, 1, 0.36, 1);
+  /* transitions.dev's bounce: a pop open, the landing page's mark blooming. */
+  --ease-bounce: cubic-bezier(0.34, 1.36, 0.64, 1);
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -165,13 +167,6 @@ html.dark .shiki span {
   font-style: var(--shiki-dark-font-style, normal) !important;
   font-weight: var(--shiki-dark-font-weight, inherit) !important;
   text-decoration: var(--shiki-dark-text-decoration, none) !important;
-}
-
-/* The landing page's strip of components (only under `motion-safe:`): two copies of a row, slid by one. */
-@keyframes marquee {
-  to {
-    transform: translateX(-50%);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
