@@ -2,6 +2,7 @@
 
 import {type ReactNode, useState} from 'react'
 
+import {track} from '../../analytics/track'
 import {CopyButton} from '../../ui/copy-button'
 import {cn} from '../../ui/utils'
 import {docsStyles} from '../docs-styles'
@@ -29,7 +30,10 @@ export const PreviewTabs = ({code, codeHtml, preview}: PreviewTabsProps) => {
               aria-selected={tab === value}
               className={cn(styles.tab(), tab === value ? styles.tabActive() : styles.tabInactive())}
               key={value}
-              onClick={() => setTab(value)}
+              onClick={() => {
+                setTab(value)
+                track('select_preview_tab', {tab: value})
+              }}
               role="tab"
               type="button"
             >
@@ -38,7 +42,12 @@ export const PreviewTabs = ({code, codeHtml, preview}: PreviewTabsProps) => {
           ))}
         </div>
         {tab === 'code' ? (
-          <CopyButton className={styles.codeCopy()} iconClassName="size-3.5 text-content-tertiary" text={code} />
+          <CopyButton
+            className={styles.codeCopy()}
+            iconClassName="size-3.5 text-content-tertiary"
+            source="component_snippet"
+            text={code}
+          />
         ) : null}
       </div>
       <div className={tab === 'preview' ? undefined : 'hidden'}>{preview}</div>

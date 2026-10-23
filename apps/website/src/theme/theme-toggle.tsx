@@ -2,6 +2,7 @@
 
 import {tv} from 'tailwind-variants'
 
+import {track} from '../analytics/track'
 import {applyTheme, storeTheme} from './theme'
 import {useColorScheme} from './use-root'
 
@@ -27,6 +28,7 @@ export const ThemeToggle = () => {
     const next = document.documentElement.classList.contains('dark') ? 'light' : 'dark'
     applyTheme(next)
     storeTheme(next)
+    track('toggle_theme', {theme: next})
   }
 
   return (

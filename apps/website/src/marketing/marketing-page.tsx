@@ -60,7 +60,7 @@ export const MarketingPage = () => (
         <h1>{HERO_HEADLINE}</h1>
         <p className={styles.lede()}>{HERO_TAGLINE}</p>
         <div className={styles.actions()}>
-          <Link className={styles.primaryButton()} href="/docs">
+          <Link className={styles.primaryButton()} data-cta="get_started" href="/docs">
             Get started
             <ArrowRightIcon className="size-4" />
           </Link>
@@ -69,7 +69,12 @@ export const MarketingPage = () => (
               $
             </span>
             <code className={styles.installCommand()}>{INSTALL_COMMAND}</code>
-            <CopyButton className={styles.installCopy()} iconClassName="size-3.5" text={INSTALL_COMMAND} />
+            <CopyButton
+              className={styles.installCopy()}
+              iconClassName="size-3.5"
+              source="install"
+              text={INSTALL_COMMAND}
+            />
           </div>
         </div>
       </section>
@@ -80,7 +85,7 @@ export const MarketingPage = () => (
         </header>
         <ComponentStrip />
         <div className="mt-10 flex justify-center">
-          <Link className={styles.secondaryLink()} href="/docs/components">
+          <Link className={styles.secondaryLink()} data-cta="browse_components" href="/docs/components">
             Browse them all
             <ArrowRightIcon className="size-4" />
           </Link>
