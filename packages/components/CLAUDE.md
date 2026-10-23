@@ -16,7 +16,6 @@ and `@hzblj/kara-native` — through their entry points only.
 | `src/organisms/` | Sheet (TrueSheet with a native header: `Sheet.Header`, `Sheet.ScrollView`, `useSheetScroll`), ActionSheet, Alert, Menu, Form, SwipeActions, Snackbar — and over the native module: ContextMenu (long-press on React Native content, with a custom preview on iOS), FabMenu. (`Tabs` lives in `@hzblj/kara-router`, behind the `@hzblj/kara-ui/router` entry, so the main entry never imports expo-router.) |
 | `src/templates/screen/` | `Screen` — the full-bleed native host every screen starts with. |
 | `src/host-context.tsx` | `HostBoundary` + `useHostGuard`: dev warning when a native atom renders outside `Screen`/`Island`. |
-| `src/platform-support.ts` | `warnUnsupported` — one-per-atom dev error for atoms only one platform can implement. |
 | `src/story-decorators.tsx` | `insideIsland` / `insideIslandOfHeight` — the host a story mounts its subject in. Internal: not exported from `index.ts`. |
 | `src/haptics/` | `haptics` (a function per `Haptic`, `play`, `prepare`, `setEnabled`) and `useHapticFeedback` — the public face of the native module's haptics, and the only way components play one. |
 | `src/use-refresh-state.ts` | Bridges SwiftUI's promise-driven `refreshable` and Compose's controlled `PullToRefreshBox` into one async `onRefresh`. |
@@ -92,7 +91,7 @@ required, `args` carries `children: null` purely to satisfy the type.
 **A controlled component writes its value back through `useArgs`**, not local state — that is what
 keeps the Controls panel showing what is actually on screen.
 
-**Divergence goes in `parameters.notes`.** iOS-only (`ColorPicker`), SwiftUI-only
+**Divergence goes in `parameters.notes`.** A platform's own implementation (`ColorPicker` on Android), SwiftUI-only
 props (`buttonStyle`, `controlSize`), Android-only ones (`pageSpacing`) — the notes tab is where a
 reader finds out before the other platform surprises them.
 

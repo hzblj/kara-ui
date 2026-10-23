@@ -15,7 +15,7 @@ const meta = {
   decorators: [insideIsland],
   parameters: {
     notes:
-      'An inline icon + text pair — what goes inside a button, a menu row or a section header. For a full tappable row with a subtitle and a chevron, use `ListItem`.',
+      'An inline icon + text pair: what goes inside a button, a menu row or a section header. For a full tappable row with a subtitle and a chevron, use `ListItem`.',
   },
   title: 'Molecules/Label',
 } satisfies Meta<typeof Label>

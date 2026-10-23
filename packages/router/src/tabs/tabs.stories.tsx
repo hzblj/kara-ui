@@ -26,7 +26,7 @@ const meta = {
       '</Tabs>',
       '```',
       '',
-      '- `Tabs.Screen` renders nothing itself — `Tabs` reads its props and emits the trigger. The navigator',
+      '- `Tabs.Screen` renders nothing itself: `Tabs` reads its props and emits the trigger. The navigator',
       '  matches children by element type exactly, so a component that merely *renders* a trigger is invisible',
       '  to it and the bar comes up empty.',
       '- `hidden` drops a tab from the bar *and* makes the route unreachable. Pass a build constant: toggling it',
@@ -49,7 +49,7 @@ export const Contract: Story = {
       <Icon color="content.accent" name="grid" size="s32" />
       <Text variant="headingXs">Tabs is a route layout</Text>
       <Text color="content.secondary" variant="footnote">
-        It registers into Expo Router’s navigator tree, so it only exists as the layout of a route group — there is
+        It registers into Expo Router’s navigator tree, so it only exists as the layout of a route group; there is
         nothing a story can mount. The Notes tab holds the contract; the live tab bar is the app’s own.
       </Text>
     </VStack>

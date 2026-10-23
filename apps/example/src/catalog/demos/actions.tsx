@@ -222,25 +222,45 @@ const SwipeActionsDemo = () => {
   )
 }
 
+const PRESS_EFFECTS = [
+  {caption: 'Springs down while held', effect: 'scale'},
+  {caption: 'Dims while held', effect: 'opacity'},
+  {caption: 'Holds still; on Android the ripple is the press', effect: 'none'},
+] as const
+
 const PressableDemo = () => {
   const [count, setCount] = useState(0)
 
   return (
-    <Section caption="Any React Native content, with a gentle press scale and haptic feedback.">
-      <Pressable
-        align="center"
-        bg="fill.accent.primary"
-        borderRadius="large"
-        haptic
-        onPress={() => setCount(value => value + 1)}
-        p="s20"
-        wide
-      >
-        <RnText color="content.on.bg" variant="headline">
-          {count === 0 ? 'Press me' : `Pressed ${count}×`}
-        </RnText>
-      </Pressable>
-    </Section>
+    <>
+      <Section caption="Each platform’s own press by default: a spring on iOS, Material’s ripple on Android. With a haptic.">
+        <Pressable
+          align="center"
+          bg="fill.accent.primary"
+          borderRadius="large"
+          haptic
+          onPress={() => setCount(value => value + 1)}
+          p="s20"
+          wide
+        >
+          <RnText color="content.on.bg" variant="headline">
+            {count === 0 ? 'Press me' : `Pressed ${count}×`}
+          </RnText>
+        </Pressable>
+      </Section>
+      <Section caption="pressEffect picks the same answer on both; Android keeps its ripple on top." title="Effects">
+        <Box gap="s8">
+          {PRESS_EFFECTS.map(({caption, effect}) => (
+            <Pressable bg="surface.primary" borderRadius="large" gap="s2" key={effect} p="s16" pressEffect={effect}>
+              <RnText variant="headline">{effect}</RnText>
+              <RnText color="content.secondary" variant="footnote">
+                {caption}
+              </RnText>
+            </Pressable>
+          ))}
+        </Box>
+      </Section>
+    </>
   )
 }
 

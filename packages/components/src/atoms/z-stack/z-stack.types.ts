@@ -3,7 +3,7 @@ import type {ReactNode} from 'react'
 
 export type ZStackAlign = 'bottom' | 'center' | 'top'
 
-/** Layers its children on one another — SwiftUI `ZStack` / Compose `Box`. */
+/** Layers its children on one another: SwiftUI `ZStack` / Compose `Box`. */
 export type ZStackProps = ResponsiveSx & {
   /** Where the children sit vertically; they are always centred horizontally. `center` by default. */
   align?: ZStackAlign

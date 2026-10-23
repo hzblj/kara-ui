@@ -26,7 +26,7 @@ const meta = {
   decorators: [insideIsland],
   parameters: {
     notes:
-      'iOS only. Compose ships no equivalent, so on Android this renders nothing and says so in dev — branch on `Platform.OS` if a screen needs a fallback.',
+      'SwiftUI’s `ColorPicker` on iOS. On Android, kara’s own Compose well and sheet in the iOS picker’s shape: a grid of swatches, a spectrum and RGB sliders, with an opacity slider when `supportsOpacity` is on.',
   },
   render: ControlledColorPicker,
   title: 'Atoms/ColorPicker',

@@ -9,7 +9,7 @@ export type SnackbarProps = {
   actionLabel?: string
   /** The message. */
   message: string
-  /** The action was pressed. The snackbar stays up — turn `visible` off to hide it. */
+  /** The action was pressed. The snackbar stays up; turn `visible` off to hide it. */
   onAction?: () => void
   /** Shows the snackbar while true, fading it in and out. It sets no timer of its own. */
   visible: boolean

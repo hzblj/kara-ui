@@ -56,7 +56,7 @@ export const llmsFull = () => {
         ...(type.extends.length ? [`Also takes: ${type.extends.join(', ')}`, ''] : []),
         ...type.members.map(member => {
           const defaults = member.defaults.ios ?? member.defaults.android
-          return `- \`${member.name}${member.optional ? '?' : ''}: ${member.type}\`${defaults ? ` (default \`${defaults}\`)` : ''}${member.description ? ` — ${member.description.replace(/\n+/g, ' ')}` : ''}`
+          return `- \`${member.name}${member.optional ? '?' : ''}: ${member.type}\`${defaults ? ` (default \`${defaults}\`)` : ''}${member.description ? `: ${member.description.replace(/\n+/g, ' ')}` : ''}`
         }),
         '',
       ]
@@ -91,7 +91,7 @@ export const llmsFull = () => {
     INSTALL_COMMAND,
     '```',
     '',
-    'Add the config plugin — `plugins: [[\'@hzblj/kara-ui\', {icons: {source: \'./assets/icons\'}}]]` — prebuild, and mount `<KaraProvider>` at the root. Native components render inside `<Screen>` or `<Island>`; style through token props (`p="s16"`, `bg="surface.primary"`), never raw values.',
+    'Add the config plugin (`plugins: [[\'@hzblj/kara-ui\', {icons: {source: \'./assets/icons\'}}]]`), prebuild, and mount `<KaraProvider>` at the root. Native components render inside `<Screen>` or `<Island>`; style through token props (`p="s16"`, `bg="surface.primary"`), never raw values.',
     '',
     ...COMPONENTS.flatMap(component),
   ].join('\n')

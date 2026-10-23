@@ -45,7 +45,7 @@ const Hero = () => (
       </HStack>
       <Text variant="headingS">Native UI for Expo</Text>
       <Text color="content.secondary">
-        {`Real SwiftUI and Jetpack Compose controls, styled by one set of design tokens — in your colours. ${COMPONENT_COUNT} components, and every one of them is on this phone.`}
+        {`Real SwiftUI and Jetpack Compose controls, styled by one set of design tokens, in your colours. ${COMPONENT_COUNT} components, and every one of them is on this phone.`}
       </Text>
       <VStack spacing="s8" wide>
         <Button label="Explore components" onPress={() => router.push('/components')} />
@@ -57,7 +57,7 @@ const Hero = () => (
 
 const MakeItYours = () => (
   <Section
-    caption="The whole app follows along — native and React Native views alike. Wallpaper is Material You on Android 12+."
+    caption="The whole app follows along, native and React Native views alike. Wallpaper is Material You on Android 12+."
     title="Make it yours"
   >
     <ThemePreferenceControl testID="home-theme-preference" />
@@ -100,7 +100,7 @@ const Order = () => {
           <Divider />
           <Stepper label="Quantity" max={5} min={1} onValueChange={setQuantity} value={quantity} />
           {ordered ? (
-            <Label color="content.success" icon="check" title="Order placed — arriving Friday" variant="labelMedium" />
+            <Label color="content.success" icon="check" title="Order placed, arriving Friday" variant="labelMedium" />
           ) : (
             <Button label="Checkout" onPress={() => setCheckingOut(true)} />
           )}

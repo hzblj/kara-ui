@@ -3,18 +3,18 @@ import type {ReactElement, ReactNode} from 'react'
 
 /*
  * Every prop at the top level works on both platforms. What only one platform can do lives under `ios` or `android`,
- * typed apart, and is ignored on the other — so a call site reads which of its settings each platform honours.
+ * typed apart, and is ignored on the other, so a call site reads which of its settings each platform honours.
  */
 
 export type ZoomTransitionSourceAndroidOptions = {
-  /** The corners the transform starts with — the source's own rounding (iOS reads the view's own). Default `none`. */
+  /** The corners the transform starts with: the source's own rounding (iOS reads the view's own). Default `none`. */
   borderRadius?: RadiiSize
 }
 
 export type ZoomTransitionSourceProps = {
   /** Android-only settings. */
   android?: ZoomTransitionSourceAndroidOptions
-  /** A single view — the photo or card the zoom grows from. */
+  /** A single view: the photo or card the zoom grows from. */
   children: ReactElement
   /** Unset renders `children` alone: no zoom from here. Use `useZoomTransitionSourceId` for one unique per item. */
   identifier?: string
@@ -29,11 +29,11 @@ export type ZoomTransitionTargetIosOptions = {
 }
 
 export type ZoomTransitionTargetAndroidOptions = {
-  /** The corners the transform ends with — the target's own rounding. Default `none`. */
+  /** The corners the transform ends with: the target's own rounding. Default `none`. */
   borderRadius?: RadiiSize
   /**
-   * What the source lands on. `target` (default): the whole target. `photo`: the photo inside it — where a `contain`
-   * photo sits in a tall page — with the photo's cropped edges fading in on the way.
+   * What the source lands on. `target` (default): the whole target. `photo`: the photo inside it (where a `contain`
+   * photo sits in a tall page), with the photo's cropped edges fading in on the way.
    */
   fit?: 'photo' | 'target'
   /** The Android target is a real layout box (iOS adds none): give it `flex` when its child fills the parent. */
@@ -43,7 +43,7 @@ export type ZoomTransitionTargetAndroidOptions = {
 export type ZoomTransitionTargetProps = {
   /** Android-only settings. */
   android?: ZoomTransitionTargetAndroidOptions
-  /** A single view — what the source lands on in the pushed screen. */
+  /** A single view: what the source lands on in the pushed screen. */
   children: ReactElement
   /** The source's identifier, handed over in the route params. Unset renders `children` alone. */
   identifier?: string
@@ -52,8 +52,8 @@ export type ZoomTransitionTargetProps = {
 }
 
 /**
- * Which of UIKit's gestures may dismiss the screen back into its source. `any`: swipe down, edge swipe and pinch — a
- * swipe only once no scroll view under the finger can still scroll that way. `vertical`: a downward swipe only, for
+ * Which of UIKit's gestures may dismiss the screen back into its source. `any`: swipe down, edge swipe and pinch (a
+ * swipe only once no scroll view under the finger can still scroll that way). `vertical`: a downward swipe only, for
  * content that pages sideways under its own gestures (a gallery). `none`: the back button only.
  */
 export type ZoomTransitionDismissGesture = 'any' | 'none' | 'vertical'
@@ -88,7 +88,7 @@ export type ZoomTransitionEnablerProps = {
 }
 
 /**
- * A push that grows out of the view it was opened from — a photo into its detail — and shrinks back into it. iOS 18:
+ * A push that grows out of the view it was opened from (a photo into its detail) and shrinks back into it. iOS 18:
  * UIKit's zoom transition (`preferredTransition = .zoom`), interactive dismissal included; below iOS 18 the push stays
  * the regular slide. Android: Material's container transform from the source to the target, both ways.
  *

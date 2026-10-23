@@ -86,5 +86,9 @@ component catalogue (`apps/example/src/catalog`), and a page on the website — 
 photograph and an entry in `apps/website/src/docs/components/registry.ts`. Its props table is its JSDoc: document props
 in the `*.types.ts`.
 
+**Docs copy has no em dashes.** Not in the website, the READMEs, the JSDoc in `*.types.ts` (it becomes the props
+tables), changesets (they become the changelog), story notes or the example's captions. Rewrite with a comma, a colon,
+parentheses or a second sentence; never swap in `-`, `–` or `--`. Code comments nobody reads on a page are exempt.
+
 Code style is Biome-enforced (`@hzblj/biome-config`): 2 spaces, 120 cols, single quotes, no semicolons, sorted imports
 and object keys. Named exports and `const` arrow functions everywhere; `type` over `interface`.

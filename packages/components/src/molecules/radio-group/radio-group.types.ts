@@ -4,13 +4,13 @@ import type {ReactNode} from 'react'
 export type RadioOption = {
   /** The option's text. */
   label: string
-  /** Identifies the option to `value` and `onValueChange`, and keys its row — keep it unique. */
+  /** Identifies the option to `value` and `onValueChange`, and keys its row. Keep it unique. */
   value: string
 }
 
 /**
  * A single choice from a list: rows with a checkmark on the selected one on iOS, Material radio buttons on Android. A
- * native atom — it renders inside `<Screen>` or `<Island>`.
+ * native atom: it renders inside `<Screen>` or `<Island>`.
  */
 export type RadioGroupProps = {
   /** The user pressed an option; it passes that option's `value`. */

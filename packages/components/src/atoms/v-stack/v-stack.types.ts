@@ -4,7 +4,7 @@ import type {ReactNode} from 'react'
 
 export type VStackAlign = 'center' | 'end' | 'start'
 
-/** Stacks its children top to bottom — SwiftUI `VStack` / Compose `Column`. */
+/** Stacks its children top to bottom: SwiftUI `VStack` / Compose `Column`. */
 export type VStackProps = ResponsiveSx & {
   /** The children's horizontal alignment. `start` by default. */
   align?: VStackAlign

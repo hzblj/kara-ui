@@ -70,7 +70,7 @@ private struct EdgeBarModifier: ViewModifier {
     let sizedBar = bar
       .frame(maxWidth: .infinity)
       .frame(height: height)
-      .background(EdgeElementShape(opacity: height > 0 ? elementOpacity : 0))
+      .background(EdgeElementShape(edge: edge, opacity: height > 0 ? elementOpacity : 0))
 
 #if compiler(>=6.2)
     if #available(iOS 26.0, *) {
@@ -85,18 +85,30 @@ private struct EdgeBarModifier: ViewModifier {
 }
 
 /**
- UIKit sizes the effect around the elements it recognises — text, controls, glass — and React Native content counts
- as none, so each bar sits on an invisible SwiftUI `Button`. Its content has to stay `Color.red.opacity(opacity)`:
+ UIKit sizes the effect around the elements it recognises (text, controls, glass), and React Native content counts as
+ none, so each bar sits on an invisible SwiftUI `Button`. Its content has to stay `Color.red.opacity(opacity)`:
  `Color.clear`, `Color.black.opacity(0)` and `.accessibilityHidden(true)` all stopped the effect when tried.
+
+ iOS 27 no longer counts the button on its own: the effect view keeps the bar's height, but its backdrop layers (the
+ blur itself) stop at the status bar or the navigation bar, and the content under the bar stays sharp. A text element
+ still counts, hidden from VoiceOver too, and the blur reaches past its far side, so a single space is laid on the
+ bar's inner edge (the bottom of a top bar, the top of a bottom one). A clear image, the button without
+ `allowsHitTesting(false)`, a scroll-edge element interaction added at runtime and a 2 % opacity did not count; glass
+ counted only in part. iOS 26 measures the same as before.
  */
 private struct EdgeElementShape: View {
+  let edge: VerticalEdge
   let opacity: Double
 
   var body: some View {
-    Button(action: {}) {
-      Color.red.opacity(opacity).frame(maxWidth: .infinity, maxHeight: .infinity)
+    ZStack(alignment: edge == .top ? .bottom : .top) {
+      Button(action: {}) {
+        Color.red.opacity(opacity).frame(maxWidth: .infinity, maxHeight: .infinity)
+      }
+      .buttonStyle(.plain)
+      Text(verbatim: " ")
+        .accessibilityHidden(true)
     }
-    .buttonStyle(.plain)
     .allowsHitTesting(false)
   }
 }

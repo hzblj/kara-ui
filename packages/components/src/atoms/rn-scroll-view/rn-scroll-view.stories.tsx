@@ -18,7 +18,7 @@ const meta = {
   ],
   parameters: {
     notes:
-      'The React Native scroll container, and the one a screen full of `Island`s wants — the gallery screen is ' +
+      'The React Native scroll container, and the one a screen full of `Island`s wants; the gallery screen is ' +
       'built on it. Top-level `sx` styles the viewport, `content` styles the scrolling content container, so ' +
       'padding and gap belong in `content`.',
   },

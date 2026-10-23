@@ -31,7 +31,7 @@ const meta = {
   decorators: [insideIsland],
   parameters: {
     notes:
-      'Anchored to its child, and dismissed by the platform — which is why `visible` is controlled and ' +
+      'Anchored to its child, and dismissed by the platform, which is why `visible` is controlled and ' +
       '`onDismiss` is not optional.',
   },
   render: ControlledTooltip,

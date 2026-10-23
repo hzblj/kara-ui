@@ -74,7 +74,7 @@ export const ColorsPage = () => (
       ))}
     </Group>
     <Section
-      caption="Most tokens are the platform’s own colours — UIKit semantic colours and Material roles — so they adapt by themselves."
+      caption="Most tokens are the platform’s own colours (UIKit semantic colours and Material roles), so they adapt by themselves."
       title="Ramps"
     >
       <Box gap="s12">

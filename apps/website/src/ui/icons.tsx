@@ -58,3 +58,45 @@ export const NpmMark = ({className}: IconProps) => (
     <path d="M0 4.5v6h4.5v1H8v-1h8v-6H0Zm4.5 5H3.5v-3h-1v3h-1v-4h3v4Zm3 0v1H5.5v-5h3v4h-1Zm7.5 0h-1v-3h-1v3h-1v-3h-1v3h-1v-4h5v4ZM7.5 6.5h-1v2h1v-2Z" />
   </svg>
 )
+
+export const SearchIcon = ({className}: IconProps) => (
+  <svg aria-hidden="true" className={className} fill="none" viewBox="0 0 16 16">
+    <circle cx="7" cy="7" r="4.5" stroke="currentColor" strokeWidth="1.3" />
+    <path d="m10.5 10.5 3 3" stroke="currentColor" strokeLinecap="round" strokeWidth="1.3" />
+  </svg>
+)
+
+/** A component: four tiles, the way the gallery lays them out. */
+export const ComponentIcon = ({className}: IconProps) => (
+  <svg aria-hidden="true" className={className} fill="none" viewBox="0 0 16 16">
+    <rect height="4.5" rx="1.2" stroke="currentColor" strokeWidth="1.2" width="4.5" x="2.5" y="2.5" />
+    <rect height="4.5" rx="1.2" stroke="currentColor" strokeWidth="1.2" width="4.5" x="9" y="2.5" />
+    <rect height="4.5" rx="1.2" stroke="currentColor" strokeWidth="1.2" width="4.5" x="2.5" y="9" />
+    <rect height="4.5" rx="2.25" stroke="currentColor" strokeWidth="1.2" width="4.5" x="9" y="9" />
+  </svg>
+)
+
+/** A guide: a page with lines of text. */
+export const PageIcon = ({className}: IconProps) => (
+  <svg aria-hidden="true" className={className} fill="none" viewBox="0 0 16 16">
+    <path
+      d="M4.5 1.5h4.6l3.4 3.4v8.1a1.5 1.5 0 0 1-1.5 1.5h-6.5A1.5 1.5 0 0 1 3 13V3a1.5 1.5 0 0 1 1.5-1.5Z"
+      stroke="currentColor"
+      strokeLinejoin="round"
+      strokeWidth="1.2"
+    />
+    <path d="M5.5 8.5h5M5.5 11h3.5" stroke="currentColor" strokeLinecap="round" strokeWidth="1.2" />
+  </svg>
+)
+
+/** A section of a guide. */
+export const HashIcon = ({className}: IconProps) => (
+  <svg aria-hidden="true" className={className} fill="none" viewBox="0 0 16 16">
+    <path
+      d="M6.5 2.5 5 13.5M11 2.5 9.5 13.5M2.5 6h11M2 10.5h11"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeWidth="1.2"
+    />
+  </svg>
+)

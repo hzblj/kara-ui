@@ -14,7 +14,7 @@ const meta = {
   decorators: [insideIsland],
   parameters: {
     notes:
-      'A SwiftUI `VStack` / Compose `Column`, so it takes `spacing` — not `gap`. The React Native style keys ' +
+      'A SwiftUI `VStack` / Compose `Column`, so it takes `spacing`, not `gap`. The React Native style keys ' +
       'live on `Box` and the `Rn*` tier instead, and reaching for one here does not compile.',
   },
   title: 'Atoms/VStack',

@@ -22,8 +22,8 @@ const meta = {
   decorators: [insideIslandOfHeight(320)],
   parameters: {
     notes:
-      "Android: Material 3 Expressive's FAB menu — the button turns into a close and the actions rise above it as " +
-      'labelled pills. iOS has no such control, so the same button is the label of a SwiftUI `Menu`, which opens ' +
+      "Android: Material 3 Expressive's FAB menu, where the button turns into a close and the actions rise above it " +
+      'as labelled pills. iOS has no such control, so the same button is the label of a SwiftUI `Menu`, which opens ' +
       'its actions as a system menu. Destructive actions are marked on iOS only.',
   },
   title: 'Organisms/FabMenu',

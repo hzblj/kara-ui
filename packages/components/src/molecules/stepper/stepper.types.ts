@@ -2,10 +2,10 @@ import type {ReactNode} from 'react'
 
 /**
  * A number with minus and plus buttons beside a label: SwiftUI's `Stepper` on iOS; on Android the label, the value and
- * two icon buttons in a row. A native atom — it renders inside `<Screen>` or `<Island>`.
+ * two icon buttons in a row. A native atom: it renders inside `<Screen>` or `<Island>`.
  */
 export type StepperProps = {
-  /** The leading text. The value is shown too — before the control on iOS, between the buttons on Android. */
+  /** The leading text. The value is shown too: before the control on iOS, between the buttons on Android. */
   label: string
   /** The highest value. When unset, Android has no upper limit and iOS stops at `100`. */
   max?: number

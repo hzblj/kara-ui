@@ -9,9 +9,12 @@ import {MarqueeTrack} from './marquee-track'
 
 const styles = tv({
   slots: {
-    card: 'overflow-hidden rounded-2xl border border-border-secondary bg-surface-primary transition-[translate,box-shadow] duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-1.5 group-hover:shadow-card-default',
+    // As the docs' gallery: the card stays put, its shadow (or in dark its surface) answers, and the capture inside moves.
+    card: 'overflow-hidden rounded-2xl border border-border-secondary bg-surface-primary transition-[background-color,box-shadow] duration-250 ease-out group-hover:shadow-card-hover dark:group-hover:bg-surface-tertiary motion-reduce:transition-none',
+    media:
+      'transition-transform duration-350 ease-smooth-out group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100',
     name: 'mt-2.5 block truncate px-1 text-[13px] font-medium text-content-secondary transition-colors group-hover:text-content-primary',
-    // Room above and below inside the clip, so a card lifting on hover (and its shadow) is not cut off.
+    // Room above and below inside the clip, so a hovered card's shadow is not cut off.
     row: '-my-6 overflow-hidden py-6 [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]',
     tile: 'group block w-[256px] shrink-0 pr-4',
     track:
@@ -59,13 +62,15 @@ const Row = ({items, reverse = false}: {items: Tile[]; reverse?: boolean}) => {
               tabIndex={copy === 1 ? -1 : undefined}
             >
               <div className={s.card()}>
-                <DeviceMedia
-                  alt={`${item.name} on ${item.platform === 'ios' ? 'iOS' : 'Android'}`}
-                  autoplay="never"
-                  frame={item.media.frame}
-                  media={item.media}
-                  platform={item.platform}
-                />
+                <div className={s.media()}>
+                  <DeviceMedia
+                    alt={`${item.name} on ${item.platform === 'ios' ? 'iOS' : 'Android'}`}
+                    autoplay="never"
+                    frame={item.media.frame}
+                    media={item.media}
+                    platform={item.platform}
+                  />
+                </div>
               </div>
               <span className={s.name()}>{item.name}</span>
             </Link>

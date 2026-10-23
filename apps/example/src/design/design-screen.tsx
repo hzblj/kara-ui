@@ -13,7 +13,7 @@ const ROWS = DESIGN_PAGES.map(page => ({
 
 export const DesignScreen = () => (
   <Page testID="design">
-    <Lead>The tokens every component is built from — and the one place to change them for your brand.</Lead>
+    <Lead>The tokens every component is built from, and the one place to change them for your brand.</Lead>
     <LinkList rows={ROWS} />
   </Page>
 )

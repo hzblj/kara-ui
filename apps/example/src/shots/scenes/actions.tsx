@@ -7,6 +7,7 @@ import {
   FabMenu,
   HStack,
   IconButton,
+  Image,
   Island,
   Link,
   List,
@@ -14,6 +15,7 @@ import {
   Menu,
   type MenuAction,
   Pressable,
+  RnIcon,
   RnText,
   Spacer,
   SwipeActions,
@@ -22,6 +24,7 @@ import {
 } from '@hzblj/kara-ui'
 import {Platform} from 'react-native'
 
+import {PHOTOS} from '../../catalog/zoom/photos'
 import type {Scene} from '../shot.types'
 import {useOpened} from '../use-timeline'
 
@@ -179,12 +182,66 @@ const SwipeActionsScene: Scene = () => (
   </Island>
 )
 
+const PRESS_PHOTO = PHOTOS[2]?.uri
+
+/**
+ * Each way a press can answer, held one after the other by the flow, top to bottom: a card that springs down, a row
+ * that dims, and a button on the platform's own (a spring on iOS, the ripple alone on Android, which ripples under all
+ * three).
+ */
 const PressableScene: Scene = () => (
-  <Pressable align="center" bg="fill.accent.primary" borderRadius="large" haptic onPress={noop} p="s24" wide>
-    <RnText color="content.on.bg" variant="headline">
-      Press me
-    </RnText>
-  </Pressable>
+  <Box gap="s12">
+    <Pressable
+      align="center"
+      bg="surface.primary"
+      borderRadius="large"
+      flexDirection="row"
+      gap="s12"
+      onPress={noop}
+      p="s12"
+      pressEffect="scale"
+    >
+      <Image
+        borderRadius="medium"
+        cachePolicy="memory-disk"
+        contentFit="cover"
+        h={52}
+        source={{uri: PRESS_PHOTO}}
+        w={52}
+      />
+      <Box flex={1} gap="s2">
+        <RnText variant="headline">Air Max 90</RnText>
+        <RnText color="content.secondary" variant="footnote">
+          scale · springs down while held
+        </RnText>
+      </Box>
+      <RnText variant="headline">€129</RnText>
+    </Pressable>
+    <Pressable
+      align="center"
+      bg="surface.primary"
+      borderRadius="large"
+      flexDirection="row"
+      gap="s12"
+      onPress={noop}
+      p="s16"
+      pressEffect="opacity"
+    >
+      <RnIcon name="shopping-bag" size="s20" />
+      <Box flex={1} gap="s2">
+        <RnText variant="headline">Order #1024</RnText>
+        <RnText color="content.secondary" variant="footnote">
+          opacity · dims while held
+        </RnText>
+      </Box>
+      <RnIcon color="content.tertiary" name="chevron-right" size="s20" />
+    </Pressable>
+    <Pressable align="center" bg="fill.accent.primary" borderRadius="full" onPress={noop} p="s16">
+      <RnText color="content.on.bg" variant="headline">
+        Add to bag
+      </RnText>
+    </Pressable>
+  </Box>
 )
 
 export const ACTION_SCENES = {

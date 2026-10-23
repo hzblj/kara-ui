@@ -17,7 +17,7 @@ const Card = () => (
   <Box bg="surface.primary" borderRadius="medium" gap="s8" p="s16">
     <RnText variant="headline">Long-press this card</RnText>
     <RnText color="content.secondary" variant="footnote">
-      The button below is excluded — a long press there does not open the menu.
+      The button below is excluded: a long press there does not open the menu.
     </RnText>
     <ContextMenu.Exclusion>
       <Pressable align="center" bg="fill.tertiary" borderRadius="full" onPress={fn()} py="s8">
@@ -40,8 +40,8 @@ const meta = {
   component: ContextMenu,
   parameters: {
     notes:
-      'A context menu on a React Native subtree. iOS: `UIContextMenuInteraction`, lifting the trigger — or `preview` ' +
-      'when given, mounted only once a finger rests on the trigger — with `onPreviewPress` for a tap on it. ' +
+      'A context menu on a React Native subtree. iOS: `UIContextMenuInteraction`, lifting the trigger (or `preview` ' +
+      'when given, mounted only once a finger rests on the trigger), with `onPreviewPress` for a tap on it. ' +
       'Android: a Material dropdown under the trigger; no preview. `ContextMenu.Exclusion` keeps a control inside ' +
       'the trigger from opening the menu.',
   },

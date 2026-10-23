@@ -8,9 +8,9 @@
 [license-badge]: https://img.shields.io/badge/license-MIT-ff5700?labelColor=27272a
 [license-url]: https://github.com/hzblj/kara-ui/blob/main/LICENSE
 
-<a href="https://www.kara.janblazej.dev"><img src="https://www.kara.janblazej.dev/og.png" alt="Kara — native UI for Expo: real SwiftUI and Jetpack Compose views" width="720"></a>
+<a href="https://www.kara.janblazej.dev"><img src="https://www.kara.janblazej.dev/og.png" alt="Kara, native UI for Expo: real SwiftUI and Jetpack Compose views" width="720"></a>
 
-The design tokens, palette, typography and theme of [Kara UI](https://www.kara.janblazej.dev) — a native-first design
+The design tokens, palette, typography and theme of [Kara UI](https://www.kara.janblazej.dev), a native-first design
 system for Expo.
 
 > **Install [`@hzblj/kara-ui`](https://www.npmjs.com/package/@hzblj/kara-ui) instead.** This package is one of its
@@ -18,11 +18,11 @@ system for Expo.
 
 ## What's inside
 
-- **Tokens** — spacing, radii, shadows, opacity, durations and text styles, each a name the `sx` props accept.
-- **Palette** — the platform's own colours by default: UIKit's semantic colours on iOS, Material 3 roles on Android.
-- **`KaraProvider` and `defineTheme`** — your colours, your typefaces, the Android seed and Material You, as overrides
+- **Tokens**: spacing, radii, shadows, opacity, durations and text styles, each a name the `sx` props accept.
+- **Palette**: the platform's own colours by default (UIKit's semantic colours on iOS, Material 3 roles on Android).
+- **`KaraProvider` and `defineTheme`**: your colours, your typefaces, the Android seed and Material You, as overrides
   of values, never of names.
-- **Breakpoints** — what responsive `sx` values resolve against.
+- **Breakpoints**: what responsive `sx` values resolve against.
 
 ## Documentation
 

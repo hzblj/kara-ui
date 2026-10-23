@@ -187,7 +187,7 @@ export const tokens: Guide = {
         <Hero id="tokens" kicker="Core concepts" title="Design tokens">
           <P>
             {
-              'Every value an `sx` prop takes, read straight from `@hzblj/kara-theme` when this page was built. Colours are named by what they are for; whose colour each one is — the platform’s, or a hex kara owns — is the value’s business.'
+              'Every value an `sx` prop takes, read straight from `@hzblj/kara-theme` when this page was built. Colours are named by what they are for; whose colour each one is (the platform’s, or a hex kara owns) is the value’s business.'
             }
           </P>
         </Hero>
@@ -195,7 +195,7 @@ export const tokens: Guide = {
         <Section id="colours" title="Colours">
           <P>
             {
-              'A system name resolves on the device — so it follows the user’s appearance, contrast setting and, on Android, the Material scheme. Swatches show light, then dark, for the colours kara owns. Any colour can be overridden in the theme.'
+              'A system name resolves on the device, so it follows the user’s appearance, contrast setting and, on Android, the Material scheme. Swatches show light, then dark, for the colours kara owns. Any colour can be overridden in the theme.'
             }
           </P>
           <Colours />

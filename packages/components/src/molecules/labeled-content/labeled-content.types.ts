@@ -3,7 +3,7 @@ import type {ReactNode} from 'react'
 import type {IconName} from '../../atoms/icon'
 
 /**
- * A label on the leading edge and its value on the trailing edge — the settings/detail row.
+ * A label on the leading edge and its value on the trailing edge: the settings/detail row.
  * Pass `children` instead of `value` when the trailing side is a control rather than text.
  */
 export type LabeledContentProps = {
@@ -15,7 +15,7 @@ export type LabeledContentProps = {
   label: string
   /** Makes the row pressable and adds a chevron on the trailing edge. */
   onPress?: () => void
-  /** Horizontal padding inside the row — inside its press area too, so Android's ripple reaches the card's edges. */
+  /** Horizontal padding inside the row, and inside its press area too, so Android's ripple reaches the card's edges. */
   px?: SpaceSize
   /** Test identifier, forwarded to the native view. */
   testID?: string

@@ -4,7 +4,7 @@ import type {ScrollViewProps as RNScrollViewProps} from 'react-native'
 import type {ScrollViewAxis} from '../scroll-view'
 
 /**
- * React Native tier scroll container — the sibling of `RnView`/`RnText`. Use it when the
+ * React Native tier scroll container, the sibling of `RnView`/`RnText`. Use it when the
  * subtree is React Native and native atoms are embedded through `Island`. For a screen that
  * is native all the way down, reach for the `ScrollView` atom instead.
  *
@@ -17,7 +17,7 @@ export type RnScrollViewProps = ResponsiveViewSx &
     axis?: ScrollViewAxis
     /** The scrolling content. */
     children?: ReactNode
-    /** Styles the scrolling content container — padding and gap belong here. */
+    /** Styles the scrolling content container; padding and gap belong here. */
     content?: ResponsiveViewSx
     /** Shows the scroll indicators. On by default. */
     showsIndicators?: boolean

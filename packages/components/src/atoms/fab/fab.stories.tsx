@@ -12,7 +12,7 @@ const meta = {
   decorators: [insideIsland],
   parameters: {
     notes:
-      'The Material floating action button, and its SwiftUI counterpart. A real screen pins it to the bottom trailing corner — here it sits inline so the shape is visible.',
+      'The Material floating action button, and its SwiftUI counterpart. A real screen pins it to the bottom trailing corner; here it sits inline so the shape is visible.',
   },
   title: 'Atoms/Fab',
 } satisfies Meta<typeof Fab>

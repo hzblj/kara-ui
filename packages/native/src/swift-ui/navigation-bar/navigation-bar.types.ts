@@ -9,7 +9,7 @@ export type NavigationBarItemType = 'back' | 'close' | 'icon'
 export type NavigationBarItem = {
   /** An asset-catalog image, drawn as a template. `back` falls back to `chevron.backward`; `close` ignores it. */
   imageName?: string
-  /** The accessibility label — and, for `icon`, the title the system shows when it has room for one. */
+  /** The accessibility label and, for `icon`, the title the system shows when it has room for one. */
   label: string
   onPress: () => void
   /** iOS 26: gives the item its own glass capsule instead of sharing one with its neighbours on that side. */
@@ -42,7 +42,7 @@ export type NavigationBarProps = {
   title?: string
   titleAlignment?: NavigationBarTitleAlignment
   titleColor: ColorValue
-  /** Fades the title out and back in without moving the items — for a large title that scrolls under the bar. */
+  /** Fades the title out and back in without moving the items, for a large title that scrolls under the bar. */
   titleVisible?: boolean
   /** In screen order, toward the trailing edge. */
   trailingItems?: NavigationBarItem[]

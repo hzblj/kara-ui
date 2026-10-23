@@ -5,7 +5,7 @@ export type FloatingActionButtonMenuHorizontalAlignment = 'center' | 'end' | 'st
 
 export type FloatingActionButtonMenuProps = {
   /**
-   * One `<FloatingActionButtonMenu.Button>` holding the trigger — usually a `ToggleFloatingActionButton` — and any
+   * One `<FloatingActionButtonMenu.Button>` holding the trigger (usually a `ToggleFloatingActionButton`) and any
    * number of `<FloatingActionButtonMenuItem>`s.
    */
   children: ReactNode

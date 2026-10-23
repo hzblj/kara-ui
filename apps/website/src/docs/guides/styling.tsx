@@ -18,7 +18,7 @@ const RESPONSIVE = `<Box flexDirection={{base: 'column', md: 'row'}} gap="s16" p
 const OWN = `import {sx} from '@hzblj/kara-ui'
 import {Image as ExpoImage} from 'expo-image'
 
-/** Any component that takes \`style\` — wrapped once, at module scope. */
+/** Any component that takes \`style\`, wrapped once, at module scope. */
 export const Photo = sx(ExpoImage)
 
 <Photo borderRadius="large" h={220} source={photo} w="100%" />`
@@ -29,7 +29,7 @@ export const styling: Guide = {
       <Hero id="styling" kicker="Core concepts" title="Styling with sx">
         <P>
           {
-            'Every kara component is styled through props, and every value is a token: `p="s16"`, `bg="surface.primary"`, `borderRadius="large"`. One `sx` surface resolves to SwiftUI modifiers on iOS, Compose modifiers on Android, or a React Native style — so call sites never branch on the platform. A raw number or hex where a token belongs does not type-check.'
+            'Every kara component is styled through props, and every value is a token: `p="s16"`, `bg="surface.primary"`, `borderRadius="large"`. One `sx` surface resolves to SwiftUI modifiers on iOS, Compose modifiers on Android, or a React Native style, so call sites never branch on the platform. A raw number or hex where a token belongs does not type-check.'
           }
         </P>
       </Hero>
@@ -43,7 +43,7 @@ export const styling: Guide = {
         </P>
         <Callout>
           {
-            'There are **two surfaces, and they are not interchangeable**. Native components take the native `sx` — only what SwiftUI and Compose both honour. `Box` and the React Native tier take the wider view `sx`, with flexbox, `gap`, margins and per-corner radii. `gap` on a `VStack` does not compile; it wants `spacing`.'
+            'There are **two surfaces, and they are not interchangeable**. Native components take the native `sx`: only what SwiftUI and Compose both honour. `Box` and the React Native tier take the wider view `sx`, with flexbox, `gap`, margins and per-corner radii. `gap` on a `VStack` does not compile; it wants `spacing`.'
           }
         </Callout>
       </Section>
@@ -69,7 +69,7 @@ export const styling: Guide = {
       <Section id="react-native" title="React Native sx">
         <P>
           {
-            'The React Native tier — `Box`, `Pressable`, `GlassView`, the `Rn*` views — takes everything above except the buckets, plus the layout only a React Native style has. Lengths there may also be percentages: `w="50%"`.'
+            'The React Native tier (`Box`, `Pressable`, `GlassView`, the `Rn*` views) takes everything above except the buckets, plus the layout only a React Native style has. Lengths there may also be percentages: `w="50%"`.'
           }
         </P>
         <h3>Flex</h3>
@@ -88,7 +88,7 @@ export const styling: Guide = {
       <Section id="responsive" title="Responsive values">
         <P>
           {
-            'Layout keys take a value per breakpoint as well as a single one — mobile first, from `base` up. Colours, radii, shadows and the platform buckets stay scalar.'
+            'Layout keys take a value per breakpoint (mobile first, from `base` up) as well as a single one. Colours, radii, shadows and the platform buckets stay scalar.'
           }
         </P>
         <CodeBlock code={RESPONSIVE} />
@@ -107,7 +107,7 @@ export const styling: Guide = {
       <Section id="opacity" title="Dimmed colours">
         <P>
           {
-            'A colour token takes an opacity token after a colon: `bg="fill.accent.base:o50"`. It multiplies whatever the colour already is. Tokens iOS resolves by name (UIKit semantic colours) have no alpha to multiply, so only the ones kara owns the value of can be dimmed — the types say which.'
+            'A colour token takes an opacity token after a colon: `bg="fill.accent.base:o50"`. It multiplies whatever the colour already is. Tokens iOS resolves by name (UIKit semantic colours) have no alpha to multiply, so only the ones kara owns the value of can be dimmed; the types say which.'
           }
         </P>
       </Section>

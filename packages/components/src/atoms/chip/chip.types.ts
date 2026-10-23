@@ -1,6 +1,6 @@
 import type {ReactNode} from 'react'
 
-/** A filter pill on a `Pressable`, not a native control — the React Native tier, so it needs no host. */
+/** A filter pill on a `Pressable`, not a native control. It belongs to the React Native tier, so it needs no host. */
 export type ChipProps = {
   /** The text in the pill. */
   label: string

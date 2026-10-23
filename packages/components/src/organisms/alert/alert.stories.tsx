@@ -33,7 +33,7 @@ const meta = {
   decorators: [insideIsland],
   parameters: {
     notes:
-      'A system modal, so it is drawn by the platform above everything — nothing about the story frame contains it.',
+      'A system modal, so it is drawn by the platform above everything; nothing about the story frame contains it.',
   },
   render: ControlledAlert,
   title: 'Organisms/Alert',

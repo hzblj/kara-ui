@@ -41,6 +41,7 @@ public class KaraUIModule: Module {
     IconView.definition()
     NavigationBarView.definition()
     ScrollEdgeContainerView.definition()
+    ScrollViewZPositionView.definition()
     SegmentedControlView.definition()
     TooltipView.definition()
     ZoomTransitionSourceView.definition()

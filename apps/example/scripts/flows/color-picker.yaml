@@ -1,0 +1,42 @@
+# The "With opacity" well opens its sheet (the still is taken there, the grid showing), two swatches are picked, the
+# spectrum is tried, and the sheet closes on the well it came from, which the scene holds at its colour, so the loop
+# ends where it began. iOS opens its own picker, Android kara's sheet in the same shape; the two lay out at different
+# heights, hence a block per platform. (Inline, twice: Maestro parses a sub-flow's coordinates before it substitutes
+# env into them.)
+appId: com.hzblj.karaui.example
+---
+- startRecording: ${VIDEO}
+- runFlow: {file: pause.yaml, env: {MS: 900}}
+- runFlow:
+    when: {platform: iOS}
+    commands:
+      - tapOn: {point: '87%,52%'}
+      - runFlow: {file: pause.yaml, env: {MS: 1300}}
+      - takeScreenshot: ${STILL}
+      - tapOn: {point: '61%,60%'}
+      - runFlow: {file: pause.yaml, env: {MS: 900}}
+      - tapOn: {point: '17%,57%'}
+      - runFlow: {file: pause.yaml, env: {MS: 900}}
+      - tapOn: {point: '50%,38%'}
+      - runFlow: {file: pause.yaml, env: {MS: 800}}
+      - tapOn: {point: '72%,56%'}
+      - runFlow: {file: pause.yaml, env: {MS: 1100}}
+      - tapOn: {point: '92%,34%'}
+      - runFlow: {file: pause.yaml, env: {MS: 1500}}
+- runFlow:
+    when: {platform: Android}
+    commands:
+      - tapOn: {point: '87%,52%'}
+      - runFlow: {file: pause.yaml, env: {MS: 1300}}
+      - takeScreenshot: ${STILL}
+      - tapOn: {point: '61%,66%'}
+      - runFlow: {file: pause.yaml, env: {MS: 900}}
+      - tapOn: {point: '16%,62%'}
+      - runFlow: {file: pause.yaml, env: {MS: 900}}
+      - tapOn: {point: '50%,43%'}
+      - runFlow: {file: pause.yaml, env: {MS: 800}}
+      - tapOn: {point: '72%,62%'}
+      - runFlow: {file: pause.yaml, env: {MS: 1100}}
+      - tapOn: {point: '90%,36%'}
+      - runFlow: {file: pause.yaml, env: {MS: 1500}}
+- stopRecording

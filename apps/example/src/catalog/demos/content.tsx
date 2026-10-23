@@ -32,7 +32,7 @@ import {KARA_MODULE, NATIVE, REACT_NATIVE} from './tags'
 
 const TextDemo = () => (
   <>
-    <Section caption="Nineteen variants in all — see Design › Typography." title="Variants">
+    <Section caption="Nineteen variants in all; see Design › Typography." title="Variants">
       <Island>
         <VStack align="start" bg="surface.primary" borderRadius="large" p="s16" spacing="s4" wide>
           <Text variant="headingL">Heading</Text>
@@ -179,7 +179,7 @@ const SurfaceDemo = () => (
 const MATERIALS: BlurMaterial[] = ['ultraThin', 'thin', 'regular', 'thick', 'ultraThick']
 
 const BlurViewDemo = () => (
-  <Section caption="The five system materials over a photo — iOS's own blur, Android's backdrop blur under a Material tonal surface as thick as the material.">
+  <Section caption="The five system materials over a photo: iOS's own blur, Android's backdrop blur under a Material tonal surface as thick as the material.">
     <Box borderRadius="large" gap="s8" overflow="hidden" p="s16">
       <Image
         cachePolicy="memory-disk"
@@ -198,7 +198,7 @@ const BlurViewDemo = () => (
 )
 
 const GlassViewDemo = () => (
-  <Section caption="Liquid Glass around React Native content on iOS 26, frosted glass on Android — what lies behind, blurred. Pressed, iOS glass swells and Android ripples.">
+  <Section caption="Liquid Glass around React Native content on iOS 26, frosted glass on Android (what lies behind, blurred). Pressed, iOS glass swells and Android ripples.">
     <Box bg="fill.accent.primary" borderRadius="large" flexDirection="row" gap="s12" p="s24">
       <GlassView px="s16" py="s8">
         <RnText color="content.on.bg" variant="labelMedium">
@@ -293,7 +293,7 @@ export const CONTENT: CatalogEntry[] = [
     Demo: SurfaceDemo,
     id: 'surface',
     name: 'Surface',
-    summary: 'A coloured, rounded background — plain or glass.',
+    summary: 'A coloured, rounded background, plain or glass.',
     tags: NATIVE,
   },
   {
@@ -301,7 +301,7 @@ export const CONTENT: CatalogEntry[] = [
     Demo: BlurViewDemo,
     id: 'blur-view',
     name: 'BlurView',
-    summary: 'The system materials — sheets, bars and HUDs are made of them.',
+    summary: 'The system materials: what sheets, bars and HUDs are made of.',
     tags: KARA_MODULE,
   },
   {

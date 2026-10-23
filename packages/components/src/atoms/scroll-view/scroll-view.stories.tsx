@@ -14,7 +14,7 @@ const meta = {
   decorators: [insideIslandOfHeight(220)],
   parameters: {
     notes:
-      'The native scroll container — a SwiftUI `ScrollView` / Compose scrollable column, for a subtree that is ' +
+      'The native scroll container: a SwiftUI `ScrollView` / Compose scrollable column, for a subtree that is ' +
       'native all the way down. Its `sx` styles the scrolling *content*, the way `contentContainerStyle` does. ' +
       'For a React Native subtree reach for `RnScrollView` instead. The island here is given a fixed height ' +
       'because a scroll view has no intrinsic one to measure.',

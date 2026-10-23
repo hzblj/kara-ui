@@ -22,7 +22,7 @@ const meta = {
   component: RadioGroup,
   decorators: [insideIsland],
   parameters: {
-    notes: 'Exactly one option is selected at all times — for an independent on/off, use `Switch` or `Checkbox`.',
+    notes: 'Exactly one option is selected at all times. For an independent on/off, use `Switch` or `Checkbox`.',
   },
   render: ControlledRadioGroup,
   title: 'Molecules/RadioGroup',

@@ -158,7 +158,7 @@ export const FEEDBACK: CatalogEntry[] = [
     Demo: ProgressDemo,
     id: 'progress',
     name: 'Progress',
-    summary: 'How far along something is — or that it is still going.',
+    summary: 'How far along something is, or that it is still going.',
     tags: NATIVE,
   },
   {

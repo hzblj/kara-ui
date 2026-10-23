@@ -9,4 +9,4 @@ export const HERO_HEADLINE = 'Native UI for Expo'
 /** The landing page's one line under the headline; `HERO_LEDE` is the longer version, for search and link previews. */
 export const HERO_TAGLINE = 'Real SwiftUI and Jetpack Compose views for React Native'
 export const HERO_LEDE =
-  'Real SwiftUI and Jetpack Compose views for React Native, styled through one token-typed sx surface — in the platform’s colours by default, and yours through the theme.'
+  'Real SwiftUI and Jetpack Compose views for React Native, styled through one token-typed sx surface, in the platform’s colours by default and yours through the theme.'

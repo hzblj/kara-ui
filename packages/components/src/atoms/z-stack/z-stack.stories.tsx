@@ -9,7 +9,7 @@ const meta = {
   argTypes: {align: {control: 'radio', options: ['top', 'center', 'bottom']}},
   component: ZStack,
   decorators: [insideIsland],
-  parameters: {notes: 'Layers its children on one another — the last child is drawn on top.'},
+  parameters: {notes: 'Layers its children on one another; the last child is drawn on top.'},
   title: 'Atoms/ZStack',
 } satisfies Meta<typeof ZStack>
 

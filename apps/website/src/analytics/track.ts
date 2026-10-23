@@ -15,6 +15,8 @@ export type AnalyticsEvents = {
   click_cta: {cta: string}
   /** A link out to the repository or the package. */
   click_outbound: {destination: 'github' | 'npm'}
+  /** A result opened from the docs' search, with what was typed. */
+  search: {result: string; search_term: string}
   /** A copy button: the install command, a code block, or a component's snippet. */
   copy_code: {source: 'code_block' | 'component_snippet' | 'install'}
   /** The gallery's platform switch. */

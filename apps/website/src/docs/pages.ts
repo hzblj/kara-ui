@@ -12,7 +12,7 @@ export type DocsPage = {
 export const GUIDES = {
   changelog: {description: 'What changed in each release of kara.', href: '/docs/changelog', title: 'Changelog'},
   components: {
-    description: 'Every component, photographed on iOS and Android, in light and dark.',
+    description: 'Every component on iOS and Android, in light and dark.',
     href: '/docs/components',
     title: 'Components',
   },
@@ -37,7 +37,8 @@ export const GUIDES = {
     title: 'Installation',
   },
   introduction: {
-    description: 'A native-first design system for Expo: real SwiftUI and Jetpack Compose views, one token-typed sx.',
+    description:
+      'A native-first design system for Expo: real SwiftUI and Jetpack Compose views (@expo/ui’s and kara’s own), made one design system by a token-typed sx engine.',
     href: '/docs',
     title: 'Introduction',
   },
@@ -52,7 +53,7 @@ export const GUIDES = {
     title: 'Styling with sx',
   },
   theming: {
-    description: 'Colours, typefaces, the Android seed and Material You — overrides of values, never of names.',
+    description: 'Colours, typefaces, the Android seed and Material You: overrides of values, never of names.',
     href: '/docs/theming',
     title: 'Theming',
   },

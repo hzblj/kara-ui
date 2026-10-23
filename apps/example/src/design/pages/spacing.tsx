@@ -23,7 +23,7 @@ export const SpacingPage = () => (
         ))}
       </Box>
     </Section>
-    <Section caption="A raw number does not type-check — only a step of the scale does." title="In use">
+    <Section caption="A raw number does not type-check; only a step of the scale does." title="In use">
       <CodeBlock code={'<VStack p="s16" spacing="s8">\n<Box px="s20" mt="s12" gap="s8">'} />
     </Section>
   </>

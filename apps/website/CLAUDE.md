@@ -16,6 +16,7 @@ house style with kara's orange. Every page is static. Private; never published.
 | `src/marketing/` | The landing page and its `HeroShowcase`. |
 | `src/docs/pages.ts` | Every guide's title and description, the sidebar (`NAV`) and the pager's `READING_ORDER`. |
 | `src/docs/guides/` | The guides' content, one `Guide` each (`Content` + the `headings` the TOC follows), registered in `index.ts`. |
+| `src/docs/search/` | The docs' search: `SEARCH_INDEX` (components, guides and their sections, built from the registry and the guides at build time), `search` (term matching and ranking), `SearchDialog` (the palette, mounted once in the docs layout; ⌘K / Ctrl+K, `/`) and `SearchTrigger` (the sidebar's field, the mobile header's button). |
 | `src/docs/components/registry.ts` | What a component page *says*: summary, what each platform renders, host, snippet, examples, which types get props tables, platform notes. |
 | `src/docs/components/` | The gallery, a component page, `DeviceMedia` (a capture in the site's appearance; video plays in view or on hover) and the generated `PropsTable`. |
 | `src/docs/source/` | Read from the checkout at build time: `api.ts` (props from the library's `*.types.ts` — JSDoc, and defaults from each platform's implementation), `tokens.ts` (the theme's primitives and palette), `changelog.ts` (`packages/kara-ui/CHANGELOG.md`), `media.ts` (what is in `public/media`). |
