@@ -1,5 +1,6 @@
 import {Stepper as SwiftUIStepper} from '@expo/ui/swift-ui'
 import {labelsHidden} from '@expo/ui/swift-ui/modifiers'
+import {useReducedMotion} from '@hzblj/kara-theme'
 import {useRef} from 'react'
 
 import {HStack} from '../../atoms/h-stack'
@@ -14,10 +15,11 @@ const LABEL_HIDDEN = [labelsHidden()]
 /**
  * SwiftUI's `Stepper` at the end of a row, the label leading and the value just before the control — the way iOS's own
  * settings show a stepped value. The value rolls to the next one (`numericText`), up or down with the change, in
- * monospaced digits so the row does not jump.
+ * monospaced digits so the row does not jump. With motion reduced it cross-fades instead.
  */
 export const Stepper: StepperComponent = ({label, max, min, onValueChange, step = 1, value}: StepperProps) => {
   useHostGuard('Stepper')
+  const reduced = useReducedMotion()
   const previous = useRef(value)
   const countsDown = value < previous.current
   previous.current = value
@@ -28,7 +30,11 @@ export const Stepper: StepperComponent = ({label, max, min, onValueChange, step 
       <Spacer />
       <Text
         color="content.secondary"
-        ios={{animation: {value}, contentTransition: {countsDown, type: 'numericText'}, monospacedDigit: true}}
+        ios={{
+          animation: {value},
+          contentTransition: reduced ? {type: 'opacity'} : {countsDown, type: 'numericText'},
+          monospacedDigit: true,
+        }}
       >
         {String(value)}
       </Text>

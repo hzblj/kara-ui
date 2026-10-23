@@ -29,9 +29,18 @@ const ControlledSnackbar = (args: SnackbarProps) => {
 
 const meta = {
   args: {message: 'Item deleted', visible: false},
+  argTypes: {
+    animation: {control: 'radio', options: ['scale', 'slide', 'fade']},
+    duration: {control: 'select', options: ['indefinite', 'short', 'long']},
+    position: {control: 'radio', options: ['bottom', 'top']},
+  },
   component: Snackbar,
   parameters: {
-    notes: 'React Native tier: an overlay drawn above the screen rather than a native control, so it needs no host.',
+    notes:
+      'React Native tier: an overlay drawn above the screen rather than a native control (iOS has none), so it ' +
+      'needs no host. The action sits at the trailing end. `animation` is Material’s `scale` on Android and `slide` ' +
+      'on iOS unless set; `entering` / `exiting` take Reanimated animations of your own. `duration` and the ' +
+      'dismiss button call `onDismiss`.',
   },
   render: ControlledSnackbar,
   title: 'Organisms/Snackbar',
@@ -44,5 +53,17 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {}
 
 export const WithAction: Story = {args: {actionLabel: 'Undo', onAction: fn()}}
+
+export const Dismissible: Story = {args: {actionLabel: 'Undo', dismissible: true, duration: 'short', onDismiss: fn()}}
+
+export const AtTheTop: Story = {args: {actionLabel: 'Undo', position: 'top'}}
+
+export const ActionOnNewLine: Story = {
+  args: {
+    actionLabel: 'View order',
+    actionOnNewLine: true,
+    message: 'Your order is on its way. We will let you know when it reaches the pick-up point.',
+  },
+}
 
 export const OpenOnMount: Story = {args: {visible: true}}

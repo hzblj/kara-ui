@@ -17,11 +17,15 @@ const VARIANT = {
   sm: 'caption',
 } as const
 
-export const Avatar: AvatarComponent = ({initials, size = 'md', source, testID}: AvatarProps) => {
+export const Avatar: AvatarComponent = ({accessibilityLabel, initials, size = 'md', source, testID}: AvatarProps) => {
   const diameter = DIAMETER[size]
 
   return (
     <Box
+      aria-hidden={accessibilityLabel === undefined}
+      accessibilityLabel={accessibilityLabel}
+      accessibilityRole={accessibilityLabel === undefined ? undefined : 'image'}
+      accessible={accessibilityLabel !== undefined}
       align="center"
       bg="fill.tertiary"
       borderRadius="full"

@@ -20,6 +20,9 @@ platform and never write a raw value.
 | `src/with-sx.tsx` | `sx(Component)` — wraps any style-taking component, memoised. |
 | `src/resolve-cache.ts`, `sx-key.ts`, `value-key.ts`, `present-keys.ts`, `sx-keys.ts` | The cache: stable style objects shared across components, keyed by flattened values + theme variant. Keys are built from the props a component set, not by walking the key lists. |
 | `src/sx-padding.ts` | The padding cascade (`pt` beats `py` beats `p`). |
+| `src/accessibility.types.ts` | `AccessibilityProps` (`accessibilityLabel`, `accessibilityHint`, `accessibilityRole`, `accessibilityValue`, `accessibilityHidden`, `accessible`), `AccessibilityRole`, and `splitAccessibility`, which takes them out of a props spread before it becomes `sx`. |
+| `src/use-accessibility-modifiers.ios.ts` / `.android.ts` | The same props as SwiftUI accessibility modifiers, or as one `karaAccessibility` Compose modifier (`@hzblj/kara-native`). `pressable` makes a view a `button` unless told otherwise. |
+| `src/accessibility-props.ts` | `accessibilityProps`: the same props as React Native's own, for a React Native tier component. |
 
 ## Rules
 
@@ -43,6 +46,12 @@ too — a `WeakMap` id, which the provider memoises per variant.
 **A resolved colour is a `ColorValue`, not a `string`.** On iOS a system token becomes an opaque
 `PlatformColor`. The modifier and style paths take that as-is; the few `@expo/ui` props still declared
 `string` upstream go through `theme.colorString`.
+
+**Accessibility rides beside `sx`, not in it.** The style caches key on style keys only, so the accessibility props are
+split off (`splitAccessibility`) and turned into modifiers of their own, which the component places: last on iOS
+(`accessibilityElement` wraps what precedes it), after the `clickable` and before the padding on Android (a label that
+replaces the children's clears the semantics inside it, and the click must stay outside). A pressable role (`button`,
+`link`) reads the children as one element on both platforms.
 
 The `.ios`/`.android` files have no fallback — `tsconfig.ios.json` and `tsconfig.android.json` are
 both checked by `yarn typecheck`.

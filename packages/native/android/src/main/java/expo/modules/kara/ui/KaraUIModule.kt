@@ -10,7 +10,9 @@ import expo.modules.kara.ui.haptics.Haptic
 import expo.modules.kara.ui.haptics.Haptics
 import expo.modules.kara.ui.icon.DrawableIconView
 import expo.modules.kara.ui.icon.IconView
+import expo.modules.kara.ui.modifiers.ACCESSIBILITY_MODIFIER
 import expo.modules.kara.ui.modifiers.UNDERLINE_MODIFIER
+import expo.modules.kara.ui.modifiers.registerAccessibilityModifier
 import expo.modules.kara.ui.modifiers.registerUnderlineModifier
 import expo.modules.kara.ui.ripple.RippleConfigurationView
 import expo.modules.kara.ui.swipe.SwipeActionsBoxView
@@ -30,10 +32,12 @@ class KaraUIModule : Module() {
     Name("KaraUI")
 
     OnCreate {
+      registerAccessibilityModifier()
       registerUnderlineModifier()
     }
 
     OnDestroy {
+      ModifierRegistry.unregister(ACCESSIBILITY_MODIFIER)
       ModifierRegistry.unregister(UNDERLINE_MODIFIER)
     }
 

@@ -5,8 +5,20 @@ import {spacing, useAppTheme} from '@hzblj/kara-theme'
 import type {GlyphComponent, GlyphProps} from './glyph.types'
 
 /** The Material Symbol `@hzblj/kara-native` ships as a drawable — inside a Compose host. */
-export const Glyph: GlyphComponent = ({color = 'content.primary', name, size = 's24'}: GlyphProps) => {
+export const Glyph: GlyphComponent = ({
+  accessibilityLabel,
+  color = 'content.primary',
+  name,
+  size = 's24',
+}: GlyphProps) => {
   const theme = useAppTheme()
 
-  return <DrawableIcon iconColor={theme.color(color)} iconSize={spacing[size]} resourceName={GLYPHS[name].android} />
+  return (
+    <DrawableIcon
+      accessibilityLabel={accessibilityLabel}
+      iconColor={theme.color(color)}
+      iconSize={spacing[size]}
+      resourceName={GLYPHS[name].android}
+    />
+  )
 }

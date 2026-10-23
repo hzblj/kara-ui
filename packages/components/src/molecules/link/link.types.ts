@@ -1,10 +1,11 @@
+import type {AccessibilityProps} from '@hzblj/kara-sx'
 import type {ColorToken, TextVariant} from '@hzblj/kara-theme'
 import type {ReactNode} from 'react'
 
 import type {IconName} from '../../atoms/icon'
 
 /** Opens an external URL in the platform browser or the app that claims the scheme. */
-export type LinkProps = {
+export type LinkProps = AccessibilityProps & {
   /** Colours the label and the icon. `content.accent` by default. */
   color?: ColorToken
   /** One of the app's icons, before the label. */

@@ -16,7 +16,7 @@ const ACTIONS: MenuAction[] = [
  * room an open menu takes.
  */
 const meta = {
-  args: {actions: ACTIONS, icon: 'add'},
+  args: {accessibilityLabel: 'Create', actions: ACTIONS, icon: 'add'},
   argTypes: {icon: {control: 'select', options: ['add', 'more', 'share', 'settings']}},
   component: FabMenu,
   decorators: [insideIslandOfHeight(320)],

@@ -74,20 +74,33 @@ const SkeletonDemo = () => (
 )
 
 const SnackbarDemo = () => {
-  const [visible, setVisible] = useState(false)
+  const [deleted, setDeleted] = useState(false)
+  const [copied, setCopied] = useState(false)
 
   return (
-    <Section caption="A short message with an optional action.">
+    <Section caption="The action at the trailing end. Delete waits 4 s with a dismiss button; Copy sits at the top and goes by itself.">
       <Island>
-        <VStack wide>
-          <Button
-            label={visible ? 'Hide' : 'Delete item'}
-            onPress={() => setVisible(value => !value)}
-            variant="secondary"
-          />
-        </VStack>
+        <HStack spacing="s12" wide>
+          <Button label="Delete item" onPress={() => setDeleted(true)} variant="secondary" wide />
+          <Button label="Copy link" onPress={() => setCopied(true)} variant="secondary" wide />
+        </HStack>
       </Island>
-      <Snackbar actionLabel="Undo" message="Item deleted" onAction={() => setVisible(false)} visible={visible} />
+      <Snackbar
+        actionLabel="Undo"
+        dismissible
+        duration="short"
+        message="Item deleted"
+        onAction={() => setDeleted(false)}
+        onDismiss={() => setDeleted(false)}
+        visible={deleted}
+      />
+      <Snackbar
+        duration="short"
+        message="Link copied"
+        onDismiss={() => setCopied(false)}
+        position="top"
+        visible={copied}
+      />
     </Section>
   )
 }
@@ -178,7 +191,7 @@ export const FEEDBACK: CatalogEntry[] = [
     tags: REACT_NATIVE,
   },
   {
-    code: '<Snackbar message="Item deleted" actionLabel="Undo" onAction={undo} visible={shown} />',
+    code: '<Snackbar actionLabel="Undo" duration="short" message="Item deleted" onAction={undo} onDismiss={hide} visible={shown} />',
     Demo: SnackbarDemo,
     id: 'snackbar',
     name: 'Snackbar',

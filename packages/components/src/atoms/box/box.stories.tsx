@@ -69,7 +69,7 @@ export const Sizing: Story = {
         <RnText variant="labelMedium">w 50%</RnText>
       </Box>
       <Box align="center" aspectRatio={3} bg="fill.success.primary" borderRadius="small" justify="center" wide>
-        <RnText color="content.on.bg" variant="labelMedium">
+        <RnText color="content.on.accent" variant="labelMedium">
           aspectRatio 3
         </RnText>
       </Box>

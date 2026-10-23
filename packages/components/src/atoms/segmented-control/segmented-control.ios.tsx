@@ -33,7 +33,7 @@ export const SegmentedControl: SegmentedControlComponent = ({
   return (
     <NativeSegmentedControl
       activePillColor={theme.color('fill.accent.primary')}
-      activeTextColor={theme.color('content.on.bg')}
+      activeTextColor={theme.color('content.on.accent')}
       disabled={disabled}
       fontFamily={face.fontFamily}
       fontSize={face.fontSize}

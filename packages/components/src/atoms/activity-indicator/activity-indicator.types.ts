@@ -9,6 +9,8 @@ export type ActivityIndicatorSize = 'large' | 'small'
  * Android, so it renders anywhere. For how far along something is, use `Progress`.
  */
 export type ActivityIndicatorProps = {
+  /** What is loading, for VoiceOver and TalkBack: "Loading photos". Unset, the platform's own word ("In progress"). */
+  accessibilityLabel?: string
   /** Its colour. `fill.accent.primary` by default. */
   color?: ColorToken
   /** `small` sits in a row or a button, `large` holds a screen that is loading. `small` by default. */

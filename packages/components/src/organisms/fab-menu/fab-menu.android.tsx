@@ -25,16 +25,16 @@ const FabMenuRow = ({action, onSelect}: FabMenuRowProps) => {
   return (
     <FloatingActionButtonMenuItem
       containerColor={theme.color('fill.accent.primary')}
-      contentColor={theme.color('content.on.bg')}
+      contentColor={theme.color('content.on.accent')}
       onClick={onClick}
     >
       {action.icon ? (
         <FloatingActionButtonMenuItem.Icon>
-          <Icon color="content.on.bg" name={action.icon} />
+          <Icon color="content.on.accent" name={action.icon} />
         </FloatingActionButtonMenuItem.Icon>
       ) : null}
       <FloatingActionButtonMenuItem.Text>
-        <ComposeText color={theme.colorString('content.on.bg')} style={theme.typography.labelMedium}>
+        <ComposeText color={theme.colorString('content.on.accent')} style={theme.typography.labelMedium}>
           {action.label}
         </ComposeText>
       </FloatingActionButtonMenuItem.Text>
@@ -47,7 +47,7 @@ const FabMenuRow = ({action, onSelect}: FabMenuRowProps) => {
  * content — rather than a row of its own. The pills take the button's colours, so the menu reads as the button
  * unfolding rather than a second surface.
  */
-export const FabMenu: FabMenuComponent = ({actions, icon}: FabMenuProps) => {
+export const FabMenu: FabMenuComponent = ({accessibilityLabel, actions, icon}: FabMenuProps) => {
   useHostGuard('FabMenu')
 
   const theme = useAppTheme()
@@ -67,7 +67,11 @@ export const FabMenu: FabMenuComponent = ({actions, icon}: FabMenuProps) => {
           onCheckedChange={setExpanded}
         >
           <ToggleFloatingActionButton.Icon>
-            {icon ? <Icon color="content.on.bg" name={icon} /> : <Glyph color="content.on.bg" name="plus" />}
+            {icon ? (
+              <Icon accessibilityLabel={accessibilityLabel} color="content.on.accent" name={icon} />
+            ) : (
+              <Glyph accessibilityLabel={accessibilityLabel} color="content.on.accent" name="plus" />
+            )}
           </ToggleFloatingActionButton.Icon>
         </ToggleFloatingActionButton>
       </FloatingActionButtonMenu.Button>

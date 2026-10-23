@@ -191,7 +191,7 @@ const GlassViewScene: Scene = () => (
       </Pressable>
       <Pressable borderRadius="full" onPress={noop}>
         <GlassView interactive px="s20" py="s12" tint="fill.accent.primary">
-          <RnText color="content.on.bg" pointerEvents="none" variant="labelMedium">
+          <RnText color="content.on.accent" pointerEvents="none" variant="labelMedium">
             Tinted
           </RnText>
         </GlassView>

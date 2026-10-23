@@ -1,6 +1,6 @@
 import {Button as ComposeButton, Text as ComposeText, OutlinedButton} from '@expo/ui/jetpack-compose'
 import {testID as testIdModifier} from '@expo/ui/jetpack-compose/modifiers'
-import {useSxModifiers} from '@hzblj/kara-sx'
+import {useAccessibilityModifiers, useSxModifiers} from '@hzblj/kara-sx'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
 import {useHostGuard} from '../../host-context'
@@ -16,6 +16,7 @@ import {buttonTokens, contentOnTint} from './button-tokens'
  * colour, as a prominent style does on iOS. `buttonStyle` and `controlSize` are SwiftUI's alone.
  */
 export const Button: ButtonComponent = ({
+  accessibilityHint,
   disabled = false,
   label,
   onPress,
@@ -28,9 +29,10 @@ export const Button: ButtonComponent = ({
   const theme = useAppTheme()
   const tokens = buttonTokens(variant, disabled, theme)
   const sxModifiers = useSxModifiers({wide})
+  const accessibilityModifiers = useAccessibilityModifiers({accessibilityHint}, accessibilityHint !== undefined)
   const modifiers = useMemo(
-    () => (testID ? [...sxModifiers, testIdModifier(testID)] : sxModifiers),
-    [sxModifiers, testID]
+    () => [...sxModifiers, ...(testID ? [testIdModifier(testID)] : []), ...accessibilityModifiers],
+    [accessibilityModifiers, sxModifiers, testID]
   )
   const style = theme.typography.body
   const outlined = variant === 'glass' && !tint

@@ -66,7 +66,7 @@ export type ZoomTransitionEnablerIosOptions = {
 }
 
 export type ZoomTransitionEnablerAndroidOptions = {
-  /** Default `d450`. iOS's zoom is UIKit's own spring. */
+  /** A duration token. Unset, Material's container transform takes its own 450 ms. iOS's zoom is UIKit's own spring. */
   duration?: DurationSize
   /** Default `emphasized` (Material 3, `0.2, 0, 0, 1`); `standard` is `0.4, 0, 0.2, 1`, `decelerate` `0, 0, 0, 1`. */
   easing?: 'decelerate' | 'emphasized' | 'linear' | 'standard'

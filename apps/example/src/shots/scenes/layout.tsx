@@ -149,7 +149,7 @@ const PagerScene: Scene = ({step}) => (
       {PAGES.map(page => (
         <VStack align="center" bg={page.bg} borderRadius="large" key={page.title} tall wide>
           <Spacer />
-          <Text color="content.on.bg" variant="headingS">
+          <Text color="content.on.accent" variant="headingS">
             {page.title}
           </Text>
           <Spacer />

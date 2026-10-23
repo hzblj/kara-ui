@@ -117,6 +117,29 @@ which is what lets `index.ts` export everything on both platforms. `isLiquidGlas
 Fabric reads it as layout or style. Prefix it (`bubbleWidth`). A new native view needs a pod install / Gradle
 sync and a native rebuild of the app; a new `.ios.tsx`/`.android.tsx` caller needs Metro `--clear`.
 
+## Accessibility
+
+**Every native component that lays out a box takes `AccessibilityProps`** (`@hzblj/kara-sx`): split them off with
+`splitAccessibility`, turn them into modifiers with `useAccessibilityModifiers(props, pressable)` and place those as
+the engine's CLAUDE.md says (last on iOS, after the `clickable` on Android; `use-stack-modifiers.ts` does it for the
+Compose stacks). A React Native tier component maps the same props with `accessibilityProps`. A pressable thing is a
+`button` unless its props say otherwise, and reads its children as one element.
+
+**An icon has no words.** `IconButton`, `Fab` and `FabMenu` require `accessibilityLabel`, carried by the icon inside, as
+Material's own icon buttons carry it. `Icon`, `Glyph`, `Avatar` without a label, and `Skeleton` are hidden from screen
+readers. Native controls (`Button`, `Switch`, `Slider`, `TextField`…) are read from their own labels; do not add one.
+
+## Motion
+
+**Durations and curves are tokens, picked by what the motion does** (`src/motion.ts`'s `timing(size, curve)` for
+Reanimated): arriving `fast`, leaving `quick`, a touch `micro`, `smoothOut` unless it is a swap, a small fade or a loop.
+No springs with bounce. `timing` passes `ReduceMotion.Never`, because the component has honoured the preference first.
+
+**Every animation answers `useReducedMotion()`.** With it on, nothing slides, scales, turns or loops; what needs a
+transition to read fades (`Pressable` dims instead of scaling, `Snackbar` fades, `Skeleton` holds still). Compose and
+SwiftUI follow the device's setting by themselves, but not `KaraProvider reduceMotion`, so a Compose or SwiftUI
+animation kara drives (`Collapsible`'s turn, `Stepper`'s `numericText`) reads the hook too.
+
 ## Haptics
 
 **A component plays a haptic only where the platform's own control would and ours does not.** Compose's Material

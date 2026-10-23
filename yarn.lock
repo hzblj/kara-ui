@@ -2720,6 +2720,7 @@ __metadata:
   resolution: "@hzblj/kara-sx@workspace:packages/sx"
   dependencies:
     "@expo/ui": "npm:~57.0.18"
+    "@hzblj/kara-native": "workspace:^"
     "@hzblj/kara-theme": "workspace:^"
     "@types/react": "npm:~19.2.18"
     react: "npm:19.2.3"

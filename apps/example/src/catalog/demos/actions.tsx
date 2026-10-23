@@ -75,10 +75,10 @@ const IconButtonDemo = () => (
   <Section caption="Disabled buttons dim and stop responding.">
     <Island>
       <HStack spacing="s8">
-        <IconButton name="add" onPress={noop} />
-        <IconButton name="share" onPress={noop} />
-        <IconButton name="heart" onPress={noop} />
-        <IconButton disabled name="lock" />
+        <IconButton accessibilityLabel="Add" name="add" onPress={noop} />
+        <IconButton accessibilityLabel="Share" name="share" onPress={noop} />
+        <IconButton accessibilityLabel="Like" name="heart" onPress={noop} />
+        <IconButton accessibilityLabel="Locked" disabled name="lock" />
       </HStack>
     </Island>
   </Section>
@@ -88,8 +88,8 @@ const FabDemo = () => (
   <Section caption="Material's floating action button on Android, a round prominent button on iOS.">
     <Island>
       <HStack spacing="s12">
-        <Fab name="add" onPress={noop} />
-        <Fab name="search" onPress={noop} />
+        <Fab accessibilityLabel="Add" name="add" onPress={noop} />
+        <Fab accessibilityLabel="Search" name="search" onPress={noop} />
       </HStack>
     </Island>
   </Section>
@@ -98,7 +98,7 @@ const FabDemo = () => (
 const FabMenuDemo = () => (
   <Section caption="Tap it: Material 3 Expressive's FAB menu on Android, a native menu on iOS.">
     <Island>
-      <FabMenu actions={useActions(noop)} />
+      <FabMenu accessibilityLabel="Create" actions={useActions(noop)} />
     </Island>
   </Section>
 )
@@ -243,7 +243,7 @@ const PressableDemo = () => {
           p="s20"
           wide
         >
-          <RnText color="content.on.bg" variant="headline">
+          <RnText color="content.on.accent" variant="headline">
             {count === 0 ? 'Press me' : `Pressed ${count}×`}
           </RnText>
         </Pressable>
@@ -274,7 +274,7 @@ export const ACTIONS: CatalogEntry[] = [
     tags: NATIVE,
   },
   {
-    code: '<IconButton name="share" onPress={share} />',
+    code: '<IconButton accessibilityLabel="Share" name="share" onPress={share} />',
     Demo: IconButtonDemo,
     id: 'icon-button',
     name: 'IconButton',
@@ -282,7 +282,7 @@ export const ACTIONS: CatalogEntry[] = [
     tags: NATIVE,
   },
   {
-    code: '<Fab name="add" onPress={create} />',
+    code: '<Fab accessibilityLabel="New post" name="add" onPress={create} />',
     Demo: FabDemo,
     id: 'fab',
     name: 'Fab',
@@ -290,7 +290,7 @@ export const ACTIONS: CatalogEntry[] = [
     tags: NATIVE,
   },
   {
-    code: '<FabMenu actions={actions} />',
+    code: '<FabMenu accessibilityLabel="Create" actions={actions} />',
     Demo: FabMenuDemo,
     id: 'fab-menu',
     name: 'FabMenu',

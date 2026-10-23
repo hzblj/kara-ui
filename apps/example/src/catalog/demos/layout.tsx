@@ -47,7 +47,7 @@ const StacksDemo = () => (
     <Section caption="Children layered on top of each other." title="ZStack">
       <Island>
         <ZStack align="center" bg="fill.accent.primary" borderRadius="large" h={96} wide>
-          <Text color="content.on.bg" variant="headingXs">
+          <Text color="content.on.accent" variant="headingXs">
             On top
           </Text>
         </ZStack>

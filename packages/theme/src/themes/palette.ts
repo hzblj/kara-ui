@@ -55,8 +55,11 @@ export const palette = {
     accent: adaptive({dark: orange[13], light: orange[11]}),
     destructive: native({android: 'error', ios: 'systemRedColor'}),
     on: {
-      /** Contrast is against *our* fill, not a platform surface — and the same colour in both variants. */
-      bg: gray[0],
+      /**
+       * On the accent fill (`fill.accent.primary`). Contrast is against *our* fill, not a platform surface, and the same
+       * colour in both variants.
+       */
+      accent: gray[0],
       /**
        * On `fill.destructive.primary`. That fill is Material's `error` on Android, which goes light in dark mode, so the
        * text on it has to be `onError` there — white on Material's dark-theme error would all but vanish.

@@ -139,6 +139,49 @@ const Scale = ({
   </div>
 )
 
+/** A curve drawn the way an editor draws one: time across, progress up, its two handles as faint lines. */
+const Curve = ({points: [x1 = 0, y1 = 0, x2 = 1, y2 = 1]}: {points: number[]}) => {
+  const W = 72
+  const H = 44
+  const at = (x: number, y: number) => `${(x * W).toFixed(1)} ${((1 - y) * H).toFixed(1)}`
+
+  return (
+    <svg aria-hidden="true" className="overflow-visible" height={H} viewBox={`0 0 ${W} ${H}`} width={W}>
+      <rect className="fill-none stroke-border-secondary" height={H} rx="4" width={W} />
+      <path className="stroke-content-quaternary" d={`M${at(0, 0)} L${at(x1, y1)} M${at(1, 1)} L${at(x2, y2)}`} />
+      <path
+        className="fill-none stroke-fill-accent-primary"
+        d={`M${at(0, 0)} C${at(x1, y1)} ${at(x2, y2)} ${at(1, 1)}`}
+        strokeLinecap="round"
+        strokeWidth="2"
+      />
+    </svg>
+  )
+}
+
+const Easings = ({entries}: {entries: [string, number[]][]}) => (
+  <div className={s.wrap()}>
+    <table className={s.table()}>
+      <Head columns={['Token', 'Curve', '']} />
+      <tbody>
+        {entries.map(([name, points]) => (
+          <tr key={name}>
+            <td className={s.cell()}>
+              <code className={s.code()}>{name}</code>
+            </td>
+            <td className={s.cell()}>
+              <span className={s.muted()}>{`cubic-bezier(${points.join(', ')})`}</span>
+            </td>
+            <td className={s.cell()}>
+              <Curve points={points} />
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+)
+
 const Typography = () => (
   <div className={s.wrap()}>
     <table className={s.table()}>
@@ -180,7 +223,8 @@ const Typography = () => (
 
 export const tokens: Guide = {
   Content: () => {
-    const {breakpoints, durations, opacity, radii, spacing} = readTokens()
+    const {breakpoints, durations, easings, opacity, radii, spacing} = readTokens()
+    const longest = Math.max(...durations.map(([, value]) => value))
 
     return (
       <>
@@ -241,7 +285,30 @@ export const tokens: Guide = {
         </Section>
 
         <Section id="durations" title="Durations">
-          <Scale entries={durations} unit=" ms" />
+          <P>
+            {
+              'The scale transitions.dev uses, named by what the motion does: `micro` answers a touch, `quick` is something leaving or swapped in place, `fast` something arriving, `medium` and `slow` a larger surface leaving and arriving, `verySlow` an emphasised moment, and `stagger` the offset between items that come in one after another. Pick a step by what the motion does, not by the number: a sheet closing is `quick`, whatever it took before. Leaving is shorter than arriving, and what a finger drags is a spring, not a duration. For Reduce Motion, see [Accessibility](/docs/accessibility#motion).'
+            }
+          </P>
+          <Scale
+            entries={durations}
+            render={value => (
+              <span
+                className="block h-2 rounded-full bg-fill-accent-primary"
+                style={{width: `${Math.max(2, (value / longest) * 100)}%`}}
+              />
+            )}
+            unit=" ms"
+          />
+        </Section>
+
+        <Section id="easing" title="Easing">
+          <P>
+            {
+              'The curves timed motion follows, transitions.dev’s set. `smoothOut` is the one to reach for, arriving and leaving alike: a fast start and a long settle, so the change shows at once and lands softly. `inOut` swaps one thing for another in place, `out` is a small fade or tint, and `linear` is for what loops. `Easing.bezier(...easing.smoothOut)` in Reanimated.'
+            }
+          </P>
+          <Easings entries={easings} />
         </Section>
 
         <Section id="breakpoints" title="Breakpoints">
@@ -259,6 +326,7 @@ export const tokens: Guide = {
     {id: 'typography', label: 'Typography'},
     {id: 'opacity', label: 'Opacity'},
     {id: 'durations', label: 'Durations'},
+    {id: 'easing', label: 'Easing'},
     {id: 'breakpoints', label: 'Breakpoints'},
   ],
   id: 'tokens',

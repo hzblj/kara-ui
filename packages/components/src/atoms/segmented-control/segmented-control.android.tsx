@@ -29,7 +29,7 @@ export const SegmentedControl: SegmentedControlComponent = ({
     () => ({
       activeBorderColor: theme.color('fill.accent.primary'),
       activeContainerColor: theme.color('fill.accent.primary'),
-      activeContentColor: theme.color('content.on.bg'),
+      activeContentColor: theme.color('content.on.accent'),
       disabledActiveBorderColor: theme.color('fill.accent.disabled'),
       disabledActiveContainerColor: theme.color('fill.accent.disabled'),
       disabledActiveContentColor: theme.color('btn.content.disabled'),

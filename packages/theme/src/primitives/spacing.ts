@@ -1,3 +1,7 @@
+/**
+ * Points, on a 4 pt grid: half steps (`s2`, `s6`, `s10`) where small gaps need them, every 4 pt from `s12` to `s40`,
+ * then wider steps for sections and screens. `s1` is a hairline.
+ */
 export const spacing = {
   s0: 0,
   s1: 1,

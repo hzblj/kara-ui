@@ -6,7 +6,7 @@ import {HStack} from '../h-stack'
 import {Fab} from './fab'
 
 const meta = {
-  args: {name: 'add', onPress: fn()},
+  args: {accessibilityLabel: 'Add', name: 'add', onPress: fn()},
   argTypes: {name: {control: 'select', options: ['add', 'search', 'share', 'star', 'trash']}},
   component: Fab,
   decorators: [insideIsland],
@@ -26,9 +26,9 @@ export const Playground: Story = {}
 export const Row: Story = {
   render: () => (
     <HStack spacing="s12">
-      <Fab name="add" />
-      <Fab name="search" />
-      <Fab name="share" />
+      <Fab accessibilityLabel="Add" name="add" />
+      <Fab accessibilityLabel="Search" name="search" />
+      <Fab accessibilityLabel="Share" name="share" />
     </HStack>
   ),
 }

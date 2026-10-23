@@ -23,7 +23,7 @@ export const Checkbox: CheckboxComponent = ({disabled = false, label, onValueCha
   )
   const control = (
     <ComposeCheckbox
-      colors={{checkedColor: theme.color('fill.accent.primary'), checkmarkColor: theme.color('content.on.bg')}}
+      colors={{checkedColor: theme.color('fill.accent.primary'), checkmarkColor: theme.color('content.on.accent')}}
       enabled={!disabled}
       onCheckedChange={onValueChange ?? NOOP}
       value={value}

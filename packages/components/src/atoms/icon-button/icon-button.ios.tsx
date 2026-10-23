@@ -1,5 +1,6 @@
 import {Button} from '@expo/ui/swift-ui'
 import {buttonStyle, contentShape, disabled as disabledModifier, shapes} from '@expo/ui/swift-ui/modifiers'
+import {useAccessibilityModifiers} from '@hzblj/kara-sx'
 import {useMemo} from 'react'
 
 import {useHostGuard} from '../../host-context'
@@ -13,24 +14,32 @@ const TARGET = 44
 /** The whole square takes the tap, not only the glyph's own pixels. */
 const WHOLE_TARGET = {modifiers: [contentShape(shapes.circle())]}
 
-export const IconButton: IconButtonComponent = ({disabled = false, name, onPress, testID}: IconButtonProps) => {
+export const IconButton: IconButtonComponent = ({
+  accessibilityHint,
+  accessibilityLabel,
+  disabled = false,
+  name,
+  onPress,
+  testID,
+}: IconButtonProps) => {
   useHostGuard('IconButton')
+  const accessibilityModifiers = useAccessibilityModifiers({accessibilityHint})
 
   const modifiers = useMemo(() => {
-    const list = [buttonStyle('plain')]
+    const list = [buttonStyle('plain'), ...accessibilityModifiers]
 
     if (disabled) {
       list.push(disabledModifier(true))
     }
 
     return list
-  }, [disabled])
+  }, [accessibilityModifiers, disabled])
 
   return (
     <Button modifiers={modifiers} onPress={onPress} testID={testID}>
       <ZStack h={TARGET} ios={WHOLE_TARGET} w={TARGET}>
         {/* SwiftUI dims a disabled button's label itself; a disabled colour on top of that dimmed it twice. */}
-        <Icon color="content.primary" name={name} />
+        <Icon accessibilityLabel={accessibilityLabel} color="content.primary" name={name} />
       </ZStack>
     </Button>
   )

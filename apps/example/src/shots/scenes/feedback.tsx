@@ -69,7 +69,14 @@ const SnackbarScene: Scene = ({step}) => (
         Removed from your wishlist
       </RnText>
     </Box>
-    <Snackbar actionLabel="Undo" message="Item deleted" onAction={noop} visible={step === 0} />
+    <Snackbar
+      actionLabel="Undo"
+      dismissible
+      message="Item deleted"
+      onAction={noop}
+      onDismiss={noop}
+      visible={step === 0}
+    />
   </Box>
 )
 

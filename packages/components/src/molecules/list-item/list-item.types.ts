@@ -1,13 +1,15 @@
+import type {AccessibilityProps} from '@hzblj/kara-sx'
 import type {SpaceSize} from '@hzblj/kara-theme'
 import type {ReactNode} from 'react'
 
 import type {IconName} from '../../atoms/icon'
 
 /**
- * A row with an optional icon, a title and subtitle, and a chevron when it can be pressed. A native atom: it renders
- * inside `<Screen>` or `<Island>`; `RnListItem` is the same row without a host.
+ * A row with an optional icon, a title and subtitle, and a chevron when it can be pressed. Screen readers read it as one
+ * element (a button when it is pressable). A native atom: it renders inside `<Screen>` or `<Island>`; `RnListItem` is
+ * the same row without a host.
  */
-export type ListItemProps = {
+export type ListItemProps = AccessibilityProps & {
   /** One of the app's icons, before the title, in the secondary colour. */
   icon?: IconName
   /** Makes the row pressable and adds a chevron on the trailing edge. */

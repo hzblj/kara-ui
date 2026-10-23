@@ -18,7 +18,7 @@ const ControlledPager = (args: PagerProps) => {
       <Pager {...args} onPageChange={page => updateArgs({page})}>
         {PAGE_BACKGROUNDS.map((bg, index) => (
           <ZStack align="center" bg={bg} key={bg} wide>
-            <Text color="content.on.bg" variant="headingS">
+            <Text color="content.on.accent" variant="headingS">
               Page {index + 1}
             </Text>
           </ZStack>

@@ -1,13 +1,14 @@
 import {Button} from '@expo/ui/swift-ui'
 import {buttonStyle} from '@expo/ui/swift-ui/modifiers'
-import {useSxModifiers} from '@hzblj/kara-sx'
+import {useAccessibilityModifiers, useSxModifiers} from '@hzblj/kara-sx'
 import {useMemo} from 'react'
 import {useHostGuard} from '../../host-context'
 import {Icon} from '../icon'
 import type {FabComponent, FabProps} from './fab.types'
 
-export const Fab: FabComponent = ({name, onPress, testID}: FabProps) => {
+export const Fab: FabComponent = ({accessibilityHint, accessibilityLabel, name, onPress, testID}: FabProps) => {
   useHostGuard('Fab')
+  const accessibilityModifiers = useAccessibilityModifiers({accessibilityHint})
 
   const sxModifiers = useSxModifiers({
     bg: 'fill.accent.primary',
@@ -17,11 +18,14 @@ export const Fab: FabComponent = ({name, onPress, testID}: FabProps) => {
     shadow: 'btn.accent',
     w: 56,
   })
-  const modifiers = useMemo(() => [buttonStyle('plain'), ...sxModifiers], [sxModifiers])
+  const modifiers = useMemo(
+    () => [buttonStyle('plain'), ...sxModifiers, ...accessibilityModifiers],
+    [accessibilityModifiers, sxModifiers]
+  )
 
   return (
     <Button modifiers={modifiers} onPress={onPress} testID={testID}>
-      <Icon color="content.on.bg" name={name} />
+      <Icon accessibilityLabel={accessibilityLabel} color="content.on.accent" name={name} />
     </Button>
   )
 }

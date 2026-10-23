@@ -5,6 +5,8 @@ import type {ReactNode} from 'react'
  * value, which `ProgressView` cannot draw on iOS) / Compose's `LinearProgressIndicator` and `CircularProgressIndicator`.
  */
 export type ProgressProps = {
+  /** What is in progress, for VoiceOver and TalkBack: "Uploading". They read how far along it is themselves. */
+  accessibilityLabel?: string
   /** A circular indicator instead of a bar. Off by default. */
   circular?: boolean
   /** Between `0` and `1`. Leave it unset for an indeterminate indicator. */

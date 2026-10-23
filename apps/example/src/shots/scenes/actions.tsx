@@ -56,9 +56,9 @@ const IconButtonScene: Scene = () => (
         </Text>
       </VStack>
       <Spacer />
-      <IconButton name="share" onPress={noop} />
-      <IconButton name="heart" onPress={noop} />
-      <IconButton disabled name="lock" />
+      <IconButton accessibilityLabel="Share" name="share" onPress={noop} />
+      <IconButton accessibilityLabel="Like" name="heart" onPress={noop} />
+      <IconButton accessibilityLabel="Locked" disabled name="lock" />
     </HStack>
   </Island>
 )
@@ -66,8 +66,8 @@ const IconButtonScene: Scene = () => (
 const FabScene: Scene = () => (
   <Island>
     <HStack spacing="s20">
-      <Fab name="add" onPress={noop} />
-      <Fab name="search" onPress={noop} />
+      <Fab accessibilityLabel="Add" name="add" onPress={noop} />
+      <Fab accessibilityLabel="Search" name="search" onPress={noop} />
     </HStack>
   </Island>
 )
@@ -76,7 +76,7 @@ const FabScene: Scene = () => (
 const FabMenuScene: Scene = () => (
   <Box h={280} justify="flex-end">
     <Island>
-      <FabMenu actions={ACTIONS} testID="shot-fab-menu" />
+      <FabMenu accessibilityLabel="Create" actions={ACTIONS} testID="shot-fab-menu" />
     </Island>
   </Box>
 )
@@ -137,28 +137,40 @@ const ActionSheetScene: Scene = ({step}) => {
 }
 
 /** At the top of the stage: the lifted preview stays in place and the menu opens under it, inside the band. */
+const MENU_PHOTO = PHOTOS[1]
+
+/**
+ * A photo card from a board, held for its menu. iOS lifts a larger preview of it above the menu, which needs the
+ * whole screen (the shot's `frame` is `screen` there); Android opens Material's menu under the card, within the band.
+ */
 const ContextMenuScene: Scene = () => (
-  <Box h={270}>
+  <Box align="center" bg="surface.base" flex={1} justify="center">
     <ContextMenu
       actions={ACTIONS}
       bg="surface.primary"
       borderRadius="large"
-      gap="s4"
-      p="s20"
+      overflow="hidden"
       preview={
-        <Box bg="surface.primary" gap="s8" p="s24" w={280}>
-          <RnText variant="headingXs">Air Max 90</RnText>
-          <RnText color="content.secondary" variant="subheadline">
-            Leather, mesh and a visible Air unit.
-          </RnText>
+        <Box bg="surface.primary" w={300}>
+          <Image cachePolicy="memory-disk" contentFit="cover" h={225} source={{uri: MENU_PHOTO?.uri}} w={300} />
+          <Box gap="s4" p="s16">
+            <RnText variant="headline">{MENU_PHOTO?.title}</RnText>
+            <RnText color="content.secondary" variant="footnote">
+              Saved to your board
+            </RnText>
+          </Box>
         </Box>
       }
       testID="shot-context-menu"
+      w={210}
     >
-      <RnText variant="headline">Air Max 90</RnText>
-      <RnText color="content.secondary" variant="footnote">
-        Press and hold for options
-      </RnText>
+      <Image cachePolicy="memory-disk" contentFit="cover" h={150} source={{uri: MENU_PHOTO?.uri}} w={210} />
+      <Box gap="s2" px="s12" py="s10">
+        <RnText variant="headline">{MENU_PHOTO?.title}</RnText>
+        <RnText color="content.secondary" variant="footnote">
+          Press and hold for options
+        </RnText>
+      </Box>
     </ContextMenu>
   </Box>
 )
@@ -185,7 +197,7 @@ const SwipeActionsScene: Scene = () => (
 const PRESS_PHOTO = PHOTOS[2]?.uri
 
 /**
- * Each way a press can answer, held one after the other by the flow, top to bottom: a card that springs down, a row
+ * Each way a press can answer, held one after the other by the flow, top to bottom: a card that eases down, a row
  * that dims, and a button on the platform's own (a spring on iOS, the ripple alone on Android, which ripples under all
  * three).
  */
@@ -212,7 +224,7 @@ const PressableScene: Scene = () => (
       <Box flex={1} gap="s2">
         <RnText variant="headline">Air Max 90</RnText>
         <RnText color="content.secondary" variant="footnote">
-          scale · springs down while held
+          scale · eases down while held
         </RnText>
       </Box>
       <RnText variant="headline">€129</RnText>
@@ -237,7 +249,7 @@ const PressableScene: Scene = () => (
       <RnIcon color="content.tertiary" name="chevron-right" size="s20" />
     </Pressable>
     <Pressable align="center" bg="fill.accent.primary" borderRadius="full" onPress={noop} p="s16">
-      <RnText color="content.on.bg" variant="headline">
+      <RnText color="content.on.accent" variant="headline">
         Add to bag
       </RnText>
     </Pressable>

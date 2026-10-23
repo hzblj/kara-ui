@@ -5,6 +5,11 @@ export type AvatarSize = 'lg' | 'md' | 'sm'
 
 /** A round avatar: the image in `source`, or `initials` without one. The React Native tier: it needs no host. */
 export type AvatarProps = {
+  /**
+   * Who it is, for VoiceOver and TalkBack: "Jan Blazej". Unset, the avatar is decorative and hidden from them, as one
+   * beside the person's name should be.
+   */
+  accessibilityLabel?: string
   /** Shown in place of the image when there is no `source`. */
   initials?: string
   /** The diameter: `sm` is `s24`, `md` `s40`, `lg` `s64`. `md` by default. */

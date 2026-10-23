@@ -30,7 +30,12 @@ export type ZoomSettings = {
 
 export const DEFAULT_SETTINGS: ZoomSettings = {background: 'default', dismiss: 'any', path: 'arc', speed: 'default'}
 
-const SPEEDS: Record<ZoomSettings['speed'], DurationSize> = {default: 'd450', quick: 'd300', slow: 'd800'}
+/** Unset is Material's own 450 ms; quick is `fast` (250 ms), slow the scale's longest, `verySlow` (500 ms). */
+const SPEEDS: Record<ZoomSettings['speed'], DurationSize | undefined> = {
+  default: undefined,
+  quick: 'fast',
+  slow: 'verySlow',
+}
 
 export const parseSettings = (params: Partial<Record<keyof ZoomSettings, string>>): ZoomSettings => ({
   background: (params.background as ZoomSettings['background']) ?? DEFAULT_SETTINGS.background,

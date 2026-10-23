@@ -169,7 +169,7 @@ export const installation: Guide = {
             ['`expo-image`', '`Image`, `Avatar` and the photos in a `ZoomTransition`.'],
             [
               '`react-native-reanimated`, `react-native-worklets`',
-              '`Pressable`’s spring on iOS, `ScrollEdgeContainer` on Android, `Skeleton`, `Snackbar`.',
+              '`Pressable`’s press on iOS, `ScrollEdgeContainer` on Android, `Skeleton`, `Snackbar`.',
             ],
             ['`expo-router` (optional)', '`@hzblj/kara-ui/router`.'],
           ]}

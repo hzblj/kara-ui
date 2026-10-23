@@ -49,7 +49,7 @@ type ActionButtonProps = {action: SwipeAction; onDone: () => void}
 const ActionButton = ({action, onDone}: ActionButtonProps) => {
   const theme = useAppTheme()
   const fill = action.tint ?? (action.destructive ? 'fill.destructive.primary' : 'fill.accent.primary')
-  const content = !action.tint && action.destructive ? 'content.on.destructive' : 'content.on.bg'
+  const content = !action.tint && action.destructive ? 'content.on.destructive' : 'content.on.accent'
 
   const onClick = useCallback(() => {
     onDone()
