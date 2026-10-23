@@ -91,17 +91,14 @@ export const DeviceMedia = ({
     const target = (hoverTarget ? element.closest<HTMLElement>(hoverTarget) : null) ?? element
     const enter = () => setIsActive(true)
     const leave = () => setIsActive(false)
-    target.addEventListener('pointerenter', enter)
-    target.addEventListener('pointerleave', leave)
-    target.addEventListener('focusin', enter)
-    target.addEventListener('focusout', leave)
+    const controller = new AbortController()
+    const {signal} = controller
+    target.addEventListener('pointerenter', enter, {signal})
+    target.addEventListener('pointerleave', leave, {signal})
+    target.addEventListener('focusin', enter, {signal})
+    target.addEventListener('focusout', leave, {signal})
 
-    return () => {
-      target.removeEventListener('pointerenter', enter)
-      target.removeEventListener('pointerleave', leave)
-      target.removeEventListener('focusin', enter)
-      target.removeEventListener('focusout', leave)
-    }
+    return () => controller.abort()
   }, [autoplay, hoverTarget, video.dark, video.light])
 
   useEffect(() => {

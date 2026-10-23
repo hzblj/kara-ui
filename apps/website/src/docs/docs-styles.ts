@@ -53,8 +53,9 @@ export const docsStyles = tv({
     pagerNext: 'text-right max-[560px]:text-left',
     pagerTitle: 'text-[15px] font-semibold text-content-primary',
     section: `scroll-mt-24 border-b border-border-secondary py-14 last:border-b-0 ${flow} ${prose} ${inlineCode} [&>h2+*]:mt-0 [&>h2]:mb-5 [&>h2]:text-[28px] [&>h2]:font-semibold [&>h2]:tracking-[-0.035em] [&>h3]:text-[17px] [&>h3]:font-semibold [&>h3]:tracking-[-0.01em]`,
+    // `dvh`, not `vh`: Safari's `100vh` is the height without its toolbars, so the last links sat under them.
     sidebar:
-      'sticky top-0 left-0 flex h-screen flex-col overflow-y-auto border-r border-border-secondary px-6 pb-6 [scrollbar-color:var(--color-gray-5)_transparent] [scrollbar-width:thin] max-[820px]:hidden',
+      'sticky top-0 left-0 flex h-dvh flex-col overflow-y-auto overscroll-y-contain border-r border-border-secondary px-6 pb-6 [scrollbar-color:var(--color-gray-5)_transparent] [scrollbar-width:thin] max-[820px]:hidden',
     sidebarBrand: 'flex min-w-0 items-baseline gap-2.5',
     sidebarBrandRow: 'flex h-20 items-center',
     sidebarFooter: 'mt-auto grid gap-2.5 border-t border-border-secondary pt-5 text-[13px]',
@@ -63,14 +64,14 @@ export const docsStyles = tv({
     sidebarFooterMark: 'size-4 shrink-0',
     sidebarTop:
       'sticky top-0 z-10 -mx-6 mb-4 shrink-0 bg-surface-base px-6 pb-5 after:pointer-events-none after:absolute after:inset-x-0 after:top-full after:h-5 after:bg-gradient-to-b after:from-surface-base after:to-transparent',
-    site: 'mx-auto grid min-h-screen max-w-[1320px] grid-cols-[248px_minmax(0,1fr)_208px] max-[1180px]:grid-cols-[248px_minmax(0,1fr)] max-[820px]:block',
+    site: 'mx-auto grid min-h-dvh max-w-[1320px] grid-cols-[248px_minmax(0,1fr)_208px] max-[1180px]:grid-cols-[248px_minmax(0,1fr)] max-[820px]:block',
     tab: 'cursor-pointer rounded-[7px] border border-transparent px-[11px] py-[7px] text-xs font-semibold transition-colors hover:bg-fill-secondary-hover hover:text-content-primary',
     tabActive: 'border-border-secondary bg-surface-elevated text-content-primary shadow-btn-default',
     tabInactive: 'text-content-tertiary',
     tabs: 'flex gap-0.5',
     themeCorner: 'pointer-events-none fixed inset-x-0 top-0 z-50 flex h-20 items-center max-[820px]:hidden',
     themeCornerInner: 'mx-auto flex w-full max-w-[1320px] justify-end px-7 [&>*]:pointer-events-auto',
-    toc: 'sticky top-0 h-screen overflow-y-auto px-5 pt-[96px] pb-10 max-[1180px]:hidden',
+    toc: 'sticky top-0 h-dvh overflow-y-auto overscroll-y-contain px-5 pt-[96px] pb-10 max-[1180px]:hidden',
     tocHeader: 'mb-2 flex items-baseline justify-between gap-2',
     tocLabel: 'text-xs font-bold text-content-primary',
     tocLinkActive: 'bg-fill-secondary-hover font-semibold text-content-primary',
