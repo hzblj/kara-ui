@@ -9,6 +9,7 @@ house style with kara's orange. Every page is static. Private; never published.
 | --- | --- |
 | `app/` | Routes only: `/` (the landing page), `/docs` and `/docs/[...slug]` (guides, `/docs/components`, `/docs/components/<id>`), `llms.txt`, `llms-full.txt`, `sitemap`, `robots`, `manifest`, and `og/[...slug]` (every page's social image, drawn at build). They render what `src/` exports. |
 | `src/site.ts` | The site's URL, name, links and hero copy. |
+| `src/analytics/` | `GoogleAnalytics`: Google's tag, production deployments only. |
 | `src/seo/` | `pageMetadata` (title, description, canonical and the Open Graph and Twitter cards — a page states them in full, since Next replaces rather than merges them), `SEO_PAGES` (every page with a social image), `OgCard` (the image, drawn by `next/og` with the static Inter cuts in `fonts/`) and the JSON-LD. |
 | `src/theme/` | Light/dark and the iOS/Android preference: `HEAD_SCRIPT` sets both on `<html>` before the first paint (cookies `kara-theme`, `kara-platform`), `ThemeToggle`, `ThemeSync`, `useColorScheme` / `usePlatform`. |
 | `src/ui/` | Shared parts: `Wordmark` (`KaraMark`: four quarter-disc leaves opening from the middle, like a flower), `CodeBlock` (shiki, at build time), `Inline` (the `code`/**bold**/[link]() markdown the docs' strings carry), `MobileNav`, icons. |
@@ -40,9 +41,10 @@ and CSS (`dark:`, `android:`) shows one of each pair — never React state, whic
 **Highlighting happens on the server.** `CodeBlock` and `highlight` run shiki at build time; a client component gets the
 HTML as a prop. Do not import shiki from a `'use client'` file.
 
-**Analytics are Vercel's, and cookieless.** `<Analytics />` (page views) and `<SpeedInsights />` (Core Web Vitals) sit
-in the root layout; they report only from a Vercel deployment, and only once each is enabled in the project's dashboard.
-Nothing here sets a tracking cookie, which is why the site has no consent banner — keep it that way.
+**Analytics: Vercel's and Google's, from production only.** `<Analytics />` (page views) and `<SpeedInsights />` (Core
+Web Vitals) sit in the root layout and report once each is enabled in the Vercel project; `<GoogleAnalytics />`
+(`src/analytics/`, property `G-D1JC6JRTTX`) renders only when `VERCEL_ENV` is `production`, so previews and `yarn site`
+send nothing. Google's tag sets the `_ga` cookies — Vercel's two set none.
 
 **`yarn tsc:check` is the type check**, with the monorepo's TypeScript — `next build` skips its own (`ignoreBuildErrors`),
 because it cannot drive TypeScript 7. `next typegen` writes the route types first.
