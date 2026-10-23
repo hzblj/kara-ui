@@ -192,15 +192,17 @@ iOS-only for now.
 
 ## Icons
 
-**The library has no icon set; apps bring SVGs.** `IconName` is the keys of the global `KaraIcons`, which the config
-plugin writes into the app's `kara-icons.d.ts` from its icon folder — any string until it exists. Every icon prop
-(`Icon`, `RnIcon`, `IconButton`, `Fab`, `ListItem`, `Label`, `LabeledContent`, `Link`, `EmptyState`, `FabMenu`, menu
-actions, `Tabs`) takes one, and resolves it through `iconResourceName` (`@hzblj/kara-native`) to the native asset the
-plugin generated: an asset-catalog template image on iOS, a vector drawable on Android.
+**The library has no icon set; apps bring SVGs.** `IconName` is `NativeIconName` from `@hzblj/expo-native-icons`: the
+keys of the global `NativeIcons`, which the config plugin writes into the app's `native-icons.d.ts` from its icon
+folder, any string until it exists. Every icon prop (`Icon`, `RnIcon`, `IconButton`, `Fab`, `ListItem`, `Label`,
+`LabeledContent`, `Link`, `EmptyState`, `FabMenu`, menu actions, `Tabs`) takes one, and resolves it through that
+package's `iconResourceName` to the native asset the plugin generated (`native_icon_<name>`): an asset-catalog template
+image on iOS, a vector drawable on Android.
 
 **`Icon` lives in a host, `RnIcon` anywhere.** `Icon` is SwiftUI `Image(assetName)` / Compose `Icon(painterResource)`;
-`RnIcon` is a `UIImageView` / `ImageView` (`IconView` in `@hzblj/kara-native`) — what a list row wants, rather than a
-host per row. Same props, same asset, same size.
+`RnIcon` is `@hzblj/expo-native-icons`' `NativeIcon` (a `UIImageView`, one Android view drawing the drawable), what a
+list row wants rather than a host per row. Same props, same asset, same size. An Android `RnGlyph` draws its drawable
+through the same package's `NativeIconView`; an iOS one is kara's own `IconView` (an SF Symbol).
 
 **`src/glyph/` is internal.** The handful of glyphs kara's own chrome draws — a search field's magnifier, a row's
 chevron, a stepper's plus and minus, a bar's back and close — come from `GLYPHS` in `@hzblj/kara-native`: SF Symbols

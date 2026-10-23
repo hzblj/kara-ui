@@ -13,7 +13,7 @@ appearances before anyone else depends on it. Private; never published.
 | `src/providers.tsx` | Gesture root, `AppearanceProvider`, `KaraProvider` (with the picked accent theme and preference), the navigation theme, safe area. |
 | `src/appearance/` | The example's only state: theme preference and accent. `accents.ts` is the reference for writing a `defineTheme` override. |
 | `assets/icons/` | The example's icons — Material Symbols SVGs (Apache 2.0); `share.android.svg` is the platform-variant demo. The plugin turns them into native assets at prebuild. |
-| `kara-icons.d.ts` | The icon names, written by the plugin whenever the config is read. Committed, so `yarn typecheck` works on a fresh clone. |
+| `native-icons.d.ts` | The icon names (the global `NativeIcons`), written by the plugin whenever the config is read. Committed, so `yarn typecheck` works on a fresh clone. |
 | `src/home/` | The first screen someone sees: what kara is, the live appearance/accent switch, and a small real flow (an order with a checkout sheet). |
 | `src/catalog/` | The component catalogue: `catalog.ts` groups the entries from `demos/<category>.tsx`; each entry is a name, a one-line summary, what renders it (`tags`), its `Demo` and a usage snippet. |
 | `src/catalog/zoom/` | `ZoomTransition`'s demo, the one that needs a route of its own: a grid of photos, the page they zoom into and the settings to try, carried as route params. The page is a root `fullScreenModal` (`app/photo/[id].tsx`), the way a gallery opens: no native header on iOS — the zoom does not reach a modal's nested header stack — so it draws its own glass close, and a drag down dismisses it. The photos are remote (picsum, fixed seeds), loaded `memory-disk` so the page has them for the zoom. |

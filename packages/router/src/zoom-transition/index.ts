@@ -1,5 +1,8 @@
-export * from './use-zoom-transition-source-id'
-export * from './with-zoom-transition'
+export {
+  useZoomTransitionParam,
+  useZoomTransitionSourceId,
+  withZoomTransition,
+  ZOOM_TRANSITION_PARAM,
+} from '@hzblj/expo-zoom-transition'
 export * from './zoom-transition'
 export * from './zoom-transition.types'
-export * from './zoom-transition-param'

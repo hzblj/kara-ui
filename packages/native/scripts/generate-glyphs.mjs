@@ -11,7 +11,7 @@ import {mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync} from 'node:
 import {createRequire} from 'node:module'
 import path from 'node:path'
 
-import {androidVectorDrawable, parseSvgIcon} from '@hzblj/kara-expo-plugin'
+import {androidVectorDrawable, parseSvgIcon} from '@hzblj/expo-native-icons/plugin'
 
 const ROOT = path.resolve(import.meta.dirname, '..')
 const DRAWABLES = path.join(ROOT, 'android', 'src', 'main', 'res', 'drawable')

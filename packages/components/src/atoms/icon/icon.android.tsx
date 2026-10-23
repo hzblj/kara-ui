@@ -1,4 +1,4 @@
-import {iconResourceName} from '@hzblj/kara-native'
+import {iconResourceName} from '@hzblj/expo-native-icons'
 import {DrawableIcon} from '@hzblj/kara-native/jetpack-compose'
 import {spacing, useAppTheme} from '@hzblj/kara-theme'
 

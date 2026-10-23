@@ -20,7 +20,8 @@ The Expo Router pieces of [Kara UI](https://www.kara.janblazej.dev), a native-fi
 - **`Tabs`**: native tabs over Expo Router's `NativeTabs`, with your own icons.
 - **`navigationTheme`**: the Kara theme mapped onto Expo Router's `ThemeProvider`, so headers and tab bars take the
   same colours as everything else.
-- **`ZoomTransition`**: a push that grows out of the view it was opened from and shrinks back into it.
+- **`ZoomTransition`**: a push that grows out of the view it was opened from and shrinks back into it. It is
+  [`@hzblj/expo-zoom-transition`](https://www.npmjs.com/package/@hzblj/expo-zoom-transition) with the theme's tokens.
 
 Kept apart so the main `@hzblj/kara-ui` entry never imports `expo-router`.
 

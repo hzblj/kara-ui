@@ -1106,6 +1106,7 @@ const zoomId = useZoomTransitionParam()
       'The enabler renders first and unconditionally: behind a loading state, the push is already a slide.',
       'Zooming into a modal, give it no native header on iOS: a modal’s bar lives in a nested stack, which the zoom does not reach. Draw a close of your own; a drag down closes it too.',
       'Settings both platforms honour sit at the top; the rest is typed apart under `ios` and `android`.',
+      'It is [@hzblj/expo-zoom-transition](https://www.npmjs.com/package/@hzblj/expo-zoom-transition) with the theme’s tokens. The package works without kara, taking plain values.',
     ],
     renders: {android: 'Material container transform', ios: 'UIKit zoom transition'},
     summary: 'A push that grows out of the view it was opened from, and shrinks back into it.',

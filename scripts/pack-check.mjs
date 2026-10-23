@@ -28,7 +28,7 @@ const COMMON_REQUIRED = ['package.json', 'README.md']
 const LIBRARY_REQUIRED = ['lib/module/index.js', 'lib/typescript/index.d.ts']
 
 const REQUIRED = {
-  '@hzblj/kara-expo-plugin': ['app.plugin.js', 'build/index.js', 'build/index.d.ts', 'build/cli.js'],
+  '@hzblj/kara-expo-plugin': ['app.plugin.js', 'build/index.js', 'build/index.d.ts'],
   '@hzblj/kara-native': [
     ...LIBRARY_REQUIRED,
     'expo-module.config.json',
@@ -164,9 +164,9 @@ export const Layout = () => (
 
 export const navigation = navigationTheme
 
-// What the config plugin writes into kara-icons.d.ts for an icon folder holding bolt.svg and arrow-left.svg.
+// What the config plugin writes into native-icons.d.ts for an icon folder holding bolt.svg and arrow-left.svg.
 declare global {
-  interface KaraIcons {
+  interface NativeIcons {
     bolt: true
     'arrow-left': true
   }

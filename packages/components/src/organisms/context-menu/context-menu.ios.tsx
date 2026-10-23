@@ -1,4 +1,4 @@
-import {iconResourceName} from '@hzblj/kara-native'
+import {iconResourceName} from '@hzblj/expo-native-icons'
 import {
   type ContextMenuItem,
   ContextMenu as NativeContextMenu,
