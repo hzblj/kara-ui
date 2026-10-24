@@ -1,3 +1,5 @@
+import {Platform} from 'react-native'
+
 /**
  * The platform text style a variant grows *with*. It does not set the size — ours below stays exact — it picks the
  * rate: the size is scaled by whatever the user's Dynamic Type setting does to that style, for the platform's face and
@@ -25,9 +27,11 @@ export type FontWeight = 'bold' | 'medium' | 'regular' | 'semibold'
 
 /**
  * Which face family a variant is set in. `display` covers the headings and the large sizes, so a typeface with a
- * separate display cut (the way Inter has one) can be given it; without one, `display` falls back to `text`.
+ * separate display cut (the way Inter has one) can be given it; without one, `display` falls back to `text`. `mono` is
+ * the fixed-width face a `monospaced` text is set in, at its variant's size and weight; without one of the app's own it
+ * falls back to the platform's, never to `text`, since a proportional face cannot stand in for a fixed-width one.
  */
-export type FontRole = 'display' | 'text'
+export type FontRole = 'display' | 'mono' | 'text'
 
 export type TextStyleToken = {
   fontSize: number
@@ -85,14 +89,19 @@ export type FontFaces = Partial<Record<FontWeight, string>>
 export type FontsConfig = {
   /** Headings and display sizes. Falls back to `text` when not given. */
   display?: FontFaces
+  /**
+   * The fixed-width face, for text set `monospaced`: code, an order number, figures in a column. Falls back to the
+   * platform's own (Menlo on iOS, Android's `monospace`), never to `text`.
+   */
+  mono?: FontFaces
   /** Everything else. Omit `fonts` entirely to stay on the platform's own face. */
   text?: FontFaces
 }
 
 /**
- * A variant as a component consumes it — a ready React Native / Compose text style plus what SwiftUI needs. Exactly one
- * of `fontFamily` and `fontWeight` is set: a face of the app's own carries its weight in the face, the platform's face
- * takes it as a number.
+ * A variant as a component consumes it — a ready React Native / Compose text style plus what SwiftUI needs. A face of
+ * the app's own (or Menlo) carries its weight in the face and sets `fontFamily` alone; the platform's face takes the
+ * weight as a number, `fontWeight` alone, and so does Android's `monospace` family, which sets both.
  */
 export type ResolvedTextStyle = {
   fontFamily?: string
@@ -108,37 +117,62 @@ export type Typography = Record<TextVariant, ResolvedTextStyle>
 /**
  * The face the app registered for a weight in a role: the exact weight, else the role's `regular`, else `undefined` —
  * the platform's own face. `display` falls back to `text` as a whole, not weight by weight, so a display family is
- * never mixed with a text one inside the same heading scale.
+ * never mixed with a text one inside the same heading scale. `mono` falls back to nothing of the app's: `undefined`
+ * there means the platform's fixed-width face.
  */
 export const fontFace = (
   fonts: FontsConfig | undefined,
   weight: FontWeight,
   role: FontRole = 'text'
 ): string | undefined => {
-  const faces = (role === 'display' ? fonts?.display : undefined) ?? fonts?.text
+  const faces = role === 'mono' ? fonts?.mono : ((role === 'display' ? fonts?.display : undefined) ?? fonts?.text)
 
   return faces?.[weight] ?? faces?.regular
 }
 
+type ResolvedFace = Pick<ResolvedTextStyle, 'fontFamily' | 'fontWeight'>
+
+/**
+ * The platform's own fixed-width face. Menlo on iOS, by face: SF Mono has no name an app can ask for, and React Native
+ * can only ask by name, so a native `Text` and an `RnText` set the same face. Android's `monospace` is a family, which
+ * takes its weight as a number, the way Roboto does.
+ */
+const PLATFORM_MONO: FontsConfig = {mono: {bold: 'Menlo-Bold', regular: 'Menlo-Regular'}}
+
+const platformMono = (weight: FontWeight): ResolvedFace =>
+  Platform.OS === 'android'
+    ? {fontFamily: 'monospace', fontWeight: FONT_WEIGHT_VALUES[weight]}
+    : {fontFamily: fontFace(PLATFORM_MONO, weight, 'mono')}
+
+const faceOf = (fonts: FontsConfig | undefined, weight: FontWeight, role: FontRole): ResolvedFace => {
+  const fontFamily = fontFace(fonts, weight, role)
+
+  if (fontFamily) {
+    return {fontFamily}
+  }
+
+  return role === 'mono' ? platformMono(weight) : {fontWeight: FONT_WEIGHT_VALUES[weight]}
+}
+
 /**
  * The scale with the app's faces applied. Built once per theme config by the provider, so a text component reads a
- * finished style off the theme rather than resolving faces on every render.
+ * finished style off the theme rather than resolving faces on every render. `role` sets every variant in one role
+ * instead of its own: `mono` is the scale a `monospaced` text reads (`theme.monoTypography`).
  */
-export const resolveTypography = (fonts?: FontsConfig): Typography => {
+export const resolveTypography = (fonts?: FontsConfig, role?: FontRole): Typography => {
   const entries = Object.entries(textStyles) as [TextVariant, TextStyleToken][]
 
   return Object.fromEntries(
-    entries.map(([variant, token]) => {
-      const fontFamily = fontFace(fonts, token.weight, token.role)
-      const base = {
+    entries.map(([variant, token]) => [
+      variant,
+      {
+        ...faceOf(fonts, token.weight, role ?? token.role),
         fontSize: token.fontSize,
         lineHeight: token.lineHeight,
         scalesWith: token.scalesWith,
         weight: token.weight,
-      }
-
-      return [variant, fontFamily ? {...base, fontFamily} : {...base, fontWeight: FONT_WEIGHT_VALUES[token.weight]}]
-    })
+      },
+    ])
   ) as Typography
 }
 

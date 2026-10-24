@@ -6,6 +6,7 @@ import android.graphics.Color
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.CubicBezierEasing
+import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.material3.LocalContentColor
@@ -61,6 +62,7 @@ data class AnimatedTextProps(
   val spans: MutableState<List<AnimatedTextSpanRecord>> = mutableStateOf(emptyList()),
   val textColor: MutableState<Color?> = mutableStateOf(null),
   val fontFamily: MutableState<String?> = mutableStateOf(null),
+  val fontFeatureSettings: MutableState<String?> = mutableStateOf(null),
   val fontSize: MutableState<Float?> = mutableStateOf(null),
   val fontWeight: MutableState<TextFontWeight?> = mutableStateOf(null),
   val lineHeight: MutableState<Float?> = mutableStateOf(null),
@@ -75,6 +77,9 @@ data class AnimatedTextProps(
  * Compose `Text` over runs of colour that move to their next colour on a spring or a curve instead of switching: what
  * `Text` with `animate` and spans draws on Android, where `@expo/ui`'s text takes spans but animates none of them. Each
  * run keeps its own animation by position, so a run that changes colour eases there while the rest stay put.
+ *
+ * It is also what `Text` draws with `monospacedDigit` (`fontFeatureSettings` `tnum`), which `@expo/ui`'s text cannot
+ * set. Without an `animation` a colour switches, as it does there.
  */
 @SuppressLint("ViewConstructor")
 class AnimatedTextView(context: Context, appContext: AppContext) :
@@ -87,6 +92,7 @@ class AnimatedTextView(context: Context, appContext: AppContext) :
     val spans by props.spans
     val textColor by props.textColor
     val fontFamily by props.fontFamily
+    val fontFeatureSettings by props.fontFeatureSettings
     val fontSize by props.fontSize
     val fontWeight by props.fontWeight
     val lineHeight by props.lineHeight
@@ -116,6 +122,7 @@ class AnimatedTextView(context: Context, appContext: AppContext) :
       style = TextStyle(
         color = base,
         fontFamily = resolveFontFamily(fontFamily, context),
+        fontFeatureSettings = fontFeatureSettings,
         fontSize = fontSize?.sp ?: TextUnit.Unspecified,
         fontWeight = fontWeight?.toComposeFontWeight(),
         lineHeight = lineHeight?.sp ?: TextUnit.Unspecified,
@@ -136,8 +143,11 @@ class AnimatedTextView(context: Context, appContext: AppContext) :
 }
 
 private fun animationSpec(animation: TextAnimationRecord?): AnimationSpec<androidx.compose.ui.graphics.Color> {
-  if (animation == null || animation.type == "spring") {
-    return spring(dampingRatio = animation?.dampingRatio ?: 1f, stiffness = animation?.stiffness ?: 632f)
+  if (animation == null) {
+    return snap()
+  }
+  if (animation.type == "spring") {
+    return spring(dampingRatio = animation.dampingRatio, stiffness = animation.stiffness)
   }
   val easing = animation.easing?.takeIf { it.size == 4 }?.let { CubicBezierEasing(it[0], it[1], it[2], it[3]) }
   return if (easing != null) {

@@ -16,6 +16,18 @@ export type RnTextProps = Omit<RNTextProps, 'style'> &
     align?: 'center' | 'left' | 'right'
     /** The text's colour. `content.primary` by default. */
     color?: ColorToken
+    /**
+     * Sets it in the theme's fixed-width face, at the variant's size and weight: the app's `fonts.mono`, else Menlo on
+     * iOS and `monospace` on Android, the same face `Text` sets. For code, an order number, anything read character by
+     * character.
+     */
+    monospaced?: boolean
+    /**
+     * Digits of one width, in whatever face the text is set in, so a number that changes does not shift what follows
+     * it and figures line up in a column. React Native's `fontVariant: ['tabular-nums']`; a face without tabular
+     * figures keeps its own.
+     */
+    monospacedDigit?: boolean
     /** Goes last, over the variant and the `sx`: an animated style from `useAnimatedStyle`, which it renders through Reanimated for. */
     style?: StyleProp<AnimatedStyle<TextStyle>>
     /** The typography variant. `body` by default. */

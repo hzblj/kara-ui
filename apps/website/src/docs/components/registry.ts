@@ -458,10 +458,15 @@ export const COMPONENTS: ComponentDoc[] = [
 <Text color="content.secondary">Arrives Friday</Text>`,
     examples: [
       {
-        code: `<Text ios={{animation: {value: count}, contentTransition: {type: 'numericText'}, monospacedDigit: true}}>
+        code: `<Text ios={{animation: {value: count}, contentTransition: {type: 'numericText'}}} monospacedDigit>
   {String(count)}
 </Text>`,
         title: 'A number that rolls to the next',
+      },
+      {
+        code: `<Text monospaced variant="footnote">{trackingNumber}</Text>
+<Text monospacedDigit>{formatPrice(total)}</Text>`,
+        title: 'Code and figures',
       },
     ],
     exports: ['Text'],
@@ -475,6 +480,7 @@ export const COMPONENTS: ComponentDoc[] = [
       'With `numberOfLines`, iOS ends the last line with an ellipsis; Android clips it.',
       'It takes the native `sx` surface: padding, a background, a frame. `wide` puts the text on the side `align` names.',
       'On iOS, `contentTransition` with `animation` rolls a number to its next value; Android shows the new one at once.',
+      '`monospaced` sets it in the theme’s fixed-width face (`fonts.mono`, else Menlo and `monospace`); `monospacedDigit` keeps the face and only gives its digits one width.',
     ],
     renders: {android: 'Compose Text', ios: 'SwiftUI Text'},
     summary: 'Text in the type scale, coloured by token.',
@@ -1177,6 +1183,7 @@ const zoomId = useZoomTransitionParam()
     notes: [
       'The same variants and colours as `Text`, for text outside a native host. It takes every React Native `Text` prop.',
       'And `Box`’s `sx` props for its own box (margins, `flex`, padding), except `align`, which aligns its lines.',
+      '`monospaced` and `monospacedDigit` set the same faces and figures as on `Text`.',
     ],
     renders: {android: 'React Native Text', ios: 'React Native Text'},
     summary: 'React Native text in the type scale.',

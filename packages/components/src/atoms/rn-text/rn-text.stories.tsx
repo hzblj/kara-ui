@@ -14,6 +14,8 @@ const meta = {
       control: 'select',
       options: ['content.primary', 'content.secondary', 'content.tertiary', 'content.accent', 'content.destructive'],
     },
+    monospaced: {control: 'boolean'},
+    monospacedDigit: {control: 'boolean'},
     variant: {control: 'select', options: VARIANTS},
   },
   component: RnText,
@@ -43,3 +45,22 @@ export const Variants: Story = {
 }
 
 export const Truncated: Story = {args: {numberOfLines: 1}}
+
+export const Monospaced: Story = {
+  parameters: {
+    notes:
+      '`monospaced` sets the same fixed-width face as `Text`; `monospacedDigit` is React Native’s ' +
+      "`fontVariant: ['tabular-nums']`, in whatever face the text has.",
+  },
+  render: () => (
+    <Box gap="s12">
+      <RnText monospaced variant="footnote">
+        npx expo install @hzblj/kara-ui
+      </RnText>
+      <Box gap="s2">
+        <RnText monospacedDigit>£1,118.40</RnText>
+        <RnText monospacedDigit>£911.11</RnText>
+      </Box>
+    </Box>
+  ),
+}

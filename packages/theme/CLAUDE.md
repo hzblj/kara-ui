@@ -106,6 +106,13 @@ face (SF Pro / Roboto); with `fonts`, the face registered for that role and weig
 role's `regular`, and `display` to `text`), and no `fontWeight`, because the face *is* the weight.
 Components read `theme.typography`, never `textStyles` — the latter is the unresolved scale.
 
+**`mono` is a role of its own, and never falls back to `text`.** `theme.monoTypography` is every variant at its own
+size and weight in the fixed-width face, what a `monospaced` text reads: the app's `fonts.mono`, else the platform's.
+On iOS that is Menlo by face (`Menlo-Regular`, `Menlo-Bold`), not SF Mono: SF Mono has no name an app can ask for, and
+React Native asks by name only, so SwiftUI would set one face and `RnText` another. Android's is the `monospace` family
+with a numeric weight, the one place `fontFamily` and `fontWeight` are both set. Tabular figures are not a face:
+`monospacedDigit` keeps the text's own and asks it for `tnum`.
+
 **A text variant sets its size *and* the axis it grows on.** `scalesWith` names the platform text style a
 variant scales with — it does not set the size, ours stays exact; it picks the *rate*. An app face scales
 through `Font.custom(_:size:relativeTo:)`; the platform face through the package's own `scaledFont` SwiftUI

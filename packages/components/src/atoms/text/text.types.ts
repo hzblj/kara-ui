@@ -11,7 +11,8 @@ export type TextTransform = 'lowercase' | 'uppercase'
 /**
  * SwiftUI `Text` / Compose `Text` in a theme typography variant. A native atom: outside a host, use `RnText`. It takes
  * the native `sx` surface too: padding, a frame (`wide` lines it up by `align`), a background, and the `ios` bucket's
- * `contentTransition`, `animation` and `monospacedDigit` for a number that changes in place.
+ * `contentTransition` and `animation` for a number that changes in place (with `monospacedDigit`, so it does not move
+ * what follows it).
  *
  * Nested `Text` children are spans: runs of the same text in a colour of their own, one paragraph that wraps as one.
  * With `animate`, a colour that changes (the text's or a span's) eases to its new value instead of switching: a word lit
@@ -35,6 +36,17 @@ export type TextProps = ResponsiveSx &
     decoration?: TextDecoration
     /** The most lines it wraps to. iOS truncates the last with an ellipsis; Android clips it. */
     numberOfLines?: number
+    /**
+     * Sets it in the theme's fixed-width face, at the variant's size and weight: the app's `fonts.mono`, else Menlo on
+     * iOS and `monospace` on Android. For code, an order number, anything read character by character.
+     */
+    monospaced?: boolean
+    /**
+     * Digits of one width, in whatever face the text is set in, so a number that changes does not shift what follows
+     * it and figures line up in a column. Asks the face for its tabular figures (`tnum`); a face without them keeps
+     * its own.
+     */
+    monospacedDigit?: boolean
     /** Test identifier, forwarded to the native view. */
     testID?: string
     /** Upper- or lower-cases the text. Android applies it only when `children` is a plain string. */

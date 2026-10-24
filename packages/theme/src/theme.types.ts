@@ -122,6 +122,11 @@ export type Theme = AuthoredTheme & {
    * palette's Material roles come from one scheme.
    */
   materialSeed: string | undefined
+  /**
+   * Every text variant at its own size and weight in the fixed-width face: the app's `fonts.mono`, else the platform's
+   * (Menlo on iOS, `monospace` on Android). What a `monospaced` text is set in.
+   */
+  monoTypography: Typography
   /** The palette this theme resolves: the default with the app's overrides applied. */
   palette: Palette
   /** What `color` defers to for an entry the platform owns or adapts. */

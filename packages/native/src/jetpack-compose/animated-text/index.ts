@@ -18,8 +18,11 @@ export type TextAnimation =
   | {type: 'tween'; delayMillis?: number; durationMillis: number; easing?: readonly [number, number, number, number]}
 
 export type AnimatedTextProps = {
+  /** How a colour moves to its next value. Without one it switches. */
   animation?: TextAnimation
   fontFamily?: string
+  /** OpenType features, CSS-style: `tnum` for digits of one width. */
+  fontFeatureSettings?: string
   fontSize?: number
   fontWeight?: string
   lineHeight?: number
@@ -33,6 +36,7 @@ export type AnimatedTextProps = {
 
 /**
  * Compose `Text` over runs of colour that ease to their next colour instead of switching: what `Text` draws with
- * `animate` and spans on Android. Inside a Compose host.
+ * `animate` and spans on Android, and with `monospacedDigit`, which `@expo/ui`'s text has no font features for. Inside
+ * a Compose host.
  */
 export const AnimatedText = requireKaraView<AnimatedTextProps>('AnimatedTextView')

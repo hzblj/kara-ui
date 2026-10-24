@@ -1,10 +1,12 @@
-import {Box, Island, RnText, Text, type TextVariant, textStyles, VStack} from '@hzblj/kara-ui'
+import {Box, HStack, Island, RnText, Text, type TextVariant, textStyles, VStack} from '@hzblj/kara-ui'
 
 import {Section} from '../../ui'
 
 const VARIANTS = Object.keys(textStyles) as TextVariant[]
 
 const SAMPLE = 'The quick brown fox'
+
+const PRICES = ['£1,118.40', '£911.11', '£74.00']
 
 const PAIRS = [
   ['footnote', 'footnoteMedium'],
@@ -51,6 +53,51 @@ export const TypographyPage = () => (
             ))}
           </Box>
         ))}
+      </Box>
+    </Section>
+    <Section
+      caption="monospaced sets the theme’s fixed-width face (yours, or Menlo and Android’s monospace) at the variant’s size. monospacedDigit keeps the face and gives its digits one width, so figures line up."
+      title="Monospaced"
+    >
+      <Box bg="surface.primary" borderRadius="large" gap="s12" p="s16">
+        <Island>
+          <VStack align="start" spacing="s8" wide>
+            <Text monospaced variant="footnote">
+              npx expo install @hzblj/kara-ui
+            </Text>
+            <HStack spacing="s24">
+              <VStack align="end" spacing="s2">
+                {PRICES.map(price => (
+                  <Text key={price}>{price}</Text>
+                ))}
+              </VStack>
+              <VStack align="end" spacing="s2">
+                {PRICES.map(price => (
+                  <Text key={price} monospacedDigit>
+                    {price}
+                  </Text>
+                ))}
+              </VStack>
+            </HStack>
+          </VStack>
+        </Island>
+        <RnText monospaced variant="footnote">
+          npx expo install @hzblj/kara-ui
+        </RnText>
+        <Box gap="s24" row>
+          <Box align="flex-end" gap="s2">
+            {PRICES.map(price => (
+              <RnText key={price}>{price}</RnText>
+            ))}
+          </Box>
+          <Box align="flex-end" gap="s2">
+            {PRICES.map(price => (
+              <RnText key={price} monospacedDigit>
+                {price}
+              </RnText>
+            ))}
+          </Box>
+        </Box>
       </Box>
     </Section>
   </>

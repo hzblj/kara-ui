@@ -33,6 +33,15 @@ const MAX_TEXT_STYLES = 512
 
 const textStyles = new Map<string, TextStyle>()
 
+/** Digits of one width: React Native asks the face for its tabular figures. */
+const TABULAR_NUMS: TextStyle['fontVariant'] = ['tabular-nums']
+
+/** What the text half of the style is built from. */
+type TextLook = Pick<RnTextProps, 'align' | 'monospaced' | 'monospacedDigit'> & {
+  color: ColorToken
+  variant: TextVariant
+}
+
 /**
  * The variant at the user's text size, in its colour. React Native scales `fontSize` for the user's setting but leaves
  * `lineHeight` alone, so a grown glyph ends up in an ungrown line and clips. Scaling it here by the same factor keeps
@@ -44,12 +53,10 @@ const textStyles = new Map<string, TextStyle>()
  */
 const textStyle = (
   theme: Theme,
-  variant: TextVariant,
-  color: ColorToken,
-  align: RnTextProps['align'],
-  fontScale: number
+  fontScale: number,
+  {align, color, monospaced = false, monospacedDigit = false, variant}: TextLook
 ): TextStyle => {
-  const key = `${themeKey(theme)}|${variant}|${color}|${align}|${fontScale}`
+  const key = `${themeKey(theme)}|${variant}|${color}|${align}|${fontScale}|${monospaced}|${monospacedDigit}`
   const existing = textStyles.get(key)
 
   if (existing) {
@@ -60,7 +67,7 @@ const textStyle = (
     textStyles.clear()
   }
 
-  const typography = theme.typography[variant]
+  const typography = (monospaced ? theme.monoTypography : theme.typography)[variant]
   const style: TextStyle = {
     ...typography,
     color: theme.color(color),
@@ -71,19 +78,23 @@ const textStyle = (
     style.textAlign = align
   }
 
+  if (monospacedDigit) {
+    style.fontVariant = TABULAR_NUMS
+  }
+
   textStyles.set(key, style)
 
   return style
 }
 
 export const RnText: RnTextComponent = markMotionComponent(
-  ({align, color = 'content.primary', style, variant = 'body', ...props}: RnTextProps) => {
+  ({align, color = 'content.primary', monospaced, monospacedDigit, style, variant = 'body', ...props}: RnTextProps) => {
     const theme = useAppTheme()
     const fontScale = useFontScale()
     // A view style, which a text accepts whole — only React Native's types disagree, on `userSelect`'s width.
     const [sx, motion, rest] = useSplitSxMotion(props) as [TextStyle, SxMotion, Record<string, unknown>]
     const animated = useAnimatedLatch(motion.animated || isAnimatedStyle(style), 'RnText')
-    const text = textStyle(theme, variant, color, align, fontScale)
+    const text = textStyle(theme, fontScale, {align, color, monospaced, monospacedDigit, variant})
 
     if (!animated) {
       return (

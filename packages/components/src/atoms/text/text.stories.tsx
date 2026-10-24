@@ -26,6 +26,8 @@ const meta = {
       ],
     },
     decoration: {control: 'radio', options: ['none', 'underline', 'strikethrough']},
+    monospaced: {control: 'boolean'},
+    monospacedDigit: {control: 'boolean'},
     transform: {control: 'radio', options: ['uppercase', 'lowercase']},
     variant: {control: 'select', options: VARIANTS},
   },
@@ -93,6 +95,30 @@ export const TransformAndDecoration: Story = {
 
 export const Truncated: Story = {
   args: {numberOfLines: 1},
+}
+
+export const Monospaced: Story = {
+  parameters: {
+    notes:
+      '`monospaced` sets the theme’s fixed-width face (`fonts.mono`, else Menlo on iOS and `monospace` on Android) at ' +
+      'the variant’s size. `monospacedDigit` keeps the face and gives its digits one width, so the prices line up. ' +
+      'Android draws a `monospacedDigit` text with kara’s own Compose text, since `@expo/ui`’s sets no font features.',
+  },
+  render: () => (
+    <VStack align="start" spacing="s12" wide>
+      <Text monospaced variant="footnote">
+        npx expo install @hzblj/kara-ui
+      </Text>
+      <VStack align="start" spacing="s2">
+        <Text>£1,118.40 proportional</Text>
+        <Text>£911.11 proportional</Text>
+      </VStack>
+      <VStack align="start" spacing="s2">
+        <Text monospacedDigit>£1,118.40 tabular</Text>
+        <Text monospacedDigit>£911.11 tabular</Text>
+      </VStack>
+    </VStack>
+  ),
 }
 
 export const Spans: Story = {
