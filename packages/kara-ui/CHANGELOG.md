@@ -1,5 +1,19 @@
 # @hzblj/kara-ui
 
+## 0.15.1
+
+### Patch Changes
+
+- [`5d585b5`](https://github.com/hzblj/kara-ui/commit/5d585b51f56d590e6417d8bad94ed192fdb49e39) Thanks [@hzblj](https://github.com/hzblj)! - Every package ships the MIT LICENSE, which its tarball was missing.
+
+- Updated dependencies []:
+  - @hzblj/kara-theme@0.15.1
+  - @hzblj/kara-sx@0.15.1
+  - @hzblj/kara-native@0.15.1
+  - @hzblj/kara-components@0.15.1
+  - @hzblj/kara-router@0.15.1
+  - @hzblj/kara-expo-plugin@0.15.1
+
 ## 0.15.0
 
 ### Minor Changes

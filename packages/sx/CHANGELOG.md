@@ -1,5 +1,13 @@
 # @hzblj/kara-sx
 
+## 0.15.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @hzblj/kara-theme@0.15.1
+  - @hzblj/kara-native@0.15.1
+
 ## 0.15.0
 
 ### Minor Changes
