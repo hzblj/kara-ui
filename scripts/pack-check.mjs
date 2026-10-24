@@ -23,7 +23,7 @@ const fail = message => {
 }
 
 /** Every tarball. Source maps ship with `lib/`, so the TypeScript they point at ships too. */
-const COMMON_REQUIRED = ['package.json', 'README.md']
+const COMMON_REQUIRED = ['package.json', 'README.md', 'LICENSE']
 
 const LIBRARY_REQUIRED = ['lib/module/index.js', 'lib/typescript/index.d.ts']
 
