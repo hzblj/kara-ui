@@ -25,12 +25,14 @@ export const SegmentedControl: SegmentedControlComponent = ({
 }: SegmentedControlProps) => {
   const theme = useAppTheme()
 
+  // Every segment keeps the same outline, the selected one too: an accent border would run its fill out over the line
+  // the others draw inside, and make it look taller than its neighbours.
   const colors = useMemo(
     () => ({
-      activeBorderColor: theme.color('fill.accent.primary'),
+      activeBorderColor: theme.color('border.secondary.base'),
       activeContainerColor: theme.color('fill.accent.primary'),
       activeContentColor: theme.color('content.on.accent'),
-      disabledActiveBorderColor: theme.color('fill.accent.disabled'),
+      disabledActiveBorderColor: theme.color('border.tertiary'),
       disabledActiveContainerColor: theme.color('fill.accent.disabled'),
       disabledActiveContentColor: theme.color('btn.content.disabled'),
       disabledInactiveBorderColor: theme.color('border.tertiary'),
