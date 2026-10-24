@@ -1,6 +1,6 @@
 {
   "name": "@hzblj/kara-expo-plugin",
-  "version": "0.13.2",
+  "version": "0.14.0",
   "description": "The Expo config plugin and tooling of @hzblj/kara-ui: the app's SVG icons as native assets on iOS and Android (through @hzblj/expo-native-icons), and UIKit semantic colour overrides.",
   "author": "Jan Blazej",
   "license": "MIT",

@@ -1,5 +1,21 @@
 # @hzblj/kara-ui
 
+## 0.14.0
+
+### Minor Changes
+
+- [#38](https://github.com/hzblj/kara-ui/pull/38) [`40ddb25`](https://github.com/hzblj/kara-ui/commit/40ddb254b85e95c4e86d79f5ce71c3c004598a59) Thanks [@hzblj](https://github.com/hzblj)! - `Text` takes spans and eases their colours. Nested `Text` children are runs of one paragraph, each in a `color` of its own (`<Text>Box, box. <Text color="content.accent">Box this lap</Text></Text>`), and with `animate` a colour that changes, the text's or a span's, eases to its new value on the motion tokens instead of switching: a word lit as it is said, a phrase brought forward. SwiftUI interpolates the text; on Android each span animates its colour natively. Colours keep easing with Reduce Motion on. Rebuild the native app.
+
+### Patch Changes
+
+- Updated dependencies [[`40ddb25`](https://github.com/hzblj/kara-ui/commit/40ddb254b85e95c4e86d79f5ce71c3c004598a59)]:
+  - @hzblj/kara-components@0.14.0
+  - @hzblj/kara-native@0.14.0
+  - @hzblj/kara-sx@0.14.0
+  - @hzblj/kara-router@0.14.0
+  - @hzblj/kara-theme@0.14.0
+  - @hzblj/kara-expo-plugin@0.14.0
+
 ## 0.13.2
 
 ### Patch Changes
