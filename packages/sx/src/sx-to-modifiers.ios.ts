@@ -48,8 +48,8 @@ import {
   zIndex,
 } from '@hzblj/kara-theme'
 import type {ColorValue} from 'react-native'
-import type {SxAnimateConfig} from './motion.types'
-import {animatedValue, nativeAnimate} from './native-animate'
+import type {SxAnimate, SxAnimateConfig} from './motion.types'
+import {animateConfig, animatedValue, nativeAnimate} from './native-animate'
 import type {FrameAlignment, IosSx, Sx} from './sx.types'
 import {sxPadding} from './sx-padding'
 
@@ -352,6 +352,15 @@ const animateModifier = (sx: Sx, reduced: boolean): ModifierConfig | undefined =
 
   return animation(swiftAnimation(native.config), animatedValue(sx, native.keys))
 }
+
+/**
+ * `animate` on a text's colours: SwiftUI interpolates the text (`.contentTransition(.interpolate)`) whenever `key`
+ * changes, on the same timing `animate` gives the rest. `key` folds the colours and the text into a number.
+ */
+export const textColorTransition = (animate: SxAnimate | undefined, key: number): ModifierConfig[] =>
+  animate === undefined || animate === false
+    ? []
+    : [contentTransition('interpolate'), animation(swiftAnimation(animateConfig(animate)), key)]
 
 export const sxToModifiers = (
   sx: Sx,

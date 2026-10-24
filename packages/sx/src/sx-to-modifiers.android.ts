@@ -42,7 +42,7 @@ import {
   zIndex,
 } from '@hzblj/kara-theme'
 import type {ColorValue} from 'react-native'
-import type {AnimatableKey, SxAnimateConfig} from './motion.types'
+import type {AnimatableKey, SxAnimate, SxAnimateConfig} from './motion.types'
 import {type NativeAnimate, nativeAnimate} from './native-animate'
 import type {AndroidSx, FrameAlignment, Sx} from './sx.types'
 import {sxPadding} from './sx-padding'
@@ -226,6 +226,12 @@ const androidModifiers = (android: AndroidSx | undefined): ModifierConfig[] => {
 
   return modifiers
 }
+
+/**
+ * `animate` on a text's colours: nothing for Compose's own text, which interpolates no text. `Text` in
+ * `@hzblj/kara-components` draws an animated text natively instead (`AnimatedText`, `@hzblj/kara-native`).
+ */
+export const textColorTransition = (_animate: SxAnimate | undefined, _key: number): ModifierConfig[] => []
 
 export const sxToModifiers = (
   sx: Sx,

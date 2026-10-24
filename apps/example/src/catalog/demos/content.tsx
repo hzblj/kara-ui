@@ -23,12 +23,37 @@ import {
   Text,
   VStack,
 } from '@hzblj/kara-ui'
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 
 import {InsetDivider, Section} from '../../ui'
 import type {CatalogEntry} from '../catalog.types'
 import {PHOTOS} from '../zoom/photos'
 import {KARA_MODULE, NATIVE, REACT_NATIVE} from './tags'
+
+const KARAOKE = 'Box box, box this lap. We are going to plan B, the tyres are gone.'.split(' ')
+
+/** A sentence lit word by word, as a transcript is while its audio plays: each span eases to its colour. */
+const Karaoke = () => {
+  const [index, setIndex] = useState(0)
+
+  useEffect(() => {
+    const timer = setInterval(() => setIndex(current => (current + 1) % (KARAOKE.length + 1)), 420)
+    return () => clearInterval(timer)
+  }, [])
+
+  return (
+    <Text animate color="content.tertiary" variant="headline">
+      {KARAOKE.map((word, position) => (
+        <Text
+          color={position < index ? 'content.primary' : position === index ? 'content.accent' : 'content.tertiary'}
+          key={word + String(position)}
+        >
+          {`${word} `}
+        </Text>
+      ))}
+    </Text>
+  )
+}
 
 const TextDemo = () => (
   <>
@@ -54,6 +79,19 @@ const TextDemo = () => (
           <Text decoration="underline">Underlined</Text>
           <Text decoration="strikethrough">Struck through</Text>
           <Text numberOfLines={1}>A long line that is cut to one line, however much text it is given to show.</Text>
+        </VStack>
+      </Island>
+    </Section>
+    <Section
+      caption="Nested Text are spans: one paragraph, a colour each. With animate, a span that changes colour eases there."
+      title="Spans"
+    >
+      <Island>
+        <VStack align="start" bg="surface.primary" borderRadius="large" p="s16" spacing="s12" wide>
+          <Text>
+            Box, box. <Text color="content.accent">Box this lap</Text>, plan B.
+          </Text>
+          <Karaoke />
         </VStack>
       </Island>
     </Section>

@@ -143,6 +143,17 @@ moment. Both helpers pass `ReduceMotion.Never`, because the component has honour
 `layout` and `motion.style` to its Reanimated view, latches with `useAnimatedLatch` unless it is always animated, and
 marks itself with `markMotionComponent` so `Stagger` hands it the props instead of wrapping it.
 
+**`Text` spans are nested `Text`, and `animate` eases their colours.** `spansOf` (`atoms/text/spans.ts`) reads the
+children: strings and nested `Text` become runs, a span keeping only its `color`. iOS renders them as `@expo/ui` Text
+children, which SwiftUI concatenates into one `Text`; with `animate`, `textColorTransition` (`@hzblj/kara-sx`) adds
+`.contentTransition(.interpolate)` and `.animation(value:)` keyed on the colours and the text (`spansKey`), so SwiftUI
+interpolates a colour that changes. Android renders them as `@expo/ui` Text spans, which animate nothing; with
+`animate` it renders kara-native's `AnimatedText` instead, a Compose `Text` whose spans each run `animateColorAsState`
+on the same timing (`smoothOut` a no-bounce spring over its duration, a spring token's physics, the other curves as
+tweens along their béziers). Colours keep easing with Reduce Motion on, as `animate`'s colours do everywhere. A span
+keeps its animation by position, so give a karaoke one span per word: regrouping words into runs would hand a run's
+animation to different words.
+
 **`RnText` takes 0.01 pt off every line on iOS** (`LINE_HEIGHT_SLACK`). React Native draws a paragraph into the frame
 Yoga rounded, which can come back a hair short of the exact height of fixed-height lines, and the last line vanished.
 
