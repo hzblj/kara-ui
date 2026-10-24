@@ -12,7 +12,7 @@ import expo.modules.kotlin.records.recordFromMap
 import expo.modules.ui.ModifierRegistry
 import expo.modules.ui.composeOrNull
 
-internal const val UNDERLINE_MODIFIER = "underline"
+private const val UNDERLINE_MODIFIER = "underline"
 
 data class UnderlineParams(
   @Field val color: Color? = null,

@@ -7,30 +7,22 @@ import expo.modules.kara.ui.fab.ToggleFloatingActionButtonView
 import expo.modules.kara.ui.blur.BackdropBlurView
 import expo.modules.kara.ui.colorpicker.ColorWellView
 import expo.modules.kara.ui.icon.DrawableIconView
-import expo.modules.kara.ui.modifiers.ACCESSIBILITY_MODIFIER
-import expo.modules.kara.ui.modifiers.UNDERLINE_MODIFIER
-import expo.modules.kara.ui.modifiers.registerAccessibilityModifier
-import expo.modules.kara.ui.modifiers.registerUnderlineModifier
+import expo.modules.kara.ui.modifiers.ModifierRegistration
 import expo.modules.kara.ui.ripple.RippleConfigurationView
 import expo.modules.kara.ui.swipe.SwipeActionsBoxView
 import expo.modules.kara.ui.tooltip.TooltipBoxView
 import expo.modules.kara.ui.topappbar.TopAppBarView
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
-import expo.modules.ui.ModifierRegistry
 
 class KaraUIModule : Module() {
   override fun definition() = ModuleDefinition {
     Name("KaraUI")
 
+    // Runs once per runtime, and runtimes can overlap: the modifiers register once per process, thread-safely, and
+    // nothing is undone in `OnDestroy`, which would take them from another live runtime (see `ModifierRegistration`).
     OnCreate {
-      registerAccessibilityModifier()
-      registerUnderlineModifier()
-    }
-
-    OnDestroy {
-      ModifierRegistry.unregister(ACCESSIBILITY_MODIFIER)
-      ModifierRegistry.unregister(UNDERLINE_MODIFIER)
+      ModifierRegistration.install()
     }
 
     // Each compose view is its own ExpoComposeView subclass — not a `ComposeFunctionHolder`.
