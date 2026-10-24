@@ -1,5 +1,19 @@
 # @hzblj/kara-ui
 
+## 0.13.2
+
+### Patch Changes
+
+- [#36](https://github.com/hzblj/kara-ui/pull/36) [`cef8ad3`](https://github.com/hzblj/kara-ui/commit/cef8ad3f70d2dbf598c31a91bc524dde8f85a761) Thanks [@hzblj](https://github.com/hzblj)! - Fixed a crash at launch on iOS when two React runtimes start at the same time, as when a dev client is opened through its deep link while it launches, or the app reloads during startup. Each runtime registered kara's native modifiers into `@expo/ui`'s shared registry, and two registering at once corrupted it. On both platforms the modifiers are now registered once per process, whichever runtime comes first, and a reload no longer registers them again. On Android, a runtime that goes away no longer unregisters `underline` and the accessibility modifier while another runtime still uses them. Rebuild the native app.
+
+- Updated dependencies [[`cef8ad3`](https://github.com/hzblj/kara-ui/commit/cef8ad3f70d2dbf598c31a91bc524dde8f85a761)]:
+  - @hzblj/kara-native@0.13.2
+  - @hzblj/kara-theme@0.13.2
+  - @hzblj/kara-sx@0.13.2
+  - @hzblj/kara-components@0.13.2
+  - @hzblj/kara-router@0.13.2
+  - @hzblj/kara-expo-plugin@0.13.2
+
 ## 0.13.1
 
 ### Patch Changes
