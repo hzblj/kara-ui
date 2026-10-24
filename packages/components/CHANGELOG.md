@@ -1,5 +1,16 @@
 # @hzblj/kara-components
 
+## 0.13.1
+
+### Patch Changes
+
+- [#34](https://github.com/hzblj/kara-ui/pull/34) [`3691a12`](https://github.com/hzblj/kara-ui/commit/3691a1255908dd1c8f1cb4d2bd5ce8f679e95a81) Thanks [@hzblj](https://github.com/hzblj)! - `SegmentedControl` on Android draws one outline around every segment, the selected one too. Its accent border used to run the fill out over the line the other segments draw inside, so the selected segment looked taller than its neighbours.
+
+- Updated dependencies []:
+  - @hzblj/kara-theme@0.13.1
+  - @hzblj/kara-sx@0.13.1
+  - @hzblj/kara-native@0.13.1
+
 ## 0.13.0
 
 ### Minor Changes
