@@ -65,6 +65,10 @@ are plain React Native views with the same `sx` props.
 - [Components](https://www.kara.janblazej.dev/docs/components): the whole catalogue
 - [Changelog](https://www.kara.janblazej.dev/docs/changelog)
 
+## More libraries
+
+The other libraries from the same author are at **[libraries.janblazej.dev](https://www.libraries.janblazej.dev)**.
+
 ## Sponsorship
 
 <a href="https://www.buymeacoffee.com/hzblj"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me a Coffee" height="48"></a>
