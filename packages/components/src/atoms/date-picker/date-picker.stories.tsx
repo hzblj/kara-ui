@@ -2,7 +2,11 @@ import type {Meta, StoryObj} from '@storybook/react-native'
 import {useArgs} from 'storybook/preview-api'
 
 import {Box} from '../box'
+import {HStack} from '../h-stack'
+import {Island} from '../island'
 import {RnText} from '../rn-text'
+import {Spacer} from '../spacer'
+import {Text} from '../text'
 import {DatePicker} from './date-picker'
 import type {DatePickerProps} from './date-picker.types'
 
@@ -18,6 +22,20 @@ const ControlledDatePicker = (args: DatePickerProps) => {
         {args.value.toISOString()}
       </RnText>
     </Box>
+  )
+}
+
+const DatePickerInIsland = (args: DatePickerProps) => {
+  const [, updateArgs] = useArgs<DatePickerProps>()
+
+  return (
+    <Island>
+      <HStack align="center" spacing="s12">
+        <Text>Delivery date</Text>
+        <Spacer />
+        <DatePicker {...args} onValueChange={value => updateArgs({value})} />
+      </HStack>
+    </Island>
   )
 }
 
@@ -41,4 +59,14 @@ export const DateTime: Story = {args: {mode: 'datetime'}}
 
 export const Bounded: Story = {
   args: {max: new Date(2027, 11, 31), min: new Date(2027, 0, 1), mode: 'date'},
+}
+
+export const InsideAnIsland: Story = {
+  args: {mode: 'date'},
+  parameters: {
+    notes:
+      'On its own the picker brings a host of its own. Inside a `Screen` or `Island` it joins that host instead, so ' +
+      'it sits in a native stack beside a native `Text` label.',
+  },
+  render: DatePickerInIsland,
 }

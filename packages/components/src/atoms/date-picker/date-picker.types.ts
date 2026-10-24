@@ -5,7 +5,7 @@ export type DatePickerMode = 'date' | 'datetime' | 'time'
 /**
  * A date or time picker: SwiftUI's compact `DatePicker` on iOS, a field that opens Material's picker dialog on a tap
  * on Android. The React Native tier: it brings its own host and sizes itself to the value, so it sits in a row beside
- * its label like a `Text`.
+ * its label like a `Text`. Inside a `Screen` or `Island` it joins that host instead, beside a native `Text` label.
  */
 export type DatePickerProps = {
   /** The latest date that can be picked. Android ignores it in `time` mode. */

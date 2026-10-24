@@ -1,7 +1,10 @@
 import {DateTimePicker} from '@expo/ui/community/datetime-picker'
+import {RNHostView} from '@expo/ui/jetpack-compose'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useCallback, useState} from 'react'
 
+import {useInsideHost} from '../../host-context'
+import {Box} from '../box'
 import {Pressable} from '../pressable'
 import {RnText} from '../rn-text'
 import type {DatePickerComponent, DatePickerMode, DatePickerProps} from './date-picker.types'
@@ -21,6 +24,8 @@ const formatted = (value: Date, mode: DatePickerMode): string => {
 /**
  * The value as a field that opens Material's date picker dialog on a tap. Android's picker *is* a dialog — mounted, it
  * opens — so it is mounted only while open, and unmounted on confirm or dismiss, as the component asks its caller to.
+ * Both are React Native views; inside a `Screen` or `Island` `RNHostView` carries them into that host, sized to the
+ * field (see `useInsideHost`).
  */
 export const DatePicker: DatePickerComponent = ({
   max,
@@ -31,6 +36,7 @@ export const DatePicker: DatePickerComponent = ({
   value,
 }: DatePickerProps) => {
   const theme = useAppTheme()
+  const insideHost = useInsideHost()
   const [open, setOpen] = useState(false)
 
   const show = useCallback(() => setOpen(true), [])
@@ -44,7 +50,7 @@ export const DatePicker: DatePickerComponent = ({
     [onValueChange]
   )
 
-  return (
+  const field = (
     <>
       <Pressable
         alignSelf="flex-start"
@@ -70,5 +76,13 @@ export const DatePicker: DatePickerComponent = ({
         />
       ) : null}
     </>
+  )
+
+  return insideHost ? (
+    <RNHostView matchContents>
+      <Box>{field}</Box>
+    </RNHostView>
+  ) : (
+    field
   )
 }

@@ -58,6 +58,14 @@ const ActivityIndicatorDemo = () => (
         <ActivityIndicator size="large" />
       </Box>
     </Section>
+    <Section caption="Inside an island it joins the island’s stack, beside native text." title="In an island">
+      <Island>
+        <HStack align="center" spacing="s12">
+          <ActivityIndicator />
+          <Text color="content.secondary">Loading your orders…</Text>
+        </HStack>
+      </Island>
+    </Section>
   </>
 )
 
