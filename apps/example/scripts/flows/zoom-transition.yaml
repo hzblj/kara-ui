@@ -1,11 +1,12 @@
-# On the catalogue's ZoomTransition page: the still is the grid, the recording a photo growing into its page and
-# shrinking back — dragged down on iOS, the back gesture on Android.
+# On the catalogue's ZoomTransition page as the website records it (`?shot=1`: the title in words, the photos alone):
+# the still is the grid, the recording Look 02 growing into its page and shrinking back — dragged down on iOS, the back
+# gesture on Android.
 appId: com.hzblj.karaui.example
 ---
 - takeScreenshot: ${STILL}
 - startRecording: ${VIDEO}
 - runFlow: {file: pause.yaml, env: {MS: 900}}
-- tapOn: {point: '73%,52%'}
+- tapOn: {point: '73%,30%'}
 - runFlow: {file: pause.yaml, env: {MS: 1200}}
 - runFlow:
     when: {platform: iOS}
