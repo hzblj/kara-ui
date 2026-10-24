@@ -17,6 +17,10 @@ import UIKit
  when it moves `layer.opacity` across 0.01, the change is replayed through `alpha` (the old opacity back on the layer,
  then `alpha` to the new value), so UIKit updates the record and notifies the subtree. Other changes pass untouched.
  It is runtime method replacement rather than a patch so it also works with the prebuilt React Native core.
+
+ The replacement happens once per process, in a `static let` (`swift_once`): every React runtime runs the module's
+ `OnCreate`, sometimes two at the same time, and a second wrap would wrap the first (every change replayed twice) or,
+ racing it, capture the other's half-installed implementation.
  */
 enum OpacityVisibilitySync {
   private static let hiddenOpacity: Float = 0.01

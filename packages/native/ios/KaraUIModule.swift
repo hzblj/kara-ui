@@ -17,11 +17,11 @@ public class KaraUIModule: Module {
       SystemColors.hex(names, dark: dark)
     }
 
+    // Runs once per runtime, and runtimes can start concurrently: both install once per process, thread-safely, and
+    // nothing is undone in `OnDestroy` (see `ModifierRegistration`).
     OnCreate {
       OpacityVisibilitySync.install()
-      CounterBadgeModifier.register()
-      ScaledFontModifier.register()
-      UnderlineModifier.register()
+      ModifierRegistration.install()
     }
 
     BlurView.definition()
