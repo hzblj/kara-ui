@@ -4,6 +4,8 @@ export const PACKAGE_NAME = '@hzblj/kara-ui'
 export const REPOSITORY_URL = 'https://github.com/hzblj/kara-ui'
 export const NPM_URL = 'https://www.npmjs.com/package/@hzblj/kara-ui'
 export const COFFEE_URL = 'https://www.buymeacoffee.com/hzblj'
+/** The author's other Expo libraries, kara among them. */
+export const LIBRARIES_URL = 'https://www.libraries.janblazej.dev'
 
 export const HERO_HEADLINE = 'Native UI for Expo'
 /** The landing page's one line under the headline; `HERO_LEDE` is the longer version, for search and link previews. */

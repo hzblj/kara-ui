@@ -1,3 +1,4 @@
+import {LIBRARIES_URL} from '../../site'
 import {CodeBlock} from '../../ui/code-block'
 import {COMPONENTS} from '../components/registry'
 import type {Guide} from './guide'
@@ -117,6 +118,12 @@ export const introduction: Guide = {
           ]}
         />
       </Section>
+
+      <Section id="more-libraries" title="More libraries">
+        <P>
+          {`kara is one of a set of native libraries for Expo: haptics, native icons, app icons, a zoom transition, speech and more, each with an example app built with kara. You find them all at [libraries.janblazej.dev](${LIBRARIES_URL}).`}
+        </P>
+      </Section>
     </>
   ),
   headings: [
@@ -124,6 +131,7 @@ export const introduction: Guide = {
     {id: 'first-screen', label: 'A first screen'},
     {id: 'tiers', label: 'Two tiers'},
     {id: 'next', label: 'Next'},
+    {id: 'more-libraries', label: 'More libraries'},
   ],
   id: 'introduction',
 }
