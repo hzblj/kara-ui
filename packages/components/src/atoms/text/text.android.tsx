@@ -63,6 +63,8 @@ export const Text: TextComponent = ({
   children,
   color = 'content.primary',
   decoration,
+  monospaced,
+  monospacedDigit,
   numberOfLines,
   testID,
   transform,
@@ -71,7 +73,7 @@ export const Text: TextComponent = ({
 }: TextProps) => {
   useHostGuard('Text')
   const theme = useAppTheme()
-  const style = theme.typography[variant]
+  const style = (monospaced ? theme.monoTypography : theme.typography)[variant]
   const [accessibility, sx] = splitAccessibility(props)
   const sxModifiers = useSxModifiers(sx)
   const accessibilityModifiers = useAccessibilityModifiers(accessibility)
@@ -80,16 +82,18 @@ export const Text: TextComponent = ({
     [accessibilityModifiers, sxModifiers, testID]
   )
   const spans = useMemo(() => spansOf(children, Text), [children])
-  const animate = sx.animate
+  const animate = sx.animate === false ? undefined : sx.animate
 
-  // `@expo/ui`'s text takes spans but animates none: with `animate`, kara's own Compose text eases each span's colour.
-  if (animate !== undefined && animate !== false) {
+  // `@expo/ui`'s text takes spans but animates none, and sets no font features: with `animate`, kara's own Compose text
+  // eases each span's colour, and with `monospacedDigit` asks the face for its tabular figures.
+  if (animate !== undefined || monospacedDigit) {
     const runs = spans ?? [{text: typeof children === 'string' || typeof children === 'number' ? String(children) : ''}]
 
     return (
       <AnimatedText
-        animation={textAnimation(animateConfig(animate))}
+        animation={animate === undefined ? undefined : textAnimation(animateConfig(animate))}
         fontFamily={style.fontFamily}
+        fontFeatureSettings={monospacedDigit ? 'tnum' : undefined}
         fontSize={style.fontSize}
         fontWeight={style.fontWeight}
         lineHeight={style.lineHeight}

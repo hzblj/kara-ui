@@ -40,9 +40,13 @@ adaptive({dark: '#171717', light: '#ffffff'})
 const FONTS = `const theme = defineTheme({
   fonts: {
     display: {medium: 'InterDisplay-Medium'},
+    mono: {medium: 'JetBrainsMono-Medium', regular: 'JetBrainsMono-Regular'},
     text: {medium: 'Inter-Medium', regular: 'Inter-Regular', semibold: 'Inter-SemiBold'},
   },
-})`
+})
+
+<Text monospaced>{orderNumber}</Text>    // JetBrains Mono
+<Text monospacedDigit>{total}</Text>     // Inter, with its tabular figures`
 
 const READ = `import {useAppTheme} from '@hzblj/kara-ui'
 
@@ -116,7 +120,12 @@ export const theming: Guide = {
             'kara ships no fonts. Register your faces with `expo-font`, then name them by role (`display` for headings and the large sizes, `text` for the rest) and weight. A missing weight falls back to the role’s `regular`, then to the platform face. Every variant still grows with Dynamic Type.'
           }
         </P>
-        <CodeBlock code={FONTS} language="ts" />
+        <P>
+          {
+            '`mono` is the fixed-width face a `monospaced` text is set in, at its variant’s size and weight. Without one of yours it is Menlo on iOS and `monospace` on Android, never your `text` face. `monospacedDigit` keeps whatever face the text has and asks it for its tabular figures, so a price or a counter does not shift as it changes.'
+          }
+        </P>
+        <CodeBlock code={FONTS} />
       </Section>
 
       <Section id="reading" title="Reading the theme">

@@ -19,6 +19,7 @@ type ThemeSource = {
   dynamicColor: boolean
   fonts: FontsConfig
   materialSeed: string | undefined
+  monoTypography: Typography
   palette: Palette
   typography: Typography
 }
@@ -41,6 +42,7 @@ const themeSource = (config: ThemeConfig | undefined): ThemeSource => {
     dynamicColor,
     fonts: config?.fonts ?? {},
     materialSeed: seedFor(config, dynamicColor),
+    monoTypography: resolveTypography(config?.fonts, 'mono'),
     palette,
     typography: resolveTypography(config?.fonts),
   }
@@ -60,6 +62,7 @@ const toTheme = (source: ThemeSource, variant: ThemeVariant, resolver: PaletteRe
     dynamicColor: source.dynamicColor,
     fonts: source.fonts,
     materialSeed: source.materialSeed,
+    monoTypography: source.monoTypography,
     palette: source.palette,
     resolver,
     rgba: rgbaPalette(source.palette, token => resolveColor(theme, token)),

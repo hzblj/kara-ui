@@ -33,8 +33,8 @@ export const Stepper: StepperComponent = ({label, max, min, onValueChange, step 
         ios={{
           animation: {value},
           contentTransition: reduced ? {type: 'opacity'} : {countsDown, type: 'numericText'},
-          monospacedDigit: true,
         }}
+        monospacedDigit
       >
         {String(value)}
       </Text>

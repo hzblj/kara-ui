@@ -166,8 +166,6 @@ export type IosSx = Bucket<{
   luminanceToAlpha?: boolean
   /** Escape hatch, appended last. Pass a stable array: a fresh one every render defeats the memo. */
   modifiers?: IosModifier[]
-  /** Digits of one width, so a number that changes does not shift what follows it. */
-  monospacedDigit?: boolean
   /** Redacts only when an ancestor applies the `privacy` reason, and is inert on its own. */
   privacySensitive?: boolean
   /**

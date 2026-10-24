@@ -162,6 +162,12 @@ tweens along their béziers). Colours keep easing with Reduce Motion on, as `ani
 keeps its animation by position, so give a karaoke one span per word: regrouping words into runs would hand a run's
 animation to different words.
 
+**`monospaced` is a face, `monospacedDigit` a feature of whichever face is set.** `Text` and `RnText` read
+`theme.monoTypography` for the first. The second is SwiftUI's `monospacedDigit()`, React Native's
+`fontVariant: ['tabular-nums']`, and on Compose `fontFeatureSettings` `tnum`, which `@expo/ui`'s text cannot set, so a
+`monospacedDigit` `Text` on Android draws kara-native's `AnimatedText` (no `animation` unless `animate` asks, so a colour
+still switches). There is no `ios.monospacedDigit` in `sx` any more: the prop covers both platforms.
+
 **`RnText` takes 0.01 pt off every line on iOS** (`LINE_HEIGHT_SLACK`). React Native draws a paragraph into the frame
 Yoga rounded, which can come back a hair short of the exact height of fixed-height lines, and the last line vanished.
 

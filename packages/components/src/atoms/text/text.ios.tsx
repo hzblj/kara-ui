@@ -4,6 +4,7 @@ import {
   lineLimit,
   lineSpacing,
   type ModifierConfig,
+  monospacedDigit as monospacedDigitModifier,
   multilineTextAlignment,
   strikethrough,
   textCase,
@@ -42,6 +43,8 @@ export const Text: TextComponent = ({
   children,
   color = 'content.primary',
   decoration,
+  monospaced,
+  monospacedDigit,
   numberOfLines,
   testID,
   transform,
@@ -50,7 +53,7 @@ export const Text: TextComponent = ({
 }: TextProps) => {
   useHostGuard('Text')
   const theme = useAppTheme()
-  const style = theme.typography[variant]
+  const style = (monospaced ? theme.monoTypography : theme.typography)[variant]
   // After the text's own modifiers: the font and colour belong to the glyphs, the padding and frame to the box around.
   const [accessibility, sx] = splitAccessibility(props)
   const sxModifiers = useSxModifiers(sx, FRAME_ALIGNMENT[align ?? 'left'])
@@ -71,6 +74,10 @@ export const Text: TextComponent = ({
       lineSpacing(Math.max(0, style.lineHeight - style.fontSize)),
       foregroundStyle(theme.color(color)),
     ]
+
+    if (monospacedDigit) {
+      list.push(monospacedDigitModifier())
+    }
 
     if (align) {
       list.push(multilineTextAlignment(ALIGNMENT[align]))
@@ -98,6 +105,7 @@ export const Text: TextComponent = ({
     align,
     color,
     decoration,
+    monospacedDigit,
     numberOfLines,
     style,
     sxModifiers,

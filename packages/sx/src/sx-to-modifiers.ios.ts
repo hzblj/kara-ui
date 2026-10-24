@@ -22,7 +22,6 @@ import {
   layoutPriority,
   luminanceToAlpha,
   type ModifierConfig,
-  monospacedDigit,
   offset,
   opacity as opacityModifier,
   padding,
@@ -287,10 +286,6 @@ const iosModifiers = (ios: IosSx | undefined, theme: Theme, box: BoxShape): Modi
 
   if (ios.luminanceToAlpha) {
     modifiers.push(luminanceToAlpha())
-  }
-
-  if (ios.monospacedDigit) {
-    modifiers.push(monospacedDigit())
   }
 
   if (ios.contentTransition) {
