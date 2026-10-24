@@ -58,5 +58,5 @@
   "text": {},
   "text-field": {"steps": [1800, 700, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80]},
   "tooltip": {"steps": [3000, 1200]},
-  "zoom-transition": {"flow": "zoom-transition", "frame": "screen", "url": "/components/zoom-transition"}
+  "zoom-transition": {"flow": "zoom-transition", "frame": "screen", "url": "/components/zoom-transition?shot=1"}
 }

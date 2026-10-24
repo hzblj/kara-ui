@@ -1,10 +1,11 @@
 import {Box, ContextMenu, Image, type MenuAction, Pressable, RnText, SegmentedControl} from '@hzblj/kara-ui'
 import {useZoomTransitionSourceId, ZOOM_TRANSITION_PARAM, ZoomTransition} from '@hzblj/kara-ui/router'
-import {router} from 'expo-router'
+import {router, useLocalSearchParams} from 'expo-router'
 import {useMemo, useState} from 'react'
 import {Platform} from 'react-native'
 
 import {Section} from '../../ui'
+import {isShot} from '../shot'
 import {DEFAULT_SETTINGS, PHOTOS, type Photo, type ZoomSettings} from './photos'
 
 type Choice<TValue extends string> = {label: string; value: TValue}
@@ -114,6 +115,7 @@ const PhotoCard = ({photo, settings}: PhotoCardProps) => {
 
 /** The catalogue page's demo: a grid of photos that zoom into their page, and the settings to try on the way. */
 export const ZoomTransitionDemo = () => {
+  const shot = isShot(useLocalSearchParams())
   const [settings, setSettings] = useState(DEFAULT_SETTINGS)
   const set =
     <TKey extends keyof ZoomSettings>(key: TKey) =>
@@ -126,9 +128,11 @@ export const ZoomTransitionDemo = () => {
     <>
       <Section
         caption={
-          Platform.OS === 'ios'
-            ? 'Tap a photo and it grows into a full-screen page; drag it down, or tap the close, and it shrinks back into the card. Press and hold for the menu; a tap on the preview zooms it in as well.'
-            : 'Tap a photo and it grows into its page; go back and it shrinks into the card again.'
+          shot
+            ? undefined
+            : Platform.OS === 'ios'
+              ? 'Tap a photo and it grows into a full-screen page; drag it down, or tap the close, and it shrinks back into the card. Press and hold for the menu; a tap on the preview zooms it in as well.'
+              : 'Tap a photo and it grows into its page; go back and it shrinks into the card again.'
         }
       >
         <Box gap="s16">
@@ -142,26 +146,33 @@ export const ZoomTransitionDemo = () => {
         </Box>
       </Section>
 
-      <Section
-        caption={
-          Platform.OS === 'ios'
-            ? 'UIKit times the zoom itself; what you set is the background and which gestures may close the page.'
-            : 'Material’s container transform: the path it travels and how long it takes.'
-        }
-        title="Try it"
-      >
-        <Box bg="surface.primary" borderRadius="large" gap="s16" p="s16">
-          <Setting choices={BACKGROUNDS} label="Background" onChange={set('background')} value={settings.background} />
-          {Platform.OS === 'ios' ? (
-            <Setting choices={DISMISSALS} label="Close with" onChange={set('dismiss')} value={settings.dismiss} />
-          ) : (
-            <>
-              <Setting choices={PATHS} label="Path" onChange={set('path')} value={settings.path} />
-              <Setting choices={SPEEDS} label="Speed" onChange={set('speed')} value={settings.speed} />
-            </>
-          )}
-        </Box>
-      </Section>
+      {shot ? null : (
+        <Section
+          caption={
+            Platform.OS === 'ios'
+              ? 'UIKit times the zoom itself; what you set is the background and which gestures may close the page.'
+              : 'Material’s container transform: the path it travels and how long it takes.'
+          }
+          title="Try it"
+        >
+          <Box bg="surface.primary" borderRadius="large" gap="s16" p="s16">
+            <Setting
+              choices={BACKGROUNDS}
+              label="Background"
+              onChange={set('background')}
+              value={settings.background}
+            />
+            {Platform.OS === 'ios' ? (
+              <Setting choices={DISMISSALS} label="Close with" onChange={set('dismiss')} value={settings.dismiss} />
+            ) : (
+              <>
+                <Setting choices={PATHS} label="Path" onChange={set('path')} value={settings.path} />
+                <Setting choices={SPEEDS} label="Speed" onChange={set('speed')} value={settings.speed} />
+              </>
+            )}
+          </Box>
+        </Section>
+      )}
     </>
   )
 }

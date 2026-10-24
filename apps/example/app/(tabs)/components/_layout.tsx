@@ -1,7 +1,7 @@
 import {useAppTheme} from '@hzblj/kara-ui'
 import {Stack} from 'expo-router'
 
-import {catalogEntry} from '../../../src/catalog'
+import {catalogTitle} from '../../../src/catalog'
 
 export default function ComponentsLayout() {
   const theme = useAppTheme()
@@ -17,7 +17,7 @@ export default function ComponentsLayout() {
       <Stack.Screen name="index" options={{title: 'Components'}} />
       <Stack.Screen
         name="[id]"
-        options={({route}) => ({title: catalogEntry((route.params as {id?: string} | undefined)?.id)?.name ?? ''})}
+        options={({route}) => ({title: catalogTitle(route.params as {id?: string; shot?: string} | undefined)})}
       />
     </Stack>
   )
