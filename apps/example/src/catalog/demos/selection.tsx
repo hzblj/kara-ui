@@ -4,14 +4,17 @@ import {
   Chip,
   ColorPicker,
   DatePicker,
+  HStack,
   Island,
   Picker,
   RadioGroup,
   SearchBar,
   SegmentedControl,
   Slider,
+  Spacer,
   Stepper,
   Switch,
+  Text,
   TextField,
   VStack,
 } from '@hzblj/kara-ui'
@@ -104,13 +107,27 @@ const StepperDemo = () => {
   )
 }
 
+const COURIER_NOTE =
+  'Ring twice, the bell is quiet.\nIf nobody answers, leave it with the neighbours at number 12.\nThe gate code is 4021.'
+
 const SegmentedControlDemo = () => {
   const [index, setIndex] = useState(1)
+  const [delivery, setDelivery] = useState(0)
 
   return (
-    <Section caption={`Showing the ${['day', 'week', 'month'][index]}.`}>
-      <SegmentedControl onChange={setIndex} selectedIndex={index} values={['Day', 'Week', 'Month']} />
-    </Section>
+    <>
+      <Section caption={`Showing the ${['day', 'week', 'month'][index]}.`}>
+        <SegmentedControl onChange={setIndex} selectedIndex={index} values={['Day', 'Week', 'Month']} />
+      </Section>
+      <Section caption="Inside an island it joins the island’s stack, here under a note that wraps over several lines.">
+        <Island>
+          <VStack spacing="s12" wide>
+            <TextField defaultValue={COURIER_NOTE} label="Note for the courier" multiline />
+            <SegmentedControl onChange={setDelivery} selectedIndex={delivery} values={['Door', 'Locker', 'Pickup']} />
+          </VStack>
+        </Island>
+      </Section>
+    </>
   )
 }
 
@@ -126,9 +143,6 @@ const SLOTS = [
   {label: 'Afternoon', value: 'afternoon'},
   {label: 'Evening', value: 'evening'},
 ]
-
-const COURIER_NOTE =
-  'Ring twice, the bell is quiet.\nIf nobody answers, leave it with the neighbours at number 12.\nThe gate code is 4021.'
 
 const PickerDemo = () => {
   const [size, setSize] = useState('42')
@@ -155,13 +169,28 @@ const PickerDemo = () => {
 
 const DatePickerDemo = () => {
   const [date, setDate] = useState(new Date(2027, 0, 1))
+  const [delivery, setDelivery] = useState(new Date(2027, 0, 4))
 
   return (
-    <Section caption={`Selected: ${date.toDateString()}`}>
-      <Box bg="surface.primary" borderRadius="large" p="s12">
-        <DatePicker onValueChange={setDate} value={date} />
-      </Box>
-    </Section>
+    <>
+      <Section caption={`Selected: ${date.toDateString()}`}>
+        <Box bg="surface.primary" borderRadius="large" p="s12">
+          <DatePicker onValueChange={setDate} value={date} />
+        </Box>
+      </Section>
+      <Section caption="Inside an island it joins the island’s stack, here under a note that wraps over several lines.">
+        <Island>
+          <VStack spacing="s12" wide>
+            <TextField defaultValue={COURIER_NOTE} label="Note for the courier" multiline />
+            <HStack align="center" spacing="s12">
+              <Text>Delivery date</Text>
+              <Spacer />
+              <DatePicker onValueChange={setDelivery} value={delivery} />
+            </HStack>
+          </VStack>
+        </Island>
+      </Section>
+    </>
   )
 }
 

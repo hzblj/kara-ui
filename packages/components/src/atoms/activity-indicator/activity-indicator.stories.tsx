@@ -1,6 +1,9 @@
 import type {Meta, StoryObj} from '@storybook/react-native'
 
 import {Box} from '../box'
+import {HStack} from '../h-stack'
+import {Island} from '../island'
+import {Text} from '../text'
 import {ActivityIndicator} from './activity-indicator'
 
 const meta = {
@@ -31,5 +34,21 @@ export const OnSurface: Story = {
     <Box align="center" bg="surface.primary" borderRadius="medium" justify="center" p="s32" wide>
       <ActivityIndicator size="large" />
     </Box>
+  ),
+}
+
+export const InsideAnIsland: Story = {
+  parameters: {
+    notes:
+      'Inside a `Screen` or `Island` the indicator joins that host instead of bringing its own, so it sits in a ' +
+      'native stack beside native `Text`.',
+  },
+  render: () => (
+    <Island>
+      <HStack align="center" spacing="s12">
+        <ActivityIndicator />
+        <Text color="content.secondary">Loading your orders…</Text>
+      </HStack>
+    </Island>
   ),
 }

@@ -16,7 +16,7 @@ and `@hzblj/kara-native` — through their entry points only.
 | `src/molecules/` | Label, LabeledContent, ListItem (and `RnListItem`, its React Native-tier row for long lists), Link, SearchBar, EmptyState, Collapsible, Pager, RadioGroup, Stepper, Tooltip — and over the native module: NavigationBar, ScrollEdgeContainer, RnTooltip. |
 | `src/organisms/` | Sheet (TrueSheet with a native header: `Sheet.Header`, `Sheet.ScrollView`, `useSheetScroll`), ActionSheet, Alert, Menu, Form, SwipeActions, Snackbar — and over the native module: ContextMenu (long-press on React Native content, with a custom preview on iOS), FabMenu. (`Tabs` lives in `@hzblj/kara-router`, behind the `@hzblj/kara-ui/router` entry, so the main entry never imports expo-router.) |
 | `src/templates/screen/` | `Screen` — the full-bleed native host every screen starts with. |
-| `src/host-context.tsx` | `HostBoundary` + `useHostGuard`: dev warning when a native atom renders outside `Screen`/`Island`. `useInsideHost`: whether one already encloses it. |
+| `src/host-context.tsx` | `HostBoundary` + `useHostGuard`: dev warning when a native atom renders outside `Screen`/`Island`. `useInsideHost`: whether one already encloses it, for the atoms that otherwise bring their own. |
 | `src/story-decorators.tsx` | `insideIsland` / `insideIslandOfHeight` — the host a story mounts its subject in. Internal: not exported from `index.ts`. |
 | `src/use-refresh-state.ts` | Bridges SwiftUI's promise-driven `refreshable` and Compose's controlled `PullToRefreshBox` into one async `onRefresh`. |
 
@@ -44,10 +44,13 @@ Android configs separately); a mismatch surfaces in `contract.check.ts`.
 
 **Native atoms need a host.** They only render inside `<Screen>` or `<Island>`.
 
-**An atom that brings its own host drops it inside another.** `Picker` asks `useInsideHost()` and, inside a
-`Screen` or `Island`, renders straight into that host. A host nested in another breaks the outer one: on Android it is
-a real view beside the outer host's `ComposeView`, in a horizontal `LinearLayout` that measures the `ComposeView` in
-the width the nested host leaves (none, for a full-width one), and on iOS it gets no height in the outer stack.
+**An atom that drops into React Native layout joins a host it finds itself in.** `Picker`, `SegmentedControl`,
+`ActivityIndicator` and `DatePicker` work without a `Screen` or `Island`, so each brings its own host or is a plain
+React Native view. Each asks `useInsideHost()` and, inside one, renders straight into that host; a React Native view
+(iOS's `SegmentedControl` and `ActivityIndicator`, Android's `DatePicker` field) goes in through `RNHostView`. A host
+nested in another breaks the outer one: on Android it is a real view beside the outer host's `ComposeView`, in a
+horizontal `LinearLayout` that measures the `ComposeView` in the width the nested host leaves (none, for a full-width
+one), and on iOS it gets no height in the outer stack. A new atom of this kind does the same.
 
 **No raw style values.** Components take `sx` props resolved by `@hzblj/kara-sx` against `@hzblj/kara-theme`.
 A component that owns its own `style` prop uses `useSplitSx` instead of the `sx()` wrapper.

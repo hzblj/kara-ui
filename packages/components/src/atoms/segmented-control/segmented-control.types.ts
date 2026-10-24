@@ -3,7 +3,8 @@ import type {ReactNode} from 'react'
 /**
  * A row of mutually exclusive segments, the selected one in the accent: kara's own `UISegmentedControl` on iOS,
  * Material's single-choice segmented buttons on Android. It needs no `Screen` or `Island`: iOS is a plain view, Android
- * brings its own host. It takes the width it is given; the height is the platform's.
+ * brings its own host. Inside one it joins that host, so it can share a stack with other native views. It takes the
+ * width it is given; the height is the platform's.
  */
 export type SegmentedControlProps = {
   /** Stops the user changing the segment, and dims the control. */
