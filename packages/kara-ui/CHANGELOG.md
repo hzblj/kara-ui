@@ -1,5 +1,19 @@
 # @hzblj/kara-ui
 
+## 0.14.2
+
+### Patch Changes
+
+- [`e8074f2`](https://github.com/hzblj/kara-ui/commit/e8074f23ddf0e1f6a34c25a71b29165bcd5b3d5e) Thanks [@hzblj](https://github.com/hzblj)! - The README links to the other libraries, at libraries.janblazej.dev.
+
+- Updated dependencies []:
+  - @hzblj/kara-theme@0.14.2
+  - @hzblj/kara-sx@0.14.2
+  - @hzblj/kara-native@0.14.2
+  - @hzblj/kara-components@0.14.2
+  - @hzblj/kara-router@0.14.2
+  - @hzblj/kara-expo-plugin@0.14.2
+
 ## 0.14.1
 
 ### Patch Changes
