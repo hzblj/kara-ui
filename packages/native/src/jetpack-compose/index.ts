@@ -1,3 +1,4 @@
+export * from './animated-text'
 export * from './backdrop-blur-view'
 export * from './color-well'
 export * from './drawable-icon'

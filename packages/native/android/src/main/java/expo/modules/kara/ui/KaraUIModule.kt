@@ -10,6 +10,7 @@ import expo.modules.kara.ui.icon.DrawableIconView
 import expo.modules.kara.ui.modifiers.ModifierRegistration
 import expo.modules.kara.ui.ripple.RippleConfigurationView
 import expo.modules.kara.ui.swipe.SwipeActionsBoxView
+import expo.modules.kara.ui.text.AnimatedTextView
 import expo.modules.kara.ui.tooltip.TooltipBoxView
 import expo.modules.kara.ui.topappbar.TopAppBarView
 import expo.modules.kotlin.modules.Module
@@ -32,6 +33,8 @@ class KaraUIModule : Module() {
     // drops our events. Class-based registration gives every view a unique `viewType`.
 
     View(DrawableIconView::class)
+
+    View(AnimatedTextView::class)
 
     View(FloatingActionButtonMenuView::class)
 

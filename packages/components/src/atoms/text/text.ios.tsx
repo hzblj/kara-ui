@@ -10,11 +10,18 @@ import {
   underline,
 } from '@expo/ui/swift-ui/modifiers'
 import {scaledFont} from '@hzblj/kara-native/swift-ui'
-import {type FrameAlignment, splitAccessibility, useAccessibilityModifiers, useSxModifiers} from '@hzblj/kara-sx'
+import {
+  type FrameAlignment,
+  splitAccessibility,
+  textColorTransition,
+  useAccessibilityModifiers,
+  useSxModifiers,
+} from '@hzblj/kara-sx'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
 
 import {useHostGuard} from '../../host-context'
+import {spansKey, spansOf} from './spans'
 import type {TextAlign, TextComponent, TextProps} from './text.types'
 
 const ALIGNMENT = {
@@ -48,6 +55,13 @@ export const Text: TextComponent = ({
   const [accessibility, sx] = splitAccessibility(props)
   const sxModifiers = useSxModifiers(sx, FRAME_ALIGNMENT[align ?? 'left'])
   const accessibilityModifiers = useAccessibilityModifiers(accessibility)
+  const spans = useMemo(() => spansOf(children, Text), [children])
+  const animate = sx.animate
+  // With `animate`, SwiftUI interpolates the text when a colour changes: the text's own or a span's.
+  const transition = useMemo(
+    () => textColorTransition(animate, spansKey(color, spans, typeof children === 'string' ? children : '')),
+    [animate, children, color, spans]
+  )
 
   const modifiers = useMemo(() => {
     const list: ModifierConfig[] = [
@@ -78,12 +92,30 @@ export const Text: TextComponent = ({
       list.push(lineLimit(numberOfLines))
     }
 
-    return [...list, ...sxModifiers, ...accessibilityModifiers]
-  }, [accessibilityModifiers, align, color, decoration, numberOfLines, style, sxModifiers, theme, transform])
+    return [...list, ...transition, ...sxModifiers, ...accessibilityModifiers]
+  }, [
+    accessibilityModifiers,
+    align,
+    color,
+    decoration,
+    numberOfLines,
+    style,
+    sxModifiers,
+    theme,
+    transform,
+    transition,
+  ])
 
   return (
     <SwiftUIText modifiers={modifiers} testID={testID}>
-      {children}
+      {spans
+        ? spans.map((span, index) => (
+            // Concatenated into one SwiftUI `Text`: a span takes its colour, the font and the rest are the outer text's.
+            <SwiftUIText key={index} modifiers={span.color ? [foregroundStyle(theme.color(span.color))] : undefined}>
+              {span.text}
+            </SwiftUIText>
+          ))
+        : children}
     </SwiftUIText>
   )
 }

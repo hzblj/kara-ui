@@ -1,5 +1,6 @@
 import {type TextVariant, textStyles} from '@hzblj/kara-theme'
 import type {Meta, StoryObj} from '@storybook/react-native'
+import {useEffect, useState} from 'react'
 
 import {insideIsland} from '../../story-decorators'
 import {VStack} from '../v-stack'
@@ -92,4 +93,47 @@ export const TransformAndDecoration: Story = {
 
 export const Truncated: Story = {
   args: {numberOfLines: 1},
+}
+
+export const Spans: Story = {
+  render: () => (
+    <Text variant="headline">
+      Box, box. <Text color="content.accent">Box this lap</Text>, we are{' '}
+      <Text color="content.tertiary">going to plan B.</Text>
+    </Text>
+  ),
+}
+
+const WORDS = 'Box box, box this lap. We are going to plan B, the tyres are gone.'.split(' ')
+
+/** Lit word by word, as a transcript is while its audio plays: each span eases to its colour. */
+const Karaoke = () => {
+  const [index, setIndex] = useState(0)
+
+  useEffect(() => {
+    const timer = setInterval(() => setIndex(current => (current + 1) % (WORDS.length + 1)), 420)
+    return () => clearInterval(timer)
+  }, [])
+
+  return (
+    <Text animate color="content.tertiary" variant="headline">
+      {WORDS.map((word, position) => (
+        <Text
+          color={position < index ? 'content.primary' : position === index ? 'content.accent' : 'content.tertiary'}
+          key={word + String(position)}
+        >
+          {`${word} `}
+        </Text>
+      ))}
+    </Text>
+  )
+}
+
+export const AnimatedSpans: Story = {
+  parameters: {
+    notes:
+      'With `animate`, a span that changes colour eases there on the motion tokens (`fast`, `smoothOut` by default): ' +
+      'SwiftUI interpolates the text, Compose animates each span. Colours keep easing with Reduce Motion on.',
+  },
+  render: () => <Karaoke />,
 }

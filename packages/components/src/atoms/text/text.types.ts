@@ -12,6 +12,10 @@ export type TextTransform = 'lowercase' | 'uppercase'
  * SwiftUI `Text` / Compose `Text` in a theme typography variant. A native atom: outside a host, use `RnText`. It takes
  * the native `sx` surface too: padding, a frame (`wide` lines it up by `align`), a background, and the `ios` bucket's
  * `contentTransition`, `animation` and `monospacedDigit` for a number that changes in place.
+ *
+ * Nested `Text` children are spans: runs of the same text in a colour of their own, one paragraph that wraps as one.
+ * With `animate`, a colour that changes (the text's or a span's) eases to its new value instead of switching: a word lit
+ * as it is said, a phrase brought forward. SwiftUI interpolates the text, Compose animates each span's colour.
  */
 export type TextProps = ResponsiveSx &
   AccessibilityProps & {
@@ -20,7 +24,10 @@ export type TextProps = ResponsiveSx &
      * layout; Android keeps them as they are.
      */
     align?: TextAlign
-    /** The text. */
+    /**
+     * The text: a string, or strings and nested `Text` spans, each in a `color` of its own. A span takes only its
+     * colour; the variant, alignment and everything else are the outer text's.
+     */
     children?: ReactNode
     /** The text's colour. `content.primary` by default. */
     color?: ColorToken
