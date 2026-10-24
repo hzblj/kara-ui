@@ -54,6 +54,9 @@ export default {
         resizeMode: 'contain',
       },
     ],
+    // The scene life cycle, which apps built with the iOS 27 SDK need or they stop at launch: Expo 57's template has
+    // none, so React Native starts from Expo's scene delegate instead. Remove it with the move to Expo 58.
+    ['expo-build-properties', {ios: {enableSceneSupport: true}}],
   ],
   scheme: 'kara-ui',
   slug: 'kara-ui-example',
