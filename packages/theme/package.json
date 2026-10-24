@@ -1,6 +1,6 @@
 {
   "name": "@hzblj/kara-theme",
-  "version": "0.14.1",
+  "version": "0.14.2",
   "description": "Design tokens, palette, typography and the theme behind @hzblj/kara-ui — platform colours by default, overridable per app.",
   "author": "Jan Blazej",
   "license": "MIT",
