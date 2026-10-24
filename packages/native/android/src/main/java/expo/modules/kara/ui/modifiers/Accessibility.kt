@@ -15,7 +15,7 @@ import expo.modules.kotlin.records.Record
 import expo.modules.kotlin.records.recordFromMap
 import expo.modules.ui.ModifierRegistry
 
-internal const val ACCESSIBILITY_MODIFIER = "karaAccessibility"
+private const val ACCESSIBILITY_MODIFIER = "karaAccessibility"
 
 data class AccessibilityParams(
   @Field val hidden: Boolean = false,

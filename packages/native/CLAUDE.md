@@ -11,7 +11,7 @@ component. Autolinked into any app that installs `@hzblj/kara-ui` (a transitive 
 | `ios/KaraUIModule.swift` | Only composes the module: functions, `OnCreate` (modifier registration), one `<View>.definition()` per view. |
 | `ios/Views/<Component>/` | `<Name>View.swift`, its records/helpers and `<Name>View+Definition.swift` (events and props). |
 | `ios/Modifiers/` | SwiftUI modifiers registered into `@expo/ui`'s registry: `scaledFont`, `underline`, `counterBadge`, all in `ModifierRegistration` (once per process). |
-| `android/.../modifiers/` | Compose modifiers registered into `@expo/ui`'s registry: `underline`, and `karaAccessibility` (content and state descriptions, a role or heading, the click action's label, merging or clearing descendants), which `@hzblj/kara-sx` maps the accessibility props onto. `@expo/ui`'s own `semantics` carries only a content description. |
+| `android/.../modifiers/` | Compose modifiers registered into `@expo/ui`'s registry: `underline`, and `karaAccessibility` (content and state descriptions, a role or heading, the click action's label, merging or clearing descendants), which `@hzblj/kara-sx` maps the accessibility props onto. `@expo/ui`'s own `semantics` carries only a content description. Both in `ModifierRegistration` (once per process). |
 | `ios/Fabric/` | Runtime fixes to React Native's own component views, installed from `OnCreate`: `OpacityVisibilitySync`. |
 | `android/src/main/java/expo/modules/kara/ui/` | `KaraUIModule.kt` plus one package per component (`blur`, `colorpicker`, `fab`, `icon`, `modifiers`, `ripple`, `swipe`, `tooltip`, `topappbar`). |
 | `src/swift-ui/`, `src/jetpack-compose/` | `requireKaraView` bindings and typed wrappers per view, the modifiers' JS side. The `/swift-ui` and `/jetpack-compose` entries. |
@@ -36,12 +36,13 @@ reads it as layout or style. Prefix it (`bubbleWidth`).
 `KaraUIModule.kt` (the functional registration shares one `viewType` with `@expo/ui` and drops events). JS — a folder
 in `src/<platform>/` exported from its `index.ts`. Then the cross-platform component in `@hzblj/kara-components`.
 
-**iOS process-wide setup happens once per process.** Every React runtime (`RCTHost`) gets its own `AppContext` and
-runs `OnCreate` on its own JS thread, and two can initialise at the same time (a dev client opened by its deep link
-while it launches, a reload during startup, brownfield hosts). `@expo/ui`'s `ViewModifierRegistry` is a dictionary
-with no lock: concurrent registration crashed in `Dictionary._Variant.setValue`. A new modifier is registered inside
-`ModifierRegistration`'s `static let`, never straight from `OnCreate`, and never unregistered in `OnDestroy` (another
-runtime may still draw it). A swizzle or any other global gets the same `static let` (`OpacityVisibilitySync`).
+**Process-wide setup happens once per process.** Every React runtime gets its own `AppContext` and runs `OnCreate`,
+and two can be alive or initialising at the same time (a dev client opened by its deep link while it launches, a
+reload during startup, brownfield hosts). `@expo/ui`'s modifier registries are maps with no lock on both platforms:
+concurrent registration on iOS crashed in `Dictionary._Variant.setValue`. A new modifier is registered inside
+`ModifierRegistration` (iOS: its `static let`; Android: its `SYNCHRONIZED` lazy), never straight from `OnCreate`, and
+never unregistered in `OnDestroy` (another runtime may still draw it). A swizzle or any other global gets the same
+treatment (`OpacityVisibilitySync`).
 
 **Native changes need a native rebuild** of the app (`yarn prebuild` in the repo, then run); a new view also needs a
 pod install / Gradle sync. Swift/Kotlin are not type-checked by `yarn typecheck` — build the example to verify.
