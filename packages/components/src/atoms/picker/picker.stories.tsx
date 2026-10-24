@@ -2,6 +2,9 @@ import type {Meta, StoryObj} from '@storybook/react-native'
 import {useArgs} from 'storybook/preview-api'
 
 import {Box} from '../box'
+import {Island} from '../island'
+import {TextField} from '../text-field'
+import {VStack} from '../v-stack'
 import {Picker} from './picker'
 import type {PickerProps} from './picker.types'
 
@@ -11,6 +14,8 @@ const OPTIONS = [
   {label: 'Large', value: 'lg'},
 ]
 
+const NOTE = 'Ring twice, the bell is quiet.\nIf nobody answers, leave it with the neighbours at number 12.'
+
 const ControlledPicker = (args: PickerProps) => {
   const [, updateArgs] = useArgs<PickerProps>()
 
@@ -18,6 +23,19 @@ const ControlledPicker = (args: PickerProps) => {
     <Box bg="surface.primary" borderRadius="medium" p="s12">
       <Picker {...args} onValueChange={value => updateArgs({value})} />
     </Box>
+  )
+}
+
+const PickerInIsland = (args: PickerProps) => {
+  const [, updateArgs] = useArgs<PickerProps>()
+
+  return (
+    <Island>
+      <VStack spacing="s12" wide>
+        <TextField defaultValue={NOTE} label="Note for the courier" multiline />
+        <Picker {...args} onValueChange={value => updateArgs({value})} />
+      </VStack>
+    </Island>
   )
 }
 
@@ -35,3 +53,14 @@ type Story = StoryObj<typeof meta>
 export const Playground: Story = {}
 
 export const Disabled: Story = {args: {disabled: true}}
+
+export const InsideAnIsland: Story = {
+  parameters: {
+    notes:
+      'On its own the picker brings a host of its own. Inside a `Screen` or `Island` it renders into that host ' +
+      'instead, so it shares a stack with other native views, a multiline `TextField` here. A host nested in ' +
+      'another would take the whole width on Android and leave the island none, and on iOS the wheel would get ' +
+      'no height and spill over the field.',
+  },
+  render: PickerInIsland,
+}

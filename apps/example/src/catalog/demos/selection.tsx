@@ -121,15 +121,35 @@ const SIZES = [
   {label: 'EU 44', value: '44'},
 ]
 
+const SLOTS = [
+  {label: 'Morning', value: 'morning'},
+  {label: 'Afternoon', value: 'afternoon'},
+  {label: 'Evening', value: 'evening'},
+]
+
+const COURIER_NOTE =
+  'Ring twice, the bell is quiet.\nIf nobody answers, leave it with the neighbours at number 12.\nThe gate code is 4021.'
+
 const PickerDemo = () => {
   const [size, setSize] = useState('42')
+  const [slot, setSlot] = useState('afternoon')
 
   return (
-    <Section caption="A wheel on iOS, a dropdown on Android.">
-      <Box bg="surface.primary" borderRadius="large" p="s12">
-        <Picker onValueChange={setSize} options={SIZES} value={size} />
-      </Box>
-    </Section>
+    <>
+      <Section caption="A wheel on iOS, a dropdown on Android.">
+        <Box bg="surface.primary" borderRadius="large" p="s12">
+          <Picker onValueChange={setSize} options={SIZES} value={size} />
+        </Box>
+      </Section>
+      <Section caption="Inside an island it joins the island’s stack, here under a note that wraps over several lines.">
+        <Island>
+          <VStack spacing="s12" wide>
+            <TextField defaultValue={COURIER_NOTE} label="Note for the courier" multiline />
+            <Picker onValueChange={setSlot} options={SLOTS} value={slot} />
+          </VStack>
+        </Island>
+      </Section>
+    </>
   )
 }
 
