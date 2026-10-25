@@ -20,6 +20,11 @@ the **`sx` engine**, one token-typed styling surface that resolves into SwiftUI 
 Native styles, so every component takes the same spacing, colours, radii and type, and the whole set reads as one
 design system on iOS and Android. The platform's colours and typeface by default, yours through the theme.
 
+<p>
+  <img alt="Kara's example app on iOS: its home screen, drawn in SwiftUI" height="560" src="https://raw.githubusercontent.com/hzblj/kara-ui/main/media/ios-home.png" />
+  <img alt="The same on Android, in Jetpack Compose" height="560" src="https://raw.githubusercontent.com/hzblj/kara-ui/main/media/android-home.png" />
+</p>
+
 ## Documentation
 
 **[www.kara.janblazej.dev/docs](https://www.kara.janblazej.dev/docs)**: the guides, the design tokens, and every component
