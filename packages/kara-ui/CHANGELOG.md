@@ -1,5 +1,19 @@
 # @hzblj/kara-ui
 
+## 0.15.2
+
+### Patch Changes
+
+- [`42131a8`](https://github.com/hzblj/kara-ui/commit/42131a8f039a2baf4fe146a0cb3e9433781bf2bb) Thanks [@hzblj](https://github.com/hzblj)! - The README shows the example app on iOS and Android.
+
+- Updated dependencies []:
+  - @hzblj/kara-theme@0.15.2
+  - @hzblj/kara-sx@0.15.2
+  - @hzblj/kara-native@0.15.2
+  - @hzblj/kara-components@0.15.2
+  - @hzblj/kara-router@0.15.2
+  - @hzblj/kara-expo-plugin@0.15.2
+
 ## 0.15.1
 
 ### Patch Changes
