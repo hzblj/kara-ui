@@ -1,5 +1,16 @@
 # @hzblj/kara-components
 
+## 0.15.3
+
+### Patch Changes
+
+- [`91f4285`](https://github.com/hzblj/kara-ui/commit/91f42856d2acc0d03fb9836a718c5deba758a29f) Thanks [@hzblj](https://github.com/hzblj)! - A pressable `HStack`, `VStack` or `ZStack` on iOS now takes a tap anywhere in its frame, padding and a `Spacer`'s gap included, as it already did on Android. Before, a `LabeledContent` row pressed in its empty middle did nothing.
+
+- Updated dependencies []:
+  - @hzblj/kara-theme@0.15.3
+  - @hzblj/kara-sx@0.15.3
+  - @hzblj/kara-native@0.15.3
+
 ## 0.15.2
 
 ### Patch Changes
