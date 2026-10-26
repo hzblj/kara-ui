@@ -1,9 +1,9 @@
 import {HStack as SwiftUIHStack} from '@expo/ui/swift-ui'
-import {onTapGesture} from '@expo/ui/swift-ui/modifiers'
 import {type FrameAlignment, splitAccessibility, useAccessibilityModifiers, useSxModifiers} from '@hzblj/kara-sx'
 import {spacing} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
 import {useHostGuard} from '../../host-context'
+import {tapModifiers} from '../../tap-modifiers'
 import type {HStackAlign, HStackComponent, HStackProps} from './h-stack.types'
 
 const ALIGNMENT = {
@@ -31,7 +31,7 @@ export const HStack: HStackComponent = ({
   const sxModifiers = useSxModifiers(sx, FRAME_ALIGNMENT[align])
   const accessibilityModifiers = useAccessibilityModifiers(accessibility, onPress !== undefined)
   const modifiers = useMemo(
-    () => [...sxModifiers, ...(onPress ? [onTapGesture(onPress)] : []), ...accessibilityModifiers],
+    () => [...sxModifiers, ...tapModifiers(onPress), ...accessibilityModifiers],
     [accessibilityModifiers, onPress, sxModifiers]
   )
 

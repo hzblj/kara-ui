@@ -1,8 +1,8 @@
 import {ZStack as SwiftUIZStack} from '@expo/ui/swift-ui'
-import {onTapGesture} from '@expo/ui/swift-ui/modifiers'
 import {type FrameAlignment, splitAccessibility, useAccessibilityModifiers, useSxModifiers} from '@hzblj/kara-sx'
 import {useMemo} from 'react'
 import {useHostGuard} from '../../host-context'
+import {tapModifiers} from '../../tap-modifiers'
 import type {ZStackAlign, ZStackComponent, ZStackProps} from './z-stack.types'
 
 const ALIGNMENT = {
@@ -17,7 +17,7 @@ export const ZStack: ZStackComponent = ({align = 'center', children, onPress, te
   const sxModifiers = useSxModifiers(sx, ALIGNMENT[align])
   const accessibilityModifiers = useAccessibilityModifiers(accessibility, onPress !== undefined)
   const modifiers = useMemo(
-    () => [...sxModifiers, ...(onPress ? [onTapGesture(onPress)] : []), ...accessibilityModifiers],
+    () => [...sxModifiers, ...tapModifiers(onPress), ...accessibilityModifiers],
     [accessibilityModifiers, onPress, sxModifiers]
   )
 
