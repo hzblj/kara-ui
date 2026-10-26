@@ -1,5 +1,14 @@
 # @hzblj/kara-router
 
+## 0.15.3
+
+### Patch Changes
+
+- Updated dependencies [[`91f4285`](https://github.com/hzblj/kara-ui/commit/91f42856d2acc0d03fb9836a718c5deba758a29f)]:
+  - @hzblj/kara-components@0.15.3
+  - @hzblj/kara-theme@0.15.3
+  - @hzblj/kara-native@0.15.3
+
 ## 0.15.2
 
 ### Patch Changes
