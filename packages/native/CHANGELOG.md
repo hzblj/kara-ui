@@ -1,5 +1,31 @@
 # @hzblj/kara-native
 
+## 0.18.0
+
+### Minor Changes
+
+- [#57](https://github.com/hzblj/kara-ui/pull/57) [`262bf11`](https://github.com/hzblj/kara-ui/commit/262bf1130730001da9390df0671bc2c16f7026a7) Thanks [@hzblj](https://github.com/hzblj)! - `DatePicker` takes `datePickerStyle` and `disabled`. `compact`, the pill that opens a calendar, stays the default; `graphical` is the calendar in place, a month at a time (with the time under it in `datetime` mode on iOS), and `wheel` puts the value on wheels. Android shows Material's calendar in place for `graphical` in `date` and `datetime` modes, without its title and headline and in the accent; for `wheel`, and in `time` mode, it keeps its field and dialog, since Material has no wheel. `disabled` dims the picker and ignores taps; Material's calendar has no disabled state of its own, so a disabled `graphical` picker on Android is dimmed and offers only the selected day.
+
+  `Slider` takes `onValueChangeEnd`, called once with the final value when the user lets go, so a seek or a volume can commit on release instead of at every step of the drag: SwiftUI's `onEditingChanged` on iOS, Material's `onValueChangeFinished` on Android.
+
+  `Stepper` and `RadioGroup` take `disabled`, which dims the row and stops the value changing. `Stepper` also takes `decrementLabel` and `incrementLabel`, what TalkBack says for its minus and plus buttons on Android (`Decrement` and `Increment` unless the app passes its own words); iOS's native stepper labels its buttons itself.
+
+  `ColorPicker` takes `disabled`: SwiftUI dims the label and the well and ignores taps on iOS, and on Android kara's own well dims and does not open its sheet, the label dimmed with it.
+
+  `Divider` takes `axis`. `vertical` draws Compose's `VerticalDivider` on Android, as tall as the `HStack` around it; SwiftUI's divider already turns by itself in an `HStack`, so iOS ignores it.
+
+  `Text` ends a text cut short with an ellipsis on Android too, where `numberOfLines` used to clip it. `truncation` says where the ellipsis goes: `tail`, the default, `head` to keep the end of the text, or `middle` to keep both of its ends, for a path or a file name. Android puts it at the head or in the middle of a single line only, as Compose does, and ends a longer text at the tail; kara-native's `AnimatedText` takes `textOverflow` to draw it. That Compose text, which Android also draws for `animate` and `monospacedDigit`, now reads every string child, so a `Text` like `{count} items` no longer comes out empty there.
+
+- [#57](https://github.com/hzblj/kara-ui/pull/57) [`262bf11`](https://github.com/hzblj/kara-ui/commit/262bf1130730001da9390df0671bc2c16f7026a7) Thanks [@hzblj](https://github.com/hzblj)! - `Alert` takes `cancelLabel`: the cancel button's label, so an app in another language no longer shows an English "Cancel" beside its own confirm label. `Cancel` stays the default, and `null` leaves the button out, for an alert that only informs and is closed by its confirm button alone.
+
+  `ActionSheet` takes a `message`: the confirmation dialog's own message under the title on iOS, a line under the title on Android. The title now shows on iOS too, where SwiftUI hid it by default and the actions lost what they were about.
+
+  `Menu` can open from an icon. `icon` sits before the `label` in the same colour, or stands alone as an `IconButton` that opens the menu, with an `accessibilityLabel` the types require when there is no label. iOS now draws each action's `icon` in the menu, as Android already did.
+
+  `MenuAction` takes `disabled`: the action stays in the list, greyed, and does not respond. `Menu`, `ActionSheet` and `ContextMenu` honour it on both platforms (the iOS context menu marks its `UIAction` disabled in kara-native's `ContextMenuView`, so it needs a native rebuild), `FabMenu` on iOS only, since Material's FAB menu items have no disabled state.
+
+  `Progress` takes `color`, any colour token: `fill.destructive.primary` for storage nearly full, `fill.success.primary` for a goal reached. `fill.accent.primary` stays the default. On Android a bar in another colour gets a track in that colour, faded, rather than Material's pale accent under it.
+
 ## 0.17.0
 
 ## 0.16.0
