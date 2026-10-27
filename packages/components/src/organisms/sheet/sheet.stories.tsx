@@ -91,3 +91,12 @@ export const BackActionsAndClose: Story = {
 }
 
 export const NoHeader: Story = {}
+
+export const SystemBackground: Story = {
+  args: {
+    detents: [0.4, 0.6],
+    dimmed: false,
+    header: {title: 'Pickup points', trailingItems: [{onPress: fn(), type: 'close'}]},
+    systemBackground: true,
+  },
+}

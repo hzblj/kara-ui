@@ -32,6 +32,7 @@ const SheetRoot = ({
   onPresent,
   ref,
   scrollable = false,
+  systemBackground = false,
   testID,
   visible,
 }: SheetProps) => {
@@ -105,7 +106,7 @@ const SheetRoot = ({
   return (
     <View collapsable={false} pointerEvents="box-none" style={styles.host}>
       <TrueSheet
-        backgroundColor={theme.color(bg)}
+        backgroundColor={systemBackground && Platform.OS === 'ios' ? undefined : theme.color(bg)}
         cornerRadius={CORNER_RADIUS}
         detents={detents}
         dimmed={dimmed}
