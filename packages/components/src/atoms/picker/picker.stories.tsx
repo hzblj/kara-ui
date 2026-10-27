@@ -54,6 +54,15 @@ export const Playground: Story = {}
 
 export const Disabled: Story = {args: {disabled: true}}
 
+export const Menu: Story = {
+  args: {pickerStyle: 'menu'},
+  parameters: {
+    notes:
+      'iOS only: `pickerStyle="menu"` is a button with the selection, in the accent, that opens the options as a ' +
+      'menu, where a wheel would take the screen. Android ignores it: its exposed dropdown is a menu already.',
+  },
+}
+
 export const InsideAnIsland: Story = {
   parameters: {
     notes:

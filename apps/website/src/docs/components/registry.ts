@@ -362,13 +362,18 @@ export const COMPONENTS: ComponentDoc[] = [
 ]
 
 <Picker onValueChange={setSize} options={sizes} value={size} />`,
+    examples: [
+      {code: '<Picker onValueChange={setSize} options={sizes} pickerStyle="menu" value={size} />', title: 'Menu'},
+    ],
     exports: ['Picker'],
     group: 'selection',
     host: 'self',
     id: 'picker',
     name: 'Picker',
-    notes: ['A wheel on iOS, an exposed dropdown menu on Android.'],
-    renders: {android: 'Compose ExposedDropdownMenu', ios: 'Wheel picker'},
+    notes: [
+      'A wheel on iOS, or with `pickerStyle="menu"` a button that opens the options as a menu; an exposed dropdown menu on Android, which ignores `pickerStyle`.',
+    ],
+    renders: {android: 'Compose ExposedDropdownMenu', ios: 'Wheel or menu picker'},
     summary: 'One choice out of a longer list.',
     types: ['PickerProps', 'PickerOption'],
   },
