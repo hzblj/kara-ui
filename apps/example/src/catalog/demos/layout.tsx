@@ -64,6 +64,19 @@ const StacksDemo = () => (
         </VStack>
       </Island>
     </Section>
+    <Section caption="With axis vertical it stands between the children of an HStack, as tall as the stack. iOS turns its divider by itself; Android needs the axis.">
+      <Island>
+        <VStack bg="surface.primary" borderRadius="large" p="s16" wide>
+          <HStack align="center" h={24} spacing="s16">
+            <Text>12 km</Text>
+            <Divider axis="vertical" />
+            <Text>48 min</Text>
+            <Divider axis="vertical" />
+            <Text>320 m climb</Text>
+          </HStack>
+        </VStack>
+      </Island>
+    </Section>
   </>
 )
 
@@ -97,15 +110,39 @@ const IslandDemo = () => (
 )
 
 const ListDemo = () => (
-  <Section caption="A list scrolls, so it needs a height: here, the island’s.">
-    <Island h={240} matchContents={false}>
-      <List>
-        <ListItem icon="user" onPress={() => undefined} subtitle="Name, email, password" title="Account" />
-        <ListItem icon="notification" onPress={() => undefined} subtitle="Orders, offers" title="Notifications" />
-        <ListItem icon="lock" subtitle="Face ID is on" title="Privacy" />
-      </List>
-    </Island>
-  </Section>
+  <>
+    <Section caption="A list scrolls, so it needs a height: here, the island’s.">
+      <Island h={240} matchContents={false}>
+        <List>
+          <ListItem icon="user" onPress={() => undefined} subtitle="Name, email, password" title="Account" />
+          <ListItem icon="notification" onPress={() => undefined} subtitle="Orders, offers" title="Notifications" />
+          <ListItem icon="lock" subtitle="Face ID is on" title="Privacy" />
+        </List>
+      </Island>
+    </Section>
+    <Section
+      caption="Each platform’s own list by default: inset grouped on iOS, plain on Android. Here plain on both, without separators."
+      title="Plain"
+    >
+      <Island h={240} matchContents={false}>
+        <List separators={false} variant="plain">
+          <ListItem icon="user" onPress={() => undefined} subtitle="Name, email, password" title="Account" />
+          <ListItem icon="notification" onPress={() => undefined} subtitle="Orders, offers" title="Notifications" />
+        </List>
+      </Island>
+    </Section>
+    <Section
+      caption="Inset grouped sets the rows in a rounded card, on Android a Card inside the column as Form draws a section."
+      title="Inset grouped"
+    >
+      <Island h={240} matchContents={false}>
+        <List variant="insetGrouped">
+          <ListItem icon="user" onPress={() => undefined} title="Account" />
+          <ListItem icon="lock" subtitle="Face ID is on" title="Privacy" />
+        </List>
+      </Island>
+    </Section>
+  </>
 )
 
 /** SwiftUI's form scrolls like a list and needs a height; Android's is a column of cards that sizes itself. */

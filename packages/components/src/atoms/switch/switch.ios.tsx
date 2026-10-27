@@ -6,7 +6,7 @@ import {useMemo} from 'react'
 import {useHostGuard} from '../../host-context'
 import type {SwitchComponent, SwitchProps} from './switch.types'
 
-export const Switch: SwitchComponent = ({disabled = false, label, onValueChange, value}: SwitchProps) => {
+export const Switch: SwitchComponent = ({disabled = false, label, onValueChange, testID, value}: SwitchProps) => {
   useHostGuard('Switch')
   const theme = useAppTheme()
 
@@ -20,5 +20,5 @@ export const Switch: SwitchComponent = ({disabled = false, label, onValueChange,
     return list
   }, [disabled, theme])
 
-  return <Toggle isOn={value} label={label} modifiers={modifiers} onIsOnChange={onValueChange} />
+  return <Toggle isOn={value} label={label} modifiers={modifiers} onIsOnChange={onValueChange} testID={testID} />
 }

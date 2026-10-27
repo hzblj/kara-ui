@@ -6,16 +6,30 @@ import {Glyph} from '../../glyph'
 import {useHostGuard} from '../../host-context'
 import type {RadioGroupComponent, RadioGroupProps} from './radio-group.types'
 
-export const RadioGroup: RadioGroupComponent = ({onValueChange, options, value}: RadioGroupProps) => {
+export const RadioGroup: RadioGroupComponent = ({
+  disabled = false,
+  onValueChange,
+  options,
+  testID,
+  value,
+}: RadioGroupProps) => {
   useHostGuard('RadioGroup')
 
   return (
-    <VStack spacing="s4" wide>
+    <VStack spacing="s4" testID={testID} wide>
       {options.map(option => (
-        <HStack align="center" key={option.value} onPress={() => onValueChange?.(option.value)} py="s8" wide>
-          <Text>{option.label}</Text>
+        <HStack
+          align="center"
+          key={option.value}
+          onPress={disabled ? undefined : () => onValueChange?.(option.value)}
+          py="s8"
+          wide
+        >
+          <Text color={disabled ? 'content.tertiary' : 'content.primary'}>{option.label}</Text>
           <Spacer />
-          {option.value === value ? <Glyph color="content.accent" name="check" size="s20" /> : null}
+          {option.value === value ? (
+            <Glyph color={disabled ? 'content.tertiary' : 'content.accent'} name="check" size="s20" />
+          ) : null}
         </HStack>
       ))}
     </VStack>

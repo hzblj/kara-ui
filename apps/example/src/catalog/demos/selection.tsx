@@ -16,9 +16,10 @@ import {
   Switch,
   Text,
   TextField,
+  type TextFieldRef,
   VStack,
 } from '@hzblj/kara-ui'
-import {useState} from 'react'
+import {useRef, useState} from 'react'
 
 import {Section} from '../../ui'
 import type {CatalogEntry} from '../catalog.types'
@@ -68,42 +69,81 @@ const RadioGroupDemo = () => {
   const [delivery, setDelivery] = useState('standard')
 
   return (
-    <Section>
-      <Island>
-        <VStack bg="surface.primary" borderRadius="large" p="s16" wide>
-          <RadioGroup onValueChange={setDelivery} options={DELIVERY} value={delivery} />
-        </VStack>
-      </Island>
-    </Section>
+    <>
+      <Section>
+        <Island>
+          <VStack bg="surface.primary" borderRadius="large" p="s16" wide>
+            <RadioGroup onValueChange={setDelivery} options={DELIVERY} value={delivery} />
+          </VStack>
+        </Island>
+      </Section>
+      <Section caption="Disabled: the options dim and the choice stays as it is.">
+        <Island>
+          <VStack bg="surface.primary" borderRadius="large" p="s16" wide>
+            <RadioGroup disabled options={DELIVERY} value="express" />
+          </VStack>
+        </Island>
+      </Section>
+    </>
   )
 }
 
 const SliderDemo = () => {
   const [volume, setVolume] = useState(0.4)
+  const [position, setPosition] = useState(0.25)
+  const [seeked, setSeeked] = useState(0.25)
 
   return (
-    <Section caption={`Volume ${Math.round(volume * 100)} %`}>
-      <Island>
-        <VStack spacing="s16" wide>
-          <Slider onValueChange={setVolume} value={volume} />
-          <Slider disabled value={0.7} />
-        </VStack>
-      </Island>
-    </Section>
+    <>
+      <Section caption={`Volume ${Math.round(volume * 100)} %`}>
+        <Island>
+          <VStack spacing="s16" wide>
+            <Slider onValueChange={setVolume} value={volume} />
+            <Slider disabled value={0.7} />
+          </VStack>
+        </Island>
+      </Section>
+      <Section
+        caption={`The position follows the thumb; the player seeks to ${Math.round(seeked * 100)} % once the finger lifts.`}
+      >
+        <Island>
+          <Slider onValueChange={setPosition} onValueChangeEnd={setSeeked} value={position} />
+        </Island>
+      </Section>
+    </>
   )
 }
 
 const StepperDemo = () => {
   const [count, setCount] = useState(1)
+  const [tickets, setTickets] = useState(2)
 
   return (
-    <Section caption="Between 1 and 5.">
-      <Island>
-        <VStack bg="surface.primary" borderRadius="large" px="s16" py="s8" wide>
-          <Stepper label="Quantity" max={5} min={1} onValueChange={setCount} value={count} />
-        </VStack>
-      </Island>
-    </Section>
+    <>
+      <Section caption="Between 1 and 5.">
+        <Island>
+          <VStack bg="surface.primary" borderRadius="large" px="s16" py="s8" wide>
+            <Stepper label="Quantity" max={5} min={1} onValueChange={setCount} value={count} />
+          </VStack>
+        </Island>
+      </Section>
+      <Section caption="Disabled, the row dims. On Android TalkBack reads decrementLabel and incrementLabel for the buttons.">
+        <Island>
+          <VStack bg="surface.primary" borderRadius="large" px="s16" py="s8" wide>
+            <Stepper
+              decrementLabel="Remove a ticket"
+              incrementLabel="Add a ticket"
+              label="Tickets"
+              max={6}
+              min={1}
+              onValueChange={setTickets}
+              value={tickets}
+            />
+            <Stepper disabled label="Guests" onValueChange={() => undefined} value={2} />
+          </VStack>
+        </Island>
+      </Section>
+    </>
   )
 }
 
@@ -176,12 +216,18 @@ const PickerDemo = () => {
 const DatePickerDemo = () => {
   const [date, setDate] = useState(new Date(2027, 0, 1))
   const [delivery, setDelivery] = useState(new Date(2027, 0, 4))
+  const [day, setDay] = useState(new Date(2027, 0, 12))
 
   return (
     <>
       <Section caption={`Selected: ${date.toDateString()}`}>
         <Box bg="surface.primary" borderRadius="large" p="s12">
           <DatePicker onValueChange={setDate} value={date} />
+        </Box>
+      </Section>
+      <Section caption="With datePickerStyle graphical the calendar is in place: SwiftUI’s on iOS, Material’s on Android.">
+        <Box bg="surface.primary" borderRadius="large" p="s12">
+          <DatePicker datePickerStyle="graphical" min={new Date(2027, 0, 1)} onValueChange={setDay} value={day} />
         </Box>
       </Section>
       <Section caption="Inside an island it joins the island’s stack, here under a note that wraps over several lines.">
@@ -211,31 +257,69 @@ const ColorPickerDemo = () => {
         <VStack bg="surface.primary" borderRadius="large" p="s16" spacing="s8" wide>
           <ColorPicker label="Accent" onValueChange={setColor} value={color} />
           <ColorPicker label="With opacity" onValueChange={setColor} supportsOpacity value={color} />
+          <ColorPicker disabled label="Set by the theme" value={color} />
         </VStack>
       </Island>
     </Section>
   )
 }
 
-const TextFieldDemo = () => (
-  <Section>
-    <Island>
-      <VStack spacing="s16" wide>
-        <TextField label="Email" />
-        <TextField label="Password" secure />
-        <TextField defaultValue="110" error="A postcode has five digits." label="Postcode" />
-        <TextField disabled label="Country" />
-      </VStack>
-    </Island>
-  </Section>
-)
+const TextFieldDemo = () => {
+  const password = useRef<TextFieldRef>(null)
+
+  return (
+    <>
+      <Section>
+        <Island>
+          <VStack spacing="s16" wide>
+            <TextField label="Email" />
+            <TextField label="Password" secure />
+            <TextField defaultValue="110" error="A postcode has five digits." label="Postcode" />
+            <TextField disabled label="Country" />
+          </VStack>
+        </Island>
+      </Section>
+      <Section caption="Set up for what it takes: the email keyboard without capitals or corrections, AutoFill for the account, and Next moving on to the password through a ref. The code field takes six digits.">
+        <Island>
+          <VStack spacing="s16" wide>
+            <TextField
+              contentType="username"
+              keyboard="email"
+              label="Email"
+              onSubmit={() => password.current?.focus()}
+              placeholder="name@example.com"
+              submitLabel="next"
+            />
+            <TextField contentType="password" label="Password" ref={password} secure submitLabel="done" />
+            <TextField
+              contentType="oneTimeCode"
+              keyboard="number"
+              label="Verification code"
+              maxLength={6}
+              placeholder="6 digits"
+            />
+          </VStack>
+        </Island>
+      </Section>
+    </>
+  )
+}
 
 const SearchBarDemo = () => {
   const [query, setQuery] = useState('')
+  const [submitted, setSubmitted] = useState('')
 
   return (
-    <Section caption={query ? `Searching for “${query}”` : 'Type to search.'}>
-      <SearchBar onChangeText={setQuery} value={query} />
+    <Section
+      caption={
+        submitted
+          ? `Searched for “${submitted}”`
+          : query
+            ? `Searching for “${query}”`
+            : 'Type, then press Search on the keyboard.'
+      }
+    >
+      <SearchBar onChangeText={setQuery} onSubmit={setSubmitted} placeholder="Search stores" value={query} />
     </Section>
   )
 }

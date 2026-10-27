@@ -1,12 +1,14 @@
 import type {Meta, StoryObj} from '@storybook/react-native'
 
 import {insideIsland} from '../../story-decorators'
+import {HStack} from '../h-stack'
 import {Text} from '../text'
 import {VStack} from '../v-stack'
 import {Divider} from './divider'
 
 const meta = {
   argTypes: {
+    axis: {control: 'radio', options: ['horizontal', 'vertical']},
     color: {control: 'select', options: ['border.secondary.base', 'border.secondary.muted', 'border.accent']},
   },
   component: Divider,
@@ -31,4 +33,23 @@ export const Default: Story = {
 export const Accent: Story = {
   args: {color: 'border.accent'},
   render: Default.render,
+}
+
+export const Vertical: Story = {
+  args: {axis: 'vertical'},
+  parameters: {
+    notes:
+      'Between the children of an `HStack`, as tall as the stack: give it a height (`h`). SwiftUI’s divider turns by ' +
+      'itself in an `HStack`, so iOS ignores `axis`; Compose’s does not, so Android needs `axis="vertical"` to draw a ' +
+      '`VerticalDivider`.',
+  },
+  render: args => (
+    <HStack align="center" h={24} spacing="s12">
+      <Text variant="label">12 km</Text>
+      <Divider {...args} />
+      <Text variant="label">48 min</Text>
+      <Divider {...args} />
+      <Text variant="label">320 m climb</Text>
+    </HStack>
+  ),
 }

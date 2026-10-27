@@ -1,6 +1,6 @@
 import {Text as ComposeText} from '@expo/ui/jetpack-compose'
 import {testID as testIdModifier} from '@expo/ui/jetpack-compose/modifiers'
-import {AnimatedText, type TextAnimation} from '@hzblj/kara-native/jetpack-compose'
+import {AnimatedText, type AnimatedTextOverflow, type TextAnimation} from '@hzblj/kara-native/jetpack-compose'
 import {
   animateConfig,
   type SxAnimateConfig,
@@ -12,14 +12,20 @@ import {duration, easing, springPhysics, useAppTheme} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
 
 import {useHostGuard} from '../../host-context'
-import {spansOf} from './spans'
-import type {TextComponent, TextDecoration, TextProps, TextTransform} from './text.types'
+import {spansOf, textOf} from './spans'
+import type {TextComponent, TextDecoration, TextProps, TextTransform, TextTruncation} from './text.types'
 
 const DECORATION = {
   none: 'none',
   strikethrough: 'lineThrough',
   underline: 'underline',
 } as const
+
+const OVERFLOW = {
+  head: 'startEllipsis',
+  middle: 'middleEllipsis',
+  tail: 'ellipsis',
+} as const satisfies Record<TextTruncation, AnimatedTextOverflow>
 
 const applyTransform = (children: TextProps['children'], transform: TextTransform | undefined) => {
   if (!transform || typeof children !== 'string') {
@@ -68,6 +74,7 @@ export const Text: TextComponent = ({
   numberOfLines,
   testID,
   transform,
+  truncation = 'tail',
   variant = 'body',
   ...props
 }: TextProps) => {
@@ -83,11 +90,15 @@ export const Text: TextComponent = ({
   )
   const spans = useMemo(() => spansOf(children, Text), [children])
   const animate = sx.animate === false ? undefined : sx.animate
+  // Compose ellipsizes at the start or in the middle of a single line only, and clips a longer text: that ends at the
+  // tail instead.
+  const overflow = numberOfLines === 1 ? OVERFLOW[truncation] : 'ellipsis'
 
-  // `@expo/ui`'s text takes spans but animates none, and sets no font features: with `animate`, kara's own Compose text
-  // eases each span's colour, and with `monospacedDigit` asks the face for its tabular figures.
-  if (animate !== undefined || monospacedDigit) {
-    const runs = spans ?? [{text: typeof children === 'string' || typeof children === 'number' ? String(children) : ''}]
+  // `@expo/ui`'s text takes spans but animates none, sets no font features and ellipsizes only at the end: with
+  // `animate`, kara's own Compose text eases each span's colour, with `monospacedDigit` asks the face for its tabular
+  // figures, and puts the ellipsis at the start or in the middle of a line.
+  if (animate !== undefined || monospacedDigit || overflow !== 'ellipsis') {
+    const runs = spans ?? [{text: textOf(children)}]
 
     return (
       <AnimatedText
@@ -106,6 +117,7 @@ export const Text: TextComponent = ({
         textAlign={align}
         textColor={theme.colorString(color)}
         textDecoration={decorationOf(decoration)}
+        textOverflow={overflow}
       />
     )
   }
@@ -115,6 +127,7 @@ export const Text: TextComponent = ({
       color={theme.colorString(color)}
       maxLines={numberOfLines}
       modifiers={modifiers}
+      overflow="ellipsis"
       style={{
         fontFamily: style.fontFamily,
         fontSize: style.fontSize,

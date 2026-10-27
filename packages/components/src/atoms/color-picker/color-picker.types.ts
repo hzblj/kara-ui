@@ -6,6 +6,8 @@ import type {ReactNode} from 'react'
  * spectrum and RGB sliders.
  */
 export type ColorPickerProps = {
+  /** Stops the user picking a colour, and dims the label and the well. */
+  disabled?: boolean
   /** Text beside the colour well, and the Android sheet's title. */
   label?: string
   /** Called with the colour the user picks. */

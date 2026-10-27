@@ -11,6 +11,7 @@ import type {AlertComponent, AlertProps} from './alert.types'
 const ANCHOR = [frame({height: 0, width: 0})]
 
 export const Alert: AlertComponent = ({
+  cancelLabel = 'Cancel',
   confirmLabel = 'OK',
   destructive = false,
   message,
@@ -36,7 +37,7 @@ export const Alert: AlertComponent = ({
       </SwiftUIAlert.Trigger>
       <SwiftUIAlert.Actions>
         <Button label={confirmLabel} onPress={onConfirm ?? onDismiss} role={destructive ? 'destructive' : 'default'} />
-        <Button label="Cancel" onPress={onDismiss} role="cancel" />
+        {cancelLabel === null ? null : <Button label={cancelLabel} onPress={onDismiss} role="cancel" />}
       </SwiftUIAlert.Actions>
       {/*
         `Alert.Message` is a native slot view, and a SwiftUI host cannot render a bare string — it

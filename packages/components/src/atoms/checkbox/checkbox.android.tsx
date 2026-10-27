@@ -1,5 +1,5 @@
 import {Checkbox as ComposeCheckbox, Row, Text} from '@expo/ui/jetpack-compose'
-import {clickable, fillMaxWidth} from '@expo/ui/jetpack-compose/modifiers'
+import {clickable, fillMaxWidth, testID as testIdModifier} from '@expo/ui/jetpack-compose/modifiers'
 import {spacing, useAppTheme} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
 
@@ -14,17 +14,20 @@ const NOOP = () => undefined
  * gets a handler, so a disabled or read-only box keeps the touch target an enabled one has, and lines up with it;
  * `enabled` is what stops the input.
  */
-export const Checkbox: CheckboxComponent = ({disabled = false, label, onValueChange, value}: CheckboxProps) => {
+export const Checkbox: CheckboxComponent = ({disabled = false, label, onValueChange, testID, value}: CheckboxProps) => {
   useHostGuard('Checkbox')
   const theme = useAppTheme()
   const rowModifiers = useMemo(
     () => (disabled || !onValueChange ? [fillMaxWidth()] : [fillMaxWidth(), clickable(() => onValueChange(!value))]),
     [disabled, onValueChange, value]
   )
+  // On the box, not the row: the box is its own toggleable node inside the row, and the one a test reads.
+  const controlModifiers = useMemo(() => (testID ? [testIdModifier(testID)] : undefined), [testID])
   const control = (
     <ComposeCheckbox
       colors={{checkedColor: theme.color('fill.accent.primary'), checkmarkColor: theme.color('content.on.accent')}}
       enabled={!disabled}
+      modifiers={controlModifiers}
       onCheckedChange={onValueChange ?? NOOP}
       value={value}
     />

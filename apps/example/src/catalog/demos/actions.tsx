@@ -15,7 +15,9 @@ import {
   type MenuAction,
   Pressable,
   RnText,
+  Spacer,
   SwipeActions,
+  Text,
   VStack,
 } from '@hzblj/kara-ui'
 import {useMemo, useState} from 'react'
@@ -48,6 +50,18 @@ const ButtonDemo = () => (
         </VStack>
       </Island>
     </Section>
+    <Section
+      caption="A text button for the lesser action beside a prominent one: SwiftUI’s borderless style on iOS, Material’s TextButton on Android. An icon leads the label in its colour."
+      title="Plain, and with an icon"
+    >
+      <Island>
+        <VStack spacing="s8" wide>
+          <Button icon="arrow-right" label="Continue" />
+          <Button label="Skip for now" variant="plain" />
+          <Button icon="share" label="Share the list" variant="secondary" />
+        </VStack>
+      </Island>
+    </Section>
     <Section title="Disabled">
       <Island>
         <VStack spacing="s8" wide>
@@ -72,27 +86,78 @@ const ButtonDemo = () => (
 )
 
 const IconButtonDemo = () => (
-  <Section caption="Disabled buttons dim and stop responding.">
-    <Island>
-      <HStack spacing="s8">
-        <IconButton accessibilityLabel="Add" name="add" onPress={noop} />
-        <IconButton accessibilityLabel="Share" name="share" onPress={noop} />
-        <IconButton accessibilityLabel="Like" name="heart" onPress={noop} />
-        <IconButton accessibilityLabel="Locked" disabled name="lock" />
-      </HStack>
-    </Island>
-  </Section>
+  <>
+    <Section caption="Disabled buttons dim and stop responding.">
+      <Island>
+        <HStack spacing="s8">
+          <IconButton accessibilityLabel="Add" name="add" onPress={noop} />
+          <IconButton accessibilityLabel="Share" name="share" onPress={noop} />
+          <IconButton accessibilityLabel="Like" name="heart" onPress={noop} />
+          <IconButton accessibilityLabel="Locked" disabled name="lock" />
+        </HStack>
+      </Island>
+    </Section>
+    <Section
+      caption="Filled, tonal, outlined and glass draw a circle around the icon. Material has no glass, so Android shows the tonal one."
+      title="Variants"
+    >
+      <Island>
+        <HStack spacing="s8">
+          <IconButton accessibilityLabel="Add" name="add" onPress={noop} variant="filled" />
+          <IconButton accessibilityLabel="Share" name="share" onPress={noop} variant="tonal" />
+          <IconButton accessibilityLabel="More" name="more" onPress={noop} variant="outlined" />
+          <IconButton accessibilityLabel="Close" name="close" onPress={noop} variant="glass" />
+        </HStack>
+      </Island>
+    </Section>
+    <Section
+      caption="color tints the icon, or fills a filled button, whose icon then picks a colour that reads on it."
+      title="Colour"
+    >
+      <Island>
+        <HStack spacing="s8">
+          <IconButton accessibilityLabel="Like" color="content.destructive" name="heart" onPress={noop} />
+          <IconButton
+            accessibilityLabel="Delete"
+            color="fill.destructive.primary"
+            name="trash"
+            onPress={noop}
+            variant="filled"
+          />
+        </HStack>
+      </Island>
+    </Section>
+  </>
 )
 
 const FabDemo = () => (
-  <Section caption="Material's floating action button on Android, a round prominent button on iOS.">
-    <Island>
-      <HStack spacing="s12">
-        <Fab accessibilityLabel="Add" name="add" onPress={noop} />
-        <Fab accessibilityLabel="Search" name="search" onPress={noop} />
-      </HStack>
-    </Island>
-  </Section>
+  <>
+    <Section caption="Material's floating action button on Android, a round prominent button on iOS.">
+      <Island>
+        <HStack spacing="s12">
+          <Fab accessibilityLabel="Add" name="add" onPress={noop} />
+          <Fab accessibilityLabel="Search" name="search" onPress={noop} />
+        </HStack>
+      </Island>
+    </Section>
+    <Section caption="Material’s three sizes: small, regular and large." title="Sizes">
+      <Island>
+        <HStack align="center" spacing="s12">
+          <Fab accessibilityLabel="Search" name="search" onPress={noop} size="small" />
+          <Fab accessibilityLabel="Add" name="add" onPress={noop} />
+          <Fab accessibilityLabel="Share" name="share" onPress={noop} size="large" />
+        </HStack>
+      </Island>
+    </Section>
+    <Section
+      caption="With a label it is the extended FAB: Material’s own on Android, an accent capsule on iOS."
+      title="Extended"
+    >
+      <Island>
+        <Fab accessibilityLabel="New post" label="New post" name="add" onPress={noop} />
+      </Island>
+    </Section>
+  </>
 )
 
 const FabMenuDemo = () => (
@@ -117,12 +182,29 @@ const LinkDemo = () => (
 const MenuDemo = () => {
   const [picked, setPicked] = useState('Nothing yet')
 
+  const actions = useActions(setPicked)
+
   return (
-    <Section caption={`Picked: ${picked}`}>
-      <Island>
-        <Menu actions={useActions(setPicked)} label="More options" />
-      </Island>
-    </Section>
+    <>
+      <Section caption={`Picked: ${picked}`}>
+        <Island>
+          <Menu actions={actions} label="More options" />
+        </Island>
+      </Section>
+      <Section caption="An icon alone opens the menu like an icon button, and needs an accessibilityLabel. An action that is not available yet is disabled.">
+        <Island>
+          <HStack align="center" spacing="s8" wide>
+            <Text variant="headline">Order #1042</Text>
+            <Spacer />
+            <Menu
+              accessibilityLabel="More options"
+              actions={[...actions, {disabled: true, icon: 'bolt', label: 'Track parcel', onPress: noop}]}
+              icon="more"
+            />
+          </HStack>
+        </Island>
+      </Section>
+    </>
   )
 }
 
@@ -137,6 +219,7 @@ const ActionSheetDemo = () => {
           <Button label="Show actions" onPress={() => setVisible(true)} variant="secondary" />
           <ActionSheet
             actions={useActions(setPicked)}
+            message="Size 42, White/Black"
             onDismiss={() => setVisible(false)}
             title="Air Max 90"
             visible={visible}

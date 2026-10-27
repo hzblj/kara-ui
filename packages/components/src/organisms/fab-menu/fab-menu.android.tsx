@@ -43,6 +43,9 @@ const FabMenuRow = ({action, onSelect}: FabMenuRowProps) => {
 }
 
 /**
+ * `MenuAction.destructive` and `disabled` are not drawn: Material 3's `FloatingActionButtonMenuItem` takes neither a
+ * role nor an `enabled` state, and its pills keep the button's colours.
+ *
  * The menu fills its host and pins itself to the bottom end, so give it the corner of a screen — a `ZStack` over the
  * content — rather than a row of its own. The pills take the button's colours, so the menu reads as the button
  * unfolding rather than a second surface.

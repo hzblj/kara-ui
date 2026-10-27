@@ -11,6 +11,8 @@ export type SwitchProps = {
   label?: string
   /** Called with the new value when the user flips it. On Android a flip plays `toggleOn` / `toggleOff`. */
   onValueChange?: (value: boolean) => void
+  /** Test identifier, forwarded to the native switch (on Android the switch itself, not the labelled row). */
+  testID?: string
   /** Whether it is on. Controlled: pass back what `onValueChange` reports. */
   value: boolean
 }

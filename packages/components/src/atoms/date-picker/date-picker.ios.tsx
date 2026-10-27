@@ -1,5 +1,10 @@
 import {Host, DatePicker as SwiftUIDatePicker} from '@expo/ui/swift-ui'
-import {datePickerStyle, labelsHidden, tint} from '@expo/ui/swift-ui/modifiers'
+import {
+  datePickerStyle as datePickerStyleModifier,
+  disabled as disabledModifier,
+  labelsHidden,
+  tint,
+} from '@expo/ui/swift-ui/modifiers'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
 
@@ -13,13 +18,15 @@ const COMPONENTS = {
 } as const satisfies Record<DatePickerMode, ('date' | 'hourAndMinute')[]>
 
 /**
- * The system's compact date picker: the value in a pill, and a tap on it opens the calendar popover UIKit owns. Its own
- * host, sized to the pill on both axes — a host that took the width it was given would lay the pill out against the
- * far edge of it, or past its container's — so it drops into a row the way a `Text` does. The label is the caller's,
- * beside it; the calendar is in the accent. Inside a `Screen` or `Island` it renders into that host instead (see
- * `useInsideHost`).
+ * The system's date picker, in the accent. `compact` by default: the value in a pill, and a tap on it opens the
+ * calendar popover UIKit owns. `graphical` is that calendar in place, `wheel` the value on wheels. Its own host, sized
+ * to the picker on both axes (a host that took the width it was given would lay the pill out against the far edge of
+ * it, or past its container's), so it drops into a row the way a `Text` does. The label is the caller's, beside it.
+ * Inside a `Screen` or `Island` it renders into that host instead (see `useInsideHost`).
  */
 export const DatePicker: DatePickerComponent = ({
+  datePickerStyle = 'compact',
+  disabled = false,
   max,
   min,
   mode = 'date',
@@ -31,8 +38,13 @@ export const DatePicker: DatePickerComponent = ({
   const insideHost = useInsideHost()
 
   const modifiers = useMemo(
-    () => [datePickerStyle('compact'), labelsHidden(), tint(theme.color('fill.accent.primary'))],
-    [theme]
+    () => [
+      datePickerStyleModifier(datePickerStyle),
+      labelsHidden(),
+      tint(theme.color('fill.accent.primary')),
+      ...(disabled ? [disabledModifier(true)] : []),
+    ],
+    [datePickerStyle, disabled, theme]
   )
 
   const picker = (

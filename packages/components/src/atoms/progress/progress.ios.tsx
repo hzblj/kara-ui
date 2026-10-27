@@ -7,7 +7,13 @@ import {useMemo} from 'react'
 import {useHostGuard} from '../../host-context'
 import type {ProgressComponent, ProgressProps} from './progress.types'
 
-export const Progress: ProgressComponent = ({accessibilityLabel, circular = false, value}: ProgressProps) => {
+export const Progress: ProgressComponent = ({
+  accessibilityLabel,
+  circular = false,
+  color = 'fill.accent.primary',
+  testID,
+  value,
+}: ProgressProps) => {
   useHostGuard('Progress')
   const theme = useAppTheme()
   const accessibilityModifiers = useAccessibilityModifiers({accessibilityLabel})
@@ -16,16 +22,16 @@ export const Progress: ProgressComponent = ({accessibilityLabel, circular = fals
   const modifiers = useMemo(
     () => [
       ring ? gaugeStyle('circularCapacity') : progressViewStyle(circular ? 'circular' : 'linear'),
-      tint(theme.color('fill.accent.primary')),
+      tint(theme.color(color)),
       ...accessibilityModifiers,
     ],
-    [accessibilityModifiers, circular, ring, theme]
+    [accessibilityModifiers, circular, color, ring, theme]
   )
 
   // SwiftUI's circular `ProgressView` ignores its value on iOS and spins; a ring that fills is a capacity `Gauge`.
   return ring ? (
-    <Gauge modifiers={modifiers} value={value} />
+    <Gauge modifiers={modifiers} testID={testID} value={value} />
   ) : (
-    <ProgressView modifiers={modifiers} value={value ?? null} />
+    <ProgressView modifiers={modifiers} testID={testID} value={value ?? null} />
   )
 }

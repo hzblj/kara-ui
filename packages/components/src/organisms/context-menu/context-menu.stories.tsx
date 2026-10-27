@@ -13,6 +13,12 @@ const ACTIONS: MenuAction[] = [
   {destructive: true, icon: 'trash', label: 'Delete', onPress: fn()},
 ]
 
+const WITH_DISABLED: MenuAction[] = [
+  {icon: 'share', label: 'Share', onPress: fn()},
+  {disabled: true, icon: 'star', label: 'Favourite', onPress: fn()},
+  {destructive: true, icon: 'trash', label: 'Delete', onPress: fn()},
+]
+
 const Card = () => (
   <Box bg="surface.primary" borderRadius="medium" gap="s8" p="s16">
     <RnText variant="headline">Long-press this card</RnText>
@@ -63,6 +69,20 @@ export const Default: Story = {
 export const WithPreview: Story = {
   render: args => (
     <ContextMenu {...args} preview={<Preview />}>
+      <Card />
+    </ContextMenu>
+  ),
+}
+
+export const DisabledAction: Story = {
+  args: {actions: WITH_DISABLED},
+  parameters: {
+    notes:
+      'A `disabled` action stays in the menu, greyed, and does not respond: UIKit’s disabled menu element on iOS, a ' +
+      'Material item with `enabled` off on Android.',
+  },
+  render: args => (
+    <ContextMenu {...args}>
       <Card />
     </ContextMenu>
   ),

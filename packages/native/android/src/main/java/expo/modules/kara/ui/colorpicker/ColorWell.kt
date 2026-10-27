@@ -45,6 +45,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
@@ -84,7 +85,9 @@ data class ColorWellProps(
   /** Adds the opacity slider, and the alpha to the reported hex. */
   val supportsOpacity: MutableState<Boolean> = mutableStateOf(false),
   /** The sheet's title and the well's accessibility label: the label beside the well. */
-  val title: MutableState<String?> = mutableStateOf(null)
+  val title: MutableState<String?> = mutableStateOf(null),
+  /** Off, the well dims and does not open the sheet. */
+  val enabled: MutableState<Boolean> = mutableStateOf(true)
 ) : ComposeProps
 
 open class ColorWellChangeEvent(
@@ -177,12 +180,13 @@ private fun Modifier.track(onPosition: (Offset, Size) -> Unit) = pointerInput(Un
 
 /** The colour well: a rainbow ring around the colour, the way iOS draws `ColorPicker`'s. */
 @Composable
-private fun Well(color: Color, description: String, onClick: () -> Unit) {
+private fun Well(color: Color, description: String, enabled: Boolean, onClick: () -> Unit) {
   Box(
     Modifier
       .size(30.dp)
+      .alpha(if (enabled) 1f else 0.38f)
       .clip(CircleShape)
-      .clickable(role = Role.Button, onClickLabel = description, onClick = onClick)
+      .clickable(enabled = enabled, role = Role.Button, onClickLabel = description, onClick = onClick)
       .semantics { contentDescription = description }
       .drawBehind {
         val ring = 2.5.dp.toPx()
@@ -345,6 +349,7 @@ class ColorWellView(context: Context, appContext: AppContext) :
     val value by props.value
     val supportsOpacity by props.supportsOpacity
     val title by props.title
+    val enabled by props.enabled
     var isOpen by remember { mutableStateOf(false) }
     var hsva by remember { mutableStateOf(Hsva(0f, 0f, 1f, 1f)) }
     var tab by remember { mutableIntStateOf(0) }
@@ -359,7 +364,7 @@ class ColorWellView(context: Context, appContext: AppContext) :
       onValueChange(ColorWellChangeEvent(hexOf(clamped.color, withAlpha = supportsOpacity)))
     }
 
-    Well(shown, label) {
+    Well(shown, label, enabled) {
       hsva = (parseHex(value) ?: Color.White).toHsva()
       isOpen = true
     }

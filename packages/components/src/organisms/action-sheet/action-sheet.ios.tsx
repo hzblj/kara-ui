@@ -1,5 +1,5 @@
-import {Button, ConfirmationDialog, Spacer} from '@expo/ui/swift-ui'
-import {frame} from '@expo/ui/swift-ui/modifiers'
+import {Button, ConfirmationDialog, Spacer, Text as SwiftUIText} from '@expo/ui/swift-ui'
+import {disabled, frame} from '@expo/ui/swift-ui/modifiers'
 
 import {useHostGuard} from '../../host-context'
 import type {ActionSheetComponent, ActionSheetProps} from './action-sheet.types'
@@ -11,7 +11,13 @@ import type {ActionSheetComponent, ActionSheetProps} from './action-sheet.types'
  */
 const ANCHOR = [frame({height: 0, width: 0})]
 
-export const ActionSheet: ActionSheetComponent = ({actions, onDismiss, title, visible}: ActionSheetProps) => {
+const DISABLED = [disabled(true)]
+
+/**
+ * `titleVisibility="visible"`: left to `automatic`, SwiftUI drops the title of a dialog presented as an action sheet,
+ * and the actions lose what they are about.
+ */
+export const ActionSheet: ActionSheetComponent = ({actions, message, onDismiss, title, visible}: ActionSheetProps) => {
   useHostGuard('ActionSheet')
 
   return (
@@ -23,6 +29,7 @@ export const ActionSheet: ActionSheetComponent = ({actions, onDismiss, title, vi
         }
       }}
       title={title}
+      titleVisibility="visible"
     >
       <ConfirmationDialog.Trigger>
         <Spacer modifiers={ANCHOR} />
@@ -32,11 +39,21 @@ export const ActionSheet: ActionSheetComponent = ({actions, onDismiss, title, vi
           <Button
             key={action.label}
             label={action.label}
+            modifiers={action.disabled ? DISABLED : undefined}
             onPress={action.onPress}
             role={action.destructive ? 'destructive' : 'default'}
           />
         ))}
       </ConfirmationDialog.Actions>
+      {/*
+        A native slot view, which cannot hold a bare string (see `Alert`): the dialog mounts while dismissed, so an
+        unwrapped string would crash on mount. Plain SwiftUI `Text`, so the message keeps the system's styling.
+      */}
+      {message ? (
+        <ConfirmationDialog.Message>
+          <SwiftUIText>{message}</SwiftUIText>
+        </ConfirmationDialog.Message>
+      ) : null}
     </ConfirmationDialog>
   )
 }

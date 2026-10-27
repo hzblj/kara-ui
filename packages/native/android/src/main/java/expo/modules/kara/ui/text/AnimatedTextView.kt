@@ -69,6 +69,7 @@ data class AnimatedTextProps(
   val textAlign: MutableState<String?> = mutableStateOf(null),
   val textDecoration: MutableState<String?> = mutableStateOf(null),
   val maxLines: MutableState<Int?> = mutableStateOf(null),
+  val textOverflow: MutableState<String?> = mutableStateOf(null),
   val animation: MutableState<TextAnimationRecord?> = mutableStateOf(null),
   val modifiers: MutableState<ModifierList> = mutableStateOf(emptyList())
 ) : ComposeProps
@@ -79,7 +80,8 @@ data class AnimatedTextProps(
  * run keeps its own animation by position, so a run that changes colour eases there while the rest stay put.
  *
  * It is also what `Text` draws with `monospacedDigit` (`fontFeatureSettings` `tnum`), which `@expo/ui`'s text cannot
- * set. Without an `animation` a colour switches, as it does there.
+ * set, and with `truncation` at the head or in the middle of a single line (`textOverflow`), which `@expo/ui`'s text
+ * cannot ellipsize. Without an `animation` a colour switches, as it does there.
  */
 @SuppressLint("ViewConstructor")
 class AnimatedTextView(context: Context, appContext: AppContext) :
@@ -99,6 +101,7 @@ class AnimatedTextView(context: Context, appContext: AppContext) :
     val textAlign by props.textAlign
     val textDecoration by props.textDecoration
     val maxLines by props.maxLines
+    val textOverflow by props.textOverflow
     val animation by props.animation
     val modifiers by props.modifiers
 
@@ -118,7 +121,7 @@ class AnimatedTextView(context: Context, appContext: AppContext) :
       },
       modifier = ModifierRegistry.applyModifiers(modifiers, appContext, this, globalEventDispatcher),
       maxLines = maxLines ?: Int.MAX_VALUE,
-      overflow = TextOverflow.Ellipsis,
+      overflow = textOverflowOf(textOverflow),
       style = TextStyle(
         color = base,
         fontFamily = resolveFontFamily(fontFamily, context),
@@ -140,6 +143,17 @@ class AnimatedTextView(context: Context, appContext: AppContext) :
       )
     )
   }
+}
+
+/**
+ * `textOverflow` as Compose's `TextOverflow`: an ellipsis at the end unless told otherwise. Compose puts one at the
+ * start or in the middle of a single line only, and clips a longer text.
+ */
+private fun textOverflowOf(name: String?): TextOverflow = when (name) {
+  "clip" -> TextOverflow.Clip
+  "startEllipsis" -> TextOverflow.StartEllipsis
+  "middleEllipsis" -> TextOverflow.MiddleEllipsis
+  else -> TextOverflow.Ellipsis
 }
 
 private fun animationSpec(animation: TextAnimationRecord?): AnimationSpec<androidx.compose.ui.graphics.Color> {

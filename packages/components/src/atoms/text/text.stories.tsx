@@ -29,6 +29,7 @@ const meta = {
     monospaced: {control: 'boolean'},
     monospacedDigit: {control: 'boolean'},
     transform: {control: 'radio', options: ['uppercase', 'lowercase']},
+    truncation: {control: 'radio', options: ['head', 'middle', 'tail']},
     variant: {control: 'select', options: VARIANTS},
   },
   component: Text,
@@ -95,6 +96,28 @@ export const TransformAndDecoration: Story = {
 
 export const Truncated: Story = {
   args: {numberOfLines: 1},
+}
+
+const PATH = 'Projects/kara-ui/apps/example/src/catalog/demos/selection.tsx'
+
+export const Truncation: Story = {
+  parameters: {
+    notes:
+      'Where the ellipsis goes in a text cut short: the tail by default, the head to keep the end, the middle to keep ' +
+      'both ends of a path or a file name. SwiftUI’s `truncationMode` on iOS. Android puts it at the head or in the ' +
+      'middle of a single line only, as Compose does, drawn by kara’s own Compose text; a longer text ends at the tail.',
+  },
+  render: () => (
+    <VStack align="start" spacing="s8" wide>
+      <Text numberOfLines={1}>{PATH}</Text>
+      <Text numberOfLines={1} truncation="middle">
+        {PATH}
+      </Text>
+      <Text numberOfLines={1} truncation="head">
+        {PATH}
+      </Text>
+    </VStack>
+  ),
 }
 
 export const Monospaced: Story = {

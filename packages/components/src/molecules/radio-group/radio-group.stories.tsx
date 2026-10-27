@@ -43,3 +43,5 @@ export const TwoOptions: Story = {
     value: 'dark',
   },
 }
+
+export const Disabled: Story = {args: {disabled: true}}

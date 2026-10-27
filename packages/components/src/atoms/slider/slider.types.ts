@@ -10,8 +10,15 @@ export type SliderProps = {
   min?: number
   /** Called with the new value as the thumb moves. */
   onValueChange?: (value: number) => void
+  /**
+   * Called once with the final value when the user lets go of the slider: where a seek or a volume commits, rather
+   * than at every step of the drag.
+   */
+  onValueChangeEnd?: (value: number) => void
   /** The increment between stops; leave it unset for a continuous slider. On Android every stop plays a `tick`. */
   step?: number
+  /** Test identifier, forwarded to the native view. */
+  testID?: string
   /** Between `min` and `max`. Controlled: pass back what `onValueChange` reports. */
   value: number
 }
