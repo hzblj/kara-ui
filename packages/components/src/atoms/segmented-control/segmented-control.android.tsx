@@ -1,16 +1,60 @@
 import {Host, SegmentedButton, SingleChoiceSegmentedButtonRow, Text} from '@expo/ui/jetpack-compose'
-import {fillMaxWidth, testID as testIdModifier, weight} from '@expo/ui/jetpack-compose/modifiers'
+import {fillMaxWidth, height, testID as testIdModifier, weight} from '@expo/ui/jetpack-compose/modifiers'
+import {iconResourceName} from '@hzblj/expo-native-icons'
 import {haptics} from '@hzblj/expo-rich-haptics'
-import {useAppTheme} from '@hzblj/kara-theme'
+import {DrawableIcon, NativeImage} from '@hzblj/kara-native/jetpack-compose'
+import {spacing as spacingTokens, useAppTheme} from '@hzblj/kara-theme'
 import {useCallback, useMemo} from 'react'
 
 import {useInsideHost} from '../../host-context'
-import type {SegmentedControlComponent, SegmentedControlProps} from './segmented-control.types'
+import {HStack} from '../h-stack'
+import type {SegmentedControlComponent, SegmentedControlProps, SegmentedControlSegment} from './segmented-control.types'
+import {imageUri, segmentOf} from './segments'
 
 const MATCH_HEIGHT_ONLY = {horizontal: false, vertical: true}
 
-/** Every segment the same width, like UIKit's: Material's would size each to its label. */
-const SEGMENT = [weight(1)]
+/** Material's own segment height, which `spacing` only ever adds to. */
+const MATERIAL_HEIGHT = 40
+
+type SegmentLabelProps = {
+  iconSize: number
+  segment: SegmentedControlSegment
+}
+
+/**
+ * What a segment shows: its label, one of the app's icons before it, or an image loaded by kara-native. The icon and a
+ * label the image falls back to take the segment's content colour, so they follow the selection and `disabled`.
+ */
+const SegmentLabel = ({iconSize, segment}: SegmentLabelProps) => {
+  const theme = useAppTheme()
+  const face = theme.typography.subheadlineMedium
+
+  if (segment.image !== undefined) {
+    return (
+      <NativeImage
+        fontFamily={face.fontFamily}
+        fontSize={face.fontSize}
+        fontWeight={String(face.fontWeight)}
+        imageHeight={iconSize}
+        label={segment.label}
+        source={imageUri(segment.image)}
+      />
+    )
+  }
+
+  const label = <Text style={face}>{segment.label}</Text>
+
+  if (segment.icon === undefined) {
+    return label
+  }
+
+  return (
+    <HStack align="center" spacing="s6">
+      <DrawableIcon iconSize={iconSize} resourceName={iconResourceName(segment.icon)} />
+      {label}
+    </HStack>
+  )
+}
 
 /**
  * Material's single-choice segmented buttons, the selected one filled with the accent like a checked `Switch`. Its own
@@ -20,13 +64,28 @@ const SEGMENT = [weight(1)]
  */
 export const SegmentedControl: SegmentedControlComponent = ({
   disabled = false,
+  iconSize = 's20',
   onChange,
   selectedIndex,
+  spacing,
   testID,
   values,
 }: SegmentedControlProps) => {
   const theme = useAppTheme()
   const insideHost = useInsideHost()
+  const segments = useMemo(() => values.map(segmentOf), [values])
+  const iconPoints = spacingTokens[iconSize]
+
+  // Every segment the same width, like UIKit's: Material's would size each to its label. With `spacing`, as tall as
+  // the content and that space, and never shorter than Material's own segment.
+  const segmentModifiers = useMemo(() => {
+    if (spacing === undefined) {
+      return [weight(1)]
+    }
+
+    const content = Math.max(theme.typography.subheadlineMedium.lineHeight, iconPoints)
+    return [weight(1), height(Math.max(MATERIAL_HEIGHT, content + 2 * spacingTokens[spacing]))]
+  }, [iconPoints, spacing, theme])
 
   // Every segment keeps the same outline, the selected one too: an accent border would run its fill out over the line
   // the others draw inside, and make it look taller than its neighbours.
@@ -56,24 +115,24 @@ export const SegmentedControl: SegmentedControlComponent = ({
       }
 
       haptics.selection()
-      onChange?.(index, values[index] ?? '')
+      onChange?.(index, segments[index]?.label ?? '')
     },
-    [onChange, selectedIndex, values]
+    [onChange, segments, selectedIndex]
   )
 
   const row = (
     <SingleChoiceSegmentedButtonRow modifiers={rowModifiers}>
-      {values.map((label, index) => (
+      {segments.map((segment, index) => (
         <SegmentedButton
           colors={colors}
           enabled={!disabled}
           key={index}
-          modifiers={SEGMENT}
+          modifiers={segmentModifiers}
           onClick={() => select(index)}
           selected={index === selectedIndex}
         >
           <SegmentedButton.Label>
-            <Text style={theme.typography.subheadlineMedium}>{label}</Text>
+            <SegmentLabel iconSize={iconPoints} segment={segment} />
           </SegmentedButton.Label>
         </SegmentedButton>
       ))}

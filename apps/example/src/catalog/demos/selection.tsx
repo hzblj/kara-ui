@@ -150,9 +150,31 @@ const StepperDemo = () => {
 const COURIER_NOTE =
   'Ring twice, the bell is quiet.\nIf nobody answers, leave it with the neighbours at number 12.\nThe gate code is 4021.'
 
+// Made-up carriers' logos as SVG data URIs: what an app would get from its API as URLs, drawn in their own colours.
+const svg = (body: string) =>
+  `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 24">${body}</svg>`)}`
+
+const CARRIERS = [
+  {
+    image: {
+      uri: svg(
+        '<rect x="2" y="3" width="44" height="18" rx="5" fill="#FF6A00"/><path d="M14 9h20v6H14z" fill="#fff"/>'
+      ),
+    },
+    label: 'Parcel box',
+  },
+  {
+    image: {uri: svg('<circle cx="17" cy="12" r="8" fill="#1F6FEB"/><circle cx="31" cy="12" r="8" fill="#FFC300"/>')},
+    label: 'Post',
+  },
+  {image: {uri: svg('<path d="M6 19 18 5h8L14 19zM22 19 34 5h8L30 19z" fill="#12A37F"/>')}, label: 'Courier'},
+]
+
 const SegmentedControlDemo = () => {
   const [index, setIndex] = useState(1)
   const [delivery, setDelivery] = useState(0)
+  const [carrier, setCarrier] = useState(0)
+  const [view, setView] = useState(0)
 
   return (
     <>
@@ -166,6 +188,24 @@ const SegmentedControlDemo = () => {
             <SegmentedControl onChange={setDelivery} selectedIndex={delivery} values={['Door', 'Locker', 'Pickup']} />
           </VStack>
         </Island>
+      </Section>
+      <Section caption="One of your icons before each label, in the label’s colour. iconSize and spacing make the control bigger.">
+        <SegmentedControl
+          iconSize="s24"
+          onChange={setView}
+          selectedIndex={view}
+          spacing="s12"
+          values={[
+            {icon: 'grid', label: 'Grid'},
+            {icon: 'star', label: 'Saved'},
+            {icon: 'heart', label: 'Liked'},
+          ]}
+        />
+      </Section>
+      <Section
+        caption={`Images in their own colours, carriers’ logos here (SVG, loaded natively). ${CARRIERS[carrier]?.label} is selected; screen readers say each label.`}
+      >
+        <SegmentedControl onChange={setCarrier} selectedIndex={carrier} spacing="s8" values={CARRIERS} />
       </Section>
     </>
   )

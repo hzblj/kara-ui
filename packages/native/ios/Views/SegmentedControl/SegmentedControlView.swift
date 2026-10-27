@@ -4,6 +4,11 @@ import UIKit
 internal final class SegmentedControlRecord: Record {
   @Field var label: String = ""
   @Field var value: String = ""
+  /// An asset-catalog image (the app's icon): drawn before the label, in the label's colour.
+  @Field var icon: String?
+  /// An image by URL or bundle name (a logo): drawn in its own colours instead of the label, which stays its
+  /// accessibility label and comes back if the image cannot be loaded.
+  @Field var image: String?
 
   required init() {}
 }
@@ -31,6 +36,12 @@ public final class SegmentedControlView: ExpoView {
   // nil for either keeps UIKit's own rounded look.
   private var trackCornerRadius: CGFloat?
   private var pillCornerRadius: CGFloat?
+  /// The height of an icon or an image in a segment.
+  private var iconSize: CGFloat = 20
+  /// Space above and below a segment's content. nil keeps UIKit's own height.
+  private var verticalPadding: CGFloat?
+  /// Each icon segment's template, drawn again in the label's colour whenever the selection or the colours change.
+  private var icons: [Int: UIImage] = [:]
 
   public required init(appContext: AppContext? = nil) {
     super.init(appContext: appContext)
@@ -48,9 +59,12 @@ public final class SegmentedControlView: ExpoView {
   }
 
   /// Yoga never asks a native view for its size, so the control's own height goes to the shadow node — the width
-  /// stays the layout's (a negative width leaves it unset).
+  /// stays the layout's (a negative width leaves it unset). With a vertical padding the control is as tall as its
+  /// content and that padding, and never less than UIKit's own height.
   private func reportHeight() {
-    let height = control.intrinsicContentSize.height
+    let intrinsic = control.intrinsicContentSize.height
+    let content = max(resolvedFont().lineHeight, iconSize)
+    let height = verticalPadding.map { max(intrinsic, ceil(content + 2 * $0)) } ?? intrinsic
 
     guard height > 0, height != reportedHeight else {
       return
@@ -62,11 +76,99 @@ public final class SegmentedControlView: ExpoView {
 
   func setOptions(_ options: [SegmentedControlRecord]) {
     segments = options
+    icons = [:]
     control.removeAllSegments()
     for (index, option) in options.enumerated() {
-      control.insertSegment(withTitle: option.label, at: index, animated: false)
+      // An image segment starts empty, as Footshop's does: its label only comes back if the image fails.
+      control.insertSegment(withTitle: option.image == nil ? option.label : nil, at: index, animated: false)
+      if let icon = option.icon.flatMap({ UIImage(named: $0) }) {
+        icons[index] = icon.withRenderingMode(.alwaysTemplate)
+      }
+      loadImage(for: option, at: index)
     }
     applySelectedValue(pendingSelectedValue)
+    applyIcons()
+    setNeedsLayout()
+  }
+
+  func setIconSize(_ size: Double?) {
+    iconSize = CGFloat(size ?? 20)
+    applyIcons()
+    reloadImages()
+    setNeedsLayout()
+  }
+
+  func setVerticalPadding(_ padding: Double?) {
+    verticalPadding = padding.map { CGFloat($0) }
+    setNeedsLayout()
+  }
+
+  private func reloadImages() {
+    for (index, option) in segments.enumerated() {
+      loadImage(for: option, at: index)
+    }
+  }
+
+  private func loadImage(for option: SegmentedControlRecord, at index: Int) {
+    guard let source = option.image else {
+      return
+    }
+
+    NativeImageLoader.loadImage(source, height: iconSize, scale: displayScale) { [weak self] image in
+      self?.applyImage(image, to: option, at: index)
+    }
+  }
+
+  private var displayScale: CGFloat {
+    let scale = traitCollection.displayScale
+    return scale > 0 ? scale : UITraitCollection.current.displayScale
+  }
+
+  private func applyImage(_ image: UIImage?, to option: SegmentedControlRecord, at index: Int) {
+    // The options may have changed while the image loaded.
+    guard index < segments.count, segments[index] === option else {
+      return
+    }
+
+    guard let image else {
+      control.setTitle(option.label, forSegmentAt: index)
+      return
+    }
+
+    image.accessibilityLabel = option.label
+    control.setImage(image, forSegmentAt: index)
+    setNeedsLayout()
+  }
+
+  /// A segment shows a title or an image, never both, so an icon segment is one image: the icon and the label drawn
+  /// together in the colour the label would have, the selected segment's or the others'.
+  private func applyIcons() {
+    for (index, icon) in icons where index < segments.count {
+      let color = index == control.selectedSegmentIndex ? activeTextColor : inactiveTextColor
+      control.setImage(renderSegment(icon: icon, label: segments[index].label, color: color), forSegmentAt: index)
+    }
+  }
+
+  private func renderSegment(icon: UIImage, label: String, color: UIColor) -> UIImage {
+    let iconWidth = icon.size.height > 0 ? iconSize * icon.size.width / icon.size.height : iconSize
+    let text = NSAttributedString(string: label, attributes: [.font: resolvedFont(), .foregroundColor: color])
+    let textSize = label.isEmpty ? .zero : text.size()
+    let gap: CGFloat = label.isEmpty ? 0 : 6
+    let height = max(iconSize, ceil(textSize.height))
+    let size = CGSize(width: ceil(iconWidth + gap + textSize.width), height: height)
+    let format = UIGraphicsImageRendererFormat.preferred()
+    format.scale = displayScale
+
+    let image = UIGraphicsImageRenderer(size: size, format: format).image { _ in
+      icon.withTintColor(color, renderingMode: .alwaysOriginal)
+        .draw(in: CGRect(x: 0, y: (height - iconSize) / 2, width: iconWidth, height: iconSize))
+      if !label.isEmpty {
+        text.draw(at: CGPoint(x: iconWidth + gap, y: (height - textSize.height) / 2))
+      }
+    }.withRenderingMode(.alwaysOriginal)
+    image.accessibilityLabel = label
+
+    return image
   }
 
   func setSelectedValue(_ value: String) {
@@ -91,21 +193,25 @@ public final class SegmentedControlView: ExpoView {
   func setActiveTextColor(_ color: UIColor) {
     activeTextColor = color
     applyTitleAttributes()
+    applyIcons()
   }
 
   func setInactiveTextColor(_ color: UIColor) {
     inactiveTextColor = color
     applyTitleAttributes()
+    applyIcons()
   }
 
   func setFontFamily(_ family: String?) {
     fontFamily = family
     applyTitleAttributes()
+    applyIcons()
   }
 
   func setFontSize(_ size: Double) {
     fontSize = CGFloat(size)
     applyTitleAttributes()
+    applyIcons()
   }
 
   func setCornerRadius(_ radius: Double?) {
@@ -171,6 +277,7 @@ public final class SegmentedControlView: ExpoView {
       UIView.performWithoutAnimation {
         control.selectedSegmentIndex = index
       }
+      applyIcons()
     }
   }
 
@@ -181,6 +288,7 @@ public final class SegmentedControlView: ExpoView {
       return
     }
 
+    applyIcons()
     onValueChange(["value": segments[index].value])
     scheduleSelectionReconcile()
   }

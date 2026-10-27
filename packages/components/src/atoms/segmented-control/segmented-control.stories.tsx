@@ -13,6 +13,26 @@ const ControlledSegmentedControl = (args: SegmentedControlProps) => {
   return <SegmentedControl {...args} onChange={selectedIndex => updateArgs({selectedIndex})} />
 }
 
+// Made-up carriers' logos as SVG data URIs: what an app would get from its API as URLs, drawn in their own colours.
+const svg = (body: string) =>
+  `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 24">${body}</svg>`)}`
+
+const CARRIERS = [
+  {
+    image: {
+      uri: svg(
+        '<rect x="2" y="3" width="44" height="18" rx="5" fill="#FF6A00"/><path d="M14 9h20v6H14z" fill="#fff"/>'
+      ),
+    },
+    label: 'Parcel box',
+  },
+  {
+    image: {uri: svg('<circle cx="17" cy="12" r="8" fill="#1F6FEB"/><circle cx="31" cy="12" r="8" fill="#FFC300"/>')},
+    label: 'Post',
+  },
+  {image: {uri: svg('<path d="M6 19 18 5h8L14 19zM22 19 34 5h8L30 19z" fill="#12A37F"/>')}, label: 'Courier'},
+]
+
 const NOTE = 'Ring twice, the bell is quiet.\nIf nobody answers, leave it with the neighbours at number 12.'
 
 const SegmentedControlInIsland = (args: SegmentedControlProps) => {
@@ -49,6 +69,44 @@ export const Playground: Story = {}
 export const TwoSegments: Story = {args: {values: ['Light', 'Dark']}}
 
 export const Disabled: Story = {args: {disabled: true}}
+
+export const Icons: Story = {
+  args: {
+    values: [
+      {icon: 'grid', label: 'Grid'},
+      {icon: 'star', label: 'Saved'},
+      {icon: 'heart', label: 'Liked'},
+    ],
+  },
+  parameters: {
+    notes:
+      'An icon leads its label in the label’s colour. iOS draws the two as one image, as a UIKit segment shows a title ' +
+      'or an image; Android puts Material’s icon before the text.',
+  },
+}
+
+export const Images: Story = {
+  args: {values: CARRIERS},
+  parameters: {
+    notes:
+      'An image replaces the label in its own colours, loaded natively (SDWebImage on iOS, androidsvg on Android), ' +
+      'raster or SVG. The label stays what screen readers say and is shown if the image cannot be loaded.',
+  },
+}
+
+export const Spacing: Story = {
+  args: {
+    iconSize: 's24',
+    spacing: 's12',
+    values: [
+      {icon: 'grid', label: 'Grid'},
+      {icon: 'star', label: 'Saved'},
+    ],
+  },
+  parameters: {
+    notes: '`spacing` adds space above and below the content, and `iconSize` sets the icons’ and images’ height.',
+  },
+}
 
 export const InsideAnIsland: Story = {
   args: {values: ['Door', 'Locker', 'Pickup']},
