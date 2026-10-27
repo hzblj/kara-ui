@@ -147,12 +147,18 @@ const SLOTS = [
 const PickerDemo = () => {
   const [size, setSize] = useState('42')
   const [slot, setSlot] = useState('afternoon')
+  const [menuSize, setMenuSize] = useState('42')
 
   return (
     <>
       <Section caption="A wheel on iOS, a dropdown on Android.">
         <Box bg="surface.primary" borderRadius="large" p="s12">
           <Picker onValueChange={setSize} options={SIZES} value={size} />
+        </Box>
+      </Section>
+      <Section caption="With pickerStyle menu, iOS shows a button with the selection that opens the options as a menu, for a screen with more than one picker. Android’s dropdown is the same either way.">
+        <Box bg="surface.primary" borderRadius="large" p="s12">
+          <Picker onValueChange={setMenuSize} options={SIZES} pickerStyle="menu" value={menuSize} />
         </Box>
       </Section>
       <Section caption="Inside an island it joins the island’s stack, here under a note that wraps over several lines.">
