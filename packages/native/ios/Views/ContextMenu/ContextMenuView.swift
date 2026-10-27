@@ -37,6 +37,7 @@ public final class ContextMenuView: ExpoView, UIContextMenuInteractionDelegate {
   private var previewPhotoRect: CGRect?
   private var previewPhotoCornerRadius: CGFloat = 0
   private var committedZoomIdentifier: String?
+  private let touchCanceller = ContextMenuTouchCanceller()
 
   /// How long a tapped preview's photo waits for the push before the way back zooms into the card again.
   private static let transientSourceTimeout: TimeInterval = 3
@@ -45,6 +46,7 @@ public final class ContextMenuView: ExpoView, UIContextMenuInteractionDelegate {
     super.init(appContext: appContext)
     let interaction = UIContextMenuInteraction(delegate: self)
     addInteraction(interaction)
+    addGestureRecognizer(touchCanceller)
   }
 
   private var previewView: ContextMenuPreviewView? {
@@ -142,35 +144,41 @@ public final class ContextMenuView: ExpoView, UIContextMenuInteractionDelegate {
   /// shows it through a `_UIPortalView` whose `sourceView` is that view, so the portal's frame is the preview's.
   private func previewPhotoOnScreen(in window: UIWindow) -> (frame: CGRect, cornerRadius: CGFloat)? {
     guard let previewContentView, let container = previewContentView.superview, let previewPhotoRect,
-      container.bounds.width > 0,
-      let portal = Self.portal(showing: container, in: window)
+      container.bounds.width > 0, container.bounds.height > 0,
+      let previewFrame = Self.previewFrame(showing: container, in: window)
     else {
       return nil
     }
-    let portalFrame = portal.convert(portal.bounds, to: window)
-    let scale = portalFrame.width / container.bounds.width
+    let scale = previewFrame.width / container.bounds.width
     guard scale > 0 else {
       return nil
     }
     let frame = CGRect(
-      x: portalFrame.minX + previewPhotoRect.minX * scale,
-      y: portalFrame.minY + previewPhotoRect.minY * scale,
+      x: previewFrame.minX + previewPhotoRect.minX * scale,
+      y: previewFrame.minY + previewPhotoRect.minY * scale,
       width: previewPhotoRect.width * scale,
       height: previewPhotoRect.height * scale
     )
     return (frame, previewPhotoCornerRadius * scale)
   }
 
-  private static func portal(showing source: UIView, in view: UIView) -> UIView? {
-    let sourceViewKey = "sourceView"
-    if view !== source, !view.isHidden, view.bounds.width > 0,
-      view.responds(to: NSSelectorFromString(sourceViewKey)),
-      (view.value(forKey: sourceViewKey) as? UIView) === source
-    {
-      return view
+  private static func previewFrame(showing source: UIView, in window: UIWindow) -> CGRect? {
+    guard let portal = portalLayer(showing: source.layer, in: window.layer) else {
+      return nil
     }
-    for subview in view.subviews {
-      if let portal = portal(showing: source, in: subview) {
+    return portal.convert(portal.bounds, to: window.layer)
+  }
+
+  private static func portalLayer(showing source: CALayer, in layer: CALayer) -> CALayer? {
+    let sourceLayerKey = "sourceLayer"
+    if layer !== source, !layer.isHidden, layer.bounds.width > 0,
+      layer.responds(to: NSSelectorFromString(sourceLayerKey)),
+      (layer.value(forKey: sourceLayerKey) as? CALayer) === source
+    {
+      return layer
+    }
+    for sublayer in layer.sublayers ?? [] {
+      if let portal = portalLayer(showing: source, in: sublayer) {
         return portal
       }
     }
@@ -297,6 +305,14 @@ public final class ContextMenuView: ExpoView, UIContextMenuInteractionDelegate {
       ZoomTransitionRegistry.shared.finishTransientSource(transient, identifier: identifier)
     }
     onPreviewPress()
+  }
+
+  public func contextMenuInteraction(
+    _ interaction: UIContextMenuInteraction,
+    willDisplayMenuFor configuration: UIContextMenuConfiguration,
+    animator: (any UIContextMenuInteractionAnimating)?
+  ) {
+    touchCanceller.cancelTouches()
   }
 
   public func contextMenuInteraction(

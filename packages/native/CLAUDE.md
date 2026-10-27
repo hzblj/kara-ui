@@ -72,9 +72,22 @@ that is why the example is called "Kara Example".
 **It lives in `@hzblj/expo-zoom-transition`** (`../expo-zoom-transition`, its own repo and pod `ExpoZoomTransition`);
 this package depends on it so the pod is always there. One piece stays here: **a tapped context menu preview zooms.**
 With a zoom source inside the trigger, `ContextMenuView` (`import ExpoZoomTransition`, `s.dependency` in the podspec)
-renders the preview to an image, finds where UIKit shows it (a `_UIPortalView` whose `sourceView` is the preview
-controller's view) and lays a copy of its photo there as a transient source (`ZoomTransitionRegistry.shared`,
+renders the preview to an image, finds where UIKit shows it (a visible portal layer whose `sourceLayer` is the preview
+controller's view's layer: a `_UIPortalView`'s `CAPortalLayer` up to iOS 26, AnimationKit's
+`InProcessAnimatablePortalLayer` on iOS 27, where the `_UIPortalView` is hidden at zero size and shows the trigger, so a
+lookup by `_UIPortalView` left a tapped preview only dismissing) and lays a copy of its photo there as a transient source (`ZoomTransitionRegistry.shared`,
 `ZoomTransitionTransientSource`), under a frozen snapshot of the window, then fires `onPreviewPress` at once. The
 enabler hands that copy to UIKit and fades the snapshot over 0.3 s; the copy goes when the push completes, or after 3 s
 without one. `previewTransition` picks `zoom`, `pop` or `dismiss`. Those registry calls are the package's public API:
 bump it together with this file.
+
+## Context menu
+
+**Once the menu shows, the trigger's press is cancelled** (`ContextMenuTouchCanceller`, from `willDisplayMenu`). The
+finger still belongs to the content, so a `Pressable` inside the trigger fired its press when it lifted and the menu and
+a navigation ran together. React Native's `RCTSurfaceTouchHandler` `ignore`s the touch and is then reset (`isEnabled`
+toggled), which sends JS the cancel at once; the content's gesture recognizers are reset, and the canceller recognizes
+itself with `cancelsTouchesInView`, so `UIControl`s get `touchesCancelled`. React Native's handler is reset only once the
+touch has left it (`touch.gestureRecognizers`): reset while UIKit still gives it the touch, on iOS 27 it then gets
+`touchesCancelled` for the touch it has just forgotten, and a debug build crashes on its touch registry assertion
+("Inconsistency between local and UIKit touch registries").
