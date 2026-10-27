@@ -1,9 +1,13 @@
 import ExpoModulesCore
+import SDWebImage
+import SDWebImageSVGCoder
 import UIKit
 
 internal final class SegmentedControlRecord: Record {
   @Field var label: String = ""
   @Field var value: String = ""
+  /// An image shown instead of the label, which stays the segment's accessibility label.
+  @Field var icon: URL?
 
   required init() {}
 }
@@ -31,6 +35,7 @@ public final class SegmentedControlView: ExpoView {
   // nil for either keeps UIKit's own rounded look.
   private var trackCornerRadius: CGFloat?
   private var pillCornerRadius: CGFloat?
+  private let iconHeight: CGFloat = 20
 
   public required init(appContext: AppContext? = nil) {
     super.init(appContext: appContext)
@@ -64,9 +69,37 @@ public final class SegmentedControlView: ExpoView {
     segments = options
     control.removeAllSegments()
     for (index, option) in options.enumerated() {
-      control.insertSegment(withTitle: option.label, at: index, animated: false)
+      control.insertSegment(withTitle: option.icon == nil ? option.label : nil, at: index, animated: false)
+      loadIcon(for: option, at: index)
     }
     applySelectedValue(pendingSelectedValue)
+  }
+
+  /// A segment with an icon stays empty until SDWebImage has it (from its cache, the same one `expo-image` uses, or the
+  /// network), and shows its label if the image cannot be loaded.
+  private func loadIcon(for option: SegmentedControlRecord, at index: Int) {
+    guard let url = option.icon else {
+      return
+    }
+
+    SegmentedControlIcon.registerSVGCoder()
+    _ = SDWebImageManager.shared.loadImage(with: url, options: [], progress: nil) { [weak self] icon, _, _, _, _, _ in
+      self?.applyIcon(icon, to: option, at: index)
+    }
+  }
+
+  private func applyIcon(_ icon: UIImage?, to option: SegmentedControlRecord, at index: Int) {
+    // The options may have changed while the image loaded.
+    guard index < segments.count, segments[index] === option else {
+      return
+    }
+
+    guard let icon, let image = SegmentedControlIcon.image(from: icon, height: iconHeight, label: option.label) else {
+      control.setTitle(option.label, forSegmentAt: index)
+      return
+    }
+
+    control.setImage(image, forSegmentAt: index)
   }
 
   func setSelectedValue(_ value: String) {
@@ -198,5 +231,33 @@ public final class SegmentedControlView: ExpoView {
 
       self.applySelectedValue(self.pendingSelectedValue)
     }
+  }
+}
+
+private enum SegmentedControlIcon {
+  /// `expo-image` registers the SVG coder too; without it in the app, an SVG icon would not decode.
+  private static let svgCoderRegistration: Void = {
+    let coders = SDImageCodersManager.shared.coders ?? []
+    if !coders.contains(where: { $0 is SDImageSVGCoder }) {
+      SDImageCodersManager.shared.addCoder(SDImageSVGCoder.shared)
+    }
+  }()
+
+  static func registerSVGCoder() {
+    _ = svgCoderRegistration
+  }
+
+  /// The icon scaled to `height`, drawn in its own colours: UIKit tints a segment image like a template otherwise.
+  static func image(from icon: UIImage, height: CGFloat, label: String) -> UIImage? {
+    guard icon.size.height > 0 else {
+      return nil
+    }
+
+    let size = CGSize(width: icon.size.width * height / icon.size.height, height: height)
+    let image = UIGraphicsImageRenderer(size: size).image { _ in
+      icon.draw(in: CGRect(origin: .zero, size: size))
+    }.withRenderingMode(.alwaysOriginal)
+    image.accessibilityLabel = label
+    return image
   }
 }

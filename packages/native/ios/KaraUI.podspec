@@ -20,6 +20,9 @@ Pod::Spec.new do |s|
   s.dependency 'ExpoUI'
   # The context menu hands a tapped preview's photo to the zoom transition as its source.
   s.dependency 'ExpoZoomTransition'
+  # Segmented control icons load from a URL, SVG included, through the cache `expo-image` shares.
+  s.dependency 'SDWebImage'
+  s.dependency 'SDWebImageSVGCoder'
 
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',

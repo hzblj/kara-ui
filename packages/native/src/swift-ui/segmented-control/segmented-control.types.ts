@@ -1,6 +1,12 @@
 import type {ColorValue, StyleProp, ViewStyle} from 'react-native'
 
-export type SegmentedControlOption = {label: string; value: string}
+export type SegmentedControlOption = {
+  /** An image URL (PNG, SVG…) shown instead of the label, at 20 pt high in its own colours. */
+  icon?: string
+  /** The segment's text, and its accessibility label when it has an `icon`. */
+  label: string
+  value: string
+}
 
 export type SegmentedControlProps = {
   activePillColor: ColorValue
