@@ -23,9 +23,6 @@ import UIKit
  With a `ZoomTransitionSourceView` (`@hzblj/expo-zoom-transition`) inside the trigger and a custom preview, a tap on
  the preview zooms the preview's photo straight into the pushed screen on iOS 18, the
  way the App Store expands one (see `previewPhotoOnScreen` and the commit below).
-
- Once the menu shows, `ContextMenuTouchCanceller` cancels the press the trigger's content still tracks, so lifting
- the finger opens nothing underneath the menu.
  */
 public final class ContextMenuView: ExpoView, UIContextMenuInteractionDelegate {
   let onSelectItem = EventDispatcher()
@@ -40,7 +37,6 @@ public final class ContextMenuView: ExpoView, UIContextMenuInteractionDelegate {
   private var previewPhotoRect: CGRect?
   private var previewPhotoCornerRadius: CGFloat = 0
   private var committedZoomIdentifier: String?
-  /// Cancels the press the trigger's content still tracks once the menu shows.
   private let touchCanceller = ContextMenuTouchCanceller()
 
   /// How long a tapped preview's photo waits for the push before the way back zooms into the card again.
@@ -166,9 +162,6 @@ public final class ContextMenuView: ExpoView, UIContextMenuInteractionDelegate {
     return (frame, previewPhotoCornerRadius * scale)
   }
 
-  /// The window frame the lifted preview shows `source` in: the visible portal layer whose `sourceLayer` is its layer.
-  /// That is a `_UIPortalView`'s `CAPortalLayer` up to iOS 26 and AnimationKit's `InProcessAnimatablePortalLayer` on
-  /// iOS 27, where the `_UIPortalView` is hidden at zero size and shows the trigger instead.
   private static func previewFrame(showing source: UIView, in window: UIWindow) -> CGRect? {
     guard let portal = portalLayer(showing: source.layer, in: window.layer) else {
       return nil

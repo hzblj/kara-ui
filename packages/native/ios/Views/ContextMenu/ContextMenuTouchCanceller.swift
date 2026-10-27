@@ -1,25 +1,11 @@
 import UIKit
 import UIKit.UIGestureRecognizerSubclass
 
-/**
- Follows the touches on a context menu's content without taking part in them.
-
- Once the menu shows, the finger still belongs to the content: RN's `Pressable` (the surface touch
- handler), gesture-handler buttons (a `UIControl`) and gestures fire their press when it lifts, so the
- menu and a navigation would run together. `cancelTouches()` stops all of them: React Native's touch
- handler first ignores the touch and is then reset, which sends JS the cancel, the content's own
- recognizers are reset, and the canceller recognizes itself, which makes UIKit send `touchesCancelled`
- to the views. Resetting React Native's handler while UIKit still gives it the touch made iOS 27 deliver
- the touch's `touchesCancelled` after the reset, which its touch registry assertion turns into a crash in
- a debug build, so the reset waits until the touch has left the handler; if it has not, the handler
- cancels from its own `reset` when the touch ends. The menu's own recognizers live on the menu view and
- are left alone.
- */
 final class ContextMenuTouchCanceller: UIGestureRecognizer, UIGestureRecognizerDelegate {
   private static let reactTouchHandlerClass: AnyClass? = NSClassFromString("RCTSurfaceTouchHandler")
 
-  private var activeTouches = Set<UITouch>()
-  private var touchEvent: UIEvent?
+  private var touches = Set<UITouch>()
+  private var event: UIEvent?
 
   init() {
     super.init(target: nil, action: nil)
@@ -30,50 +16,28 @@ final class ContextMenuTouchCanceller: UIGestureRecognizer, UIGestureRecognizerD
   }
 
   func cancelTouches() {
-    guard state == .possible, !activeTouches.isEmpty, let container = view, let touchEvent else {
+    guard state == .possible, let container = view, let event, !touches.isEmpty else {
       return
     }
 
     var reactTouchHandlers = Set<UIGestureRecognizer>()
-    for touch in activeTouches {
+    for touch in touches {
       for recognizer in touch.gestureRecognizers ?? [] where recognizer !== self {
-        if isReactTouchHandler(recognizer) {
-          recognizer.ignore(touch, for: touchEvent)
+        if Self.isReactTouchHandler(recognizer) {
+          recognizer.ignore(touch, for: event)
           reactTouchHandlers.insert(recognizer)
-        } else if isContentRecognizer(recognizer, within: container) {
-          recognizer.isEnabled = false
-          recognizer.isEnabled = true
+        } else if Self.isContentRecognizer(recognizer, of: container) {
+          Self.restart(recognizer)
         }
       }
     }
-    for handler in reactTouchHandlers where !tracksActiveTouch(handler) {
-      handler.isEnabled = false
-      handler.isEnabled = true
-    }
+    reactTouchHandlers.filter { !isTracking($0) }.forEach(Self.restart)
     state = .began
   }
 
-  private func tracksActiveTouch(_ recognizer: UIGestureRecognizer) -> Bool {
-    activeTouches.contains { $0.gestureRecognizers?.contains(recognizer) ?? false }
-  }
-
-  private func isReactTouchHandler(_ recognizer: UIGestureRecognizer) -> Bool {
-    guard let reactTouchHandlerClass = Self.reactTouchHandlerClass else {
-      return false
-    }
-    return recognizer.isKind(of: reactTouchHandlerClass)
-  }
-
-  private func isContentRecognizer(_ recognizer: UIGestureRecognizer, within container: UIView) -> Bool {
-    guard let recognizerView = recognizer.view else {
-      return false
-    }
-    return recognizerView !== container && recognizerView.isDescendant(of: container)
-  }
-
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
-    activeTouches.formUnion(touches)
-    touchEvent = event
+    self.touches.formUnion(touches)
+    self.event = event
   }
 
   override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
@@ -84,18 +48,10 @@ final class ContextMenuTouchCanceller: UIGestureRecognizer, UIGestureRecognizerD
     finish(touches, as: .cancelled)
   }
 
-  private func finish(_ touches: Set<UITouch>, as finalState: UIGestureRecognizer.State) {
-    activeTouches.subtract(touches)
-    guard activeTouches.isEmpty else {
-      return
-    }
-    state = state == .possible ? .failed : finalState
-  }
-
   override func reset() {
     super.reset()
-    activeTouches.removeAll()
-    touchEvent = nil
+    touches.removeAll()
+    event = nil
   }
 
   override func canPrevent(_ preventedGestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -111,5 +67,33 @@ final class ContextMenuTouchCanceller: UIGestureRecognizer, UIGestureRecognizerD
     shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
   ) -> Bool {
     true
+  }
+
+  private func finish(_ touches: Set<UITouch>, as finalState: UIGestureRecognizer.State) {
+    self.touches.subtract(touches)
+    guard self.touches.isEmpty else {
+      return
+    }
+    state = state == .possible ? .failed : finalState
+  }
+
+  private func isTracking(_ recognizer: UIGestureRecognizer) -> Bool {
+    touches.contains { $0.gestureRecognizers?.contains(recognizer) ?? false }
+  }
+
+  private static func restart(_ recognizer: UIGestureRecognizer) {
+    recognizer.isEnabled = false
+    recognizer.isEnabled = true
+  }
+
+  private static func isReactTouchHandler(_ recognizer: UIGestureRecognizer) -> Bool {
+    reactTouchHandlerClass.map { recognizer.isKind(of: $0) } ?? false
+  }
+
+  private static func isContentRecognizer(_ recognizer: UIGestureRecognizer, of container: UIView) -> Bool {
+    guard let view = recognizer.view else {
+      return false
+    }
+    return view !== container && view.isDescendant(of: container)
   }
 }
