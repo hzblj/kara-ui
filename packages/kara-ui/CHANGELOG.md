@@ -1,5 +1,19 @@
 # @hzblj/kara-ui
 
+## 0.15.4
+
+### Patch Changes
+
+- [#48](https://github.com/hzblj/kara-ui/pull/48) [`15aa9db`](https://github.com/hzblj/kara-ui/commit/15aa9db0b1c22dd4a55cb301982643449ad28dd0) Thanks [@hzblj](https://github.com/hzblj)! - A long press on a `ContextMenu` trigger opens only its menu on iOS. Lifting the finger after the menu appears no longer also fires a `Pressable` inside the trigger, so a card no longer opens its screen under the menu. On iOS 27 a tapped preview zooms into the pushed screen again instead of closing the menu first.
+
+- Updated dependencies [[`15aa9db`](https://github.com/hzblj/kara-ui/commit/15aa9db0b1c22dd4a55cb301982643449ad28dd0)]:
+  - @hzblj/kara-native@0.15.4
+  - @hzblj/kara-theme@0.15.4
+  - @hzblj/kara-sx@0.15.4
+  - @hzblj/kara-components@0.15.4
+  - @hzblj/kara-router@0.15.4
+  - @hzblj/kara-expo-plugin@0.15.4
+
 ## 0.15.3
 
 ### Patch Changes
