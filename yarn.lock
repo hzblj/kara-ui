@@ -2649,16 +2649,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hzblj/expo-zoom-transition@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "@hzblj/expo-zoom-transition@npm:0.1.0"
+"@hzblj/expo-zoom-transition@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "@hzblj/expo-zoom-transition@npm:0.2.0"
   peerDependencies:
     expo: ">=57"
     expo-router: ">=57"
     react: "*"
     react-native: "*"
     react-native-screens: ">=4"
-  checksum: 10c0/60d461b5c9dfefaa10bff9ccbcb9794bd310815e1a8ca3acc9d27eff247ee7a0186c2f1b19d1ed6bc4c35308c1b5969d70d99278155484959062158aa3ec5176
+  checksum: 10c0/2a28c734528327e28d34a745038d745758320fb519e891f76ffe71b8f9aa08540579af07774a5718a43806ea9103aa52d966f39d08dfef15f50ca96da6d70eb3
   languageName: node
   linkType: hard
 
@@ -2715,7 +2715,7 @@ __metadata:
   dependencies:
     "@expo/ui": "npm:~57.0.18"
     "@hzblj/expo-native-icons": "npm:^0.1.0"
-    "@hzblj/expo-zoom-transition": "npm:^0.1.0"
+    "@hzblj/expo-zoom-transition": "npm:^0.2.0"
     "@material-symbols/svg-400": "npm:^0.48.0"
     "@types/react": "npm:~19.2.18"
     expo: "npm:~57.0.22"
@@ -2738,7 +2738,7 @@ __metadata:
   dependencies:
     "@expo/ui": "npm:~57.0.18"
     "@hzblj/expo-native-icons": "npm:^0.1.0"
-    "@hzblj/expo-zoom-transition": "npm:^0.1.0"
+    "@hzblj/expo-zoom-transition": "npm:^0.2.0"
     "@hzblj/kara-components": "workspace:^"
     "@hzblj/kara-native": "workspace:^"
     "@hzblj/kara-theme": "workspace:^"
