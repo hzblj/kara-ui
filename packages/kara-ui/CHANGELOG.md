@@ -1,5 +1,21 @@
 # @hzblj/kara-ui
 
+## 0.17.0
+
+### Minor Changes
+
+- [#54](https://github.com/hzblj/kara-ui/pull/54) [`76f14b5`](https://github.com/hzblj/kara-ui/commit/76f14b5e71bdbb8fb431502a987e776243015177) Thanks [@hzblj](https://github.com/hzblj)! - `Picker` takes `pickerStyle` on iOS: `wheel`, as before and still the default, or `menu`, a button with the selection, in the accent, that opens the options as a menu. A screen with more than one picker, or a picker in a row, no longer has to give the screen to wheels. Android ignores it: its exposed dropdown is a menu already.
+
+### Patch Changes
+
+- Updated dependencies [[`76f14b5`](https://github.com/hzblj/kara-ui/commit/76f14b5e71bdbb8fb431502a987e776243015177)]:
+  - @hzblj/kara-components@0.17.0
+  - @hzblj/kara-router@0.17.0
+  - @hzblj/kara-theme@0.17.0
+  - @hzblj/kara-sx@0.17.0
+  - @hzblj/kara-native@0.17.0
+  - @hzblj/kara-expo-plugin@0.17.0
+
 ## 0.16.0
 
 ### Minor Changes
