@@ -8,6 +8,8 @@ export type CheckboxProps = {
   label?: string
   /** Called with the new value when the user toggles it. */
   onValueChange?: (value: boolean) => void
+  /** Test identifier, forwarded to the native control (on Android the box itself, not the labelled row). */
+  testID?: string
   /** Whether it is checked. Controlled: update it from `onValueChange`. */
   value: boolean
 }

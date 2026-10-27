@@ -2,16 +2,18 @@ import type {ColorToken, ShadowName, Theme} from '@hzblj/kara-theme'
 
 import type {ButtonVariant} from './button.types'
 
+/** `fill` and `shadow` are unset for `plain`: a text button has no container to fill or lift. */
 type ButtonTokens = {
   content: ColorToken
-  fill: ColorToken
-  shadow: ShadowName
+  fill: ColorToken | undefined
+  shadow: ShadowName | undefined
 }
 
 const TOKENS = {
   accent: {content: 'content.on.accent', fill: 'fill.accent.primary', shadow: 'btn.accent'},
   destructive: {content: 'content.on.destructive', fill: 'fill.destructive.primary', shadow: 'btn.destructive'},
   glass: {content: 'content.primary', fill: 'btn.bg.glass.base', shadow: 'btn.glass'},
+  plain: {content: 'content.accent', fill: undefined, shadow: undefined},
   secondary: {content: 'content.primary', fill: 'btn.bg.secondary.base', shadow: 'btn.secondary'},
 } as const satisfies Record<ButtonVariant, ButtonTokens>
 
@@ -26,8 +28,9 @@ export const buttonTokens = (variant: ButtonVariant, disabled: boolean, theme: T
     accent: 'fill.accent.disabled',
     destructive: 'fill.destructive.disabled',
     glass: 'btn.bg.glass.disabled',
+    plain: undefined,
     secondary: 'btn.bg.secondary.disabled',
-  } as const satisfies Record<ButtonVariant, ColorToken>
+  } as const satisfies Record<ButtonVariant, ColorToken | undefined>
 
   void theme
 

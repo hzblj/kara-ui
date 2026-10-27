@@ -1,4 +1,5 @@
 import {Button, Image, Label, Menu} from '@expo/ui/swift-ui'
+import {disabled} from '@expo/ui/swift-ui/modifiers'
 import {iconResourceName} from '@hzblj/expo-native-icons'
 
 import {Icon} from '../../atoms/icon'
@@ -9,6 +10,8 @@ import type {FabMenuComponent, FabMenuProps} from './fab-menu.types'
 
 /** Matches `Fab`, so a screen can switch between the two without the button changing shape. */
 const FAB_SIZE = 56
+
+const DISABLED = [disabled(true)]
 
 export const FabMenu: FabMenuComponent = ({accessibilityLabel, actions, icon, testID}: FabMenuProps) => {
   useHostGuard('FabMenu')
@@ -35,7 +38,12 @@ export const FabMenu: FabMenuComponent = ({accessibilityLabel, actions, icon, te
       testID={testID}
     >
       {actions.map(action => (
-        <Button key={action.label} onPress={action.onPress} role={action.destructive ? 'destructive' : 'default'}>
+        <Button
+          key={action.label}
+          modifiers={action.disabled ? DISABLED : undefined}
+          onPress={action.onPress}
+          role={action.destructive ? 'destructive' : 'default'}
+        >
           {/* A menu row is the system's Label: our icon is its image, from the asset catalog, and UIKit sizes it. */}
           <Label
             icon={action.icon ? <Image assetName={iconResourceName(action.icon)} /> : undefined}

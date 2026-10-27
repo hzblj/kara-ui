@@ -8,6 +8,9 @@ export type TextDecoration = 'none' | 'strikethrough' | 'underline'
 
 export type TextTransform = 'lowercase' | 'uppercase'
 
+/** Where the ellipsis goes in a text cut short: its start, its middle or its end. */
+export type TextTruncation = 'head' | 'middle' | 'tail'
+
 /**
  * SwiftUI `Text` / Compose `Text` in a theme typography variant. A native atom: outside a host, use `RnText`. It takes
  * the native `sx` surface too: padding, a frame (`wide` lines it up by `align`), a background, and the `ios` bucket's
@@ -34,7 +37,7 @@ export type TextProps = ResponsiveSx &
     color?: ColorToken
     /** An underline or a strikethrough. */
     decoration?: TextDecoration
-    /** The most lines it wraps to. iOS truncates the last with an ellipsis; Android clips it. */
+    /** The most lines it wraps to. A text cut short ends with an ellipsis, where `truncation` puts it. */
     numberOfLines?: number
     /**
      * Sets it in the theme's fixed-width face, at the variant's size and weight: the app's `fonts.mono`, else Menlo on
@@ -51,6 +54,12 @@ export type TextProps = ResponsiveSx &
     testID?: string
     /** Upper- or lower-cases the text. Android applies it only when `children` is a plain string. */
     transform?: TextTransform
+    /**
+     * Where the ellipsis goes in a text cut short. `tail` by default: the end of the last line. `head` keeps the end of
+     * the text and `middle` both of its ends, for a file name, a path or an address. Android puts it at the head or in
+     * the middle of a single line only (`numberOfLines={1}`), as Compose does; a longer text there ends at the tail.
+     */
+    truncation?: TextTruncation
     /** The typography variant. `body` by default. */
     variant?: TextVariant
   }

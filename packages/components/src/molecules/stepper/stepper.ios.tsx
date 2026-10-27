@@ -1,5 +1,5 @@
 import {Stepper as SwiftUIStepper} from '@expo/ui/swift-ui'
-import {labelsHidden} from '@expo/ui/swift-ui/modifiers'
+import {disabled as disabledModifier, labelsHidden} from '@expo/ui/swift-ui/modifiers'
 import {useReducedMotion} from '@hzblj/kara-theme'
 import {useRef} from 'react'
 
@@ -12,12 +12,24 @@ import type {StepperComponent, StepperProps} from './stepper.types'
 /** The label stays VoiceOver's, on the control; on screen it is the row's own text. */
 const LABEL_HIDDEN = [labelsHidden()]
 
+const LABEL_HIDDEN_DISABLED = [labelsHidden(), disabledModifier(true)]
+
 /**
  * SwiftUI's `Stepper` at the end of a row, the label leading and the value just before the control — the way iOS's own
  * settings show a stepped value. The value rolls to the next one (`numericText`), up or down with the change, in
- * monospaced digits so the row does not jump. With motion reduced it cross-fades instead.
+ * monospaced digits so the row does not jump. With motion reduced it cross-fades instead. Its buttons are labelled by
+ * the system, so `decrementLabel` and `incrementLabel` are Android's alone.
  */
-export const Stepper: StepperComponent = ({label, max, min, onValueChange, step = 1, value}: StepperProps) => {
+export const Stepper: StepperComponent = ({
+  disabled = false,
+  label,
+  max,
+  min,
+  onValueChange,
+  step = 1,
+  testID,
+  value,
+}: StepperProps) => {
   useHostGuard('Stepper')
   const reduced = useReducedMotion()
   const previous = useRef(value)
@@ -26,10 +38,10 @@ export const Stepper: StepperComponent = ({label, max, min, onValueChange, step 
 
   return (
     <HStack align="center" spacing="s12" wide>
-      <Text>{label}</Text>
+      <Text color={disabled ? 'content.tertiary' : 'content.primary'}>{label}</Text>
       <Spacer />
       <Text
-        color="content.secondary"
+        color={disabled ? 'content.tertiary' : 'content.secondary'}
         ios={{
           animation: {value},
           contentTransition: reduced ? {type: 'opacity'} : {countsDown, type: 'numericText'},
@@ -38,13 +50,16 @@ export const Stepper: StepperComponent = ({label, max, min, onValueChange, step 
       >
         {String(value)}
       </Text>
+      {/* iOS 27 stops a disabled stepper but draws its buttons at full strength. Pinned to its value, UIKit greys
+          both buttons, as it greys one at a limit. */}
       <SwiftUIStepper
         label={label}
-        max={max}
-        min={min}
-        modifiers={LABEL_HIDDEN}
+        max={disabled ? value : max}
+        min={disabled ? value : min}
+        modifiers={disabled ? LABEL_HIDDEN_DISABLED : LABEL_HIDDEN}
         onValueChange={onValueChange}
         step={step}
+        testID={testID}
         value={value}
       />
     </HStack>

@@ -30,3 +30,15 @@ export const AtMinimum: Story = {args: {value: 0}}
 export const AtMaximum: Story = {args: {value: 5}}
 
 export const Stepped: Story = {args: {label: 'Minutes', max: 60, min: 0, step: 15, value: 30}}
+
+export const Disabled: Story = {args: {disabled: true}}
+
+export const ButtonLabels: Story = {
+  args: {decrementLabel: 'Ubrat kus', incrementLabel: 'Přidat kus', label: 'Počet kusů'},
+  parameters: {
+    notes:
+      'Android only: `decrementLabel` and `incrementLabel` are what TalkBack says for the minus and plus buttons, ' +
+      '`Decrement` and `Increment` unless the app passes its own words. iOS ignores them: its native stepper labels ' +
+      'its buttons itself, in the device’s language.',
+  },
+}

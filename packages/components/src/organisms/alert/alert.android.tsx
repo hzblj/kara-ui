@@ -7,9 +7,10 @@ import type {AlertComponent, AlertProps} from './alert.types'
 /**
  * Material's `AlertDialog`, built from its slots — title, text, confirm and dismiss buttons. Content passed as plain
  * children has no slot to land in, and the dialog draws empty. The actions mirror the iOS alert: the confirm label
- * (in the destructive colour when asked) and Cancel.
+ * (in the destructive colour when asked) and the cancel label, whose slot stays empty when it is `null`.
  */
 export const Alert: AlertComponent = ({
+  cancelLabel = 'Cancel',
   confirmLabel = 'OK',
   destructive = false,
   message,
@@ -62,13 +63,15 @@ export const Alert: AlertComponent = ({
           </ComposeText>
         </TextButton>
       </AlertDialog.ConfirmButton>
-      <AlertDialog.DismissButton>
-        <TextButton onClick={onDismiss}>
-          <ComposeText color={theme.colorString('content.accent')} style={theme.typography.body}>
-            Cancel
-          </ComposeText>
-        </TextButton>
-      </AlertDialog.DismissButton>
+      {cancelLabel === null ? null : (
+        <AlertDialog.DismissButton>
+          <TextButton onClick={onDismiss}>
+            <ComposeText color={theme.colorString('content.accent')} style={theme.typography.body}>
+              {cancelLabel}
+            </ComposeText>
+          </TextButton>
+        </AlertDialog.DismissButton>
+      )}
     </AlertDialog>
   )
 }

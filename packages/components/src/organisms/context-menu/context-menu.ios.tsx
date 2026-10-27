@@ -26,6 +26,7 @@ const ContextMenuRoot = ({
     () =>
       actions.map((action, index) => ({
         destructive: action.destructive,
+        disabled: action.disabled,
         id: String(index),
         image: action.icon ? iconResourceName(action.icon) : undefined,
         title: action.label,

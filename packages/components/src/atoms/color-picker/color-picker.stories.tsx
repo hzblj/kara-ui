@@ -39,3 +39,12 @@ type Story = StoryObj<typeof meta>
 export const Playground: Story = {}
 
 export const WithOpacity: Story = {args: {label: 'With opacity', supportsOpacity: true}}
+
+export const Disabled: Story = {
+  args: {disabled: true, label: 'Disabled'},
+  parameters: {
+    notes:
+      'SwiftUI dims the label and the well and ignores taps; on Android kara’s own well dims and does not open its ' +
+      'sheet, and the label dims with it.',
+  },
+}

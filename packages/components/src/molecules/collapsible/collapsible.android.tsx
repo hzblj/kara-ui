@@ -13,6 +13,7 @@ import {
   defaultMinSize,
   fillMaxWidth,
   graphicsLayer,
+  testID as testIdModifier,
   tween,
 } from '@expo/ui/jetpack-compose/modifiers'
 import {useAccessibilityModifiers} from '@hzblj/kara-sx'
@@ -44,7 +45,13 @@ const ROW_HEIGHT = 48
  * toward it, as a Material disclosure does — it used to jump between two glyphs. The row spans its parent, the chevron
  * at the far end, and is never shorter than a touch target.
  */
-export const Collapsible: CollapsibleComponent = ({children, expanded, label, onExpandedChange}: CollapsibleProps) => {
+export const Collapsible: CollapsibleComponent = ({
+  children,
+  expanded,
+  label,
+  onExpandedChange,
+  testID,
+}: CollapsibleProps) => {
   useHostGuard('Collapsible')
   const theme = useAppTheme()
   const reduced = useReducedMotion()
@@ -53,10 +60,11 @@ export const Collapsible: CollapsibleComponent = ({children, expanded, label, on
     () => [
       fillMaxWidth(),
       defaultMinSize({minHeight: ROW_HEIGHT}),
+      ...(testID ? [testIdModifier(testID)] : []),
       clickable(() => onExpandedChange(!expanded)),
       ...accessibilityModifiers,
     ],
-    [accessibilityModifiers, expanded, onExpandedChange]
+    [accessibilityModifiers, expanded, onExpandedChange, testID]
   )
   const turn = useMemo(
     () => [graphicsLayer({rotationZ: animated(expanded ? 90 : 0, reduced ? SNAP : TURN)})],

@@ -51,10 +51,17 @@ public final class ContextMenuView: ExpoView {
       let image =
         item.image.flatMap { UIImage(named: $0)?.withRenderingMode(.alwaysTemplate) }
         ?? item.systemImage.flatMap { UIImage(systemName: $0) }
+      var attributes: UIMenuElement.Attributes = []
+      if item.destructive {
+        attributes.insert(.destructive)
+      }
+      if item.disabled {
+        attributes.insert(.disabled)
+      }
       return UIAction(
         title: item.title,
         image: image,
-        attributes: item.destructive ? .destructive : []
+        attributes: attributes
       ) { [weak self] _ in
         self?.onSelectItem(["id": item.id])
       }

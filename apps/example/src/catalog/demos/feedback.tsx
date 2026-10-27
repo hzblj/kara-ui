@@ -39,6 +39,14 @@ const ProgressDemo = () => (
         </HStack>
       </Island>
     </Section>
+    <Section caption="Any colour token: red for storage nearly full, green for a goal reached." title="Colours">
+      <Island>
+        <VStack spacing="s16" wide>
+          <Progress accessibilityLabel="Storage used" color="fill.destructive.primary" value={0.92} />
+          <Progress accessibilityLabel="Daily goal" color="fill.success.primary" value={1} />
+        </VStack>
+      </Island>
+    </Section>
   </>
 )
 
@@ -115,23 +123,40 @@ const SnackbarDemo = () => {
 
 const AlertDemo = () => {
   const [visible, setVisible] = useState(false)
+  const [placed, setPlaced] = useState(false)
 
   return (
-    <Section caption="A SwiftUI alert on iOS, Material’s dialog on Android.">
-      <Island>
-        <VStack wide>
-          <Button label="Delete account" onPress={() => setVisible(true)} variant="destructive" />
-          <Alert
-            confirmLabel="Delete"
-            destructive
-            message="This removes your orders and wishlist. It cannot be undone."
-            onDismiss={() => setVisible(false)}
-            title="Delete account?"
-            visible={visible}
-          />
-        </VStack>
-      </Island>
-    </Section>
+    <>
+      <Section caption="A SwiftUI alert on iOS, Material’s dialog on Android.">
+        <Island>
+          <VStack wide>
+            <Button label="Delete account" onPress={() => setVisible(true)} variant="destructive" />
+            <Alert
+              confirmLabel="Delete"
+              destructive
+              message="This removes your orders and wishlist. It cannot be undone."
+              onDismiss={() => setVisible(false)}
+              title="Delete account?"
+              visible={visible}
+            />
+          </VStack>
+        </Island>
+      </Section>
+      <Section caption="With cancelLabel null the alert has only its confirm button, for news that needs no decision. cancelLabel also puts Cancel in the app’s language.">
+        <Island>
+          <VStack wide>
+            <Button label="Place order" onPress={() => setPlaced(true)} variant="secondary" />
+            <Alert
+              cancelLabel={null}
+              message="We will email you when it ships."
+              onDismiss={() => setPlaced(false)}
+              title="Order placed"
+              visible={placed}
+            />
+          </VStack>
+        </Island>
+      </Section>
+    </>
   )
 }
 

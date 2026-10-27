@@ -1,5 +1,5 @@
 import {Switch as ComposeSwitch, Row, Text} from '@expo/ui/jetpack-compose'
-import {clickable, fillMaxWidth} from '@expo/ui/jetpack-compose/modifiers'
+import {clickable, fillMaxWidth, testID as testIdModifier} from '@expo/ui/jetpack-compose/modifiers'
 import {haptics} from '@hzblj/expo-rich-haptics'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useCallback, useMemo} from 'react'
@@ -16,7 +16,7 @@ const NOOP = () => undefined
  * `toggleOn`/`toggleOff` — Android 14's constants made for switches — since Compose's Material switch plays nothing
  * of its own. iOS stays silent, as `UISwitch` does.
  */
-export const Switch: SwitchComponent = ({disabled = false, label, onValueChange, value}: SwitchProps) => {
+export const Switch: SwitchComponent = ({disabled = false, label, onValueChange, testID, value}: SwitchProps) => {
   useHostGuard('Switch')
   const theme = useAppTheme()
   const toggle = useCallback(
@@ -30,6 +30,8 @@ export const Switch: SwitchComponent = ({disabled = false, label, onValueChange,
     () => (disabled || !onValueChange ? [fillMaxWidth()] : [fillMaxWidth(), clickable(() => toggle(!value))]),
     [disabled, onValueChange, toggle, value]
   )
+  // On the switch, not the row: the switch is its own toggleable node inside the row, and the one a test reads.
+  const controlModifiers = useMemo(() => (testID ? [testIdModifier(testID)] : undefined), [testID])
   const control = (
     <ComposeSwitch
       colors={{
@@ -38,6 +40,7 @@ export const Switch: SwitchComponent = ({disabled = false, label, onValueChange,
         checkedTrackColor: theme.color('fill.accent.primary'),
       }}
       enabled={!disabled}
+      modifiers={controlModifiers}
       onCheckedChange={onValueChange ? toggle : NOOP}
       value={value}
     />

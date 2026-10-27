@@ -13,6 +13,8 @@ export type CollapsibleProps = {
   label: string
   /** The user pressed the row; it passes the state the row asks for. */
   onExpandedChange: (expanded: boolean) => void
+  /** Test identifier: on SwiftUI's `DisclosureGroup` on iOS, on the pressable row on Android. */
+  testID?: string
 }
 
 export type CollapsibleComponent = (props: CollapsibleProps) => ReactNode

@@ -16,6 +16,12 @@ const ACTIONS: MenuAction[] = [
   {destructive: true, icon: 'trash', label: 'Delete', onPress: fn()},
 ]
 
+const WITH_DISABLED: MenuAction[] = [
+  {icon: 'share', label: 'Share', onPress: fn()},
+  {disabled: true, icon: 'star', label: 'Favourite', onPress: fn()},
+  {destructive: true, icon: 'trash', label: 'Delete', onPress: fn()},
+]
+
 const ControlledActionSheet = (args: ActionSheetProps) => {
   const [, updateArgs] = useArgs<ActionSheetProps>()
 
@@ -35,7 +41,8 @@ const meta = {
   decorators: [insideIsland],
   parameters: {
     notes:
-      'The same `MenuAction` list as `Menu` and `ContextMenu`, presented as a confirmation dialog from the bottom edge.',
+      'The same `MenuAction` list as `Menu` and `ContextMenu`, presented as a confirmation dialog from the bottom edge. ' +
+      'The title shows on both platforms. Icons are Android’s only: an iOS confirmation dialog draws text alone.',
   },
   render: ControlledActionSheet,
   title: 'Organisms/ActionSheet',
@@ -46,5 +53,23 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {}
+
+export const WithMessage: Story = {
+  args: {message: 'The photo will be removed from all your devices.', title: 'Delete this photo?'},
+  parameters: {
+    notes:
+      '`message` is the confirmation dialog’s own message on iOS, under the title; on Android a line under the ' +
+      'title, at its size and lighter.',
+  },
+}
+
+export const DisabledAction: Story = {
+  args: {actions: WITH_DISABLED},
+  parameters: {
+    notes:
+      'A `disabled` action stays in the list, greyed, and does not respond: SwiftUI’s disabled button on iOS, a row ' +
+      'in `btn.content.disabled` with no press on Android.',
+  },
+}
 
 export const OpenOnMount: Story = {args: {visible: true}}

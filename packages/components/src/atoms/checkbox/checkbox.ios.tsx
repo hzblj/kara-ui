@@ -6,7 +6,7 @@ import {useMemo} from 'react'
 import {useHostGuard} from '../../host-context'
 import type {CheckboxComponent, CheckboxProps} from './checkbox.types'
 
-export const Checkbox: CheckboxComponent = ({disabled = false, label, onValueChange, value}: CheckboxProps) => {
+export const Checkbox: CheckboxComponent = ({disabled = false, label, onValueChange, testID, value}: CheckboxProps) => {
   useHostGuard('Checkbox')
   const theme = useAppTheme()
 
@@ -20,5 +20,5 @@ export const Checkbox: CheckboxComponent = ({disabled = false, label, onValueCha
     return list
   }, [disabled, theme])
 
-  return <Toggle isOn={value} label={label} modifiers={modifiers} onIsOnChange={onValueChange} />
+  return <Toggle isOn={value} label={label} modifiers={modifiers} onIsOnChange={onValueChange} testID={testID} />
 }

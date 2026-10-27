@@ -43,6 +43,7 @@ const REFERENCES: Record<string, string> = {
 
 const EXTENDS: Record<string, string> = {
   AccessibilityProps: 'the [accessibility props](/docs/accessibility#props)',
+  MenuTrigger: 'a `label`, or an `icon` with an `accessibilityLabel`',
   ResponsiveSx: 'the [native `sx` props](/docs/styling#native)',
   ResponsiveViewSx: 'the [React Native `sx` props](/docs/styling#react-native)',
 }

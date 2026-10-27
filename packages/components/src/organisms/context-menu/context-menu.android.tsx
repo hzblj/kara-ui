@@ -8,6 +8,7 @@ import {Icon} from '../../atoms/icon'
 import {HostBoundary} from '../../host-context'
 import {splitForRipple} from '../../ripple-clip'
 import type {MenuAction} from '../menu'
+import {menuActionColor} from '../menu/menu-parts'
 import type {ContextMenuComponent, ContextMenuExclusionProps, ContextMenuProps} from './context-menu.types'
 
 type Point = {x: number; y: number}
@@ -25,7 +26,7 @@ type MenuRowProps = {
 /** A row's `onClick` closes over its own action, so memoising it needs a component per row. */
 const MenuRow = ({action, onDismiss}: MenuRowProps) => {
   const theme = useAppTheme()
-  const color = action.destructive ? 'content.destructive' : 'content.primary'
+  const color = menuActionColor(action)
 
   const onClick = useCallback(() => {
     onDismiss()
@@ -33,7 +34,7 @@ const MenuRow = ({action, onDismiss}: MenuRowProps) => {
   }, [action, onDismiss])
 
   return (
-    <DropdownMenuItem onClick={onClick}>
+    <DropdownMenuItem enabled={!action.disabled} onClick={onClick}>
       <DropdownMenuItem.Text>
         <ComposeText color={theme.colorString(color)} style={theme.typography.body}>
           {action.label}

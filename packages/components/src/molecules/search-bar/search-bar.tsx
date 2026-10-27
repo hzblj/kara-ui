@@ -7,7 +7,11 @@ import {RnGlyph} from '../../glyph'
 import type {SearchBarComponent, SearchBarProps} from './search-bar.types'
 
 export const SearchBar: SearchBarComponent = ({
+  autoCapitalize = 'none',
+  autoCorrect = false,
+  autoFocus = false,
   onChangeText,
+  onSubmit,
   placeholder = 'Search',
   testID,
   value,
@@ -35,9 +39,14 @@ export const SearchBar: SearchBarComponent = ({
     >
       <RnGlyph color="content.tertiary" name="search" size="s20" />
       <TextInput
+        autoCapitalize={autoCapitalize}
+        autoCorrect={autoCorrect}
+        autoFocus={autoFocus}
         onChangeText={onChangeText}
+        onSubmitEditing={onSubmit ? event => onSubmit(event.nativeEvent.text) : undefined}
         placeholder={placeholder}
         placeholderTextColor={theme.color('content.quaternary')}
+        returnKeyType="search"
         style={[text, {color: theme.color('content.primary'), flex: 1, padding: 0}]}
         value={value}
       />

@@ -49,4 +49,24 @@ export const Destructive: Story = {args: {confirmLabel: 'Delete', destructive: t
 
 export const TitleOnly: Story = {args: {message: undefined, title: 'Are you sure?'}}
 
+export const ConfirmOnly: Story = {
+  args: {cancelLabel: null, message: 'We will email you when it ships.', title: 'Order placed'},
+  parameters: {
+    notes:
+      '`cancelLabel={null}` leaves the cancel button out on both platforms: an alert that only informs, closed by OK.',
+  },
+}
+
+export const Localised: Story = {
+  args: {
+    cancelLabel: 'Zrušit',
+    confirmLabel: 'Smazat',
+    destructive: true,
+    message: 'Položka zmizí ze všech vašich zařízení.',
+    onConfirm: fn(),
+    title: 'Smazat položku?',
+  },
+  parameters: {notes: 'Both labels in the app’s language: `confirmLabel` and `cancelLabel` replace OK and Cancel.'},
+}
+
 export const OpenOnMount: Story = {args: {visible: true}}

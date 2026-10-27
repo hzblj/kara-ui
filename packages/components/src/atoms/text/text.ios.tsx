@@ -8,6 +8,7 @@ import {
   multilineTextAlignment,
   strikethrough,
   textCase,
+  truncationMode,
   underline,
 } from '@expo/ui/swift-ui/modifiers'
 import {scaledFont} from '@hzblj/kara-native/swift-ui'
@@ -48,6 +49,7 @@ export const Text: TextComponent = ({
   numberOfLines,
   testID,
   transform,
+  truncation,
   variant = 'body',
   ...props
 }: TextProps) => {
@@ -99,6 +101,10 @@ export const Text: TextComponent = ({
       list.push(lineLimit(numberOfLines))
     }
 
+    if (truncation) {
+      list.push(truncationMode(truncation))
+    }
+
     return [...list, ...transition, ...sxModifiers, ...accessibilityModifiers]
   }, [
     accessibilityModifiers,
@@ -112,6 +118,7 @@ export const Text: TextComponent = ({
     theme,
     transform,
     transition,
+    truncation,
   ])
 
   return (

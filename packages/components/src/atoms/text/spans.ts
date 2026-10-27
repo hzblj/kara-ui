@@ -4,7 +4,8 @@ import {Children, isValidElement, type ReactNode} from 'react'
 /** A run of the text: a string child, or a nested `Text` with a colour of its own. */
 export type TextSpan = {color?: ColorToken; text: string}
 
-const textOf = (children: ReactNode): string =>
+/** The string and number children, joined: the text of a `Text` without spans, however JSX split it. */
+export const textOf = (children: ReactNode): string =>
   Children.toArray(children)
     .map(child => (typeof child === 'string' || typeof child === 'number' ? String(child) : ''))
     .join('')

@@ -17,6 +17,9 @@ export type TextAnimation =
   | {type: 'spring'; dampingRatio: number; stiffness: number}
   | {type: 'tween'; delayMillis?: number; durationMillis: number; easing?: readonly [number, number, number, number]}
 
+/** Compose's `TextOverflow`, by name. Not `overflow`: Fabric would read that as the view's style. */
+export type AnimatedTextOverflow = 'clip' | 'ellipsis' | 'middleEllipsis' | 'startEllipsis'
+
 export type AnimatedTextProps = {
   /** How a colour moves to its next value. Without one it switches. */
   animation?: TextAnimation
@@ -32,6 +35,11 @@ export type AnimatedTextProps = {
   textAlign?: 'center' | 'left' | 'right'
   textColor?: ColorValue
   textDecoration?: 'lineThrough' | 'none' | 'underline'
+  /**
+   * How a text cut short by `maxLines` ends: Compose's `TextOverflow`. `ellipsis` by default, at the end of the last
+   * line. `startEllipsis` and `middleEllipsis` hold for a single line only (`maxLines` 1); on more lines Compose clips.
+   */
+  textOverflow?: AnimatedTextOverflow
 }
 
 /**

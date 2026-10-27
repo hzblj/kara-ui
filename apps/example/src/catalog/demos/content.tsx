@@ -79,6 +79,9 @@ const TextDemo = () => (
           <Text decoration="underline">Underlined</Text>
           <Text decoration="strikethrough">Struck through</Text>
           <Text numberOfLines={1}>A long line that is cut to one line, however much text it is given to show.</Text>
+          <Text numberOfLines={1} truncation="middle">
+            Documents/Invoices/2027/January/kara-ui-invoice-0042.pdf
+          </Text>
         </VStack>
       </Island>
     </Section>

@@ -6,6 +6,10 @@ import {useMemo} from 'react'
 import {useHostGuard} from '../../host-context'
 import type {DividerComponent, DividerProps} from './divider.types'
 
+/**
+ * SwiftUI's divider, which turns with its stack: vertical in an `HStack`, horizontal anywhere else. So `axis`, which
+ * Android needs to pick its divider, has nothing to do here.
+ */
 export const Divider: DividerComponent = ({color = 'border.tertiary', testID}: DividerProps) => {
   useHostGuard('Divider')
   const theme = useAppTheme()

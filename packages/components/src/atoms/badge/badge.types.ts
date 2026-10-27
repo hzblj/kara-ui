@@ -6,6 +6,8 @@ export type BadgeTone = 'accent' | 'destructive' | 'neutral' | 'success'
 export type BadgeProps = {
   /** The text inside. */
   label: string
+  /** Test identifier, forwarded to the native view. */
+  testID?: string
   /** The fill and text colours. `neutral` by default. */
   tone?: BadgeTone
 }
