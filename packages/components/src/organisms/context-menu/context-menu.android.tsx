@@ -52,10 +52,18 @@ const MenuRow = ({action, onDismiss}: MenuRowProps) => {
  * Android's own take on a context menu, since Material has no lifted preview: a long press ripples the trigger, ticks
  * the long-press haptic, and opens a Material dropdown where the finger is — the trigger stays highlighted while the
  * menu is up. The host behind the menu mounts on the first long press and stays, so a list of triggers that are only
- * scrolled past never builds one. `preview`, `onPreviewPress` and `previewTransition` are iOS-only.
+ * scrolled past never builds one. `preview`, `onPreviewPress`, `previewTransition`, `onOpenChange` and
+ * `preloadedScreenId` are iOS-only.
  */
 const ContextMenuRoot = ({actions, children, testID, ...props}: ContextMenuProps) => {
-  const {onPreviewPress: _onPreviewPress, preview: _preview, previewTransition: _previewTransition, ...sx} = props
+  const {
+    onOpenChange: _onOpenChange,
+    onPreviewPress: _onPreviewPress,
+    preloadedScreenId: _preloadedScreenId,
+    preview: _preview,
+    previewTransition: _previewTransition,
+    ...sx
+  } = props
   const theme = useAppTheme()
   const resolved = useSx(sx)
   const trigger = useRef<View>(null)

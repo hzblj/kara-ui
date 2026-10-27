@@ -14,8 +14,20 @@ export type ContextMenuProps = ResponsiveViewSx & {
   actions: MenuAction[]
   /** The trigger, laid out as usual. */
   children: ReactNode
+  /**
+   * iOS: `true` when the menu appears, `false` when it ends without a tap on the preview. Preload the detail the card
+   * stands for here, and drop the preload on `false`.
+   */
+  onOpenChange?: (isOpen: boolean) => void
   /** iOS: the user tapped the lifted preview, committing to it. Open the detail the card stands for. */
   onPreviewPress?: () => void
+  /**
+   * iOS: the route key of that detail, preloaded in the enclosing native stack while the menu is open (React
+   * Navigation's `preload`, Expo Router's `router.prefetch`). A tapped preview pushes it natively in the same frame
+   * and, with `zoom`, morphs the whole preview into it, the way Apple's apps open a preview. Move the route into the
+   * stack in `onPreviewPress`.
+   */
+  preloadedScreenId?: string
   /**
    * iOS: lifted in place of the trigger while the menu is open (a larger version of the card, say). A snapshot of the
    * trigger when unset. Mounted only once a finger has rested on the trigger, so a list of cards does not pay for
