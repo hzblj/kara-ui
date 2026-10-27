@@ -1,5 +1,18 @@
 # @hzblj/kara-components
 
+## 0.19.0
+
+### Minor Changes
+
+- [#58](https://github.com/hzblj/kara-ui/pull/58) [`024f36b`](https://github.com/hzblj/kara-ui/commit/024f36b58b3ceca20f04889b876eb7905ed7b540) Thanks [@hzblj](https://github.com/hzblj)! - `SegmentedControl` segments can show more than a label: `{label, icon}` leads with one of the app's icons in the label's colour, and `{label, image}` shows an image in its own colours instead, such as a carrier's logo from a URL, raster or SVG. `iconSize` sets their height (`s20` by default) and `spacing` the space above and below the content, for a taller control. The images load natively, as Footshop's platform-ui loads them: kara-native now depends on SDWebImage and SDWebImageSVGCoder on iOS and on androidsvg on Android, and its new `NativeImage` draws such an image in a Compose host. The label stays what screen readers say, and is shown if the image cannot be loaded.
+
+### Patch Changes
+
+- Updated dependencies [[`024f36b`](https://github.com/hzblj/kara-ui/commit/024f36b58b3ceca20f04889b876eb7905ed7b540)]:
+  - @hzblj/kara-native@0.19.0
+  - @hzblj/kara-sx@0.19.0
+  - @hzblj/kara-theme@0.19.0
+
 ## 0.18.0
 
 ### Minor Changes
