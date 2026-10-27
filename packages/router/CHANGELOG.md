@@ -1,5 +1,16 @@
 # @hzblj/kara-router
 
+## 0.16.0
+
+### Patch Changes
+
+- [#49](https://github.com/hzblj/kara-ui/pull/49) [`1b82690`](https://github.com/hzblj/kara-ui/commit/1b826908a729399b4b9ef8038836b60539d1fa41) Thanks [@hzblj](https://github.com/hzblj)! - Depends on `@hzblj/expo-zoom-transition` 0.2, the same version `@hzblj/kara-native` needs for the context menu preview morph.
+
+- Updated dependencies [[`1b82690`](https://github.com/hzblj/kara-ui/commit/1b826908a729399b4b9ef8038836b60539d1fa41)]:
+  - @hzblj/kara-native@0.16.0
+  - @hzblj/kara-components@0.16.0
+  - @hzblj/kara-theme@0.16.0
+
 ## 0.15.4
 
 ### Patch Changes

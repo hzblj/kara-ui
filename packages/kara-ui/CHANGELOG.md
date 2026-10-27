@@ -1,5 +1,21 @@
 # @hzblj/kara-ui
 
+## 0.16.0
+
+### Minor Changes
+
+- [#49](https://github.com/hzblj/kara-ui/pull/49) [`1b82690`](https://github.com/hzblj/kara-ui/commit/1b826908a729399b4b9ef8038836b60539d1fa41) Thanks [@hzblj](https://github.com/hzblj)! - A tapped `ContextMenu` preview can morph into a screen that is already loaded, the way Apple's apps open a preview. Preload the detail in the new `onOpenChange` (React Navigation's `preload`) and pass its route key as `preloadedScreenId`: the screen is pushed natively in the same frame, and with `zoom` the whole preview grows into it, rounded and shadowed like the menu's platter, while the menu fades away. `pop` and `dismiss` push it as soon as UIKit's commit animation ends. Uses `@hzblj/expo-zoom-transition` 0.2.
+
+### Patch Changes
+
+- Updated dependencies [[`1b82690`](https://github.com/hzblj/kara-ui/commit/1b826908a729399b4b9ef8038836b60539d1fa41), [`1b82690`](https://github.com/hzblj/kara-ui/commit/1b826908a729399b4b9ef8038836b60539d1fa41)]:
+  - @hzblj/kara-native@0.16.0
+  - @hzblj/kara-components@0.16.0
+  - @hzblj/kara-router@0.16.0
+  - @hzblj/kara-sx@0.16.0
+  - @hzblj/kara-theme@0.16.0
+  - @hzblj/kara-expo-plugin@0.16.0
+
 ## 0.15.4
 
 ### Patch Changes
