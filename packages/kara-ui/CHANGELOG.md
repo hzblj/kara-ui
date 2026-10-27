@@ -1,5 +1,57 @@
 # @hzblj/kara-ui
 
+## 0.18.0
+
+### Minor Changes
+
+- [#57](https://github.com/hzblj/kara-ui/pull/57) [`262bf11`](https://github.com/hzblj/kara-ui/commit/262bf1130730001da9390df0671bc2c16f7026a7) Thanks [@hzblj](https://github.com/hzblj)! - `Button` takes `variant="plain"`, a text button in the accent with no fill, for the lesser action beside a prominent one ("Skip", "Forgot password?"): SwiftUI's `borderless` style on iOS, padded to a 44pt tap target that the whole label area takes, and Material's `TextButton` on Android. A `tint` colours its label. `Button` also takes `icon`, one of the app's icons before the label and in its colour: a SwiftUI `Label` in the button on iOS, the icon in the button's content row on Android, with Material's tighter padding on the icon side. Screen readers still read the label alone.
+
+  `IconButton` takes `variant`: `plain` (as before, and the default), `filled`, `tonal`, `outlined` or `glass`. iOS draws them as SwiftUI's `borderedProminent`, `bordered` and `glass` styles in a circle, and `outlined` as a plain button in a hairline ring, since SwiftUI has no outlined style; below iOS 26 `glass` is the `bordered` circle. Android draws Material's `FilledIconButton`, `FilledTonalIconButton` and `OutlinedIconButton`, and `glass` as the tonal one: Material has no glass, and a contained button still reads over a photo where an outline would not. A new `color` is the icon's colour, or on `filled` the fill, with the icon picking a colour that reads on it, as a `Button`'s `tint` does.
+
+  `List` takes `variant` and `separators`. `insetGrouped` sets the rows in a rounded card inset from the edges (SwiftUI's `insetGrouped` list style; on Android a `Card` inside the column, as `Form` draws a section), `plain` runs them edge to edge. Each platform keeps its own list by default, `insetGrouped` on iOS and `plain` on Android, so nothing changes until you ask. `separators={false}` drops the lines between rows: iOS hides each row's separator, Android draws no `Divider`.
+
+  `Fab` takes `label`, which makes it an extended FAB with the text beside the icon: Material's `ExtendedFloatingActionButton` on Android, and on iOS kara's own FAB as a 56pt accent capsule. Screen readers say `accessibilityLabel` for the whole button, so give it the label's words. It also takes `size`: `small` (40), `regular` (56, the default) or `large` (96, with a 36 icon), Material's `SmallFloatingActionButton` and `LargeFloatingActionButton` on Android and circles of the same sizes on iOS.
+
+- [#57](https://github.com/hzblj/kara-ui/pull/57) [`262bf11`](https://github.com/hzblj/kara-ui/commit/262bf1130730001da9390df0671bc2c16f7026a7) Thanks [@hzblj](https://github.com/hzblj)! - `DatePicker` takes `datePickerStyle` and `disabled`. `compact`, the pill that opens a calendar, stays the default; `graphical` is the calendar in place, a month at a time (with the time under it in `datetime` mode on iOS), and `wheel` puts the value on wheels. Android shows Material's calendar in place for `graphical` in `date` and `datetime` modes, without its title and headline and in the accent; for `wheel`, and in `time` mode, it keeps its field and dialog, since Material has no wheel. `disabled` dims the picker and ignores taps; Material's calendar has no disabled state of its own, so a disabled `graphical` picker on Android is dimmed and offers only the selected day.
+
+  `Slider` takes `onValueChangeEnd`, called once with the final value when the user lets go, so a seek or a volume can commit on release instead of at every step of the drag: SwiftUI's `onEditingChanged` on iOS, Material's `onValueChangeFinished` on Android.
+
+  `Stepper` and `RadioGroup` take `disabled`, which dims the row and stops the value changing. `Stepper` also takes `decrementLabel` and `incrementLabel`, what TalkBack says for its minus and plus buttons on Android (`Decrement` and `Increment` unless the app passes its own words); iOS's native stepper labels its buttons itself.
+
+  `ColorPicker` takes `disabled`: SwiftUI dims the label and the well and ignores taps on iOS, and on Android kara's own well dims and does not open its sheet, the label dimmed with it.
+
+  `Divider` takes `axis`. `vertical` draws Compose's `VerticalDivider` on Android, as tall as the `HStack` around it; SwiftUI's divider already turns by itself in an `HStack`, so iOS ignores it.
+
+  `Text` ends a text cut short with an ellipsis on Android too, where `numberOfLines` used to clip it. `truncation` says where the ellipsis goes: `tail`, the default, `head` to keep the end of the text, or `middle` to keep both of its ends, for a path or a file name. Android puts it at the head or in the middle of a single line only, as Compose does, and ends a longer text at the tail; kara-native's `AnimatedText` takes `textOverflow` to draw it. That Compose text, which Android also draws for `animate` and `monospacedDigit`, now reads every string child, so a `Text` like `{count} items` no longer comes out empty there.
+
+- [#57](https://github.com/hzblj/kara-ui/pull/57) [`262bf11`](https://github.com/hzblj/kara-ui/commit/262bf1130730001da9390df0671bc2c16f7026a7) Thanks [@hzblj](https://github.com/hzblj)! - `Alert` takes `cancelLabel`: the cancel button's label, so an app in another language no longer shows an English "Cancel" beside its own confirm label. `Cancel` stays the default, and `null` leaves the button out, for an alert that only informs and is closed by its confirm button alone.
+
+  `ActionSheet` takes a `message`: the confirmation dialog's own message under the title on iOS, a line under the title on Android. The title now shows on iOS too, where SwiftUI hid it by default and the actions lost what they were about.
+
+  `Menu` can open from an icon. `icon` sits before the `label` in the same colour, or stands alone as an `IconButton` that opens the menu, with an `accessibilityLabel` the types require when there is no label. iOS now draws each action's `icon` in the menu, as Android already did.
+
+  `MenuAction` takes `disabled`: the action stays in the list, greyed, and does not respond. `Menu`, `ActionSheet` and `ContextMenu` honour it on both platforms (the iOS context menu marks its `UIAction` disabled in kara-native's `ContextMenuView`, so it needs a native rebuild), `FabMenu` on iOS only, since Material's FAB menu items have no disabled state.
+
+  `Progress` takes `color`, any colour token: `fill.destructive.primary` for storage nearly full, `fill.success.primary` for a goal reached. `fill.accent.primary` stays the default. On Android a bar in another colour gets a track in that colour, faded, rather than Material's pale accent under it.
+
+- [#53](https://github.com/hzblj/kara-ui/pull/53) [`d31ac23`](https://github.com/hzblj/kara-ui/commit/d31ac23ae6cdb27948148b14d7d7abb0611ab3f9) Thanks [@hzblj](https://github.com/hzblj)! - `Sheet` takes `systemBackground`: on iOS the sheet keeps the system's own background instead of `bg`, which is untinted Liquid Glass on iOS 26 and a material blur before it. Use it for a sheet that floats over content it should let through, such as a map. Android keeps `bg`.
+
+- [#57](https://github.com/hzblj/kara-ui/pull/57) [`262bf11`](https://github.com/hzblj/kara-ui/commit/262bf1130730001da9390df0671bc2c16f7026a7) Thanks [@hzblj](https://github.com/hzblj)! - `testID` works on both platforms, so Maestro and other end-to-end tests can find a control by it: the accessibility identifier on iOS, the Compose test tag (exposed as the resource id) on Android. `Switch`, `Checkbox`, `Slider`, `Stepper`, `RadioGroup`, `Menu`, `Collapsible`, `Progress` and `Badge` take it for the first time, and `TextField`, `IconButton`, `Fab`, `Divider` and `List`, which only forwarded it on iOS, now tag their Compose views too. It lands on the control a test taps or reads rather than on a row around it: the switch or the box beside its label, the field below its label, a `Menu`'s trigger, a `Stepper`'s buttons and value, a `Collapsible`'s row.
+
+- [#57](https://github.com/hzblj/kara-ui/pull/57) [`262bf11`](https://github.com/hzblj/kara-ui/commit/262bf1130730001da9390df0671bc2c16f7026a7) Thanks [@hzblj](https://github.com/hzblj)! - `TextField` can be set up for the text it takes, so a proper email, password or one-time-code field can be built. `placeholder` is a hint in the empty field; `keyboard` brings up the `email`, `url`, `number`, `decimal` or `phone` keyboard; `autoCapitalize` and `autoCorrect` say how the keyboard treats what is typed, and both turn off by themselves for an email or a URL; `contentType` offers to fill the field in, through iOS AutoFill and, on Android, an autofill service; `maxLength` cuts off what is typed past it. It submits and moves on as well: `submitLabel` names the return key (`done`, `go`, `next`, `search` or `send`), `onSubmit` is called with the text when it is pressed, `autoFocus` focuses the field as it appears, `onFocusChange` reports focus, and a `ref` (`TextFieldRef`, with `focus`, `blur` and `clear`) lets one field's `next` focus the following one. A `multiline` field keeps a return key that starts a new line. On Android a `secure` field now brings up the password keyboard, which suggests and learns nothing.
+
+  `SearchBar` takes `onSubmit`, called with the query when the keyboard's return key, which now reads Search, is pressed, and `autoFocus`. A query is taken as typed: capitals and corrections are off by default, and `autoCapitalize` and `autoCorrect` turn them back on.
+
+### Patch Changes
+
+- Updated dependencies [[`262bf11`](https://github.com/hzblj/kara-ui/commit/262bf1130730001da9390df0671bc2c16f7026a7), [`262bf11`](https://github.com/hzblj/kara-ui/commit/262bf1130730001da9390df0671bc2c16f7026a7), [`262bf11`](https://github.com/hzblj/kara-ui/commit/262bf1130730001da9390df0671bc2c16f7026a7), [`d31ac23`](https://github.com/hzblj/kara-ui/commit/d31ac23ae6cdb27948148b14d7d7abb0611ab3f9), [`262bf11`](https://github.com/hzblj/kara-ui/commit/262bf1130730001da9390df0671bc2c16f7026a7), [`262bf11`](https://github.com/hzblj/kara-ui/commit/262bf1130730001da9390df0671bc2c16f7026a7)]:
+  - @hzblj/kara-components@0.18.0
+  - @hzblj/kara-native@0.18.0
+  - @hzblj/kara-router@0.18.0
+  - @hzblj/kara-sx@0.18.0
+  - @hzblj/kara-theme@0.18.0
+  - @hzblj/kara-expo-plugin@0.18.0
+
 ## 0.17.0
 
 ### Minor Changes
