@@ -23,9 +23,18 @@ export type ContextMenuProps = {
   /** The always-visible trigger; a long press on it opens the menu. */
   children: ReactNode
   items: ContextMenuItem[]
+  /** The menu ended; `isCommitted` when a tap on the preview ended it. */
+  onMenuClose?: (isCommitted: boolean) => void
+  /** The menu appeared. */
+  onMenuOpen?: () => void
   /** The user tapped the lifted preview, committing to it. */
   onPreviewPress?: () => void
   onSelectItem?: (id: string) => void
+  /**
+   * The react-native-screens `screenId` (the route key) of a screen preloaded in the enclosing native stack. A tapped
+   * preview then pushes it natively at once and, with `zoom`, morphs as a whole into it.
+   */
+  preloadedScreenId?: string
   /** Shown lifted while the menu is open. A snapshot of the trigger when unset. */
   preview?: ReactNode
   /** Default: `zoom` when the trigger holds a `ZoomTransitionSource`, `pop` otherwise. */

@@ -11,7 +11,9 @@ import type {ContextMenuComponent, ContextMenuExclusionProps, ContextMenuProps} 
 const ContextMenuRoot = ({
   actions,
   children,
+  onOpenChange,
   onPreviewPress,
+  preloadedScreenId,
   preview,
   previewTransition,
   testID,
@@ -33,11 +35,25 @@ const ContextMenuRoot = ({
 
   const onSelectItem = useCallback((id: string) => actions[Number(id)]?.onPress(), [actions])
 
+  const onMenuOpen = useCallback(() => onOpenChange?.(true), [onOpenChange])
+
+  const onMenuClose = useCallback(
+    (isCommitted: boolean) => {
+      if (!isCommitted) {
+        onOpenChange?.(false)
+      }
+    },
+    [onOpenChange]
+  )
+
   return (
     <NativeContextMenu
       items={items}
+      onMenuClose={onOpenChange ? onMenuClose : undefined}
+      onMenuOpen={onOpenChange ? onMenuOpen : undefined}
       onPreviewPress={onPreviewPress}
       onSelectItem={onSelectItem}
+      preloadedScreenId={preloadedScreenId}
       preview={preview}
       previewTransition={previewTransition}
       style={style}

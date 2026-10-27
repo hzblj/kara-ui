@@ -74,12 +74,11 @@ this package depends on it so the pod is always there. One piece stays here: **a
 With a zoom source inside the trigger, `ContextMenuView` (`import ExpoZoomTransition`, `s.dependency` in the podspec)
 renders the preview to an image, finds where UIKit shows it (a visible portal layer whose `sourceLayer` is the preview
 controller's view's layer: a `_UIPortalView`'s `CAPortalLayer` up to iOS 26, AnimationKit's
-`InProcessAnimatablePortalLayer` on iOS 27, where the `_UIPortalView` is hidden at zero size and shows the trigger, so a
-lookup by `_UIPortalView` left a tapped preview only dismissing) and lays a copy of its photo there as a transient source (`ZoomTransitionRegistry.shared`,
-`ZoomTransitionTransientSource`), under a frozen snapshot of the window, then fires `onPreviewPress` at once. The
-enabler hands that copy to UIKit and fades the snapshot over 0.3 s; the copy goes when the push completes, or after 3 s
-without one. `previewTransition` picks `zoom`, `pop` or `dismiss`. Those registry calls are the package's public API:
-bump it together with this file.
+`InProcessAnimatablePortalLayer` on iOS 27, where the `_UIPortalView` is hidden at zero size and shows the trigger) and
+hands a copy over as a transient source (`ZoomTransitionRegistry.shared`, `ZoomTransitionTransientSource`): the photo
+under a frozen snapshot of the window while JavaScript pushes, or, with `preloadedScreenId`, the whole preview with the
+photo as its `focusRect` (see below). Those registry calls are the package's public API: bump it together with this
+file.
 
 ## Context menu
 
@@ -91,3 +90,33 @@ itself with `cancelsTouchesInView`, so `UIControl`s get `touchesCancelled`. Reac
 touch has left it (`touch.gestureRecognizers`): reset while UIKit still gives it the touch, on iOS 27 it then gets
 `touchesCancelled` for the touch it has just forgotten, and a debug build crashes on its touch registry assertion
 ("Inconsistency between local and UIKit touch registries").
+
+**Files:** `ContextMenuView` (props, events, menu, targeted preview), `+Interaction` (the delegate), `ContextMenuPreview`
+(renders the preview, the photo or whole-card copy), `ContextMenuPortal` (where UIKit shows the preview),
+`ContextMenuPreviewZoom` (the commit into the zoom), `ContextMenuPreloadedScreen`, `ContextMenuBackdrop` +
+`ContextMenuPlatterStyle` (UIKit's menu layer), `ContextMenuTouchCanceller`. They are the same as Footshop's
+`platform-ui` apart from `import ExpoZoomTransition` and the doc comments: change both together.
+
+**`onMenuOpen` / `onMenuClose(isCommitted)` come from `willDisplayMenu` / `willEndFor`**, never from
+`configurationForMenuAtLocation`: UIKit asks for a configuration also on a slightly long tap that never opens the menu,
+and no `willEndFor` follows it. `@hzblj/kara-components` maps them to `onOpenChange`.
+
+**`previewTransition`** is `zoom` (the default with a zoom source), `pop` (the default without one) or `dismiss`; a zoom
+that cannot happen falls back to `.dismiss`. Without the zoom, `onPreviewPress` fires once UIKit's commit animation ends
+(with `.dismiss` iOS 27 reports that about 1.2 s after the preview is back on the trigger).
+
+**With `preloadedScreenId` a tapped preview morphs into a screen that is already rendered.** The app preloads the
+detail while the menu is open (React Navigation's `preload`; the route key is the react-native-screens `screenId`), and
+the commit pushes it natively in the same frame (`activityState = 2` + `markChildUpdated` on the `RNSScreenStackView`,
+through KVC like expo-router's `Link.Preview`, so no RNScreens import; JavaScript then moves the route into `routes` and
+its prop update is a no-op). `pop` and `dismiss` push it the same way when the commit animation ends. With `zoom` the
+source is a copy of the whole platter, so the screen grows out of the whole preview. UIKit's menu layer
+(`_UIContextMenuContainerView`) sits above the whole app, so the commit hides the platter, fades a drawn copy of the menu
+(a `snapshotView` loses the glass) and, when the zoom starts, hides the layer with `isHidden` (its own dismissal kept an
+`alpha` change from showing and the dim doubled for a frame), re-creates its background under the zoom in the source
+screen and on the tab bar capsule, and holds an opaque copy of the card under the zoom's crossfade for 0.15 s. On iOS 26+
+that background is a dim (`_alertControllerDimmingViewColor`), not a blur. AnimationKit draws the platter's rounding, so no
+layer has a `cornerRadius`: the radius is `_UIContextMenuListView._platformMetrics.previewPlatterCornerRadius` (32 pt
+glass, 13 pt before), applied to the preview at its own size, so the copy uses it times the preview's on-screen scale.
+Any missing private piece falls back to the frozen-snapshot zoom. React Navigation renders a preloaded screen with a
+placeholder `navigation` whose `setOptions` throws, so its header must wait until the route is in `routes`.

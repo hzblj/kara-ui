@@ -8,12 +8,15 @@ import {useDeferredPreview} from './use-deferred-preview'
 type NativeContextMenuProps = {
   children: ReactNode
   items: ContextMenuItem[]
+  onMenuClose?: (event: {nativeEvent: {isCommitted: boolean}}) => void
+  onMenuOpen?: () => void
   onPreviewPress?: () => void
   onSelectItem?: (event: {nativeEvent: {id: string}}) => void
   onTouchCancel?: (event: GestureResponderEvent) => void
   onTouchEnd?: (event: GestureResponderEvent) => void
   onTouchMove?: (event: GestureResponderEvent) => void
   onTouchStart?: (event: GestureResponderEvent) => void
+  preloadedScreenId?: string
   previewTransition?: ContextMenuPreviewTransition
   style?: StyleProp<ViewStyle>
   testID?: string
@@ -38,8 +41,11 @@ const styles = StyleSheet.create({
 export const ContextMenu = ({
   children,
   items,
+  onMenuClose,
+  onMenuOpen,
   onPreviewPress,
   onSelectItem,
+  preloadedScreenId,
   preview,
   previewTransition,
   style,
@@ -51,12 +57,15 @@ export const ContextMenu = ({
   return (
     <NativeContextMenu
       items={items}
+      onMenuClose={onMenuClose ? event => onMenuClose(event.nativeEvent.isCommitted) : undefined}
+      onMenuOpen={onMenuOpen}
       onPreviewPress={onPreviewPress}
       onSelectItem={onSelectItem ? event => onSelectItem(event.nativeEvent.id) : undefined}
       onTouchCancel={hasPreview ? onTouchEnd : undefined}
       onTouchEnd={hasPreview ? onTouchEnd : undefined}
       onTouchMove={hasPreview ? onTouchMove : undefined}
       onTouchStart={hasPreview ? onTouchStart : undefined}
+      preloadedScreenId={preloadedScreenId}
       previewTransition={previewTransition}
       style={style}
       testID={testID}
