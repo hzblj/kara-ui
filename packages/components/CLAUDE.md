@@ -208,6 +208,10 @@ be a direct child, and `split-sheet-children.ts` lifts its props into TrueSheet'
 `useSheetScroll`) pads its content by the header's measured height. Elsewhere the header sits above the content and
 the inset is 0. A `large` title lives inside the scroll view and flips the bar's own title on once it has scrolled away.
 
+**`systemBackground` leaves iOS its own sheet background.** TrueSheet draws the system's when it gets no
+`backgroundColor`: untinted Liquid Glass on iOS 26, a material blur before it. The corner radius is already the
+system's on iOS. Android keeps `bg`, since Material's sheet has no glass.
+
 **`onDismiss` is the user's dismissal only.** `visible` going false dismisses without calling it, and a sheet
 unmounted while presented dismisses itself — otherwise it would stay on screen over everything.
 

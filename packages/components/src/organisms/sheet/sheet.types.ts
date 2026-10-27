@@ -51,7 +51,7 @@ export type SheetRef = {
  * one; native atoms in its content go in an `Island`.
  */
 export type SheetProps = {
-  /** The sheet's colour. `surface.primary` by default. */
+  /** The sheet's colour. `surface.primary` by default; ignored on iOS with `systemBackground`. */
   bg?: ColorToken
   /** The content. A `<Sheet.Header>` among the direct children becomes the native header instead. */
   children: ReactNode
@@ -80,6 +80,12 @@ export type SheetProps = {
    * and a header scrolls with the iOS 26 edge effect. Off by default; set it with a scrolling body.
    */
   scrollable?: boolean
+  /**
+   * iOS: the system's own sheet background instead of `bg` — untinted Liquid Glass on iOS 26, a material blur before
+   * it — for a sheet that floats over content it should let through, like a map. Keep the content free of fills. Android
+   * keeps `bg`. Off by default.
+   */
+  systemBackground?: boolean
   /** Test identifier, forwarded to the native sheet. */
   testID?: string
   /** Presents the sheet while true; going false dismisses it. */
