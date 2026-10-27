@@ -1,6 +1,13 @@
 import type {ColorValue, StyleProp, ViewStyle} from 'react-native'
 
-export type SegmentedControlOption = {label: string; value: string}
+export type SegmentedControlOption = {
+  /** An asset-catalog image (the app's icon), drawn before the label in the label's colour. */
+  icon?: string
+  /** An image by URL or bundle name, raster or SVG, drawn in its own colours instead of the label. */
+  image?: string
+  label: string
+  value: string
+}
 
 export type SegmentedControlProps = {
   activePillColor: ColorValue
@@ -12,6 +19,8 @@ export type SegmentedControlProps = {
   fontFamily?: string
   /** In points, not scaled with Dynamic Type: the control keeps UIKit's height. */
   fontSize?: number
+  /** The height of a segment's icon or image, in points. 20 when unset. */
+  iconSize?: number
   inactiveTextColor: ColorValue
   /** The tapped segment's `value`. The pill moves at once and goes back unless `selectedValue` follows. */
   onValueChange: (value: string) => void
@@ -24,4 +33,6 @@ export type SegmentedControlProps = {
   style?: StyleProp<ViewStyle>
   testID?: string
   trackColor?: ColorValue
+  /** Space above and below a segment's content, in points, which makes the control taller. UIKit's height when unset. */
+  verticalPadding?: number
 }

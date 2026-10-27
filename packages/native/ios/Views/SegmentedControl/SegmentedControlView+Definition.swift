@@ -38,6 +38,12 @@ extension SegmentedControlView {
       Prop("pillCornerRadius") { (view: SegmentedControlView, radius: Double?) in
         view.setPillCornerRadius(radius)
       }
+      Prop("iconSize") { (view: SegmentedControlView, size: Double?) in
+        view.setIconSize(size)
+      }
+      Prop("verticalPadding") { (view: SegmentedControlView, padding: Double?) in
+        view.setVerticalPadding(padding)
+      }
     }
   }
 }

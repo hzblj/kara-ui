@@ -364,6 +364,7 @@ export const COMPONENTS: ComponentDoc[] = [
     id: 'segmented-control',
     name: 'SegmentedControl',
     notes: [
+      'A segment can lead with one of your `icon`s, in its label’s colour, or be an `image` in its own colours (a carrier’s logo, by URL, raster or SVG, loaded natively). `iconSize` sets their height and `spacing` the space above and below, for a bigger control.',
       'The selected segment is in the accent on both platforms: on iOS through kara’s own `UISegmentedControl`, since neither the system control nor SwiftUI’s segmented picker lets the labels be coloured.',
       'It needs no `Screen` or `Island`: iOS is a plain view, Android brings its own host. It takes the width it is given; the height is the platform’s.',
       '`onChange` fires for a new segment only. Android plays `selection`; iOS plays the control’s own feedback.',
