@@ -12,6 +12,11 @@ public class KaraUIModule: Module {
       return false
     }
 
+    // Whether UIKit takes the status bar style from each screen's view controller (the key's default) or from the app.
+    Function("isViewControllerBasedStatusBarAppearance") { () -> Bool in
+      Bundle.main.object(forInfoDictionaryKey: "UIViewControllerBasedStatusBarAppearance") as? Bool ?? true
+    }
+
     // Synchronous: a transition asks while it builds its style, once per name and appearance (cached in JS).
     Function("resolveSystemColor") { (names: [String], dark: Bool) -> String? in
       SystemColors.hex(names, dark: dark)

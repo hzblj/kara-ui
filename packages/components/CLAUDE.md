@@ -260,11 +260,15 @@ as Material's large top app bar collapses. An unset `largeTitle` leaves the stac
 **Hero header.** `useHeroHeader` runs the content under a transparent bar (`HERO_HEADER_SCREEN_OPTIONS`, static, so the
 first frame has no large title) and fades the header in while 50 to 70 % of the hero's part under the bar scrolls
 away: the title through `titleRevealProgress`, the items' tint (`content.on.accent` over a hero with `overHeroStyle`
-`light`), and the background — iOS 26's scroll edge effect switched on once the reveal starts, a `BlurView` material
-fading in below iOS 26 (the bar's own blur cannot fade, and kara's `BlurView` has no intensity), the surface on
-Android. `revealedTrailingActions` join the bar with the title. The status bar is returned, not set: a native stack's
-per-screen `statusBarStyle` needs `UIViewControllerBasedStatusBarAppearance`, which Expo apps turn off, and
-react-native-screens reports an error when it is set anyway.
+`light`), and the background — iOS 26's scroll edge effect switched on once the reveal starts, below iOS 26 the bar's
+chrome material (`BlurView` `ultraThick`) coming in by its `intensity`, the shared reveal value (the bar's own blur
+cannot fade), the surface on Android. `revealedTrailingActions` join the bar with the title. The status bar follows the
+hero for this screen alone: with view-controller-based appearance (Info.plist, read by kara-native's
+`isViewControllerBasedStatusBarAppearance`) through the native stack's per-screen `statusBarStyle`, which
+react-native-screens rejects otherwise; without it (Expo's default) and on Android through React Native's `StatusBar`
+in `background`, rendered only while the screen is focused and over the hero, so its stack restores the previous style
+on blur and once the header is revealed. That is why `useHeroHeader` takes a navigation object with `isFocused` and
+`addListener`.
 
 **Search.** `useHeaderSearch` gives iOS UIKit's search bar stacked under the title (title and items kept, nothing dimmed
 by the system, so a list filters live) for `useHeader`'s `search`, and Android a row with kara-native's Material

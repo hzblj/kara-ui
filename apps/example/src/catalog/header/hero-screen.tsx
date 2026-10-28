@@ -1,7 +1,6 @@
 import {Image, RnText} from '@hzblj/kara-ui'
 import {type HeaderAction, useHeroHeader} from '@hzblj/kara-ui/header'
 import {useNavigation} from 'expo-router'
-import {StatusBar} from 'expo-status-bar'
 import {useMemo, useState} from 'react'
 import {StyleSheet, View} from 'react-native'
 import Animated, {useAnimatedScrollHandler} from 'react-native-reanimated'
@@ -76,7 +75,6 @@ export const HeroScreen = () => {
         </View>
       </Animated.ScrollView>
       {hero.background}
-      <StatusBar style={hero.statusBarStyle ?? 'auto'} />
     </>
   )
 }

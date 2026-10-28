@@ -1,7 +1,7 @@
-import {isScrollEdgeEffectAvailable} from '@hzblj/kara-native'
+import {isScrollEdgeEffectAvailable, isViewControllerBasedStatusBarAppearance} from '@hzblj/kara-native'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useCallback, useEffect, useLayoutEffect, useMemo, useState} from 'react'
-import {Platform} from 'react-native'
+import {Platform, StatusBar} from 'react-native'
 import {
   Extrapolation,
   interpolate,
@@ -13,7 +13,14 @@ import {
 import {useSafeAreaInsets} from 'react-native-safe-area-context'
 import {scheduleOnRN} from 'react-native-worklets'
 
-import type {HeaderAction, HeaderNavigation, HeaderOptions, HeroHeader, HeroHeaderParams} from './header.types'
+import type {
+  HeaderAction,
+  HeaderOptions,
+  HeroHeader,
+  HeroHeaderNavigation,
+  HeroHeaderParams,
+  HeroHeaderStyle,
+} from './header.types'
 import {headerColor} from './header-color'
 import {useIsTitleRevealed} from './header-title'
 import {HeroHeaderBackground} from './hero-header-background'
@@ -49,6 +56,46 @@ const useIsOverHero = (progress: SharedValue<number>) => {
   return overHero
 }
 
+const useIsScreenFocused = (navigation: HeroHeaderNavigation) => {
+  const [focused, setFocused] = useState(() => navigation.isFocused())
+
+  useEffect(() => {
+    const unsubscribeFocus = navigation.addListener('focus', () => setFocused(true))
+    const unsubscribeBlur = navigation.addListener('blur', () => setFocused(false))
+
+    return () => {
+      unsubscribeFocus()
+      unsubscribeBlur()
+    }
+  }, [navigation])
+
+  return focused
+}
+
+const BAR_STYLES = {dark: 'dark-content', light: 'light-content'} as const satisfies Record<HeroHeaderStyle, string>
+
+/**
+ * The status bar over the hero, for this screen only. With view-controller-based appearance (Info.plist) the native
+ * stack sets it per screen (`statusBarStyle`); otherwise, as in Expo apps and on Android, React Native's `StatusBar`
+ * applies it while the screen is focused and over the hero, and its stack restores the previous style once it is not.
+ */
+const useHeroStatusBar = (navigation: HeroHeaderNavigation, overHero: boolean, overHeroStyle: HeroHeaderStyle) => {
+  const focused = useIsScreenFocused(navigation)
+  const perScreen = isViewControllerBasedStatusBarAppearance()
+
+  useEffect(() => {
+    if (perScreen) {
+      navigation.setOptions({statusBarStyle: overHero ? overHeroStyle : 'auto'})
+    }
+  }, [navigation, overHero, overHeroStyle, perScreen])
+
+  if (perScreen || !focused || !overHero) {
+    return null
+  }
+
+  return <StatusBar animated barStyle={BAR_STYLES[overHeroStyle]} />
+}
+
 const useRevealProgress = (barHeight: number, heroHeight: number, introProgress?: SharedValue<number>) => {
   const scrollY = useSharedValue(0)
   const heroUnderBar = heroHeight - barHeight
@@ -79,13 +126,13 @@ const useRevealProgress = (barHeight: number, heroHeight: number, introProgress?
 /**
  * A header over a full-bleed hero: the content runs under a transparent bar, and while 50 to 70 % of the hero's part
  * under the bar scrolls away the header fades in — the title (and subtitle) in the bar, the bar's background
- * (`background`: iOS 26's scroll edge effect switched on, a fading material below iOS 26, the top app bar's surface on
- * Android) and the items' tint, light over the hero with `overHeroStyle` `light`. `revealedTrailingActions` join the
+ * (`background`: iOS 26's scroll edge effect switched on, the bar's material coming in below iOS 26, the top app bar's
+ * surface on Android), the items' tint and the status bar, light over the hero with `overHeroStyle` `light`. `revealedTrailingActions` join the
  * bar once the title is shown. Give the screen `HERO_HEADER_SCREEN_OPTIONS` as static options, so its first frame has
  * no large title, render `background` after the list and call `onScroll` with its offset.
  */
 export const useHeroHeader = (
-  navigation: HeaderNavigation,
+  navigation: HeroHeaderNavigation,
   {
     backHidden,
     heroHeight,
@@ -104,6 +151,7 @@ export const useHeroHeader = (
   const titleShown = useIsTitleRevealed(scrollProgress)
   const overHero = useIsOverHero(progress)
   const scrolledOverHero = useIsOverHero(scrollProgress)
+  const statusBar = useHeroStatusBar(navigation, overHero, overHeroStyle)
 
   const visibleTrailingActions = useMemo(() => {
     if (!titleShown || !revealedTrailingActions) {
@@ -154,8 +202,13 @@ export const useHeroHeader = (
   }, [navigation, overHero, overHeroStyle, scrolledOverHero, theme])
 
   const background = useMemo(
-    () => <HeroHeaderBackground height={barHeight} progress={progress} />,
-    [barHeight, progress]
+    () => (
+      <>
+        <HeroHeaderBackground height={barHeight} progress={progress} />
+        {statusBar}
+      </>
+    ),
+    [barHeight, progress, statusBar]
   )
 
   return {
@@ -165,6 +218,5 @@ export const useHeroHeader = (
     onScroll,
     progress,
     scrollProgress,
-    statusBarStyle: overHero ? overHeroStyle : undefined,
   }
 }

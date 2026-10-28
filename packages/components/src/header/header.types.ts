@@ -329,18 +329,23 @@ export type HeroHeaderParams = Pick<HeaderParams, 'backHidden' | 'leadingActions
 
 /** A hero header: a transparent bar over a full-bleed image that fades in as the image scrolls away. */
 export type HeroHeader = HeaderContent & {
-  /** The bar's background below iOS 26 and on Android. Render it after the list. */
+  /**
+   * The bar's background below iOS 26 and on Android, and the status bar over the hero. Render it after the list.
+   */
   background: ReactElement
   /** How far the header has faded in, intro included: 0 over the hero, 1 revealed. */
   progress: SharedValue<number>
   /** The same from the scroll alone, without the intro. */
   scrollProgress: SharedValue<number>
-  /**
-   * The status bar's style while the bar is over the hero (`overHeroStyle`), `undefined` once it is revealed. Apply it
-   * with the app's own status bar (`expo-status-bar`'s `<StatusBar style>`): a native stack's per-screen
-   * `statusBarStyle` needs `UIViewControllerBasedStatusBarAppearance`, which Expo apps turn off.
-   */
-  statusBarStyle: HeroHeaderStyle | undefined
+}
+
+/**
+ * What `useHeroHeader` needs of a screen's navigation object, React Navigation's and Expo Router's `useNavigation()`
+ * both: setting options, and whether the screen is focused, so its status bar applies to it alone.
+ */
+export type HeroHeaderNavigation = HeaderNavigation & {
+  addListener(event: 'blur' | 'focus', callback: () => void): () => void
+  isFocused(): boolean
 }
 
 /** A native stack's screen options, as React Navigation's native stack and Expo Router's `Stack` both take them. */
