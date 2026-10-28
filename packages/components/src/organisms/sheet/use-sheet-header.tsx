@@ -6,6 +6,7 @@ import {type LayoutChangeEvent, Platform, type ViewStyle} from 'react-native'
 import {Box} from '../../atoms/box'
 import {RnText} from '../../atoms/rn-text'
 import {NavigationBar, type NavigationBarTitleAlignment} from '../../molecules/navigation-bar'
+import {SEARCH_ROW_HEIGHT} from '../../molecules/navigation-bar/navigation-bar.constants'
 import type {SheetHeaderProps, SheetScrollContextValue, SheetScrollHandler} from './sheet.types'
 
 type UseSheetHeaderParams = {
@@ -47,11 +48,13 @@ export const useSheetHeader = ({header: headerProps, scrollable}: UseSheetHeader
   const search = headerProps?.search
   const accessory = headerProps?.children
   const hasBar = title !== undefined || !!leadingItems?.length || !!trailingItems?.length || !!search
+  const searchRowHeight =
+    Platform.OS === 'ios' && search && search.placement !== 'integratedButton' ? SEARCH_ROW_HEIGHT : 0
   const hasHeader = hasBar || !!accessory
   const isOverlay = isScrollEdgeEffectAvailable() && hasHeader && scrollable
   const isLargeTitle = titleStyle === 'large' && !!title
 
-  const [headerHeight, setHeaderHeight] = useState(hasBar ? ESTIMATED_HEADER_HEIGHT : 0)
+  const [headerHeight, setHeaderHeight] = useState(hasBar ? ESTIMATED_HEADER_HEIGHT + searchRowHeight : 0)
   const [largeTitleScrolledAway, setLargeTitleScrolledAway] = useState(false)
   const largeTitleHeight = useRef(0)
 

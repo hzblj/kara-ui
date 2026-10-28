@@ -16,11 +16,12 @@ type NavigationBarItemBase = {
 
 /**
  * One item of the bar. `back` and `close` are the platform's own (a chevron and the system close item on iOS, the
- * Material arrow and cross on Android), with `Back` / `Close` as their labels unless given others. `icon` is one of the
- * app's icons and names itself for VoiceOver and TalkBack.
+ * Material arrow and cross on Android), with `Back` / `Close` as their labels unless given others; on iOS `icon` puts
+ * one of the app's icons in place of the system glyph. An `icon` item is one of the app's icons and names itself for
+ * VoiceOver and TalkBack.
  */
 export type NavigationBarItem =
-  | (NavigationBarItemBase & {label?: string; type: 'back' | 'close'})
+  | (NavigationBarItemBase & {icon?: IconName; label?: string; type: 'back' | 'close'})
   | (NavigationBarItemBase & {icon: IconName; label: string; type: 'icon'})
 
 export type NavigationBarSearchRef = {
@@ -28,14 +29,33 @@ export type NavigationBarSearchRef = {
   clear: () => void
 }
 
-/** A search field in place of the title. iOS only for now; Android keeps the title. */
+/**
+ * Where the search field goes on iOS, as a native-stack header places its search: `stacked` in a row of its own under
+ * the title, `integratedButton` as a search item beside the trailing items that turns the bar into the field.
+ */
+export type NavigationBarSearchPlacement = 'integratedButton' | 'stacked'
+
+/**
+ * A search field in the bar. iOS only for now; Android keeps the title. A focused field gets a cancel item that
+ * empties it and ends the search, a bar item like the others.
+ */
 export type NavigationBarSearch = {
+  /** `integratedButton`: the search item's icon, one of the app's icons; the system magnifying glass unset. */
+  buttonIcon?: IconName
+  /** `integratedButton`: the search item's label for VoiceOver. `Search` by default. */
+  buttonLabel?: string
+  /** The cancel item's icon, one of the app's icons; the system cross unset. */
+  cancelIcon?: IconName
+  /** The cancel item's label for VoiceOver. `Cancel` by default. */
+  cancelLabel?: string
   /** Every edit of the field's text. */
   onChangeText: (text: string) => void
   /** The field gained or lost focus. */
   onFocusChange?: (focused: boolean) => void
   /** Shown while the field is empty. */
   placeholder: string
+  /** `stacked` (a row under the title) by default. */
+  placement?: NavigationBarSearchPlacement
   /** Imperative `clear`. */
   ref?: Ref<NavigationBarSearchRef>
   /** Test identifier, forwarded to the native search field. */
@@ -56,7 +76,7 @@ export type NavigationBarProps = {
   inverted?: boolean
   /** In screen order, from the leading edge. */
   leadingItems?: NavigationBarItem[]
-  /** Replaces the title with a search field (iOS). */
+  /** A search field (iOS): under the title, or behind a search item beside the trailing items. */
   search?: NavigationBarSearch
   /** Test identifier, forwarded to the native bar. iOS only; Android ignores it. */
   testID?: string

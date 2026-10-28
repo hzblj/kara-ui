@@ -217,8 +217,11 @@ system's on iOS. Android keeps `bg`, since Material's sheet has no glass.
 unmounted while presented dismisses itself — otherwise it would stay on screen over everything.
 
 **`NavigationBar` places nothing.** Items go on the side and in the order the caller gives; the close-on-the-right
-convention belongs to call sites. `separated` (iOS 26 glass capsules) has no Material counterpart, and `search` is
-iOS-only for now.
+convention belongs to call sites, and so do glyphs: `back`, `close`, the search item and its cancel take one of the
+app's icons (`icon`, `search.buttonIcon`, `search.cancelIcon`) and fall back to the system's, so kara ships none.
+`separated` (iOS 26 glass capsules) has no Material counterpart, and `search` is iOS-only for now: `stacked` adds a
+52 pt row under the bar (`SEARCH_ROW_HEIGHT`, which `Sheet.Header` counts in its first estimate), `integratedButton`
+keeps the bar's height.
 
 ## Hosts and safe areas
 

@@ -3,11 +3,18 @@ import type {ColorValue, StyleProp, ViewStyle} from 'react-native'
 
 export type NavigationBarTitleAlignment = 'center' | 'leading'
 
+/**
+ * Where the search field goes, as a native-stack header places its search controller: `stacked` in a row of its own
+ * under the title; `integratedButton` as a search item beside the trailing items that turns the whole bar into the
+ * field while searching.
+ */
+export type NavigationBarSearchPlacement = 'integratedButton' | 'stacked'
+
 /** The back chevron, the system close item, or an image from the app's asset catalog with a title for VoiceOver. */
 export type NavigationBarItemType = 'back' | 'close' | 'icon'
 
 export type NavigationBarItem = {
-  /** An asset-catalog image, drawn as a template. `back` falls back to `chevron.backward`; `close` ignores it. */
+  /** An asset-catalog image, drawn as a template. `back` falls back to `chevron.backward`, `close` to the system item. */
   imageName?: string
   /** The accessibility label and, for `icon`, the title the system shows when it has room for one. */
   label: string
@@ -33,8 +40,18 @@ export type NavigationBarProps = {
   onSearchFocusChange?: (focused: boolean) => void
   onSearchTextChange?: (text: string) => void
   ref?: Ref<NavigationBarRef>
-  /** Replaces the title with a `UISearchBar` showing this placeholder. */
+  /** `integratedButton`: an asset-catalog image for the search item, drawn as a template; `magnifyingglass` unset. */
+  searchButtonImageName?: string
+  /** `integratedButton`: the search item's accessibility label. */
+  searchButtonLabel?: string
+  /** An asset-catalog image for the cancel item a focused field gets, drawn as a template; `xmark` unset. */
+  searchCancelImageName?: string
+  /** The cancel item's accessibility label. */
+  searchCancelLabel?: string
+  /** Adds a `UISearchBar` showing this placeholder, placed by `searchPlacement`. */
   searchPlaceholder?: string
+  /** `stacked` by default. */
+  searchPlacement?: NavigationBarSearchPlacement
   /** Becomes the search field's `accessibilityIdentifier`. */
   searchTestID?: string
   style?: StyleProp<ViewStyle>
