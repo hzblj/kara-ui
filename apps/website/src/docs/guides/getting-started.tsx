@@ -184,6 +184,10 @@ export const installation: Guide = {
               '`react-native-screens`, `react-native-safe-area-context` (optional)',
               '`@hzblj/kara-ui/header`. Every native stack has them already.',
             ],
+            [
+              '`@hzblj/expo-speech` (optional)',
+              'Dictation for a search field’s `voice`. kara draws the microphone and the waveform; any dictation works.',
+            ],
           ]}
         />
       </Section>

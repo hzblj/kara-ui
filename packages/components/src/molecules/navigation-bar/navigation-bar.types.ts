@@ -1,5 +1,6 @@
-import type {SearchVoice} from '@hzblj/kara-native'
+import type {SearchVoiceMeter} from '@hzblj/kara-native'
 import type {ReactNode, Ref} from 'react'
+import type {ColorValue} from 'react-native'
 
 import type {IconName} from '../../atoms/icon'
 
@@ -9,15 +10,34 @@ import type {IconName} from '../../atoms/icon'
  * (`@hzblj/expo-speech`'s `SpeechTranscriber`, whose `Transcription` is the `meter`, or anything else) and writes what
  * it hears into the field through the search's `setText`. The icons are the app's; unset, the platform's glyphs.
  */
-export type SearchFieldVoice = SearchVoice & {
+export type SearchFieldVoice = {
   /** The clear button that takes the microphone's place once the field holds text. */
   clearIcon?: IconName
+  /** The clear button's accessibility label. */
+  clearLabel?: string
+  /** Tints the microphone, the clear button, the waveform and the stop glyph (iOS). The bar's item colour by default. */
+  color?: ColorValue
+  /** Dictation is running: the waveform and the stop button replace the microphone. */
+  listening: boolean
+  /**
+   * The transcription to draw, a native shared object that posts its level (`@hzblj/expo-speech`'s `Transcription`), so
+   * no level crosses to JavaScript. Without one the waveform stays flat.
+   */
+  meter?: SearchVoiceMeter | null
   /** The microphone. */
   microphoneIcon?: IconName
+  /** The microphone's accessibility label. */
+  microphoneLabel: string
   /** The search ended while listening (cancelled, or typed over): drop the dictation. */
   onCancel?: () => void
+  /** The microphone was pressed. The field is focused first, so the search opens as if typed into. */
+  onStart: () => void
+  /** The stop button was pressed. */
+  onStop: () => void
   /** The glyph in the stop button. */
   stopIcon?: IconName
+  /** The stop button's accessibility label. */
+  stopLabel: string
 }
 
 type NavigationBarItemBase = {
