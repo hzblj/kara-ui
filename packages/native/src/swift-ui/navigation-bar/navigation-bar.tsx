@@ -2,6 +2,8 @@ import {useCallback, useMemo} from 'react'
 import type {NativeSyntheticEvent} from 'react-native'
 
 import {requireKaraView} from '../../require-view'
+import {type SearchVoiceActionEvent, sharedObjectId} from '../../search-voice'
+import {type NativeSearchVoiceRecord, toNativeSearchVoice} from '../navigation-item-search/native-search-voice'
 import type {NavigationBarItem, NavigationBarProps} from './navigation-bar.types'
 
 type NativeNavigationBarItem = Omit<NavigationBarItem, 'onPress'>
@@ -10,12 +12,15 @@ type ItemPressEvent = NativeSyntheticEvent<{index: number; placement: 'leading' 
 
 type NativeNavigationBarProps = Omit<
   NavigationBarProps,
-  'leadingItems' | 'onSearchFocusChange' | 'onSearchTextChange' | 'trailingItems'
+  'leadingItems' | 'onSearchFocusChange' | 'onSearchTextChange' | 'searchVoice' | 'trailingItems'
 > & {
   leadingItems?: NativeNavigationBarItem[]
   onItemPress: (event: ItemPressEvent) => void
   onSearchFocusChange: (event: NativeSyntheticEvent<{isFocused: boolean}>) => void
   onSearchTextChange: (event: NativeSyntheticEvent<{text: string}>) => void
+  onSearchVoiceAction: (event: SearchVoiceActionEvent) => void
+  searchVoice: NativeSearchVoiceRecord
+  searchVoiceMeter: number | null
   trailingItems?: NativeNavigationBarItem[]
 }
 
@@ -38,6 +43,7 @@ export const NavigationBar = ({
   leadingItems,
   onSearchFocusChange,
   onSearchTextChange,
+  searchVoice,
   trailingItems,
   ...props
 }: NavigationBarProps) => {
@@ -63,6 +69,14 @@ export const NavigationBar = ({
     [onSearchFocusChange]
   )
 
+  const nativeSearchVoice = useMemo(() => toNativeSearchVoice(searchVoice), [searchVoice])
+  const onVoiceStart = searchVoice?.onStart
+  const onVoiceStop = searchVoice?.onStop
+  const handleSearchVoiceAction = useCallback(
+    (event: SearchVoiceActionEvent) => (event.nativeEvent.action === 'start' ? onVoiceStart?.() : onVoiceStop?.()),
+    [onVoiceStart, onVoiceStop]
+  )
+
   return (
     <NativeNavigationBar
       {...props}
@@ -70,6 +84,9 @@ export const NavigationBar = ({
       onItemPress={handleItemPress}
       onSearchFocusChange={handleSearchFocusChange}
       onSearchTextChange={handleSearchTextChange}
+      onSearchVoiceAction={handleSearchVoiceAction}
+      searchVoice={nativeSearchVoice}
+      searchVoiceMeter={sharedObjectId(searchVoice?.meter)}
       trailingItems={nativeTrailingItems}
     />
   )

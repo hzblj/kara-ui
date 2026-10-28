@@ -38,6 +38,9 @@ dependencies {
   // The views register into @expo/ui's modifier registry and render its slots, so they compile against the copy
   // the app already links rather than bundling a second one.
   compileOnly 'expo.modules.ui:expo.modules.ui:57.+'
+  // A search field's voice draws the transcription's level with expo-waveform's LiveWaveformView; the app links it
+  // through autolinking, since @hzblj/expo-waveform is a dependency of this package.
+  compileOnly project(':hzblj-expo-waveform')
 
   implementation 'androidx.compose.foundation:foundation-android:1.10.2'
   implementation 'androidx.compose.ui:ui-android:1.10.2'

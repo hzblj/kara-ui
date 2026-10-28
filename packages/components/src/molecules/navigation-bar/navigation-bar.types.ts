@@ -1,6 +1,24 @@
+import type {SearchVoice} from '@hzblj/kara-native'
 import type {ReactNode, Ref} from 'react'
 
 import type {IconName} from '../../atoms/icon'
+
+/**
+ * A search field's voice: a microphone while the field is empty, the clear button in its place once it holds text, and
+ * while `listening` a live waveform of `meter` beside a stop button. Nothing records here: the app runs the dictation
+ * (`@hzblj/expo-speech`'s `SpeechTranscriber`, whose `Transcription` is the `meter`, or anything else) and writes what
+ * it hears into the field through the search's `setText`. The icons are the app's; unset, the platform's glyphs.
+ */
+export type SearchFieldVoice = SearchVoice & {
+  /** The clear button that takes the microphone's place once the field holds text. */
+  clearIcon?: IconName
+  /** The microphone. */
+  microphoneIcon?: IconName
+  /** The search ended while listening (cancelled, or typed over): drop the dictation. */
+  onCancel?: () => void
+  /** The glyph in the stop button. */
+  stopIcon?: IconName
+}
 
 type NavigationBarItemBase = {
   /** Called when the item is pressed. */
@@ -27,6 +45,8 @@ export type NavigationBarItem =
 export type NavigationBarSearchRef = {
   /** Empties the field and ends editing. */
   clear: () => void
+  /** Sets the field's text without `onChangeText`, the way dictation fills it in. */
+  setText: (text: string) => void
 }
 
 /**
@@ -48,6 +68,8 @@ export type NavigationBarSearch = {
   cancelIcon?: IconName
   /** The cancel item's label for VoiceOver. `Cancel` by default. */
   cancelLabel?: string
+  /** The field's clear button, one of the app's icons; the system's unset. */
+  clearIcon?: IconName
   /** Every edit of the field's text. */
   onChangeText: (text: string) => void
   /** The field gained or lost focus. */
@@ -60,6 +82,8 @@ export type NavigationBarSearch = {
   ref?: Ref<NavigationBarSearchRef>
   /** Test identifier, forwarded to the native search field. */
   testID?: string
+  /** A microphone in the field: see `SearchFieldVoice`. */
+  voice?: SearchFieldVoice
 }
 
 export type NavigationBarTitleAlignment = 'center' | 'leading'

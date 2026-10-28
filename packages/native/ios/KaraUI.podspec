@@ -23,6 +23,8 @@ Pod::Spec.new do |s|
   s.dependency 'SDWebImageSVGCoder'
   # The context menu hands a tapped preview's photo to the zoom transition as its source.
   s.dependency 'ExpoZoomTransition'
+  # A search field's voice draws the transcription's level as a live waveform.
+  s.dependency 'ExpoWaveform'
 
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',

@@ -3,10 +3,14 @@ import ExpoModulesCore
 extension NavigationBarView {
   static func definition() -> ViewDefinition<NavigationBarView> {
     View(NavigationBarView.self) {
-      Events("onItemPress", "onSearchTextChange", "onSearchFocusChange")
+      Events("onItemPress", "onSearchTextChange", "onSearchFocusChange", "onSearchVoiceAction")
 
       AsyncFunction("clearSearchText") { (view: NavigationBarView) in
         view.clearSearchText()
+      }.runOnQueue(.main)
+
+      AsyncFunction("setSearchText") { (view: NavigationBarView, text: String) in
+        view.setSearchText(text)
       }.runOnQueue(.main)
 
       Prop("title") { (view: NavigationBarView, title: String?) in
@@ -44,6 +48,15 @@ extension NavigationBarView {
       }
       Prop("searchCancelLabel") { (view: NavigationBarView, label: String?) in
         view.setSearchCancelLabel(label)
+      }
+      Prop("searchClearImageName") { (view: NavigationBarView, name: String?) in
+        view.setSearchClearImageName(name)
+      }
+      Prop("searchVoice") { (view: NavigationBarView, record: SearchVoiceRecord?) in
+        view.setSearchVoice(record)
+      }
+      Prop("searchVoiceMeter") { (view: NavigationBarView, meter: SharedObject?) in
+        view.setSearchVoiceMeter(meter)
       }
       Prop("itemColor") { (view: NavigationBarView, color: UIColor) in
         view.setItemColor(color)

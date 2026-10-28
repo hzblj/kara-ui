@@ -24,10 +24,13 @@ Every package has its own `CLAUDE.md` — read that one before touching it.
 
 Dependencies point one way: `theme` ← `sx` ← `components` ← `router`, with `native` beside `theme` (a pure platform
 layer that `sx` and `components` both use) and `kara-ui` on top of all of them. Nothing imports upwards, and nothing reaches past another package's
-`exports`. Three pieces live in their own repos, next to this one, and come from npm like any dependency:
+`exports`. Four pieces live in their own repos, next to this one, and come from npm like any dependency:
 `@hzblj/expo-rich-haptics` (`../expo-rich-haptics`: haptics, which `components` depends on), `@hzblj/expo-native-icons`
-(`../expo-native-icons`: the icon plugin, `NativeIcon`, `iconResourceName`) and `@hzblj/expo-zoom-transition`
-(`../expo-zoom-transition`: the zoom transition, natively). A change there is released there first, then bumped here.
+(`../expo-native-icons`: the icon plugin, `NativeIcon`, `iconResourceName`), `@hzblj/expo-zoom-transition`
+(`../expo-zoom-transition`: the zoom transition, natively) and `@hzblj/expo-waveform` (`../expo-waveform`: the live
+waveform a search field's voice draws, which `native` depends on). Speech is not one of them: a search field's voice
+takes the app's dictation (`@hzblj/expo-speech` or any other), so no app gets microphone or speech APIs it did not ask
+for. A change there is released there first, then bumped here.
 All packages are versioned together (`fixed` in `.changeset/config.json`). The website reads the packages'
 sources at build time but imports none of them.
 

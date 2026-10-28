@@ -13,9 +13,11 @@ export const GLYPHS = {
   chevronRight: {android: 'kara_glyph_chevron_right', ios: 'chevron.right'},
   close: {android: 'kara_glyph_close', ios: 'xmark'},
   error: {android: 'kara_glyph_error', ios: 'exclamationmark.circle'},
+  microphone: {android: 'kara_glyph_microphone', ios: 'mic'},
   minus: {android: 'kara_glyph_minus', ios: 'minus'},
   plus: {android: 'kara_glyph_plus', ios: 'plus'},
   search: {android: 'kara_glyph_search', ios: 'magnifyingglass'},
+  stop: {android: 'kara_glyph_stop', ios: 'stop.fill'},
 } as const satisfies Record<string, {android: string; ios: SFSymbol}>
 
 export type GlyphName = keyof typeof GLYPHS

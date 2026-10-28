@@ -6,6 +6,7 @@ import type {SearchBarCommands} from 'react-native-screens'
 import type {SFSymbol} from 'sf-symbols-typescript'
 
 import type {IconName} from '../../atoms/icon'
+import type {SearchFieldVoice} from '../../molecules/navigation-bar/navigation-bar.types'
 
 type HeaderActionBase = {
   /**
@@ -269,6 +270,7 @@ export type HeaderOptionsResult = HeaderContent & {
 
 /** UIKit's search bar options, as the native stack takes them (`headerSearchBarOptions`). */
 export type HeaderSearchBarOptions = {
+  allowToolbarIntegration?: boolean
   autoCapitalize?: 'characters' | 'none' | 'sentences' | 'words'
   hideNavigationBar?: boolean
   hideWhenScrolling?: boolean
@@ -283,11 +285,26 @@ export type HeaderSearchBarOptions = {
   tintColor?: string
 }
 
+/**
+ * Where the search goes on iOS: `stacked` in a row under the title (title and items kept); `integratedButton` as a
+ * search button in the bar's trailing corner that opens the field in the bar, the title and items hidden meanwhile.
+ * The integrated field's close is the system's: iOS gives it no other glyph.
+ */
+export type HeaderSearchPlacement = 'integratedButton' | 'stacked'
+
 export type HeaderSearchParams = {
+  /** iOS: the cancel circle beside a focused stacked field (iOS 26), one of the app's icons; the system cross unset. */
+  cancelIcon?: IconName
+  /** The field's clear button, one of the app's icons; the platform's unset. */
+  clearIcon?: IconName
   /** Off leaves the header without a field, for a screen that searches only sometimes. On by default. */
   enabled?: boolean
   /** Shown while the field is empty. `Search` by default. */
   placeholder?: string
+  /** iOS: `stacked` by default. Android always puts its field in a row under the bar. */
+  placement?: HeaderSearchPlacement
+  /** A microphone in the field: see `SearchFieldVoice`. Write what it hears with `setText`. */
+  voice?: SearchFieldVoice
 }
 
 /**
@@ -300,12 +317,17 @@ export type HeaderSearch = {
   clear: () => void
   /** The field's text. */
   query: string
-  /** Over the content while the field is focused and empty; a tap on it ends the search. Render it last. */
+  /**
+   * Over the content while the field is focused and empty; a tap on it ends the search. On iOS it also carries the
+   * field's glyphs and voice, which have to sit in the screen's tree. Render it last.
+   */
   scrim: ReactElement | null
   /** Android: the Material search field, a row to put right under the bar. `null` on iOS. */
   searchInput: ReactElement | null
   /** iOS: `search` for `useHeader`. `undefined` on Android. */
   searchBar: HeaderSearchBarOptions | undefined
+  /** Puts text into the field and the query, the way dictation fills it in. */
+  setText: (text: string) => void
 }
 
 /** Whether the header over a hero is light (over a dark image) or dark (over a light one). */

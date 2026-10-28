@@ -1,6 +1,7 @@
 export * from './availability'
 export * from './glyphs'
 export * from './require-view'
+export type {SearchVoice, SearchVoiceMeter} from './search-voice'
 export * from './status-bar-appearance'
 export * from './system-color'
 export type {TextWeight} from './text-weight'

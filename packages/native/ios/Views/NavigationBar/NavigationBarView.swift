@@ -72,6 +72,15 @@ public final class NavigationBarView: ExpoView, UISearchBarDelegate {
   let onItemPress = EventDispatcher()
   let onSearchTextChange = EventDispatcher()
   let onSearchFocusChange = EventDispatcher()
+  let onSearchVoiceAction = EventDispatcher()
+  private lazy var searchVoice: SearchFieldAccessory = {
+    let accessory = SearchFieldAccessory()
+    accessory.onAction = { [weak self] action in
+      self?.onSearchVoiceAction(["action": action.rawValue])
+    }
+    return accessory
+  }()
+  private let searchAppearance = SearchFieldAppearance()
 
   private let bar = UINavigationBar()
   private let item = UINavigationItem()
@@ -251,12 +260,40 @@ public final class NavigationBarView: ExpoView, UISearchBarDelegate {
     searchCancelItem.accessibilityLabel = label
   }
 
+  func setSearchClearImageName(_ name: String?) {
+    searchAppearance.clearImageName = name
+    searchAppearance.attach(to: searchBar)
+  }
+
+  /// The voice of the search field (`SearchFieldAccessory`): a microphone, a clear button in its place once there is
+  /// text, and a waveform with a stop while listening. Off, the field keeps UIKit's own clear button.
+  func setSearchVoice(_ record: SearchVoiceRecord?) {
+    let record = record ?? SearchVoiceRecord()
+    searchVoice.apply(record)
+    guard record.enabled else {
+      searchVoice.detach()
+      return
+    }
+    searchVoice.attach(to: searchBar)
+  }
+
+  func setSearchVoiceMeter(_ meter: AnyObject?) {
+    searchVoice.meter = meter
+  }
+
+  /// Sets the field's text without a delegate call, the way dictation fills it in.
+  func setSearchText(_ text: String) {
+    searchBar.text = text
+    searchVoice.refresh()
+  }
+
   func setSearchTestID(_ testID: String?) {
     searchBar.searchTextField.accessibilityIdentifier = testID
   }
 
   func clearSearchText() {
     searchBar.text = nil
+    searchVoice.refresh()
     searchBar.resignFirstResponder()
     endIntegratedSearch()
   }

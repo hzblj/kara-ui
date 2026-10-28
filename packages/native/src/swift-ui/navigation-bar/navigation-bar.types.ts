@@ -1,6 +1,8 @@
 import type {Ref} from 'react'
 import type {ColorValue, StyleProp, ViewStyle} from 'react-native'
 
+import type {SearchFieldVoiceIOS} from '../navigation-item-search/navigation-item-search.types'
+
 export type NavigationBarTitleAlignment = 'center' | 'leading'
 
 /**
@@ -29,6 +31,8 @@ export type NavigationBarItem = {
 export type NavigationBarRef = {
   /** Empties the search field and ends editing. */
   clearSearchText: () => Promise<void>
+  /** Sets the search field's text without a change event, the way dictation fills it in. */
+  setSearchText: (text: string) => Promise<void>
 }
 
 export type NavigationBarProps = {
@@ -48,12 +52,16 @@ export type NavigationBarProps = {
   searchCancelImageName?: string
   /** The cancel item's accessibility label. */
   searchCancelLabel?: string
+  /** The field's own clear button, without `searchVoice`: an asset-catalog image, drawn in the secondary label colour. */
+  searchClearImageName?: string
   /** Adds a `UISearchBar` showing this placeholder, placed by `searchPlacement`. */
   searchPlaceholder?: string
   /** `stacked` by default. */
   searchPlacement?: NavigationBarSearchPlacement
   /** Becomes the search field's `accessibilityIdentifier`. */
   searchTestID?: string
+  /** A microphone in the search field, a live waveform and a stop button while listening. */
+  searchVoice?: SearchFieldVoiceIOS
   style?: StyleProp<ViewStyle>
   testID?: string
   title?: string

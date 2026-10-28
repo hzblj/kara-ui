@@ -47,8 +47,25 @@ export const NavigationBar: NavigationBarComponent = ({
 
   useImperativeHandle(
     search?.ref,
-    () => ({clear: () => barRef.current?.clearSearchText().catch(ignoreDetachedView)}),
+    () => ({
+      clear: () => barRef.current?.clearSearchText().catch(ignoreDetachedView),
+      setText: (text: string) => barRef.current?.setSearchText(text).catch(ignoreDetachedView),
+    }),
     []
+  )
+
+  const voice = search?.voice
+  const clearIcon = search?.clearIcon
+  const nativeVoice = useMemo(
+    () =>
+      voice && {
+        ...voice,
+        clearImageName: toImageName(voice.clearIcon ?? clearIcon),
+        color: voice.color ?? color,
+        microphoneImageName: toImageName(voice.microphoneIcon),
+        stopImageName: toImageName(voice.stopIcon),
+      },
+    [clearIcon, color, voice]
   )
 
   const nativeLeadingItems = useMemo(() => leadingItems?.map(toNativeItem), [leadingItems])
@@ -68,9 +85,11 @@ export const NavigationBar: NavigationBarComponent = ({
       searchButtonLabel={search ? (search.buttonLabel ?? DEFAULT_LABELS.search) : undefined}
       searchCancelImageName={toImageName(search?.cancelIcon)}
       searchCancelLabel={search ? (search.cancelLabel ?? DEFAULT_LABELS.cancel) : undefined}
+      searchClearImageName={toImageName(clearIcon)}
       searchPlaceholder={search?.placeholder}
       searchPlacement={search?.placement}
       searchTestID={search?.testID}
+      searchVoice={nativeVoice}
       style={isStackedSearch ? styles.stackedSearchBar : styles.bar}
       testID={testID}
       title={title}
