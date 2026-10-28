@@ -36,6 +36,11 @@
       "types": "./lib/typescript/index.d.ts",
       "default": "./lib/module/index.js"
     },
+    "./header": {
+      "source": "./src/header.ts",
+      "types": "./lib/typescript/header.d.ts",
+      "default": "./lib/module/header.js"
+    },
     "./router": {
       "source": "./src/router.ts",
       "types": "./lib/typescript/router.d.ts",
@@ -104,10 +109,14 @@
     "react": "*",
     "react-native": "*",
     "react-native-reanimated": ">=4.0.0",
+    "react-native-safe-area-context": "*",
     "react-native-screens": "*"
   },
   "peerDependenciesMeta": {
     "expo-router": {
+      "optional": true
+    },
+    "react-native-safe-area-context": {
       "optional": true
     },
     "react-native-screens": {

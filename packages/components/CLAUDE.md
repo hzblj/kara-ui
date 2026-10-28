@@ -16,6 +16,7 @@ and `@hzblj/kara-native` — through their entry points only.
 | `src/molecules/` | Label, LabeledContent, ListItem (and `RnListItem`, its React Native-tier row for long lists), Link, SearchBar, EmptyState, Collapsible, Pager, RadioGroup, Stepper, Tooltip — and over the native module: NavigationBar, ScrollEdgeContainer, RnTooltip. |
 | `src/organisms/` | Sheet (TrueSheet with a native header: `Sheet.Header`, `Sheet.ScrollView`, `useSheetScroll`), ActionSheet, Alert, Menu, Form, SwipeActions, Snackbar — and over the native module: ContextMenu (long-press on React Native content, with a custom preview on iOS), FabMenu. (`Tabs` lives in `@hzblj/kara-router`, behind the `@hzblj/kara-ui/router` entry, so the main entry never imports expo-router.) |
 | `src/templates/screen/` | `Screen` — the full-bleed native host every screen starts with. |
+| `src/header/` | The `/header` entry: a native stack screen's header for React Navigation and Expo Router alike — `useHeader` / `useHeaderOptions` (actions on both sides), `useStackScreenOptions` and its presets, `HeaderInset`, `useHeaderBarInset`, `useHeaderScrollToTop`. Not in the main entry, which must not need `react-native-screens`. |
 | `src/host-context.tsx` | `HostBoundary` + `useHostGuard`: dev warning when a native atom renders outside `Screen`/`Island`. `useInsideHost`: whether one already encloses it, for the atoms that otherwise bring their own. |
 | `src/story-decorators.tsx` | `insideIsland` / `insideIslandOfHeight` — the host a story mounts its subject in. Internal: not exported from `index.ts`. |
 | `src/use-refresh-state.ts` | Bridges SwiftUI's promise-driven `refreshable` and Compose's controlled `PullToRefreshBox` into one async `onRefresh`. |
@@ -218,6 +219,35 @@ unmounted while presented dismisses itself — otherwise it would stay on screen
 **`NavigationBar` places nothing.** Items go on the side and in the order the caller gives; the close-on-the-right
 convention belongs to call sites. `separated` (iOS 26 glass capsules) has no Material counterpart, and `search` is
 iOS-only for now.
+
+## Header
+
+**`src/header/` imports no navigation library.** It builds native-stack options (`HeaderOptions`,
+`StackScreenOptions`, structural copies of the native stack's own types) and the screen applies them: spread into
+Expo Router's `<Stack.Screen options>` or a React Navigation screen's `options`, or through `useHeader(navigation, …)`,
+which takes either library's `useNavigation()` and calls `setOptions` before the first paint. Expo Router's stack is a
+fork of React Navigation's native stack with the same option shapes; `contract.check.ts` assigns kara's types to Expo
+Router's, so a drift fails `yarn typecheck`.
+
+**One action model, both sides.** `leadingActions` go to `unstable_headerLeftItems`, `trailingActions` to
+`unstable_headerRightItems` on iOS — the navigation bar's own `UIBarButtonItem`s, so glass, press and the iOS 26
+overflow menu are the system's — and to `headerLeft` / `headerRight` on Android, where each action is a Material
+button in a host sized to it both ways (the toolbar gives custom content no width to fill). An unset side keeps what
+the stack's options gave it; an empty array clears it. `separated` ends the capsule with a zero-width spacing item, as
+the system's headers do. `back` and `close` fall back to kara's glyphs. On Android a trailing `close` on a screen
+without its back button moves to the navigation icon's place (Material's full-screen dialog), and menu submenus are
+listed in place, since its dropdown does not nest. The bar items are React Navigation's `unstable_` API: check them
+after a native stack upgrade.
+
+**Actions a screen has when it is pushed belong in its static options.** iOS morphs the bar items between two screens
+only when both exist at the push; set later from an effect, the outgoing screen's items slide away and the new ones
+pop in. `useHeaderOptions` is what goes into static options.
+
+**`useHeaderBarInset` and `HeaderInset` never measure.** The inset is the safe area plus the bar's known height (54pt
+on iOS 26, 44 before, 0 on Android, where the bar sits above the content), so nothing laid out by it jumps once the
+bar reports its size, as a measured header height does. `HeaderInset` is react-native-screens' `SafeAreaView`, which
+follows the bar natively, a search field included. `useHeaderScrollToTop` hands the libraries' own `useScrollToTop` a
+ref that scrolls to the expanded large title instead of to 0, which on iOS would leave the content under the bar.
 
 ## Icons
 

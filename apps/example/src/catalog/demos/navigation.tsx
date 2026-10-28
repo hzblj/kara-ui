@@ -4,6 +4,7 @@ import {Platform} from 'react-native'
 
 import {LinkList, Section} from '../../ui'
 import type {CatalogEntry} from '../catalog.types'
+import {HeaderDemo} from '../header'
 import {ZoomTransitionDemo} from '../zoom'
 import {KARA_MODULE} from './tags'
 
@@ -179,6 +180,15 @@ export const NAVIGATION: CatalogEntry[] = [
     name: 'NavigationBar',
     summary: 'A title with items on either side: a real navigation bar outside a navigation stack.',
     tags: KARA_MODULE,
+  },
+  {
+    code: "const navigation = useNavigation()\n\nuseHeader(navigation, {\n  leadingActions: [{type: 'text', label: 'Edit', onPress: edit}],\n  trailingActions: [\n    {type: 'icon', icon: 'share', label: 'Share', onPress: share},\n    {type: 'menu', icon: 'more', label: 'More', items: [{type: 'action', label: 'Delete', destructive: true, onPress: remove}]},\n  ],\n})\n\n// or declaratively, Expo Router\n<Stack.Screen options={useHeaderOptions({trailingActions})} />",
+    Demo: HeaderDemo,
+    id: 'header',
+    name: 'Header',
+    summary:
+      'A screen header’s actions on both sides: the navigation bar’s own items on iOS, Material buttons on Android. For React Navigation and Expo Router alike.',
+    tags: ['UIKit', 'Material', 'React Navigation', 'Expo Router'],
   },
   {
     code: '<Tabs>\n  <Tabs.Screen name="index" title="Home" icon="home" selectedIcon="home-filled" />\n</Tabs>',
