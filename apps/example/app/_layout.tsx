@@ -1,5 +1,5 @@
 import {useAppTheme} from '@hzblj/kara-ui'
-import {useStackScreenOptions} from '@hzblj/kara-ui/header'
+import {HERO_HEADER_SCREEN_OPTIONS, LARGE_TITLE_SCREEN_OPTIONS, useStackScreenOptions} from '@hzblj/kara-ui/header'
 import {withZoomTransition} from '@hzblj/kara-ui/router'
 import {Stack} from 'expo-router'
 import {Platform} from 'react-native'
@@ -28,8 +28,12 @@ const RootStack = () => {
         through every component replaces the shot on screen instead of stacking fifty of them, and no animation, so a
         deep link lands on the component rather than on a push half-way across.
       */}
-      {/* The `useHeader` demo: kara's stack options, then the screen sets its own actions. */}
-      <Stack.Screen name="header" options={{...stackScreenOptions, headerShown: true, title: 'Header'}} />
+      {/* The header demos: kara's stack options with a large title, and a hero header's transparent bar. */}
+      <Stack.Screen
+        name="header"
+        options={{...stackScreenOptions, ...LARGE_TITLE_SCREEN_OPTIONS, title: 'Countries'}}
+      />
+      <Stack.Screen name="hero" options={{...stackScreenOptions, ...HERO_HEADER_SCREEN_OPTIONS, title: ''}} />
       <Stack.Screen dangerouslySingular={() => 'shot'} name="shot/[id]" options={{animation: 'none'}} />
       {/*
         The photo a ZoomTransition demo card grows into: a full-screen modal over the tabs, the way a gallery opens. No

@@ -1,6 +1,8 @@
 import type {ColorToken} from '@hzblj/kara-theme'
 import type {ReactElement, ReactNode, RefObject} from 'react'
 import type {ColorValue, ImageSourcePropType} from 'react-native'
+import type {SharedValue} from 'react-native-reanimated'
+import type {SearchBarCommands} from 'react-native-screens'
 import type {SFSymbol} from 'sf-symbols-typescript'
 
 import type {IconName} from '../atoms/icon'
@@ -146,10 +148,35 @@ export type HeaderParams = {
    */
   backHidden?: boolean
   /**
+   * A large title that collapses into the bar as the list scrolls. iOS draws UIKit's own; Android, where the native
+   * stack has none, puts it into the content as the list's first row (`largeTitle` in the result) and fades the bar's
+   * title in once that row has scrolled away, as Material's large top app bar does. Wire `onScroll` for it.
+   */
+  largeTitle?: boolean
+  /**
    * The leading side's actions, in screen order from the edge. On iOS they follow the back button. Unset leaves the
    * side as the stack's options have it; an empty array clears it.
    */
   leadingActions?: HeaderAction[]
+  /**
+   * A search field in the header, from `useHeaderSearch`: UIKit's search bar under the title on iOS. Android has no
+   * field in its top app bar, so `useHeaderSearch` gives the screen a row of its own to put under it.
+   */
+  search?: HeaderSearchBarOptions
+  /**
+   * A line under the title, both on the leading side. iOS 26 sets it as the navigation item's own subtitle, which
+   * truncates and morphs between screens natively; elsewhere a title and subtitle are drawn in the bar.
+   */
+  subtitle?: string
+  /** The screen's title, in the bar. */
+  title?: string
+  /** Keeps the bar without a title, for a screen that draws its own under it. */
+  titleHidden?: boolean
+  /**
+   * Fades the title (and subtitle) in as this goes from 0 to 1, for a detail screen whose title appears once its image
+   * has scrolled away. Past half, iOS 26 switches its native title and subtitle on with a cross-dissolve.
+   */
+  titleRevealProgress?: SharedValue<number>
   /**
    * The trailing side's actions, in screen order toward the edge: the close usually last. Unset leaves the side as the
    * stack's options have it; an empty array clears it.
@@ -203,18 +230,124 @@ export type HeaderItemProps = {
  * into `options`, or hand them to `navigation.setOptions`.
  */
 export type HeaderOptions = {
+  headerBackground?: () => ReactNode
   headerBackVisible?: boolean
+  headerBlurEffect?: 'none' | 'systemChromeMaterial'
+  headerLargeTitleEnabled?: boolean
   headerLeft?: (props: HeaderItemProps) => ReactNode
   headerRight?: (props: HeaderItemProps) => ReactNode
+  headerSearchBarOptions?: HeaderSearchBarOptions
+  headerShown?: boolean
+  headerStyle?: {backgroundColor?: string}
+  headerTintColor?: string
+  headerTitle?: string | (() => ReactNode)
+  headerTransparent?: boolean
+  scrollEdgeEffects?: {top?: 'automatic' | 'hidden'}
+  statusBarStyle?: 'auto' | 'dark' | 'light'
+  title?: string
   unstable_headerLeftItems?: (props: HeaderItemProps) => NativeHeaderItem[]
   unstable_headerRightItems?: (props: HeaderItemProps) => NativeHeaderItem[]
+}
+
+/** What a list under the header needs from it. */
+export type HeaderContent = {
+  /**
+   * Hand it to the list: `automatic` lets iOS inset the content under its transparent bar, `never` (a hero header)
+   * lets the content run under it.
+   */
+  contentInsetAdjustmentBehavior: 'automatic' | 'never'
+  /** Android, with `largeTitle`: the large title, to render as the list's first row. `null` everywhere else. */
+  largeTitle: ReactElement | null
+  /** A worklet to call with the list's vertical offset from its scroll handler, for what follows the scroll. */
+  onScroll: (offsetY: number) => void
+}
+
+/** `HeaderContent` plus the options, for a screen that sets them itself (Expo Router's `<Stack.Screen options>`). */
+export type HeaderOptionsResult = HeaderContent & {
+  options: HeaderOptions
+}
+
+/** UIKit's search bar options, as the native stack takes them (`headerSearchBarOptions`). */
+export type HeaderSearchBarOptions = {
+  autoCapitalize?: 'characters' | 'none' | 'sentences' | 'words'
+  hideNavigationBar?: boolean
+  hideWhenScrolling?: boolean
+  obscureBackground?: boolean
+  onBlur?: () => void
+  onCancelButtonPress?: () => void
+  onChangeText?: (event: {nativeEvent: {text: string}}) => void
+  onFocus?: () => void
+  placeholder?: string
+  placement?: 'automatic' | 'inline' | 'integrated' | 'integratedButton' | 'integratedCentered' | 'stacked'
+  ref?: RefObject<SearchBarCommands | null>
+  tintColor?: string
+}
+
+export type HeaderSearchParams = {
+  /** Off leaves the header without a field, for a screen that searches only sometimes. On by default. */
+  enabled?: boolean
+  /** Shown while the field is empty. `Search` by default. */
+  placeholder?: string
+}
+
+/**
+ * A header's search: what to give `useHeader` (`searchBar`, iOS), the row Android puts under its bar (`searchInput`),
+ * the scrim that washes the content out while the field is focused and empty (render it last, over the content), and
+ * the query to filter by.
+ */
+export type HeaderSearch = {
+  /** Empties the field and ends the search. */
+  clear: () => void
+  /** The field's text. */
+  query: string
+  /** Over the content while the field is focused and empty; a tap on it ends the search. Render it last. */
+  scrim: ReactElement | null
+  /** Android: the Material search field, a row to put right under the bar. `null` on iOS. */
+  searchInput: ReactElement | null
+  /** iOS: `search` for `useHeader`. `undefined` on Android. */
+  searchBar: HeaderSearchBarOptions | undefined
+}
+
+/** Whether the header over a hero is light (over a dark image) or dark (over a light one). */
+export type HeroHeaderStyle = 'dark' | 'light'
+
+export type HeroHeaderParams = Pick<HeaderParams, 'backHidden' | 'leadingActions' | 'subtitle' | 'trailingActions'> & {
+  /** The hero's height: the header fades in while the part of it under the bar scrolls away. */
+  heroHeight: number
+  /**
+   * Holds the header in its revealed look while above 0, for a hero that opens with an intro (the bar's background, tint
+   * and status bar; the title and the trailing actions follow the scroll alone).
+   */
+  introProgress?: SharedValue<number>
+  /** The items and status bar over the hero. `light` (over a dark image) by default. */
+  overHeroStyle?: HeroHeaderStyle
+  /** Trailing actions that join the bar, in front of `trailingActions`, once the title is revealed. */
+  revealedTrailingActions?: HeaderAction[]
+  /** The screen's title, revealed in the bar once the hero has scrolled away. */
+  title: string
+}
+
+/** A hero header: a transparent bar over a full-bleed image that fades in as the image scrolls away. */
+export type HeroHeader = HeaderContent & {
+  /** The bar's background below iOS 26 and on Android. Render it after the list. */
+  background: ReactElement
+  /** How far the header has faded in, intro included: 0 over the hero, 1 revealed. */
+  progress: SharedValue<number>
+  /** The same from the scroll alone, without the intro. */
+  scrollProgress: SharedValue<number>
+  /**
+   * The status bar's style while the bar is over the hero (`overHeroStyle`), `undefined` once it is revealed. Apply it
+   * with the app's own status bar (`expo-status-bar`'s `<StatusBar style>`): a native stack's per-screen
+   * `statusBarStyle` needs `UIViewControllerBasedStatusBarAppearance`, which Expo apps turn off.
+   */
+  statusBarStyle: HeroHeaderStyle | undefined
 }
 
 /** A native stack's screen options, as React Navigation's native stack and Expo Router's `Stack` both take them. */
 export type StackScreenOptions = {
   contentStyle?: {backgroundColor?: string}
   headerBackButtonDisplayMode?: 'default' | 'generic' | 'minimal'
-  headerBlurEffect?: 'systemChromeMaterial'
+  headerBlurEffect?: 'none' | 'systemChromeMaterial'
   headerLargeTitleEnabled?: boolean
   headerLargeTitleShadowVisible?: boolean
   headerLargeTitleStyle?: {color?: string; fontFamily?: string; fontSize?: number}
@@ -224,6 +357,7 @@ export type StackScreenOptions = {
   headerTintColor?: string
   headerTitleStyle?: {color?: string; fontFamily?: string; fontSize?: number}
   headerTransparent?: boolean
+  scrollEdgeEffects?: {top?: 'automatic' | 'hidden'}
 }
 
 /** What `useHeader` needs of a screen's navigation object: React Navigation's and Expo Router's `useNavigation()` both. */

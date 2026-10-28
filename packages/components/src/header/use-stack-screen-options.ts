@@ -1,15 +1,10 @@
 import {isScrollEdgeEffectAvailable} from '@hzblj/kara-native'
-import {type ColorToken, type Theme, useAppTheme} from '@hzblj/kara-theme'
+import {useAppTheme} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
 import {Platform} from 'react-native'
 
 import type {StackScreenOptions} from './header.types'
-
-/**
- * The native stack types header colours as `string`, but they only end up in native styles, which take any
- * `ColorValue`, including the opaque `PlatformColor` a system token resolves to on iOS.
- */
-const headerColor = (theme: Theme, token: ColorToken): string => theme.color(token) as string
+import {headerColor} from './header-color'
 
 /** iOS 26 draws its own scroll edge effect under a transparent bar; older iOS needs the bar's blur instead. */
 const HEADER_BLUR_EFFECT =
@@ -56,3 +51,16 @@ export const LARGE_TITLE_SCREEN_OPTIONS: StackScreenOptions = {headerLargeTitleE
 
 /** A screen without the stack's header, for one that draws its own or none. */
 export const HIDDEN_HEADER_SCREEN_OPTIONS: StackScreenOptions = {headerShown: false}
+
+/**
+ * A screen whose content runs under a transparent bar, a full-bleed image above all, for `useHeroHeader`. Static, so the
+ * first frame already has no large title and no bar background over the image.
+ */
+export const HERO_HEADER_SCREEN_OPTIONS: StackScreenOptions = {
+  headerBlurEffect: 'none',
+  headerLargeTitleEnabled: false,
+  headerShown: true,
+  headerStyle: {backgroundColor: 'transparent'},
+  headerTransparent: true,
+  scrollEdgeEffects: {top: 'hidden'},
+}

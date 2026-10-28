@@ -31,6 +31,7 @@ public class KaraUIModule: Module {
     GlassView.definition()
     IconView.definition()
     NavigationBarView.definition()
+    NavigationItemSubtitleView.definition()
     ScrollEdgeContainerView.definition()
     ScrollViewZPositionView.definition()
     SegmentedControlView.definition()

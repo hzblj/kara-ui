@@ -16,7 +16,7 @@ and `@hzblj/kara-native` — through their entry points only.
 | `src/molecules/` | Label, LabeledContent, ListItem (and `RnListItem`, its React Native-tier row for long lists), Link, SearchBar, EmptyState, Collapsible, Pager, RadioGroup, Stepper, Tooltip — and over the native module: NavigationBar, ScrollEdgeContainer, RnTooltip. |
 | `src/organisms/` | Sheet (TrueSheet with a native header: `Sheet.Header`, `Sheet.ScrollView`, `useSheetScroll`), ActionSheet, Alert, Menu, Form, SwipeActions, Snackbar — and over the native module: ContextMenu (long-press on React Native content, with a custom preview on iOS), FabMenu. (`Tabs` lives in `@hzblj/kara-router`, behind the `@hzblj/kara-ui/router` entry, so the main entry never imports expo-router.) |
 | `src/templates/screen/` | `Screen` — the full-bleed native host every screen starts with. |
-| `src/header/` | The `/header` entry: a native stack screen's header for React Navigation and Expo Router alike — `useHeader` / `useHeaderOptions` (actions on both sides), `useStackScreenOptions` and its presets, `HeaderInset`, `useHeaderBarInset`, `useHeaderScrollToTop`. Not in the main entry, which must not need `react-native-screens`. |
+| `src/header/` | The `/header` entry: a native stack screen's header for React Navigation and Expo Router alike — `useHeader` / `useHeaderOptions` (titles, search and actions on both sides), `useHeroHeader`, `useHeaderSearch`, `useStackScreenOptions` and its presets, `HeaderInset`, `useHeaderBarInset`, `useHeaderScrollToTop`. Not in the main entry, which must not need `react-native-screens`. |
 | `src/host-context.tsx` | `HostBoundary` + `useHostGuard`: dev warning when a native atom renders outside `Screen`/`Island`. `useInsideHost`: whether one already encloses it, for the atoms that otherwise bring their own. |
 | `src/story-decorators.tsx` | `insideIsland` / `insideIslandOfHeight` — the host a story mounts its subject in. Internal: not exported from `index.ts`. |
 | `src/use-refresh-state.ts` | Bridges SwiftUI's promise-driven `refreshable` and Compose's controlled `PullToRefreshBox` into one async `onRefresh`. |
@@ -220,6 +220,14 @@ unmounted while presented dismisses itself — otherwise it would stay on screen
 convention belongs to call sites. `separated` (iOS 26 glass capsules) has no Material counterpart, and `search` is
 iOS-only for now.
 
+## Hosts and safe areas
+
+**`ignoreSafeArea` is one exact type for every host** (`IgnoredSafeArea`: `none`, `keyboard`, `container`, `all`), on
+`Island` and `Screen`, never a boolean or an `undefined` that means something. iOS hands it to the SwiftUI `Host`
+(`none` is no modifier); Android's Compose `Host` can ignore only the keyboard, and reads it once, on mount. An
+`Island` defaults to `keyboard`: it sits in a React Native layout that moves it for the keyboard itself, and SwiftUI
+would lift its content inside it as well. A `Screen` defaults to `none`.
+
 ## Header
 
 **`src/header/` imports no navigation library.** It builds native-stack options (`HeaderOptions`,
@@ -238,6 +246,31 @@ the system's headers do. `back` and `close` fall back to kara's glyphs. On Andro
 without its back button moves to the navigation icon's place (Material's full-screen dialog), and menu submenus are
 listed in place, since its dropdown does not nest. The bar items are React Navigation's `unstable_` API: check them
 after a native stack upgrade.
+
+**Titles.** `title` alone is the native title. `subtitle` puts title and subtitle on the leading side: on iOS 26 as the
+navigation item's own (`NavigationItemSubtitle` from `headerBackground`, which sits in the screen's tree, with the
+native title only once it is revealed), elsewhere as a title view kara draws (on iOS it asks for the window's width and
+shrinks, because the bar centres a custom title view in what the items leave). `titleRevealProgress` (0..1) fades the
+title in; past half iOS 26 switches its native title and subtitle on with the bar's cross-dissolve, through
+`useIsTitleRevealed`, the one place the header crosses from the UI thread to JS. `largeTitle` is UIKit's own on iOS;
+the native stack has none on Android, so there it is the list's first row (`largeTitle` in the result) and the bar's
+title fades in between half and all of that row's height scrolled away, from the `onScroll` worklet the screen feeds,
+as Material's large top app bar collapses. An unset `largeTitle` leaves the stack's own setting alone.
+
+**Hero header.** `useHeroHeader` runs the content under a transparent bar (`HERO_HEADER_SCREEN_OPTIONS`, static, so the
+first frame has no large title) and fades the header in while 50 to 70 % of the hero's part under the bar scrolls
+away: the title through `titleRevealProgress`, the items' tint (`content.on.accent` over a hero with `overHeroStyle`
+`light`), and the background — iOS 26's scroll edge effect switched on once the reveal starts, a `BlurView` material
+fading in below iOS 26 (the bar's own blur cannot fade, and kara's `BlurView` has no intensity), the surface on
+Android. `revealedTrailingActions` join the bar with the title. The status bar is returned, not set: a native stack's
+per-screen `statusBarStyle` needs `UIViewControllerBasedStatusBarAppearance`, which Expo apps turn off, and
+react-native-screens reports an error when it is set anyway.
+
+**Search.** `useHeaderSearch` gives iOS UIKit's search bar stacked under the title (title and items kept, nothing dimmed
+by the system, so a list filters live) for `useHeader`'s `search`, and Android a row with kara-native's Material
+`SearchField` to put under the top app bar, which has no field of its own. `scrim` washes the content out while the
+field is focused and empty and ends the search on a tap; it starts under the bar on iOS (react-native-screens'
+`SafeAreaView`) and under the row on Android.
 
 **Actions a screen has when it is pushed belong in its static options.** iOS morphs the bar items between two screens
 only when both exist at the push; set later from an effect, the outgoing screen's items slide away and the new ones

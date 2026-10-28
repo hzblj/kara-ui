@@ -4,11 +4,23 @@ import {router} from 'expo-router'
 import {Section} from '../../ui'
 
 export const HeaderDemo = () => (
-  <Section caption="Pushes a screen whose header actions come from useHeader.">
+  <Section caption="Each pushes a screen whose header comes from @hzblj/kara-ui/header.">
     <Island>
       <VStack spacing="s12">
-        <Text color="content.secondary">The same actions on both platforms, both sides of the bar.</Text>
-        <Button label="Open the screen" onPress={() => router.push('/header')} testID="header-demo-open" />
+        <Text color="content.secondary">
+          Titles, a search field and actions on both sides, the same on React Navigation and Expo Router.
+        </Text>
+        <Button
+          label="Large title, search and actions"
+          onPress={() => router.push('/header')}
+          testID="header-demo-open"
+        />
+        <Button
+          label="Hero header"
+          onPress={() => router.push('/hero')}
+          testID="header-demo-hero"
+          variant="secondary"
+        />
       </VStack>
     </Island>
   </Section>
