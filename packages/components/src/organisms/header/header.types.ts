@@ -414,3 +414,10 @@ export type HeaderInsetProps = {
 }
 
 export type HeaderInsetComponent = (props: HeaderInsetProps) => ReactNode
+
+export type HeaderLargeTitleFadeProps = {
+  /** Content under the header (segments, chips) that leaves with the large title while the header search is open. */
+  children?: ReactNode
+}
+
+export type HeaderLargeTitleFadeComponent = (props: HeaderLargeTitleFadeProps) => ReactNode

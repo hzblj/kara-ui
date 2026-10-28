@@ -305,6 +305,12 @@ bar reports its size, as a measured header height does. `HeaderInset` is react-n
 follows the bar natively, a search field included. `useHeaderScrollToTop` hands the libraries' own `useScrollToTop` a
 ref that scrolls to the expanded large title instead of to 0, which on iOS would leave the content under the bar.
 
+**Content in a `HeaderInset` keeps its size while the bar animates.** The `SafeAreaView` moves inside UIKit's own bar
+animation (search open and close). Content mounted into it mid-animation changes its height under the running position
+animation, so it draws half that height off until the animation ends and then jumps. Hide it instead of unmounting it:
+`HeaderLargeTitleFade` (kara-native `LargeTitleFade`, a fragment on Android) fades it with the large title and keeps it
+mounted.
+
 ## Icons
 
 **The library has no icon set; apps bring SVGs.** `IconName` is `NativeIconName` from `@hzblj/expo-native-icons`: the

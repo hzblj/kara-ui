@@ -1,5 +1,6 @@
 export * from './header.types'
 export * from './header-inset'
+export * from './header-large-title-fade'
 export {useIsTitleRevealed} from './header-title'
 export * from './sheet-grabber'
 export type {SheetGrabberProps} from './sheet-grabber.types'

@@ -61,6 +61,12 @@ const found = countries.filter(country => country.includes(search.query))
   {search.scrim}
 </>`
 
+const SEARCH_FADE = `<HeaderInset>
+  <HeaderLargeTitleFade>
+    <SegmentedControl options={genders} />
+  </HeaderLargeTitleFade>
+</HeaderInset>`
+
 const SEARCH_BUTTON = `const search = useHeaderSearch({
   placeholder: 'Search brands',
   placement: 'integratedButton',
@@ -181,6 +187,12 @@ export const header: Guide = {
           }
         </P>
         <CodeBlock code={SEARCH_BUTTON} />
+        <P>
+          {
+            'Content under the header that should leave with the large title while searching, like segments or chips: wrap it in `HeaderLargeTitleFade` (iOS). It fades in step with the title. Keep it mounted; don’t render it conditionally.'
+          }
+        </P>
+        <CodeBlock code={SEARCH_FADE} />
       </Section>
 
       <Section id="voice" title="Voice">
@@ -214,6 +226,7 @@ export const header: Guide = {
           columns={['Export', 'Use it for']}
           rows={[
             ['`HeaderInset`', 'Content right under a transparent header.'],
+            ['`HeaderLargeTitleFade`', 'Content under the header that fades with the large title during search (iOS).'],
             ['`useHeaderBarInset()`', 'The header’s height, as a number.'],
             [
               '`useHeaderScrollToTop(ref, {largeTitle})`',
