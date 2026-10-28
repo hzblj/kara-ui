@@ -3,7 +3,7 @@ import {tint} from '@expo/ui/swift-ui/modifiers'
 import {iconResourceName} from '@hzblj/expo-native-icons'
 import {useAppTheme} from '@hzblj/kara-theme'
 
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import type {SwipeAction, SwipeActionsComponent, SwipeActionsProps} from './swipe-actions.types'
 
 type ActionsProps = {actions: SwipeAction[]; allowsFullSwipe: boolean; edge: 'leading' | 'trailing'}

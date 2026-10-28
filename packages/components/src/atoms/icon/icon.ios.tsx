@@ -4,7 +4,7 @@ import {iconResourceName} from '@hzblj/expo-native-icons'
 import {spacing, useAppTheme} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
 
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import type {IconComponent, IconProps} from './icon.types'
 
 /**

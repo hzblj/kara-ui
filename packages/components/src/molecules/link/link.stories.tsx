@@ -1,7 +1,7 @@
 import type {Meta, StoryObj} from '@storybook/react-native'
 
 import {VStack} from '../../atoms/v-stack'
-import {insideIsland} from '../../story-decorators'
+import {insideIsland} from '../../utils/story-decorators'
 import {Link} from './link'
 
 const meta = {

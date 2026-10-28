@@ -3,7 +3,7 @@ import {defaultMinSize, weight} from '@expo/ui/jetpack-compose/modifiers'
 import {spacing} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
 
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import type {SpacerComponent, SpacerProps} from './spacer.types'
 
 export const Spacer: SpacerComponent = ({min}: SpacerProps) => {

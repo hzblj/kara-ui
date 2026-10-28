@@ -2,7 +2,7 @@ import type {Meta, StoryObj} from '@storybook/react-native'
 import {useArgs} from 'storybook/preview-api'
 
 import {Text} from '../../atoms/text'
-import {insideIsland} from '../../story-decorators'
+import {insideIsland} from '../../utils/story-decorators'
 import {Collapsible} from './collapsible'
 import type {CollapsibleProps} from './collapsible.types'
 

@@ -4,7 +4,7 @@ import {useSxModifiers} from '@hzblj/kara-sx'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useCallback, useMemo, useRef, useState} from 'react'
 import {StatusBar, StyleSheet, View} from 'react-native'
-import {HostBoundary} from '../../host-context'
+import {HostBoundary} from '../../hooks/host-context'
 import type {ScreenComponent, ScreenProps} from './screen.types'
 
 /**

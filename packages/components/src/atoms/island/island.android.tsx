@@ -2,7 +2,7 @@ import {Host} from '@expo/ui/jetpack-compose'
 import {useSx} from '@hzblj/kara-sx'
 import {useAppTheme} from '@hzblj/kara-theme'
 
-import {HostBoundary} from '../../host-context'
+import {HostBoundary} from '../../hooks/host-context'
 import type {IslandComponent, IslandProps} from './island.types'
 
 const MATCH_HEIGHT_ONLY = {horizontal: false, vertical: true}

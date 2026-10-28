@@ -1,7 +1,7 @@
 import {Button, ConfirmationDialog, Spacer, Text as SwiftUIText} from '@expo/ui/swift-ui'
 import {disabled, frame} from '@expo/ui/swift-ui/modifiers'
 
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import type {ActionSheetComponent, ActionSheetProps} from './action-sheet.types'
 
 /**

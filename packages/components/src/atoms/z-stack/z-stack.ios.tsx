@@ -1,8 +1,8 @@
 import {ZStack as SwiftUIZStack} from '@expo/ui/swift-ui'
 import {type FrameAlignment, splitAccessibility, useAccessibilityModifiers, useSxModifiers} from '@hzblj/kara-sx'
 import {useMemo} from 'react'
-import {useHostGuard} from '../../host-context'
-import {tapModifiers} from '../../tap-modifiers'
+import {useHostGuard} from '../../hooks/host-context'
+import {tapModifiers} from '../../utils/tap-modifiers'
 import type {ZStackAlign, ZStackComponent, ZStackProps} from './z-stack.types'
 
 const ALIGNMENT = {

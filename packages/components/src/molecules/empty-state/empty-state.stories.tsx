@@ -3,7 +3,7 @@ import {fn} from 'storybook/test'
 
 import {Button} from '../../atoms/button'
 import {VStack} from '../../atoms/v-stack'
-import {insideIsland} from '../../story-decorators'
+import {insideIsland} from '../../utils/story-decorators'
 import {EmptyState} from './empty-state'
 
 const CLEAR_FILTERS = <Button label="Clear filters" onPress={fn()} variant="secondary" />

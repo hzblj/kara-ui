@@ -1,11 +1,10 @@
 import {Platform} from 'react-native'
-
+import {Glyph} from '../../atoms/glyph'
 import {HStack} from '../../atoms/h-stack'
 import {Icon} from '../../atoms/icon'
 import {Spacer} from '../../atoms/spacer'
 import {Text} from '../../atoms/text'
 import {VStack} from '../../atoms/v-stack'
-import {Glyph} from '../../glyph'
 import type {ListItemComponent, ListItemProps} from './list-item.types'
 
 /**

@@ -1,7 +1,7 @@
 import {Card} from '../../atoms/card'
 import {Text} from '../../atoms/text'
 import {VStack} from '../../atoms/v-stack'
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import type {FormComponent, FormProps, FormSectionProps} from './form.types'
 
 /**

@@ -4,7 +4,7 @@ import {useArgs} from 'storybook/preview-api'
 import {Text} from '../../atoms/text'
 import {VStack} from '../../atoms/v-stack'
 import {ZStack} from '../../atoms/z-stack'
-import {insideIslandOfHeight} from '../../story-decorators'
+import {insideIslandOfHeight} from '../../utils/story-decorators'
 import {Pager} from './pager'
 import type {PagerProps} from './pager.types'
 

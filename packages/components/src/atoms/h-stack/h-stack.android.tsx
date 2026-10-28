@@ -1,7 +1,7 @@
 import {Row} from '@expo/ui/jetpack-compose'
 import {spacing} from '@hzblj/kara-theme'
-import {useHostGuard} from '../../host-context'
-import {useStackModifiers} from '../../use-stack-modifiers'
+import {useHostGuard} from '../../hooks/host-context'
+import {useStackModifiers} from '../../hooks/use-stack-modifiers'
 import type {HStackAlign, HStackComponent, HStackProps} from './h-stack.types'
 
 const ALIGNMENT = {

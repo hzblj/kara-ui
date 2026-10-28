@@ -1,6 +1,6 @@
 import {HStack} from '@expo/ui/swift-ui'
 import {useSxModifiers} from '@hzblj/kara-sx'
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import {Text} from '../text'
 import type {BadgeComponent, BadgeProps} from './badge.types'
 import {BADGE_TOKENS} from './badge-tokens'

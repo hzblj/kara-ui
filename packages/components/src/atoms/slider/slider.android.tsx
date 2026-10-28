@@ -4,7 +4,7 @@ import {haptics} from '@hzblj/expo-rich-haptics'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useCallback, useEffect, useMemo, useRef} from 'react'
 
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import type {SliderComponent, SliderProps} from './slider.types'
 
 /**

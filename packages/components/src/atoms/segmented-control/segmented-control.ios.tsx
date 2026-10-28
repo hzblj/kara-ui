@@ -4,7 +4,7 @@ import {SegmentedControl as NativeSegmentedControl} from '@hzblj/kara-native/swi
 import {spacing as spacingTokens, useAppTheme} from '@hzblj/kara-theme'
 import {useCallback, useMemo} from 'react'
 
-import {useInsideHost} from '../../host-context'
+import {useInsideHost} from '../../hooks/host-context'
 import type {SegmentedControlComponent, SegmentedControlProps} from './segmented-control.types'
 import {imageUri, segmentOf} from './segments'
 

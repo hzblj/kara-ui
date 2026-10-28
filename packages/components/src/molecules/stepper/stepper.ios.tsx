@@ -6,7 +6,7 @@ import {useRef} from 'react'
 import {HStack} from '../../atoms/h-stack'
 import {Spacer} from '../../atoms/spacer'
 import {Text} from '../../atoms/text'
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import type {StepperComponent, StepperProps} from './stepper.types'
 
 /** The label stays VoiceOver's, on the control; on screen it is the row's own text. */

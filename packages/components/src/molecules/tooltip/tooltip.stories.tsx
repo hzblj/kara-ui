@@ -3,7 +3,7 @@ import {useArgs} from 'storybook/preview-api'
 
 import {HStack} from '../../atoms/h-stack'
 import {Text} from '../../atoms/text'
-import {insideIsland} from '../../story-decorators'
+import {insideIsland} from '../../utils/story-decorators'
 import {Tooltip} from './tooltip'
 import type {TooltipProps} from './tooltip.types'
 

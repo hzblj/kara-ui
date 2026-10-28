@@ -19,8 +19,8 @@ import {
 import {useAccessibilityModifiers} from '@hzblj/kara-sx'
 import {duration, useAppTheme, useReducedMotion} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
-import {Glyph} from '../../glyph'
-import {useHostGuard} from '../../host-context'
+import {Glyph} from '../../atoms/glyph'
+import {useHostGuard} from '../../hooks/host-context'
 import type {CollapsibleComponent, CollapsibleProps} from './collapsible.types'
 
 /** Material's standard easing, at the length a chevron turning takes. */

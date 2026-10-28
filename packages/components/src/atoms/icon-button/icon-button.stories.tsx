@@ -1,7 +1,7 @@
 import type {Meta, StoryObj} from '@storybook/react-native'
 import {fn} from 'storybook/test'
 
-import {insideIsland} from '../../story-decorators'
+import {insideIsland} from '../../utils/story-decorators'
 import {HStack} from '../h-stack'
 import {VStack} from '../v-stack'
 import {IconButton} from './icon-button'

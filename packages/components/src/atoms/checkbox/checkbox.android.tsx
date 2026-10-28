@@ -3,7 +3,7 @@ import {clickable, fillMaxWidth, testID as testIdModifier} from '@expo/ui/jetpac
 import {spacing, useAppTheme} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
 
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import type {CheckboxComponent, CheckboxProps} from './checkbox.types'
 
 /** Stands in for a missing handler: Material drops its 48dp touch target without one, and the box moves. */

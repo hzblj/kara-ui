@@ -2,8 +2,8 @@ import {VStack as SwiftUIVStack} from '@expo/ui/swift-ui'
 import {type FrameAlignment, splitAccessibility, useAccessibilityModifiers, useSxModifiers} from '@hzblj/kara-sx'
 import {spacing} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
-import {useHostGuard} from '../../host-context'
-import {tapModifiers} from '../../tap-modifiers'
+import {useHostGuard} from '../../hooks/host-context'
+import {tapModifiers} from '../../utils/tap-modifiers'
 import type {VStackAlign, VStackComponent, VStackProps} from './v-stack.types'
 
 const ALIGNMENT = {

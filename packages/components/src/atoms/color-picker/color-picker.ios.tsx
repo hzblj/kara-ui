@@ -2,7 +2,7 @@ import {ColorPicker as SwiftUIColorPicker} from '@expo/ui/swift-ui'
 import {disabled as disabledModifier, labelsHidden, opacity as opacityModifier} from '@expo/ui/swift-ui/modifiers'
 import {opacity} from '@hzblj/kara-theme'
 
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import {HStack} from '../h-stack'
 import {Spacer} from '../spacer'
 import {Text} from '../text'

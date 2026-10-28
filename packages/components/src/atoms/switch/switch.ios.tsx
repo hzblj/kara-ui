@@ -3,7 +3,7 @@ import {disabled as disabledModifier, tint} from '@expo/ui/swift-ui/modifiers'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
 
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import type {SwitchComponent, SwitchProps} from './switch.types'
 
 export const Switch: SwitchComponent = ({disabled = false, label, onValueChange, testID, value}: SwitchProps) => {

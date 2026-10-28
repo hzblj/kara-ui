@@ -6,7 +6,7 @@ import {Children, useCallback, useEffect, useMemo, useRef, useState} from 'react
 import {HStack} from '../../atoms/h-stack'
 import {Spacer} from '../../atoms/spacer'
 import {VStack} from '../../atoms/v-stack'
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import type {PagerComponent, PagerProps} from './pager.types'
 
 const DOT_SIZE = 6

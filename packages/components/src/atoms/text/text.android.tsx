@@ -11,7 +11,7 @@ import {
 import {duration, easing, springPhysics, useAppTheme} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
 
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import {spansOf, textOf} from './spans'
 import type {TextComponent, TextDecoration, TextProps, TextTransform, TextTruncation} from './text.types'
 

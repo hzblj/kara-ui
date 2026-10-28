@@ -3,7 +3,7 @@ import {Text as ComposeText, Host, RNHostView, Row, TextButton} from '@expo/ui/j
 import {TooltipBox} from '@hzblj/kara-native/jetpack-compose'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {Button} from '../../atoms/button'
-import {HostBoundary} from '../../host-context'
+import {HostBoundary} from '../../hooks/host-context'
 import type {RnTooltipAction, RnTooltipComponent, RnTooltipProps} from './rn-tooltip.types'
 
 /** Material's rich tooltip width, in dp. */

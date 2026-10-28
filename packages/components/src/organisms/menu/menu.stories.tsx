@@ -3,7 +3,7 @@ import {fn} from 'storybook/test'
 
 import {HStack} from '../../atoms/h-stack'
 import {Text} from '../../atoms/text'
-import {insideIsland} from '../../story-decorators'
+import {insideIsland} from '../../utils/story-decorators'
 import {Menu} from './menu'
 import type {MenuAction} from './menu.types'
 

@@ -4,9 +4,9 @@ import {useMemo} from 'react'
 import {Platform, Pressable, type PressableStateCallbackType} from 'react-native'
 
 import {Box} from '../../atoms/box'
+import {RnGlyph} from '../../atoms/glyph'
 import {RnIcon} from '../../atoms/rn-icon'
 import {RnText} from '../../atoms/rn-text'
-import {RnGlyph} from '../../glyph'
 import type {RnListItemComponent, RnListItemProps} from './rn-list-item.types'
 
 export const RnListItem: RnListItemComponent = ({

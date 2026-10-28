@@ -4,7 +4,7 @@ import {haptics} from '@hzblj/expo-rich-haptics'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useCallback, useMemo} from 'react'
 
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import type {SwitchComponent, SwitchProps} from './switch.types'
 
 /** Stands in for a missing handler: Material drops its 48dp touch target without one, and the switch moves. */

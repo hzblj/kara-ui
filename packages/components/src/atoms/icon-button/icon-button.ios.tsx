@@ -12,7 +12,7 @@ import {useAccessibilityModifiers} from '@hzblj/kara-sx'
 import {type ColorToken, useAppTheme} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
 
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import type {ButtonStyleName} from '../button/button.types'
 import {contentOnTint} from '../button/button-tokens'
 import {Icon} from '../icon'

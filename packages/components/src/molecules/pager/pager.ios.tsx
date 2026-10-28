@@ -2,7 +2,7 @@ import {TabView} from '@expo/ui/swift-ui'
 import {type ModifierConfig, tabViewStyle} from '@expo/ui/swift-ui/modifiers'
 import {Children, useCallback, useMemo} from 'react'
 
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import type {PagerComponent, PagerProps} from './pager.types'
 
 export const Pager: PagerComponent = ({children, indicators = true, onPageChange, page, testID}: PagerProps) => {

@@ -2,7 +2,7 @@ import {RNHostView} from '@expo/ui/swift-ui'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {ActivityIndicator as RNActivityIndicator} from 'react-native'
 
-import {useInsideHost} from '../../host-context'
+import {useInsideHost} from '../../hooks/host-context'
 import type {ActivityIndicatorComponent, ActivityIndicatorProps} from './activity-indicator.types'
 
 /**

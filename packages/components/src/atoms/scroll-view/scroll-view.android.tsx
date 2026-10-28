@@ -8,8 +8,8 @@ import {
 import {useSxModifiers} from '@hzblj/kara-sx'
 import {spacing} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
-import {useHostGuard} from '../../host-context'
-import {useRefreshState} from '../../use-refresh-state'
+import {useHostGuard} from '../../hooks/host-context'
+import {useRefreshState} from '../../hooks/use-refresh-state'
 import type {ScrollViewComponent, ScrollViewProps} from './scroll-view.types'
 
 export const ScrollView: ScrollViewComponent = ({
