@@ -5,7 +5,7 @@ import {Island} from '../island'
 import {TextField} from '../text-field'
 import {VStack} from '../v-stack'
 import {SegmentedControl} from './segmented-control'
-import type {SegmentedControlProps} from './segmented-control.types'
+import type {SegmentedControlProps, SegmentedControlSegment} from './segmented-control.types'
 
 const ControlledSegmentedControl = (args: SegmentedControlProps) => {
   const [, updateArgs] = useArgs<SegmentedControlProps>()
@@ -17,7 +17,7 @@ const ControlledSegmentedControl = (args: SegmentedControlProps) => {
 const svg = (body: string) =>
   `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 24">${body}</svg>`)}`
 
-const CARRIERS = [
+const CARRIERS: SegmentedControlSegment[] = [
   {
     image: {
       uri: svg(
@@ -105,6 +105,23 @@ export const Spacing: Story = {
   },
   parameters: {
     notes: '`spacing` adds space above and below the content, and `iconSize` sets the icons’ and images’ height.',
+  },
+}
+
+export const Track: Story = {
+  args: {
+    bg: 'surface.primary',
+    iconSize: 's24',
+    p: 's4',
+    spacing: 's10',
+    values: CARRIERS.concat({label: 'All'}),
+    variant: 'body',
+  },
+  parameters: {
+    notes:
+      '`bg` colours the track and `p` is the room around the pill, the `sx` names: on iOS kara draws the track itself, ' +
+      'a capsule in exactly that colour under the system pill, and grows it by `p`. `variant` sets the labels like ' +
+      '`Text`. Android fills the unselected segments with `bg`.',
   },
 }
 

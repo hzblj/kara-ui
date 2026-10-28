@@ -3,7 +3,7 @@ import {fillMaxWidth, height, testID as testIdModifier, weight} from '@expo/ui/j
 import {iconResourceName} from '@hzblj/expo-native-icons'
 import {haptics} from '@hzblj/expo-rich-haptics'
 import {DrawableIcon, NativeImage} from '@hzblj/kara-native/jetpack-compose'
-import {spacing as spacingTokens, useAppTheme} from '@hzblj/kara-theme'
+import {spacing as spacingTokens, type TextVariant, useAppTheme} from '@hzblj/kara-theme'
 import {useCallback, useMemo} from 'react'
 
 import {useInsideHost} from '../../host-context'
@@ -19,15 +19,16 @@ const MATERIAL_HEIGHT = 40
 type SegmentLabelProps = {
   iconSize: number
   segment: SegmentedControlSegment
+  variant: TextVariant
 }
 
 /**
  * What a segment shows: its label, one of the app's icons before it, or an image loaded by kara-native. The icon and a
  * label the image falls back to take the segment's content colour, so they follow the selection and `disabled`.
  */
-const SegmentLabel = ({iconSize, segment}: SegmentLabelProps) => {
+const SegmentLabel = ({iconSize, segment, variant}: SegmentLabelProps) => {
   const theme = useAppTheme()
-  const face = theme.typography.subheadlineMedium
+  const face = theme.typography[variant]
 
   if (segment.image !== undefined) {
     return (
@@ -60,9 +61,10 @@ const SegmentLabel = ({iconSize, segment}: SegmentLabelProps) => {
  * Material's single-choice segmented buttons, the selected one filled with the accent like a checked `Switch`. Its own
  * host, themed like an `Island`, so it drops into React Native layout the way the iOS control does. Inside a `Screen`
  * or `Island` it renders into that host instead (see `useInsideHost`). Material plays nothing on a new segment, so this
- * plays `selection`.
+ * plays `selection`. `bg` fills the unselected segments; `p` has nothing to inset, as Material draws no pill.
  */
 export const SegmentedControl: SegmentedControlComponent = ({
+  bg,
   disabled = false,
   iconSize = 's20',
   onChange,
@@ -70,6 +72,7 @@ export const SegmentedControl: SegmentedControlComponent = ({
   spacing,
   testID,
   values,
+  variant = 'subheadlineMedium',
 }: SegmentedControlProps) => {
   const theme = useAppTheme()
   const insideHost = useInsideHost()
@@ -83,9 +86,9 @@ export const SegmentedControl: SegmentedControlComponent = ({
       return [weight(1)]
     }
 
-    const content = Math.max(theme.typography.subheadlineMedium.lineHeight, iconPoints)
+    const content = Math.max(theme.typography[variant].lineHeight, iconPoints)
     return [weight(1), height(Math.max(MATERIAL_HEIGHT, content + 2 * spacingTokens[spacing]))]
-  }, [iconPoints, spacing, theme])
+  }, [iconPoints, spacing, theme, variant])
 
   // Every segment keeps the same outline, the selected one too: an accent border would run its fill out over the line
   // the others draw inside, and make it look taller than its neighbours.
@@ -100,9 +103,10 @@ export const SegmentedControl: SegmentedControlComponent = ({
       disabledInactiveBorderColor: theme.color('border.tertiary'),
       disabledInactiveContentColor: theme.color('btn.content.disabled'),
       inactiveBorderColor: theme.color('border.secondary.base'),
+      inactiveContainerColor: bg === undefined ? undefined : theme.color(bg),
       inactiveContentColor: theme.color('content.primary'),
     }),
-    [theme]
+    [bg, theme]
   )
 
   const rowModifiers = useMemo(() => (testID ? [fillMaxWidth(), testIdModifier(testID)] : [fillMaxWidth()]), [testID])
@@ -132,7 +136,7 @@ export const SegmentedControl: SegmentedControlComponent = ({
           selected={index === selectedIndex}
         >
           <SegmentedButton.Label>
-            <SegmentLabel iconSize={iconPoints} segment={segment} />
+            <SegmentLabel iconSize={iconPoints} segment={segment} variant={variant} />
           </SegmentedButton.Label>
         </SegmentedButton>
       ))}
