@@ -30,6 +30,21 @@ extension NavigationBarView {
       Prop("searchTestID") { (view: NavigationBarView, testID: String?) in
         view.setSearchTestID(testID)
       }
+      Prop("searchPlacement") { (view: NavigationBarView, placement: String?) in
+        view.setSearchPlacement(placement ?? "stacked")
+      }
+      Prop("searchButtonImageName") { (view: NavigationBarView, name: String?) in
+        view.setSearchButtonImageName(name)
+      }
+      Prop("searchButtonLabel") { (view: NavigationBarView, label: String?) in
+        view.setSearchButtonLabel(label)
+      }
+      Prop("searchCancelImageName") { (view: NavigationBarView, name: String?) in
+        view.setSearchCancelImageName(name)
+      }
+      Prop("searchCancelLabel") { (view: NavigationBarView, label: String?) in
+        view.setSearchCancelLabel(label)
+      }
       Prop("itemColor") { (view: NavigationBarView, color: UIColor) in
         view.setItemColor(color)
       }

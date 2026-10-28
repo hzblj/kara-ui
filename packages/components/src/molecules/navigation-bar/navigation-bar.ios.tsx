@@ -7,21 +7,26 @@ import {
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useImperativeHandle, useMemo, useRef} from 'react'
 import {StyleSheet} from 'react-native'
+import type {IconName} from '../../atoms/icon'
+import {SEARCH_ROW_HEIGHT} from './navigation-bar.constants'
 import type {NavigationBarComponent, NavigationBarItem, NavigationBarProps} from './navigation-bar.types'
 
-/** Fits iOS 26's 44 pt glass items with the bar's own margin; the bar centres itself vertically in it. */
+/** Fits iOS 26's 44 pt glass items with the bar's own margin; the bar centres its item row vertically in it. */
 const BAR_HEIGHT = 56
 
 const styles = StyleSheet.create({
   bar: {height: BAR_HEIGHT, width: '100%'},
+  stackedSearchBar: {height: BAR_HEIGHT + SEARCH_ROW_HEIGHT, width: '100%'},
 })
 
-const DEFAULT_LABELS = {back: 'Back', close: 'Close'} as const
+const DEFAULT_LABELS = {back: 'Back', cancel: 'Cancel', close: 'Close', search: 'Search'} as const
+
+const toImageName = (icon?: IconName) => (icon ? iconResourceName(icon) : undefined)
 
 const toNativeItem = (item: NavigationBarItem): NativeNavigationBarItem =>
   item.type === 'icon'
     ? {...item, imageName: iconResourceName(item.icon), type: 'icon'}
-    : {...item, label: item.label ?? DEFAULT_LABELS[item.type]}
+    : {...item, imageName: toImageName(item.icon), label: item.label ?? DEFAULT_LABELS[item.type]}
 
 const ignoreDetachedView = () => undefined
 
@@ -48,6 +53,7 @@ export const NavigationBar: NavigationBarComponent = ({
 
   const nativeLeadingItems = useMemo(() => leadingItems?.map(toNativeItem), [leadingItems])
   const nativeTrailingItems = useMemo(() => trailingItems?.map(toNativeItem), [trailingItems])
+  const isStackedSearch = !!search && search.placement !== 'integratedButton'
 
   return (
     <NativeNavigationBar
@@ -58,9 +64,14 @@ export const NavigationBar: NavigationBarComponent = ({
       onSearchFocusChange={search?.onFocusChange}
       onSearchTextChange={search?.onChangeText}
       ref={barRef}
+      searchButtonImageName={toImageName(search?.buttonIcon)}
+      searchButtonLabel={search ? (search.buttonLabel ?? DEFAULT_LABELS.search) : undefined}
+      searchCancelImageName={toImageName(search?.cancelIcon)}
+      searchCancelLabel={search ? (search.cancelLabel ?? DEFAULT_LABELS.cancel) : undefined}
       searchPlaceholder={search?.placeholder}
+      searchPlacement={search?.placement}
       searchTestID={search?.testID}
-      style={styles.bar}
+      style={isStackedSearch ? styles.stackedSearchBar : styles.bar}
       testID={testID}
       title={title}
       titleAlignment={titleAlignment}
