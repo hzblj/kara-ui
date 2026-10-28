@@ -26,6 +26,11 @@ export const GUIDES = {
     href: '/docs/haptics',
     title: 'Haptics',
   },
+  header: {
+    description: 'Native screen headers for React Navigation and Expo Router: titles, search and actions.',
+    href: '/docs/header',
+    title: 'Header',
+  },
   hosts: {
     description: 'Native views render in a Screen or an Island; the React Native tier renders anywhere.',
     href: '/docs/hosts',
@@ -101,6 +106,7 @@ export const NAV: NavGroup[] = [
       link('icons'),
       link('haptics'),
       link('accessibility'),
+      link('header'),
       link('router'),
     ],
   },
@@ -127,6 +133,7 @@ export const READING_ORDER: DocsPage[] = [
   GUIDES.icons,
   GUIDES.haptics,
   GUIDES.accessibility,
+  GUIDES.header,
   GUIDES.router,
   GUIDES.components,
   ...COMPONENT_GROUPS.flatMap(group =>

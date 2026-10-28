@@ -180,6 +180,10 @@ export const installation: Guide = {
               '`Pressable`’s press on iOS, `ScrollEdgeContainer` on Android, `Skeleton`, `Snackbar`.',
             ],
             ['`expo-router` (optional)', '`@hzblj/kara-ui/router`.'],
+            [
+              '`react-native-screens`, `react-native-safe-area-context` (optional)',
+              '`@hzblj/kara-ui/header`. Every native stack has them already.',
+            ],
           ]}
         />
       </Section>
@@ -223,6 +227,7 @@ export const installation: Guide = {
               '`@hzblj/kara-ui/router`',
               '`Tabs`, `navigationTheme`, `ZoomTransition`: everything that needs Expo Router.',
             ],
+            ['`@hzblj/kara-ui/header`', 'Screen headers, for React Navigation and Expo Router.'],
             ['`@hzblj/kara-ui/swift-ui`', 'kara’s raw SwiftUI and UIKit views, for building your own.'],
             ['`@hzblj/kara-ui/jetpack-compose`', 'kara’s raw Compose views.'],
           ]}
@@ -284,6 +289,11 @@ export const hosts: Guide = {
           }
         </P>
         <CodeBlock code={SCREEN} title="app/settings.tsx" />
+        <P>
+          {
+            '`ignoreSafeArea`: `none` (default), `keyboard`, `container` or `all`. `keyboard` keeps the content still when the keyboard opens. Android can only ignore the keyboard.'
+          }
+        </P>
       </Section>
 
       <Section id="island" title="Island">
@@ -298,6 +308,11 @@ export const hosts: Guide = {
           }
         </Callout>
         <CodeBlock code={ISLAND_HEIGHT} />
+        <P>
+          {
+            'An island ignores the keyboard by default (`ignoreSafeArea="keyboard"`): your React Native layout moves it, so its content stays put.'
+          }
+        </P>
         <P>
           {
             'Keep a page to a few islands. Dozens of Compose hosts in one frame stall Android’s main thread; a long list of rows belongs in a list, not in a column of islands.'

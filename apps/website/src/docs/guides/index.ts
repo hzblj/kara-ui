@@ -3,6 +3,7 @@ import {accessibility} from './accessibility'
 import {componentsGuide} from './components-guide'
 import {hosts, installation, introduction} from './getting-started'
 import type {Guide} from './guide'
+import {header} from './header'
 import {motion} from './motion'
 import {changelog, haptics, icons, router} from './platform'
 import {styling} from './styling'
@@ -14,6 +15,7 @@ export const GUIDE_CONTENT: Record<GuideId, Guide> = {
   changelog,
   components: componentsGuide,
   haptics,
+  header,
   hosts,
   icons,
   installation,
