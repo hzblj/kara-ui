@@ -1,5 +1,21 @@
 # @hzblj/kara-ui
 
+## 0.22.0
+
+### Minor Changes
+
+- [#70](https://github.com/hzblj/kara-ui/pull/70) [`877e43c`](https://github.com/hzblj/kara-ui/commit/877e43cc26be5029af3c3b7c2f4cb9059c14f202) Thanks [@hzblj](https://github.com/hzblj)! - `HeaderLargeTitleFade` (`@hzblj/kara-ui/header`) fades content under the header, like segments or chips, out and back with the large title while the header search is open, in step with UIKit's animation (iOS). `ScrollViewZPosition` is removed: a large title stays in the bar when the screen's first view is not a scroll view, so the empty anchor scroll view it kept visible is no longer needed.
+
+### Patch Changes
+
+- Updated dependencies [[`877e43c`](https://github.com/hzblj/kara-ui/commit/877e43cc26be5029af3c3b7c2f4cb9059c14f202)]:
+  - @hzblj/kara-native@0.22.0
+  - @hzblj/kara-components@0.22.0
+  - @hzblj/kara-router@0.22.0
+  - @hzblj/kara-sx@0.22.0
+  - @hzblj/kara-theme@0.22.0
+  - @hzblj/kara-expo-plugin@0.22.0
+
 ## 0.21.0
 
 ### Minor Changes
