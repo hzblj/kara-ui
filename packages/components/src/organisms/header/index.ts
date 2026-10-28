@@ -1,6 +1,8 @@
 export * from './header.types'
 export * from './header-inset'
 export {useIsTitleRevealed} from './header-title'
+export * from './sheet-grabber'
+export type {SheetGrabberProps} from './sheet-grabber.types'
 export * from './use-header'
 export * from './use-header-bar-inset'
 export * from './use-header-scroll-to-top'

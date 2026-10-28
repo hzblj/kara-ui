@@ -221,7 +221,10 @@ unmounted while presented dismisses itself — otherwise it would stay on screen
 
 **`NavigationBar` places nothing.** Items go on the side and in the order the caller gives; the close-on-the-right
 convention belongs to call sites, and so do glyphs: `back`, `close`, the search item and its cancel take one of the
-app's icons (`icon`, `search.buttonIcon`, `search.cancelIcon`) and fall back to the system's, so kara ships none.
+app's icons (`icon`, `search.buttonIcon`, `search.cancelIcon`, `search.clearIcon`) and fall back to the system's, so
+kara ships none. `search.voice` (`SearchFieldVoice`) gives the field a microphone, a clear button in its place once it
+holds text and, while listening, a waveform of the app's transcription with a stop; `search.ref.setText` writes what
+it hears without `onChangeText`.
 `separated` (iOS 26 glass capsules) has no Material counterpart, and `search` is iOS-only for now: `stacked` adds a
 52 pt row under the bar (`SEARCH_ROW_HEIGHT`, which `Sheet.Header` counts in its first estimate), `integratedButton`
 keeps the bar's height.
@@ -280,7 +283,17 @@ on blur and once the header is revealed. That is why `useHeroHeader` takes a nav
 by the system, so a list filters live) for `useHeader`'s `search`, and Android a row with kara-native's Material
 `SearchField` to put under the top app bar, which has no field of its own. `scrim` washes the content out while the
 field is focused and empty and ends the search on a tap; it starts under the bar on iOS (react-native-screens'
-`SafeAreaView`) and under the row on Android.
+`SafeAreaView`) and under the row on Android. On iOS `scrim` always carries `HeaderSearchAccessory` too
+(kara-native's `NavigationItemSearch`, which has to sit in the screen's tree): the app's clear and cancel glyphs
+(`clearIcon`, `cancelIcon`), the voice, and the reset of a search the integrated search's system close ended without
+telling react-native-screens. `placement: 'integratedButton'` puts the search behind a button in the bar's corner
+(the bar hidden while it is open); its close stays the system's, since iOS gives it no other glyph. `voice`
+(`SearchFieldVoice`) is optional and records nothing: the app runs the dictation and writes it with `setText`; typed
+text that differs from the last `setText`, or the end of the search, calls `voice.onCancel` while listening. Android
+passes the same voice to its Material `SearchField`.
+
+**`SheetGrabber`** (`/header`) shows the system grabber of a native-stack screen presented as a `modal` sheet, which
+react-native-screens gives only `formSheet`; render it anywhere in the presented content. Android renders nothing.
 
 **Actions a screen has when it is pushed belong in its static options.** iOS morphs the bar items between two screens
 only when both exist at the push; set later from an effect, the outgoing screen's items slide away and the new ones

@@ -1076,11 +1076,12 @@ export const COMPONENTS: ComponentDoc[] = [
       'iOS: a standalone `UINavigationBar`; on iOS 26 neighbours share one glass capsule, and `separated` gives an item its own.',
       'Android: Material’s top app bar.',
       "`search` (iOS): a field under the title, or a search button that turns the bar into the field (`placement: 'integratedButton'`).",
+      '`search.voice` puts a microphone in the field, with a live waveform while it listens. See Header › Voice.',
       'It places nothing: items go on the side and in the order you give them.',
     ],
     renders: {android: 'Material TopAppBar', ios: 'UINavigationBar'},
     summary: 'A title with items on either side: a real navigation bar outside a navigation stack.',
-    types: ['NavigationBarProps'],
+    types: ['NavigationBarProps', 'NavigationBarSearch', 'SearchFieldVoice'],
   },
   {
     code: `// app/(tabs)/_layout.tsx

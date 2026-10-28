@@ -1,6 +1,16 @@
 import type {Ref} from 'react'
 import type {ColorValue} from 'react-native'
 
+import type {SearchVoice} from '../../search-voice'
+
+/** A search field's voice on Android, with the app's own icons: drawable resource names. */
+export type SearchFieldVoiceAndroid = Omit<SearchVoice, 'clearLabel' | 'color'> & {
+  /** kara's microphone glyph by default, `iconResourceName(name)` for an app icon. */
+  microphoneIconName?: string
+  /** The glyph in the tonal stop button: kara's stop glyph by default, `iconResourceName(name)` for an app icon. */
+  stopIconName?: string
+}
+
 export type SearchFieldRef = {
   /** Ends editing and hides the keyboard. Rejects once the view is detached. */
   blurField: () => Promise<void>
@@ -68,4 +78,9 @@ export type SearchFieldProps = {
   titleLetterSpacing?: number
   /** In dp. Room left above the title for a toolbar drawn over it, collapsed together with the title. */
   toolbarHeight?: number
+  /**
+   * A microphone while the field is empty, the clear button in its place once it holds text, and a live waveform with a
+   * tonal stop button while listening. Tinted by `iconColor`.
+   */
+  voice?: SearchFieldVoiceAndroid
 }

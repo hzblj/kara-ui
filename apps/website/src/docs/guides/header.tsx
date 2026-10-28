@@ -61,6 +61,32 @@ const found = countries.filter(country => country.includes(search.query))
   {search.scrim}
 </>`
 
+const SEARCH_BUTTON = `const search = useHeaderSearch({
+  placeholder: 'Search brands',
+  placement: 'integratedButton',
+  clearIcon: 'close-fill',
+  cancelIcon: 'close',
+})`
+
+const VOICE = `const transcriber = useSpeechTranscriber({mode: 'dictation', onDevice: 'preferred'})
+const [transcription, setTranscription] = useState<Transcription | null>(null)
+const {transcript, state} = useTranscription(transcription)
+
+const search = useHeaderSearch({
+  placeholder: 'Search',
+  voice: {
+    listening: transcription !== null && !['completed', 'cancelled', 'failed'].includes(state ?? ''),
+    meter: transcription,
+    microphoneLabel: 'Search by voice',
+    stopLabel: 'Stop listening',
+    onStart: () => setTranscription(transcriber.listen({autoStop: {afterSilence: 1500}})),
+    onStop: () => transcription?.stop(),
+    onCancel: () => transcription?.cancel(),
+  },
+})
+
+useEffect(() => search.setText(transcript.text.trim()), [transcript.text])`
+
 const HERO = `// layout: <Stack.Screen name="place" options={HERO_HEADER_SCREEN_OPTIONS} />
 
 export default function Place() {
@@ -149,6 +175,26 @@ export const header: Guide = {
           }
         </P>
         <CodeBlock code={SEARCH} />
+        <P>
+          {
+            'On iOS the field can also hide behind a search button in the bar’s corner, which opens it in the bar. Its close button there is the system’s; iOS offers no other. `clearIcon` and `cancelIcon` take your own icons for the rest.'
+          }
+        </P>
+        <CodeBlock code={SEARCH_BUTTON} />
+      </Section>
+
+      <Section id="voice" title="Voice">
+        <P>
+          {
+            'Give the field a `voice` and it gets a microphone. Press it and a live waveform with a stop button takes its place; once the field holds text, a clear button sits there instead. kara records nothing: run the dictation yourself and write what you hear with `setText`. With `@hzblj/expo-speech` the transcription is also the waveform’s `meter`, drawn natively without passing through JavaScript.'
+          }
+        </P>
+        <CodeBlock code={VOICE} />
+        <P>
+          {
+            'Leave `voice` out (or set it to `undefined`) to turn the microphone off. Typing over the dictation, or ending the search, calls `onCancel`. `NavigationBar` and `Sheet.Header` take the same `voice` on their `search`.'
+          }
+        </P>
       </Section>
 
       <Section id="hero" title="Hero header">
@@ -176,6 +222,7 @@ export const header: Guide = {
             ['`LARGE_TITLE_SCREEN_OPTIONS`', 'Static options for a large-title screen.'],
             ['`HERO_HEADER_SCREEN_OPTIONS`', 'Static options for a hero screen.'],
             ['`HIDDEN_HEADER_SCREEN_OPTIONS`', 'No header.'],
+            ['`<SheetGrabber />`', 'The system grabber on a screen presented as a `modal` sheet (iOS).'],
           ]}
         />
         <Callout>
@@ -190,6 +237,7 @@ export const header: Guide = {
     {id: 'actions', label: 'Actions'},
     {id: 'titles', label: 'Titles'},
     {id: 'search', label: 'Search'},
+    {id: 'voice', label: 'Voice'},
     {id: 'hero', label: 'Hero header'},
     {id: 'helpers', label: 'Helpers'},
   ],

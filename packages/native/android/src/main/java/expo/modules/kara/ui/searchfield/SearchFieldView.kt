@@ -2,9 +2,20 @@
 
 package expo.modules.kara.ui.searchfield
 
+import expo.modules.kotlin.sharedobjects.SharedObject
+import com.hzblj.expowaveform.WaveformStyle
+import com.hzblj.expowaveform.LiveWaveformView
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.graphics.isSpecified
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.FilledTonalIconButton
+import androidx.compose.foundation.layout.size
+import androidx.compose.animation.togetherWith
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.tween
@@ -100,7 +111,14 @@ data class SearchFieldProps(
   val titleFontFamily: MutableState<String?> = mutableStateOf(null),
   val titleFontSize: MutableState<Float?> = mutableStateOf(null),
   val titleLetterSpacing: MutableState<Float?> = mutableStateOf(null),
-  val toolbarHeight: MutableState<Float?> = mutableStateOf(null)
+  val toolbarHeight: MutableState<Float?> = mutableStateOf(null),
+  val voiceEnabled: MutableState<Boolean> = mutableStateOf(false),
+  val voiceListening: MutableState<Boolean> = mutableStateOf(false),
+  val microphoneIconName: MutableState<String?> = mutableStateOf(null),
+  val stopIconName: MutableState<String?> = mutableStateOf(null),
+  val microphoneLabel: MutableState<String?> = mutableStateOf(null),
+  val stopLabel: MutableState<String?> = mutableStateOf(null),
+  val voiceMeter: MutableState<SharedObject?> = mutableStateOf(null)
 ) : ComposeProps
 
 open class SearchFieldTextEvent(
@@ -111,10 +129,19 @@ open class SearchFieldFocusChangeEvent(
   @Field open val isFocused: Boolean = false
 ) : Record, Serializable
 
+open class SearchFieldVoiceEvent(
+  @Field open val action: String = ""
+) : Record, Serializable
+
 /**
  * Material 3's search `InputField` with autocorrect off. A tap on the idle field ripples over the pill and focuses it;
  * while it is focused or holds text, a `TextButton` expands next to it that clears and blurs it. The search and clear
  * icons are drawables by name (kara's `kara_glyph_*` unless the app passes its own).
+ *
+ * With `voiceEnabled` the trailing slot holds a microphone while the field is empty and the clear button in its place
+ * once it holds text; while `voiceListening`, a live waveform of `voiceMeter` (expo-waveform's `LiveWaveformView`, which
+ * follows the transcription natively) and a tonal stop button. Nothing here records: `onVoiceAction` reports `start`
+ * and `stop`. The overlay that focuses an idle field stops short of the microphone.
  *
  * With `title` it is a whole search header: a `toolbarHeight` spacer and a large title above the field collapse while
  * the field is active, so the field slides up to the top. React Native content is not composed in: a nested host took
@@ -130,6 +157,7 @@ class SearchFieldView(context: Context, appContext: AppContext) :
   internal val onQueryChange by EventDispatcher<SearchFieldTextEvent>()
   internal val onSearchFocusChange by EventDispatcher<SearchFieldFocusChangeEvent>()
   internal val onSearchSubmit by EventDispatcher<SearchFieldTextEvent>()
+  internal val onVoiceAction by EventDispatcher<SearchFieldVoiceEvent>()
 
   private val textFieldState = TextFieldState()
   private val focusRequester = FocusRequester()
@@ -172,6 +200,13 @@ class SearchFieldView(context: Context, appContext: AppContext) :
     val titleFontSize by props.titleFontSize
     val titleLetterSpacing by props.titleLetterSpacing
     val toolbarHeight by props.toolbarHeight
+    val voiceEnabled by props.voiceEnabled
+    val voiceListening by props.voiceListening
+    val microphoneIconName by props.microphoneIconName
+    val stopIconName by props.stopIconName
+    val microphoneLabel by props.microphoneLabel
+    val stopLabel by props.stopLabel
+    val voiceMeter by props.voiceMeter
     val blurRequest by blurRequests
 
     val focusManager = LocalFocusManager.current
@@ -252,8 +287,39 @@ class SearchFieldView(context: Context, appContext: AppContext) :
               DrawableIcon(searchIconName, null)
             },
             trailingIcon = {
-              ClearButton(isVisible = hasText, iconName = clearIconName, label = clearLabel) {
-                textFieldState.clearText()
+              Row(verticalAlignment = Alignment.CenterVertically) {
+                if (voiceEnabled && voiceListening) {
+                  VoiceMeter(voiceMeter, icon)
+                  FilledTonalIconButton(onClick = { onVoiceAction(SearchFieldVoiceEvent("stop")) }) {
+                    DrawableIcon(stopIconName, stopLabel)
+                  }
+                } else if (voiceEnabled) {
+                  AnimatedContent(
+                    targetState = hasText,
+                    transitionSpec = {
+                      (fadeIn() + scaleIn(initialScale = ICON_SCALE)) togetherWith
+                        (fadeOut() + scaleOut(targetScale = ICON_SCALE))
+                    },
+                    label = "voiceOrClear"
+                  ) { showsClear ->
+                    if (showsClear) {
+                      IconButton(onClick = { textFieldState.clearText() }) {
+                        DrawableIcon(clearIconName, clearLabel)
+                      }
+                    } else {
+                      IconButton(onClick = {
+                        focusRequester.requestFocus()
+                        onVoiceAction(SearchFieldVoiceEvent("start"))
+                      }) {
+                        DrawableIcon(microphoneIconName, microphoneLabel)
+                      }
+                    }
+                  }
+                } else {
+                  ClearButton(isVisible = hasText, iconName = clearIconName, label = clearLabel) {
+                    textFieldState.clearText()
+                  }
+                }
               }
             },
             inputTransformation = SearchKeyboard,
@@ -265,6 +331,7 @@ class SearchFieldView(context: Context, appContext: AppContext) :
             Box(
               Modifier
                 .matchParentSize()
+                .padding(end = if (voiceEnabled) VoiceButtonWidth else 0.dp)
                 .clip(shape)
                 .clickable(interactionSource = remember { MutableInteractionSource() }, indication = ripple()) {
                   focusRequester.requestFocus()
@@ -339,6 +406,24 @@ private fun CollapsibleSection(isVisible: Boolean, content: @Composable () -> Un
 }
 
 @Composable
+private fun VoiceMeter(meter: SharedObject?, color: ComposeColor) {
+  val tint = if (color.isSpecified) color else LocalContentColor.current
+  AndroidView(
+    factory = { context ->
+      val density = context.resources.displayMetrics.density
+      LiveWaveformView(context).apply {
+        style = WaveformStyle(barWidth = 2 * density, barGap = 2 * density, minBarHeight = 2 * density)
+      }
+    },
+    update = { view ->
+      view.meter = meter
+      view.color = tint.toArgb()
+    },
+    modifier = Modifier.size(width = VoiceMeterWidth, height = VoiceMeterHeight)
+  )
+}
+
+@Composable
 private fun ClearButton(isVisible: Boolean, iconName: String?, label: String?, onClick: () -> Unit) {
   AnimatedVisibility(
     visible = isVisible,
@@ -374,6 +459,9 @@ private object SearchKeyboard : InputTransformation {
 }
 
 private const val ICON_SCALE = 0.6f
+private val VoiceButtonWidth = 48.dp
+private val VoiceMeterWidth = 64.dp
+private val VoiceMeterHeight = 20.dp
 
 private val HeaderEasing = CubicBezierEasing(0.2f, 0f, 0f, 1f)
 private val HeaderSizeSpec = tween<IntSize>(durationMillis = 350, easing = HeaderEasing)

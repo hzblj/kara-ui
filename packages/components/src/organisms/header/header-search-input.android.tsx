@@ -1,7 +1,8 @@
 import {Host} from '@expo/ui/jetpack-compose'
+import {iconResourceName} from '@hzblj/expo-native-icons'
 import {SearchField, type SearchFieldRef} from '@hzblj/kara-native/jetpack-compose'
 import {useAppTheme} from '@hzblj/kara-theme'
-import {useImperativeHandle, useRef} from 'react'
+import {useImperativeHandle, useMemo, useRef} from 'react'
 import {StyleSheet, View} from 'react-native'
 
 import type {HeaderSearchInputComponent, HeaderSearchInputProps} from './header-search-input.types'
@@ -20,10 +21,12 @@ const styles = StyleSheet.create({
 const ignoreDetachedView = () => undefined
 
 export const HeaderSearchInput: HeaderSearchInputComponent = ({
+  clearIcon,
   onChangeText,
   onFocusChange,
   placeholder,
   ref,
+  voice,
 }: HeaderSearchInputProps) => {
   const theme = useAppTheme()
   const fieldRef = useRef<SearchFieldRef>(null)
@@ -38,9 +41,23 @@ export const HeaderSearchInput: HeaderSearchInputComponent = ({
       clear: () => {
         fieldRef.current?.clearQuery().catch(ignoreDetachedView)
       },
+      setText: (text: string) => {
+        fieldRef.current?.setQuery(text).catch(ignoreDetachedView)
+      },
     }),
     []
   )
+
+  const nativeVoice = useMemo(
+    () =>
+      voice && {
+        ...voice,
+        microphoneIconName: voice.microphoneIcon ? iconResourceName(voice.microphoneIcon) : undefined,
+        stopIconName: voice.stopIcon ? iconResourceName(voice.stopIcon) : undefined,
+      },
+    [voice]
+  )
+  const fieldClearIcon = voice?.clearIcon ?? clearIcon
 
   return (
     <View style={styles.row}>
@@ -52,7 +69,8 @@ export const HeaderSearchInput: HeaderSearchInputComponent = ({
       >
         <SearchField
           cancelLabel="Cancel"
-          clearLabel="Clear"
+          clearIconName={fieldClearIcon ? iconResourceName(fieldClearIcon) : undefined}
+          clearLabel={voice?.clearLabel ?? 'Clear'}
           containerColor={theme.color('fill.quaternary')}
           fontFamily={face.fontFamily}
           fontSize={face.fontSize}
@@ -63,6 +81,7 @@ export const HeaderSearchInput: HeaderSearchInputComponent = ({
           placeholderColor={theme.color('content.tertiary')}
           ref={fieldRef}
           textColor={theme.color('content.primary')}
+          voice={nativeVoice}
         />
       </Host>
     </View>
