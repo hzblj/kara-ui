@@ -2698,6 +2698,7 @@ __metadata:
     react-native-reanimated: ">=4.0.0"
     react-native-safe-area-context: "*"
     react-native-screens: "*"
+    react-native-worklets: "*"
   peerDependenciesMeta:
     react-native-safe-area-context:
       optional: true
@@ -2843,6 +2844,7 @@ __metadata:
     react-native-reanimated: ">=4.0.0"
     react-native-safe-area-context: "*"
     react-native-screens: "*"
+    react-native-worklets: "*"
   peerDependenciesMeta:
     expo-router:
       optional: true
