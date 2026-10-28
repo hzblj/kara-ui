@@ -12,14 +12,19 @@ import type {ScreenComponent, ScreenProps} from './screen.types'
  */
 const DYNAMIC_TYPE_CAP = [dynamicTypeSize({max: MAX_DYNAMIC_TYPE_SIZE})]
 
-export const Screen: ScreenComponent = ({bg = 'surface.base', children, ignoreKeyboardInset, testID}: ScreenProps) => {
+export const Screen: ScreenComponent = ({
+  bg = 'surface.base',
+  children,
+  ignoreSafeArea = 'none',
+  testID,
+}: ScreenProps) => {
   const theme = useAppTheme()
   const modifiers = useSxModifiers({bg, tall: true, wide: true})
 
   return (
     <Host
       colorScheme={theme.dark ? 'dark' : 'light'}
-      ignoreSafeArea={ignoreKeyboardInset ? 'keyboard' : undefined}
+      ignoreSafeArea={ignoreSafeArea === 'none' ? undefined : ignoreSafeArea}
       modifiers={DYNAMIC_TYPE_CAP}
       seedColor={theme.materialSeed}
       style={StyleSheet.absoluteFill}

@@ -1,6 +1,8 @@
 import type {Sx} from '@hzblj/kara-sx'
 import type {ReactNode} from 'react'
 
+import type {IgnoredSafeArea} from '../../atoms/island'
+
 /**
  * The full-bleed native host a screen starts with: a SwiftUI or Compose `Host` filling its parent, so native atoms
  * render anywhere inside it. The background runs to the edges; the content keeps clear of the status bar where the
@@ -11,8 +13,11 @@ export type ScreenProps = {
   bg?: Sx['bg']
   /** Laid out in a column that fills the screen. */
   children?: ReactNode
-  /** Keeps the content where it is when the keyboard opens, instead of avoiding it. Android reads it once, on mount. */
-  ignoreKeyboardInset?: boolean
+  /**
+   * Which insets the content ignores. `none` by default: a screen keeps clear of the status bar, the home indicator and
+   * the keyboard. `keyboard` keeps the content where it is when the keyboard opens. See `IgnoredSafeArea`.
+   */
+  ignoreSafeArea?: IgnoredSafeArea
   /** Test identifier, on the host view on iOS and on the view around it on Android. */
   testID?: string
 }
