@@ -22,6 +22,11 @@ internal final class SegmentedControlRecord: Record {
 public final class SegmentedControlView: ExpoView {
   let onValueChange = EventDispatcher()
 
+  /// What UIKit keeps between its own track and the selected pill.
+  private static let systemPillInset: CGFloat = 2
+
+  /// The track kara draws itself, under a clear control, once a track colour is set.
+  private let track = UIView()
   private let control = UISegmentedControl()
 
   private var segments: [SegmentedControlRecord] = []
@@ -33,9 +38,17 @@ public final class SegmentedControlView: ExpoView {
   private var inactiveTextColor: UIColor = .label
   private var fontFamily: String?
   private var fontSize: CGFloat = UIFont.labelFontSize
+  /// The system face's weight, when no `fontFamily` is set.
+  private var fontWeight: UIFont.Weight = .medium
+  /// Extra space between the label's letters, in points. nil keeps the face's own.
+  private var letterSpacing: CGFloat?
   // nil for either keeps UIKit's own rounded look.
   private var trackCornerRadius: CGFloat?
   private var pillCornerRadius: CGFloat?
+  /// nil keeps UIKit's own track. Set, kara draws the track in exactly this colour.
+  private var trackColor: UIColor?
+  /// Space between kara's track and the selected pill. nil keeps UIKit's own 2 pt.
+  private var trackPadding: CGFloat?
   /// The height of an icon or an image in a segment.
   private var iconSize: CGFloat = 20
   /// Space above and below a segment's content. nil keeps UIKit's own height.
@@ -45,14 +58,18 @@ public final class SegmentedControlView: ExpoView {
 
   public required init(appContext: AppContext? = nil) {
     super.init(appContext: appContext)
+    track.isUserInteractionEnabled = false
+    track.isHidden = true
     control.apportionsSegmentWidthsByContent = false
     control.addTarget(self, action: #selector(segmentChanged), for: .valueChanged)
+    addSubview(track)
     addSubview(control)
   }
 
   public override func layoutSubviews() {
     super.layoutSubviews()
-    control.frame = bounds
+    track.frame = bounds
+    control.frame = bounds.insetBy(dx: controlInset, dy: controlInset)
     applyTrackCorners()
     applyPillCorners()
     reportHeight()
@@ -60,11 +77,14 @@ public final class SegmentedControlView: ExpoView {
 
   /// Yoga never asks a native view for its size, so the control's own height goes to the shadow node — the width
   /// stays the layout's (a negative width leaves it unset). With a vertical padding the control is as tall as its
-  /// content and that padding, and never less than UIKit's own height.
+  /// content and that padding, and never less than UIKit's own height. A padded track of kara's own adds its padding
+  /// on both sides, so the pill keeps that height.
   private func reportHeight() {
     let intrinsic = control.intrinsicContentSize.height
     let content = max(resolvedFont().lineHeight, iconSize)
-    let height = verticalPadding.map { max(intrinsic, ceil(content + 2 * $0)) } ?? intrinsic
+    let padding = drawsOwnTrack ? trackPadding ?? 0 : 0
+    let height =
+      verticalPadding.map { max(intrinsic, ceil(content + 2 * ($0 + padding))) } ?? intrinsic + 2 * controlInset
 
     guard height > 0, height != reportedHeight else {
       return
@@ -72,6 +92,21 @@ public final class SegmentedControlView: ExpoView {
 
     reportedHeight = height
     setShadowNodeSize(-1, height: Float(height))
+  }
+
+  /// UIKit renders a control's own `backgroundColor` translucent, so a white track came out grey over a map, and a
+  /// background image (`setBackgroundImage`) takes the selected pill away with the track. A track colour is therefore
+  /// drawn by a plain view under a clear control, which keeps the system's pill (Liquid Glass on iOS 26).
+  private var drawsOwnTrack: Bool {
+    trackColor != nil
+  }
+
+  private var controlInset: CGFloat {
+    guard drawsOwnTrack, let trackPadding else {
+      return 0
+    }
+
+    return max(trackPadding - Self.systemPillInset, 0)
   }
 
   func setOptions(_ options: [SegmentedControlRecord]) {
@@ -151,7 +186,7 @@ public final class SegmentedControlView: ExpoView {
 
   private func renderSegment(icon: UIImage, label: String, color: UIColor) -> UIImage {
     let iconWidth = icon.size.height > 0 ? iconSize * icon.size.width / icon.size.height : iconSize
-    let text = NSAttributedString(string: label, attributes: [.font: resolvedFont(), .foregroundColor: color])
+    let text = NSAttributedString(string: label, attributes: titleAttributes(color: color))
     let textSize = label.isEmpty ? .zero : text.size()
     let gap: CGFloat = label.isEmpty ? 0 : 6
     let height = max(iconSize, ceil(textSize.height))
@@ -187,7 +222,20 @@ public final class SegmentedControlView: ExpoView {
   }
 
   func setTrackColor(_ color: UIColor?) {
-    control.backgroundColor = color
+    trackColor = color
+    applyTrack()
+  }
+
+  func setTrackPadding(_ padding: Double?) {
+    trackPadding = padding.map { CGFloat($0) }
+    applyTrack()
+  }
+
+  private func applyTrack() {
+    track.isHidden = !drawsOwnTrack
+    track.backgroundColor = trackColor
+    control.backgroundColor = drawsOwnTrack ? .clear : nil
+    setNeedsLayout()
   }
 
   func setActiveTextColor(_ color: UIColor) {
@@ -214,6 +262,33 @@ public final class SegmentedControlView: ExpoView {
     applyIcons()
   }
 
+  func setFontWeight(_ weight: String?) {
+    fontWeight = Self.systemWeight(weight)
+    applyTitleAttributes()
+    applyIcons()
+  }
+
+  func setLetterSpacing(_ spacing: Double?) {
+    letterSpacing = spacing.map { CGFloat($0) }
+    applyTitleAttributes()
+    applyIcons()
+  }
+
+  /// The numeric weights React Native and the theme use, as the system face's.
+  private static func systemWeight(_ weight: String?) -> UIFont.Weight {
+    switch weight {
+    case "100": return .ultraLight
+    case "200": return .thin
+    case "300": return .light
+    case "400": return .regular
+    case "600": return .semibold
+    case "700": return .bold
+    case "800": return .heavy
+    case "900": return .black
+    default: return .medium
+    }
+  }
+
   func setCornerRadius(_ radius: Double?) {
     trackCornerRadius = radius.map { CGFloat($0) }
     applyTrackCorners()
@@ -225,9 +300,12 @@ public final class SegmentedControlView: ExpoView {
   }
 
   private func applyTrackCorners() {
-    // nil: radius 0 without clipping, which leaves UIKit's own rounded background showing.
-    control.layer.cornerRadius = trackCornerRadius ?? 0
-    control.layer.masksToBounds = trackCornerRadius != nil
+    // nil: radius 0 without clipping, which leaves UIKit's own rounded background showing. kara's own track is a
+    // capsule then, the shape of iOS 26's.
+    let radius = trackCornerRadius ?? (drawsOwnTrack ? bounds.height / 2 : nil)
+    track.layer.cornerRadius = radius ?? 0
+    control.layer.cornerRadius = radius.map { max($0 - controlInset, 0) } ?? 0
+    control.layer.masksToBounds = radius != nil
   }
 
   private func applyPillCorners() {
@@ -255,13 +333,27 @@ public final class SegmentedControlView: ExpoView {
       return font
     }
 
-    return .systemFont(ofSize: fontSize, weight: .medium)
+    return .systemFont(ofSize: fontSize, weight: fontWeight)
+  }
+
+  private func titleAttributes(color: UIColor) -> [NSAttributedString.Key: Any] {
+    var attributes: [NSAttributedString.Key: Any] = [.foregroundColor: color, .font: resolvedFont()]
+    if let letterSpacing {
+      attributes[.kern] = letterSpacing
+    }
+
+    return attributes
   }
 
   private func applyTitleAttributes() {
-    let font = resolvedFont()
-    control.setTitleTextAttributes([.foregroundColor: inactiveTextColor, .font: font], for: .normal)
-    control.setTitleTextAttributes([.foregroundColor: activeTextColor, .font: font], for: .selected)
+    let inactiveAttributes = titleAttributes(color: inactiveTextColor)
+    let activeAttributes = titleAttributes(color: activeTextColor)
+    control.setTitleTextAttributes(inactiveAttributes, for: .normal)
+    control.setTitleTextAttributes(activeAttributes, for: .selected)
+    // iOS 26 puts the segments under a held or dragged glass pill into the highlighted state; without these their
+    // titles fall back to the system black until the drag ends.
+    control.setTitleTextAttributes(inactiveAttributes, for: .highlighted)
+    control.setTitleTextAttributes(activeAttributes, for: [.selected, .highlighted])
     // A new font can change the control's height.
     setNeedsLayout()
   }

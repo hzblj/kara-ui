@@ -19,9 +19,13 @@ export type SegmentedControlProps = {
   fontFamily?: string
   /** In points, not scaled with Dynamic Type: the control keeps UIKit's height. */
   fontSize?: number
+  /** The system face's weight (`'400'`, `'500'`…) when no `fontFamily` is set. Medium when unset. */
+  fontWeight?: string
   /** The height of a segment's icon or image, in points. 20 when unset. */
   iconSize?: number
   inactiveTextColor: ColorValue
+  /** Extra space between the label's letters, in points. The face's own when unset. */
+  letterSpacing?: number
   /** The tapped segment's `value`. The pill moves at once and goes back unless `selectedValue` follows. */
   onValueChange: (value: string) => void
   options: SegmentedControlOption[]
@@ -32,7 +36,13 @@ export type SegmentedControlProps = {
   /** The width comes from layout; the height is the control's own. */
   style?: StyleProp<ViewStyle>
   testID?: string
+  /**
+   * The track, drawn by kara in exactly this colour under a clear control (UIKit would render it translucent), a
+   * capsule unless `cornerRadius` says otherwise. UIKit's own track when unset.
+   */
   trackColor?: ColorValue
+  /** Space between `trackColor`'s track and the selected pill, in points; the track grows by it. UIKit's 2 when unset. */
+  trackPadding?: number
   /** Space above and below a segment's content, in points, which makes the control taller. UIKit's height when unset. */
   verticalPadding?: number
 }

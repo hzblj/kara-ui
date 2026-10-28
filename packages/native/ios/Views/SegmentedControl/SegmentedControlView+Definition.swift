@@ -44,6 +44,15 @@ extension SegmentedControlView {
       Prop("verticalPadding") { (view: SegmentedControlView, padding: Double?) in
         view.setVerticalPadding(padding)
       }
+      Prop("trackPadding") { (view: SegmentedControlView, padding: Double?) in
+        view.setTrackPadding(padding)
+      }
+      Prop("fontWeight") { (view: SegmentedControlView, weight: String?) in
+        view.setFontWeight(weight)
+      }
+      Prop("letterSpacing") { (view: SegmentedControlView, spacing: Double?) in
+        view.setLetterSpacing(spacing)
+      }
     }
   }
 }

@@ -1,4 +1,4 @@
-import type {SpaceSize} from '@hzblj/kara-theme'
+import type {ColorToken, SpaceSize, TextVariant} from '@hzblj/kara-theme'
 import type {ReactNode} from 'react'
 import type {ImageSourcePropType} from 'react-native'
 
@@ -23,8 +23,16 @@ export type SegmentedControlSegment = {
  * brings its own host. Inside one it joins that host, so it can share a stack with other native views. It takes the
  * width it is given; the height is the platform's, or taller with `spacing`. A segment can lead with one of the app's
  * icons or be an image, a logo, both loaded natively (SDWebImage on iOS, androidsvg on Android, as Footshop does).
+ * The track takes the `sx` names a component sized by props uses: `bg` for its colour, `p` for the room around the
+ * pill, and `variant` sets the labels like `Text`.
  */
 export type SegmentedControlProps = {
+  /**
+   * The track's colour, a palette token. iOS draws it itself as a capsule under the control, in exactly this colour
+   * (UIKit renders a control's own background translucent); Android fills the unselected segments with it. The
+   * platform's own track when unset.
+   */
+  bg?: ColorToken
   /** Stops the user changing the segment, and dims the control. */
   disabled?: boolean
   /** The height of the segments' icons and images, a spacing token. `s20` by default. */
@@ -34,6 +42,11 @@ export type SegmentedControlProps = {
    * Android plays `selection`; iOS's control plays its own feedback.
    */
   onChange?: (index: number, value: string) => void
+  /**
+   * Room between the track's edge and the selected pill, a spacing token, with `bg`: the track grows by it and the pill
+   * keeps its height. iOS only, UIKit's own `s2` when unset; Material's segments have no pill to inset.
+   */
+  p?: SpaceSize
   /** The selected segment. Controlled: pass back what `onChange` reports. */
   selectedIndex: number
   /**
@@ -45,6 +58,11 @@ export type SegmentedControlProps = {
   testID?: string
   /** The segments, in order: a label, or a segment with an icon or an image. */
   values: (string | SegmentedControlSegment)[]
+  /**
+   * The labels' typography variant, the app's face if it has one. `footnoteMedium` on iOS and `subheadlineMedium` on
+   * Android by default, each platform's own segmented size. Not scaled with Dynamic Type on iOS.
+   */
+  variant?: TextVariant
 }
 
 export type SegmentedControlComponent = (props: SegmentedControlProps) => ReactNode

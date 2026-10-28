@@ -16,20 +16,24 @@ const MATCH_HEIGHT_ONLY = {horizontal: false, vertical: true}
  * the width it is given and UIKit's height. Inside a `Screen` or `Island` it is carried into that host by `RNHostView`
  * (see `useInsideHost`), the host's width and its own height. UIKit plays the control's own feedback. A segment shows a
  * title or an image, never both, so an icon segment is drawn natively as one image of the icon and the label, in the
- * label's colour; an image segment is the image alone, loaded and drawn by kara-native at `iconSize`.
+ * label's colour; an image segment is the image alone, loaded and drawn by kara-native at `iconSize`. With `bg` the
+ * track is kara-native's own view under a clear control, inset by `p`, so the pill stays the system's.
  */
 export const SegmentedControl: SegmentedControlComponent = ({
+  bg,
   disabled = false,
   iconSize = 's20',
   onChange,
+  p,
   selectedIndex,
   spacing,
   testID,
   values,
+  variant = 'footnoteMedium',
 }: SegmentedControlProps) => {
   const theme = useAppTheme()
   const insideHost = useInsideHost()
-  const face = theme.typography.footnoteMedium
+  const face = theme.typography[variant]
 
   const segments = useMemo(() => values.map(segmentOf), [values])
 
@@ -60,12 +64,15 @@ export const SegmentedControl: SegmentedControlComponent = ({
       disabled={disabled}
       fontFamily={face.fontFamily}
       fontSize={face.fontSize}
+      fontWeight={face.fontWeight}
       iconSize={spacingTokens[iconSize]}
       inactiveTextColor={theme.color('content.primary')}
       onValueChange={onValueChange}
       options={options}
       selectedValue={String(selectedIndex)}
       testID={testID}
+      trackColor={bg === undefined ? undefined : theme.color(bg)}
+      trackPadding={p === undefined ? undefined : spacingTokens[p]}
       verticalPadding={spacing === undefined ? undefined : spacingTokens[spacing]}
     />
   )
