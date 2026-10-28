@@ -1,5 +1,43 @@
 # @hzblj/kara-ui
 
+## 0.21.0
+
+### Minor Changes
+
+- [#65](https://github.com/hzblj/kara-ui/pull/65) [`901c6b2`](https://github.com/hzblj/kara-ui/commit/901c6b2324cbd1be9f1eb391252bae8821b79ea8) Thanks [@hzblj](https://github.com/hzblj)! - `BlurView` takes `intensity`, from 0 (no material) to 1 (the full material, the default). On iOS it works the way UIKit fades a material in: a paused effect animation at that fraction, since UIKit has no blur radius. On Android it scales the blur, the saturation and the surface. Pass a Reanimated shared value to animate it on the UI thread, for example a bar's background coming in as content scrolls under it. A plain number sets it.
+
+- [#65](https://github.com/hzblj/kara-ui/pull/65) [`901c6b2`](https://github.com/hzblj/kara-ui/commit/901c6b2324cbd1be9f1eb391252bae8821b79ea8) Thanks [@hzblj](https://github.com/hzblj)! - New `@hzblj/kara-ui/header` entry for a native stack screen's header, for React Navigation and Expo Router alike. It imports neither library and builds the native stack's own options.
+
+  - **`useHeader` / `useHeaderOptions`:** `useHeader(navigation, params)` applies the header through either library's `useNavigation()`, and `useHeaderOptions` returns the options for static `options`. Both cover the title (centred, leading with a subtitle, revealed on scroll, or large), a search field and actions on both sides. Actions can be back, close, icons with a spinner, badge or selected state, text and menus with sections. iOS draws them as the navigation bar's own items, Android as Material buttons and dropdowns.
+  - **Large title on Android:** the native stack has none there, so it becomes a collapsing first row of the list.
+  - **Subtitle on iOS 26:** it is the navigation item's own, through the new `NavigationItemSubtitle` view in `@hzblj/kara-native/swift-ui`.
+  - **`useHeroHeader`:** a transparent bar over a full-bleed image that fades in as the image scrolls away. It brings its own background (below iOS 26 the bar's material coming in by its intensity), tint and status bar. The status bar applies to that screen alone, whether the app uses view-controller-based status bar appearance or not; `isViewControllerBasedStatusBarAppearance` in kara-native tells which.
+  - **`useHeaderSearch`:** UIKit's stacked search bar on iOS, a row with the new Material `SearchField` (`@hzblj/kara-native/jetpack-compose`) on Android, and a scrim over the content.
+  - **Stack and content helpers:** `useStackScreenOptions()` themes a stack, with the `LARGE_TITLE_SCREEN_OPTIONS`, `HIDDEN_HEADER_SCREEN_OPTIONS` and `HERO_HEADER_SCREEN_OPTIONS` presets. `HeaderInset` and `useHeaderBarInset()` place content under a transparent header without measuring it. `useHeaderScrollToTop` makes `useScrollToTop` land on an expanded large title.
+  - **Peers:** `react-native-screens` and `react-native-safe-area-context` are optional peers that only this entry needs. `react-native-worklets`, which Reanimated 4 already requires, is now a peer as well.
+
+- [#65](https://github.com/hzblj/kara-ui/pull/65) [`901c6b2`](https://github.com/hzblj/kara-ui/commit/901c6b2324cbd1be9f1eb391252bae8821b79ea8) Thanks [@hzblj](https://github.com/hzblj)! - `Island` and `Screen` take `ignoreSafeArea`, one exact type for which insets the native content ignores: `none`, `keyboard`, `container` or `all`. iOS passes it to the SwiftUI host. Android can ignore only the keyboard, and reads the value once, on mount.
+
+  `Island` now ignores the keyboard by default. It sits in a React Native layout that moves it for the keyboard itself, and SwiftUI was lifting the content inside it as well. `Screen` keeps clear of everything by default.
+
+  Breaking: `Screen`'s `ignoreKeyboardInset` is replaced by `ignoreSafeArea="keyboard"`.
+
+- [#64](https://github.com/hzblj/kara-ui/pull/64) [`440665e`](https://github.com/hzblj/kara-ui/commit/440665e72c1cd2e21cae06d297dddfaf3111ec13) Thanks [@hzblj](https://github.com/hzblj)! - `NavigationBar` (and so `Sheet.Header`) places its search the way a native-stack header does. `search.placement` is `stacked` by default, a row of its own under the title with the title and items kept, or `integratedButton`, a search item beside the trailing items that turns the whole bar into the field. A focused field now gets a cancel item that empties it and ends the search; `UISearchBar`'s own cancel button did nothing in a standalone bar. The field is laid out on the item row, so it lines up with the cancel item instead of sitting 5 pt lower. `back` and `close` items take an optional `icon`, and the search item and the cancel `search.buttonIcon` / `search.cancelIcon`, in place of the system glyphs. The bar also centres its item row again on iOS 27, where the old lookup by the glass platters' class name found nothing and left the title and items 5 pt high.
+
+- [#69](https://github.com/hzblj/kara-ui/pull/69) [`79154b5`](https://github.com/hzblj/kara-ui/commit/79154b503ffec1a48116c22d607b9289bdaabf56) Thanks [@hzblj](https://github.com/hzblj)! - Search fields can take a voice. Give `useHeaderSearch`, `NavigationBar` or `Sheet.Header` a `voice` and the field gets a microphone: press it and a live waveform with a stop button takes its place, and once the field holds text a clear button sits there instead. kara records nothing, so it adds no microphone or speech permissions: run the dictation yourself (`@hzblj/expo-speech` works out of the box, its transcription drawn as the waveform natively) and write what you hear with the new `setText`. Leave `voice` out to turn it off.
+
+  `useHeaderSearch` also takes `placement: 'integratedButton'` (a search button in the bar's corner that opens the field in the bar), `clearIcon` and `cancelIcon`, and closing the integrated search now empties the query. `NavigationBar`'s search takes `clearIcon`. The new `SheetGrabber` from `@hzblj/kara-ui/header` shows the system grabber on a screen presented as a `modal` sheet on iOS.
+
+### Patch Changes
+
+- Updated dependencies [[`901c6b2`](https://github.com/hzblj/kara-ui/commit/901c6b2324cbd1be9f1eb391252bae8821b79ea8), [`901c6b2`](https://github.com/hzblj/kara-ui/commit/901c6b2324cbd1be9f1eb391252bae8821b79ea8), [`901c6b2`](https://github.com/hzblj/kara-ui/commit/901c6b2324cbd1be9f1eb391252bae8821b79ea8), [`440665e`](https://github.com/hzblj/kara-ui/commit/440665e72c1cd2e21cae06d297dddfaf3111ec13), [`79154b5`](https://github.com/hzblj/kara-ui/commit/79154b503ffec1a48116c22d607b9289bdaabf56)]:
+  - @hzblj/kara-native@0.21.0
+  - @hzblj/kara-components@0.21.0
+  - @hzblj/kara-router@0.21.0
+  - @hzblj/kara-sx@0.21.0
+  - @hzblj/kara-theme@0.21.0
+  - @hzblj/kara-expo-plugin@0.21.0
+
 ## 0.20.1
 
 ### Patch Changes
