@@ -66,6 +66,7 @@ are plain React Native views with the same `sx` props.
 - [Styling with `sx`](https://www.kara.janblazej.dev/docs/styling): tokens in place of raw values
 - [Theming](https://www.kara.janblazej.dev/docs/theming): your colours, your typefaces, Material You
 - [Icons](https://www.kara.janblazej.dev/docs/icons): your own SVGs, as native icons on both platforms
+- [Header](https://www.kara.janblazej.dev/docs/header): native screen headers for React Navigation and Expo Router
 - [Expo Router](https://www.kara.janblazej.dev/docs/router): native tabs and the zoom transition
 - [Components](https://www.kara.janblazej.dev/docs/components): the whole catalogue
 - [Changelog](https://www.kara.janblazej.dev/docs/changelog)

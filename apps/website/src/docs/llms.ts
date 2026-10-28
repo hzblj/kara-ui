@@ -17,7 +17,7 @@ export const llmsIndex = () =>
     '',
     `> ${HERO_LEDE}`,
     '',
-    'Package: @hzblj/kara-ui (Expo SDK 57, iOS and Android, development build). Router pieces: @hzblj/kara-ui/router.',
+    'Package: @hzblj/kara-ui (Expo SDK 57, iOS and Android, development build). Router pieces: @hzblj/kara-ui/router. Screen headers: @hzblj/kara-ui/header.',
     '',
     '## Guides',
     '',

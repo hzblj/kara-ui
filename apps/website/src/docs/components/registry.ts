@@ -649,6 +649,7 @@ export const COMPONENTS: ComponentDoc[] = [
     examples: [
       {code: '<BlurView material="ultraThick" vibrancy="secondary">…</BlurView>', title: 'Vibrant content (iOS)'},
       {code: '<BlurView appearance="dark" material="thin">…</BlurView>', title: 'A dark HUD over any screen'},
+      {code: '<BlurView intensity={progress} material="ultraThick" />', title: 'Fading in with a shared value'},
     ],
     exports: ['BlurView'],
     group: 'content',
@@ -660,6 +661,7 @@ export const COMPONENTS: ComponentDoc[] = [
       '`vibrancy` draws the content the way iOS draws its own on a material: its colour becomes the material’s vibrant one at that level, its alpha the mask. iOS only.',
       'Android has the same five, in its own terms: what lies behind, blurred and saturated (Android 12+), under a Material tonal surface that rises from `surface` to `surfaceContainerHighest` as the material thickens. Below Android 12 the surface alone, near-opaque.',
       '`appearance` pins a material to light or dark whatever the app’s; Android draws the opposite one with Material’s inverse surface.',
+      '`intensity` from 0 to 1. Pass a shared value to animate it.',
     ],
     renders: {android: 'Backdrop blur + tonal surface (kara)', ios: 'UIBlurEffect system materials'},
     summary: 'The system materials: what sheets, bars, menus and HUDs are made of.',
@@ -1072,7 +1074,8 @@ export const COMPONENTS: ComponentDoc[] = [
     notes: [
       'For a header that is not a navigation screen (`Sheet.Header` is built on it).',
       'iOS: a standalone `UINavigationBar`; on iOS 26 neighbours share one glass capsule, and `separated` gives an item its own.',
-      'Android: Material’s top app bar. `search` replaces the title on iOS only.',
+      'Android: Material’s top app bar.',
+      "`search` (iOS): a field under the title, or a search button that turns the bar into the field (`placement: 'integratedButton'`).",
       'It places nothing: items go on the side and in the order you give them.',
     ],
     renders: {android: 'Material TopAppBar', ios: 'UINavigationBar'},
