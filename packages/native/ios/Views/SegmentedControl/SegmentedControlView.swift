@@ -346,8 +346,14 @@ public final class SegmentedControlView: ExpoView {
   }
 
   private func applyTitleAttributes() {
-    control.setTitleTextAttributes(titleAttributes(color: inactiveTextColor), for: .normal)
-    control.setTitleTextAttributes(titleAttributes(color: activeTextColor), for: .selected)
+    let inactiveAttributes = titleAttributes(color: inactiveTextColor)
+    let activeAttributes = titleAttributes(color: activeTextColor)
+    control.setTitleTextAttributes(inactiveAttributes, for: .normal)
+    control.setTitleTextAttributes(activeAttributes, for: .selected)
+    // iOS 26 puts the segments under a held or dragged glass pill into the highlighted state; without these their
+    // titles fall back to the system black until the drag ends.
+    control.setTitleTextAttributes(inactiveAttributes, for: .highlighted)
+    control.setTitleTextAttributes(activeAttributes, for: [.selected, .highlighted])
     // A new font can change the control's height.
     setNeedsLayout()
   }
