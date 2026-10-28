@@ -6,7 +6,7 @@ its `package.json` is where the public entry points are defined.
 | Entry | Re-exports |
 | --- | --- |
 | `@hzblj/kara-ui` | `@hzblj/kara-components`, `@hzblj/kara-sx`, `@hzblj/kara-theme` |
-| `@hzblj/kara-ui/header` | `@hzblj/kara-components/header` — `useHeader`, `useHeaderOptions`, `useHeroHeader`, `useHeaderSearch`, `useStackScreenOptions`, `HeaderInset`, `useHeaderBarInset`, `useHeaderScrollToTop` |
+| `@hzblj/kara-ui/header` | `@hzblj/kara-components/header` — `useHeader`, `useHeaderOptions`, `useHeroHeader`, `useHeaderSearch`, `useStackScreenOptions`, `HeaderInset`, `HeaderLargeTitleFade`, `useHeaderBarInset`, `useHeaderScrollToTop` |
 | `@hzblj/kara-ui/router` | `@hzblj/kara-router` — `Tabs`, `navigationTheme`, `ZoomTransition` |
 | `@hzblj/kara-ui/swift-ui`, `/jetpack-compose` | `@hzblj/kara-native/swift-ui`, `/jetpack-compose` |
 | `@hzblj/kara-ui/app.plugin.js` | `@hzblj/kara-expo-plugin` |
