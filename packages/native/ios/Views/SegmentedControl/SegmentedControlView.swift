@@ -14,6 +14,38 @@ internal final class SegmentedControlRecord: Record {
 }
 
 /**
+ * A `UISegmentedControl` that can leave its track out. UIKit draws the track as resizable images, the control's direct
+ * `UIImageView` subviews, over a grey system fill whatever `backgroundColor` is set (`.clear` and the track's own colour
+ * included), so kara's track under it showed grey inside a rim of the right colour. With `hidesSystemTrack` those
+ * views go to alpha 0 after every layout of the control; a selection change keeps them hidden. A private-structure
+ * hack like the pill corners: if a future iOS draws the track another way, the grey comes back and nothing breaks.
+ */
+private final class TrackHidingSegmentedControl: UISegmentedControl {
+  var hidesSystemTrack = false {
+    didSet {
+      guard hidesSystemTrack != oldValue else {
+        return
+      }
+
+      setSystemTrackAlpha(hidesSystemTrack ? 0 : 1)
+    }
+  }
+
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    if hidesSystemTrack {
+      setSystemTrackAlpha(0)
+    }
+  }
+
+  private func setSystemTrackAlpha(_ alpha: CGFloat) {
+    for case let imageView as UIImageView in subviews where imageView.image != nil {
+      imageView.alpha = alpha
+    }
+  }
+}
+
+/**
  * A `UISegmentedControl` with its colours set from outside: the selected pill, both label colours and the track. The
  * system control would tint only the pill, and `@expo/ui`'s SwiftUI picker not even that — this is how the accent
  * reaches it. The React Native tier: a plain `UIView`, so it needs no host. Its height is UIKit's own, reported to
@@ -27,7 +59,7 @@ public final class SegmentedControlView: ExpoView {
 
   /// The track kara draws itself, under a clear control, once a track colour is set.
   private let track = UIView()
-  private let control = UISegmentedControl()
+  private let control = TrackHidingSegmentedControl()
 
   private var segments: [SegmentedControlRecord] = []
   private var reportedHeight: CGFloat = -1
@@ -94,9 +126,9 @@ public final class SegmentedControlView: ExpoView {
     setShadowNodeSize(-1, height: Float(height))
   }
 
-  /// UIKit renders a control's own `backgroundColor` translucent, so a white track came out grey over a map, and a
-  /// background image (`setBackgroundImage`) takes the selected pill away with the track. A track colour is therefore
-  /// drawn by a plain view under a clear control, which keeps the system's pill (Liquid Glass on iOS 26).
+  /// UIKit draws its own track over a grey system fill whatever colour the control is given, and a background image
+  /// (`setBackgroundImage`) takes the selected pill away with the track. A track colour is therefore drawn by a plain
+  /// view under the control, whose own track is hidden, which keeps the system's pill (Liquid Glass on iOS 26).
   private var drawsOwnTrack: Bool {
     trackColor != nil
   }
@@ -235,6 +267,7 @@ public final class SegmentedControlView: ExpoView {
     track.isHidden = !drawsOwnTrack
     track.backgroundColor = trackColor
     control.backgroundColor = drawsOwnTrack ? .clear : nil
+    control.hidesSystemTrack = drawsOwnTrack
     setNeedsLayout()
   }
 
