@@ -12,8 +12,8 @@ import {semantics, testID as testIdModifier} from '@expo/ui/jetpack-compose/modi
 import {useSxModifiers} from '@hzblj/kara-sx'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useImperativeHandle, useMemo, useRef} from 'react'
-import {Glyph} from '../../glyph'
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
+import {Glyph} from '../glyph'
 import type {TextFieldComponent, TextFieldContentType, TextFieldKeyboard, TextFieldProps} from './text-field.types'
 import {autoCorrectFor, capitalizationFor, ignoreDetachedView} from './text-field-input'
 

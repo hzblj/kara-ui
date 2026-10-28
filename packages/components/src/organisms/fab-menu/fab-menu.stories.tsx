@@ -1,7 +1,7 @@
 import type {Meta, StoryObj} from '@storybook/react-native'
 import {fn} from 'storybook/test'
 
-import {insideIslandOfHeight} from '../../story-decorators'
+import {insideIslandOfHeight} from '../../utils/story-decorators'
 import type {MenuAction} from '../menu'
 import {FabMenu} from './fab-menu'
 

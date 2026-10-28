@@ -11,7 +11,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import {scheduleOnRN} from 'react-native-worklets'
 
-import {RnText} from '../atoms/rn-text'
+import {RnText} from '../../atoms/rn-text'
 import type {HeaderOptions} from './header.types'
 import {hasNativeSubtitle, NativeSubtitle} from './native-subtitle'
 

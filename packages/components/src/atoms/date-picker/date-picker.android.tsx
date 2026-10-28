@@ -4,7 +4,7 @@ import {alpha, testID as testIdModifier} from '@expo/ui/jetpack-compose/modifier
 import {opacity, useAppTheme} from '@hzblj/kara-theme'
 import {useCallback, useMemo, useState} from 'react'
 
-import {useInsideHost} from '../../host-context'
+import {useInsideHost} from '../../hooks/host-context'
 import {Box} from '../box'
 import {Pressable} from '../pressable'
 import {RnText} from '../rn-text'

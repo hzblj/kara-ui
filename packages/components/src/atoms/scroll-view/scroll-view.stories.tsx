@@ -1,6 +1,6 @@
 import type {Meta, StoryObj} from '@storybook/react-native'
 
-import {insideIslandOfHeight} from '../../story-decorators'
+import {insideIslandOfHeight} from '../../utils/story-decorators'
 import {Surface} from '../surface'
 import {Text} from '../text'
 import {ScrollView} from './scroll-view'

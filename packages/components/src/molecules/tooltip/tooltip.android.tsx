@@ -3,7 +3,7 @@ import {TooltipBox} from '@hzblj/kara-native/jetpack-compose'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useCallback} from 'react'
 
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import type {TooltipComponent, TooltipProps} from './tooltip.types'
 
 /**

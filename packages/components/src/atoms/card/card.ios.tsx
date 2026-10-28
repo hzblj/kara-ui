@@ -1,7 +1,7 @@
 import {VStack} from '@expo/ui/swift-ui'
 import {splitAccessibility, useAccessibilityModifiers, useSxModifiers} from '@hzblj/kara-sx'
 import {useMemo} from 'react'
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import type {CardComponent, CardProps} from './card.types'
 
 export const Card: CardComponent = ({children, testID, ...props}: CardProps) => {

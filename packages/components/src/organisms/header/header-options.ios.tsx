@@ -2,8 +2,8 @@ import {iconResourceName} from '@hzblj/expo-native-icons'
 import {GLYPHS} from '@hzblj/kara-native'
 import type {Theme} from '@hzblj/kara-theme'
 
-import {ActivityIndicator} from '../atoms/activity-indicator'
-import type {IconName} from '../atoms/icon'
+import {ActivityIndicator} from '../../atoms/activity-indicator'
+import type {IconName} from '../../atoms/icon'
 import type {
   HeaderAction,
   HeaderMenuItem,

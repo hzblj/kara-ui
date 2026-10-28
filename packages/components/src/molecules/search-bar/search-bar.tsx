@@ -2,8 +2,8 @@ import {useAppTheme} from '@hzblj/kara-theme'
 import {Platform, TextInput} from 'react-native'
 
 import {Box} from '../../atoms/box'
+import {RnGlyph} from '../../atoms/glyph'
 import {Pressable} from '../../atoms/pressable'
-import {RnGlyph} from '../../glyph'
 import type {SearchBarComponent, SearchBarProps} from './search-bar.types'
 
 export const SearchBar: SearchBarComponent = ({

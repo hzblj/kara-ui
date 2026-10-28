@@ -4,7 +4,7 @@ import {fn} from 'storybook/test'
 import {Divider} from '../../atoms/divider'
 import {Switch} from '../../atoms/switch'
 import {VStack} from '../../atoms/v-stack'
-import {insideIsland} from '../../story-decorators'
+import {insideIsland} from '../../utils/story-decorators'
 import {LabeledContent} from './labeled-content'
 
 const meta = {

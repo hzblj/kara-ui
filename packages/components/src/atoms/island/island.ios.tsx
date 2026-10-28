@@ -3,7 +3,7 @@ import {dynamicTypeSize} from '@expo/ui/swift-ui/modifiers'
 import {useSx} from '@hzblj/kara-sx'
 import {MAX_DYNAMIC_TYPE_SIZE, useAppTheme} from '@hzblj/kara-theme'
 
-import {HostBoundary} from '../../host-context'
+import {HostBoundary} from '../../hooks/host-context'
 import type {IslandComponent, IslandProps} from './island.types'
 
 const DYNAMIC_TYPE_CAP = [dynamicTypeSize({max: MAX_DYNAMIC_TYPE_SIZE})]

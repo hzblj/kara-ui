@@ -9,7 +9,7 @@ import {useAccessibilityModifiers} from '@hzblj/kara-sx'
 import {type ColorToken, useAppTheme} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
 
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import {buttonTokens, contentOnTint} from '../button/button-tokens'
 import {Icon} from '../icon'
 import type {IconButtonComponent, IconButtonProps, IconButtonVariant} from './icon-button.types'

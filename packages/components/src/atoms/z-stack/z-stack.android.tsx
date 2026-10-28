@@ -1,6 +1,6 @@
 import {Box} from '@expo/ui/jetpack-compose'
-import {useHostGuard} from '../../host-context'
-import {useStackModifiers} from '../../use-stack-modifiers'
+import {useHostGuard} from '../../hooks/host-context'
+import {useStackModifiers} from '../../hooks/use-stack-modifiers'
 import type {ZStackAlign, ZStackComponent, ZStackProps} from './z-stack.types'
 
 const ALIGNMENT = {

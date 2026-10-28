@@ -1,9 +1,9 @@
 import {useCallback} from 'react'
+import {GlyphButton} from '../../atoms/glyph'
 import {HStack} from '../../atoms/h-stack'
 import {Spacer} from '../../atoms/spacer'
 import {Text} from '../../atoms/text'
-import {GlyphButton} from '../../glyph'
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import type {StepperComponent, StepperProps} from './stepper.types'
 
 export const Stepper: StepperComponent = ({

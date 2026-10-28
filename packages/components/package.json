@@ -27,9 +27,9 @@
       "default": "./lib/module/index.js"
     },
     "./header": {
-      "source": "./src/header/index.ts",
-      "types": "./lib/typescript/header/index.d.ts",
-      "default": "./lib/module/header/index.js"
+      "source": "./src/organisms/header/index.ts",
+      "types": "./lib/typescript/organisms/header/index.d.ts",
+      "default": "./lib/module/organisms/header/index.js"
     },
     "./package.json": "./package.json"
   },

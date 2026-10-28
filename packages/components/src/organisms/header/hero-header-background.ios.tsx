@@ -1,7 +1,7 @@
 import {isScrollEdgeEffectAvailable} from '@hzblj/kara-native'
 import {StyleSheet, View} from 'react-native'
 
-import {BlurView} from '../atoms/blur-view'
+import {BlurView} from '../../atoms/blur-view'
 import type {HeroHeaderBackgroundComponent, HeroHeaderBackgroundProps} from './hero-header-background.types'
 
 const styles = StyleSheet.create({

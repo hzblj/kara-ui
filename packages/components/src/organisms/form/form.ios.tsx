@@ -1,6 +1,6 @@
 import {Section, Form as SwiftUIForm} from '@expo/ui/swift-ui'
 import {Text} from '../../atoms/text'
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import type {FormComponent, FormProps, FormSectionProps} from './form.types'
 
 const FormRoot = ({children, testID}: FormProps) => {

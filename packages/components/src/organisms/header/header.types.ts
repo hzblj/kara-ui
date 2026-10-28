@@ -5,7 +5,7 @@ import type {SharedValue} from 'react-native-reanimated'
 import type {SearchBarCommands} from 'react-native-screens'
 import type {SFSymbol} from 'sf-symbols-typescript'
 
-import type {IconName} from '../atoms/icon'
+import type {IconName} from '../../atoms/icon'
 
 type HeaderActionBase = {
   /**

@@ -10,9 +10,8 @@ import {
 import {fillMaxWidth, menuAnchor, testID as testIdModifier} from '@expo/ui/jetpack-compose/modifiers'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useEffect, useMemo, useState} from 'react'
-
-import {Glyph} from '../../glyph'
-import {HostBoundary, useInsideHost} from '../../host-context'
+import {HostBoundary, useInsideHost} from '../../hooks/host-context'
+import {Glyph} from '../glyph'
 import type {PickerComponent, PickerProps} from './picker.types'
 
 const MATCH_HEIGHT_ONLY = {horizontal: false, vertical: true}

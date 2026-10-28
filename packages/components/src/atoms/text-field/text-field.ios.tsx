@@ -18,7 +18,7 @@ import {
 import {useSxModifiers} from '@hzblj/kara-sx'
 import {type ColorToken, spacing} from '@hzblj/kara-theme'
 import {useImperativeHandle, useMemo, useRef} from 'react'
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import {Text} from '../text'
 import type {TextFieldAutoCapitalize, TextFieldComponent, TextFieldKeyboard, TextFieldProps} from './text-field.types'
 import {autoCorrectFor, capitalizationFor, ignoreDetachedView} from './text-field-input'

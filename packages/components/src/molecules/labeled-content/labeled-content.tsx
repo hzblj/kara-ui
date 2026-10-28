@@ -1,8 +1,8 @@
+import {Glyph} from '../../atoms/glyph'
 import {HStack} from '../../atoms/h-stack'
 import {Icon} from '../../atoms/icon'
 import {Spacer} from '../../atoms/spacer'
 import {Text} from '../../atoms/text'
-import {Glyph} from '../../glyph'
 import type {LabeledContentComponent, LabeledContentProps} from './labeled-content.types'
 
 const TrailingValue = ({value}: {value: string}) => (

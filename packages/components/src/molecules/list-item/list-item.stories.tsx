@@ -2,7 +2,7 @@ import type {Meta, StoryObj} from '@storybook/react-native'
 import {fn} from 'storybook/test'
 
 import {List} from '../../atoms/list'
-import {insideIsland} from '../../story-decorators'
+import {insideIsland} from '../../utils/story-decorators'
 import {ListItem} from './list-item'
 
 const meta = {

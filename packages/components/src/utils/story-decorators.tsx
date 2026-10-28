@@ -1,6 +1,6 @@
 import type {Decorator} from '@storybook/react-native'
 
-import {Island} from './atoms/island'
+import {Island} from '../atoms/island'
 
 /**
  * The host a story renders its subject in. Native atoms only appear inside `<Screen>` or `<Island>`, and

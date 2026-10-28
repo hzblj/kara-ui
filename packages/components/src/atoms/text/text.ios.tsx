@@ -22,7 +22,7 @@ import {
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
 
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import {spansKey, spansOf} from './spans'
 import type {TextAlign, TextComponent, TextProps} from './text.types'
 

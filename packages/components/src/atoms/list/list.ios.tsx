@@ -2,7 +2,7 @@ import {Group, List as SwiftUIList} from '@expo/ui/swift-ui'
 import {listRowSeparator, listStyle, type ModifierConfig, refreshable} from '@expo/ui/swift-ui/modifiers'
 import {useMemo} from 'react'
 
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import type {ListComponent, ListProps} from './list.types'
 
 /**

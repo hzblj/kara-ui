@@ -9,7 +9,7 @@ import {testID as testIdModifier, width as widthModifier} from '@expo/ui/jetpack
 import {useAccessibilityModifiers, useSxModifiers} from '@hzblj/kara-sx'
 import {spacing, useAppTheme} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import {Icon} from '../icon'
 import type {ButtonComponent, ButtonProps} from './button.types'
 import {buttonTokens, contentOnTint} from './button-tokens'

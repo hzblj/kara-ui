@@ -1,6 +1,6 @@
 import {DisclosureGroup} from '@expo/ui/swift-ui'
 
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import type {CollapsibleComponent, CollapsibleProps} from './collapsible.types'
 
 export const Collapsible: CollapsibleComponent = ({

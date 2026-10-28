@@ -5,9 +5,9 @@ import {AccessibilityInfo, Platform} from 'react-native'
 import {type EntryExitAnimationFunction, withTiming} from 'react-native-reanimated'
 
 import {Box} from '../../atoms/box'
+import {RnGlyph} from '../../atoms/glyph'
 import {Pressable} from '../../atoms/pressable'
 import {RnText} from '../../atoms/rn-text'
-import {RnGlyph} from '../../glyph'
 import type {SnackbarAnimation, SnackbarComponent, SnackbarDuration, SnackbarProps} from './snackbar.types'
 
 /** Material's `SnackbarDuration.Short` and `Long`. */

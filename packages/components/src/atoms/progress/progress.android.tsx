@@ -4,7 +4,7 @@ import {useAccessibilityModifiers} from '@hzblj/kara-sx'
 import {useAppTheme, withOpacity} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
 
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import type {ProgressComponent, ProgressProps} from './progress.types'
 
 /**

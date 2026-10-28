@@ -8,7 +8,7 @@ import {HStack} from '../../atoms/h-stack'
 import {Icon} from '../../atoms/icon'
 import {Text} from '../../atoms/text'
 import {VStack} from '../../atoms/v-stack'
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import type {SwipeAction, SwipeActionsComponent, SwipeActionsProps} from './swipe-actions.types'
 
 /** A Material 3 Expressive wide icon button: wider than tall, a stadium, the label under it. */

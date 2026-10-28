@@ -1,7 +1,7 @@
 import {AlertDialog, Text as ComposeText, TextButton} from '@expo/ui/jetpack-compose'
 import {useAppTheme} from '@hzblj/kara-theme'
 
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import type {AlertComponent, AlertProps} from './alert.types'
 
 /**

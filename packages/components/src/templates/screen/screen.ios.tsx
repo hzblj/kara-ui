@@ -3,7 +3,7 @@ import {dynamicTypeSize} from '@expo/ui/swift-ui/modifiers'
 import {useSxModifiers} from '@hzblj/kara-sx'
 import {MAX_DYNAMIC_TYPE_SIZE, useAppTheme} from '@hzblj/kara-theme'
 import {StyleSheet} from 'react-native'
-import {HostBoundary} from '../../host-context'
+import {HostBoundary} from '../../hooks/host-context'
 import type {ScreenComponent, ScreenProps} from './screen.types'
 
 /**

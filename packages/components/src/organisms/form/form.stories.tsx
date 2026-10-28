@@ -3,7 +3,7 @@ import {fn} from 'storybook/test'
 
 import {Switch} from '../../atoms/switch'
 import {TextField} from '../../atoms/text-field'
-import {insideIslandOfHeight} from '../../story-decorators'
+import {insideIslandOfHeight} from '../../utils/story-decorators'
 import {Form} from './form'
 
 /** `children` is `null` here on purpose — see `list.stories.tsx`; the sections come from the render. */

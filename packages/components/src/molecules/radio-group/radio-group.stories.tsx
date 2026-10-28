@@ -1,7 +1,7 @@
 import type {Meta, StoryObj} from '@storybook/react-native'
 import {useArgs} from 'storybook/preview-api'
 
-import {insideIsland} from '../../story-decorators'
+import {insideIsland} from '../../utils/story-decorators'
 import {RadioGroup} from './radio-group'
 import type {RadioGroupProps} from './radio-group.types'
 

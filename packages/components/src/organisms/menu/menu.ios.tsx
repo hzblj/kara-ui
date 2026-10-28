@@ -7,7 +7,7 @@ import type {ReactNode} from 'react'
 
 import {Icon} from '../../atoms/icon'
 import {ZStack} from '../../atoms/z-stack'
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import type {MenuComponent, MenuProps} from './menu.types'
 import {isIconOnly} from './menu-parts'
 

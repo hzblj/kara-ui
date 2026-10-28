@@ -2,7 +2,7 @@ import {type TextVariant, textStyles} from '@hzblj/kara-theme'
 import type {Meta, StoryObj} from '@storybook/react-native'
 import {useEffect, useState} from 'react'
 
-import {insideIsland} from '../../story-decorators'
+import {insideIsland} from '../../utils/story-decorators'
 import {VStack} from '../v-stack'
 import {Text} from './text'
 

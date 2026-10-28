@@ -3,7 +3,7 @@ import {type ModifierConfig, refreshable} from '@expo/ui/swift-ui/modifiers'
 import {useSxModifiers} from '@hzblj/kara-sx'
 import {spacing} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import type {ScrollViewComponent, ScrollViewProps} from './scroll-view.types'
 
 export const ScrollView: ScrollViewComponent = ({

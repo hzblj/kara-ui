@@ -5,7 +5,7 @@ import {useAppTheme} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
 import {StyleSheet} from 'react-native'
 
-import {useInsideHost} from '../../host-context'
+import {useInsideHost} from '../../hooks/host-context'
 import type {ActivityIndicatorComponent, ActivityIndicatorProps} from './activity-indicator.types'
 
 /** Material's 48dp for a screen; half of it in a row, about where React Native's small spinner sat. */

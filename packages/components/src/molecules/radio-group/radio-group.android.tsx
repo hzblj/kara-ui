@@ -2,7 +2,7 @@ import {Text as ComposeText, RadioButton, Row} from '@expo/ui/jetpack-compose'
 import {clickable, fillMaxWidth} from '@expo/ui/jetpack-compose/modifiers'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {VStack} from '../../atoms/v-stack'
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import type {RadioGroupComponent, RadioGroupProps} from './radio-group.types'
 
 /**

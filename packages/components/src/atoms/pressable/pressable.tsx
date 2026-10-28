@@ -14,7 +14,7 @@ import {useCallback, useMemo} from 'react'
 import {Platform, Pressable as RNPressable, type ViewStyle} from 'react-native'
 import Animated, {useAnimatedStyle, useSharedValue, withSpring, withTiming} from 'react-native-reanimated'
 
-import {splitForRipple} from '../../ripple-clip'
+import {splitForRipple} from '../../utils/ripple-clip'
 import type {PressableComponent, PressableProps} from './pressable.types'
 
 /**

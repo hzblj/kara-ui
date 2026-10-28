@@ -2,7 +2,7 @@ import {Badge as ComposeBadge, Text as ComposeText} from '@expo/ui/jetpack-compo
 import {testID as testIdModifier} from '@expo/ui/jetpack-compose/modifiers'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import type {BadgeComponent, BadgeProps} from './badge.types'
 import {BADGE_TOKENS} from './badge-tokens'
 

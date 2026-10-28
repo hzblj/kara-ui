@@ -2,7 +2,7 @@ import type {Meta, StoryObj} from '@storybook/react-native'
 import {fn} from 'storybook/test'
 
 import {ListItem} from '../../molecules/list-item'
-import {insideIslandOfHeight} from '../../story-decorators'
+import {insideIslandOfHeight} from '../../utils/story-decorators'
 import {List} from './list'
 
 const settle = () => new Promise<void>(resolve => setTimeout(resolve, 1200))

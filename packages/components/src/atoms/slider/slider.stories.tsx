@@ -2,7 +2,7 @@ import type {Meta, StoryObj} from '@storybook/react-native'
 import {useState} from 'react'
 import {useArgs} from 'storybook/preview-api'
 
-import {insideIsland} from '../../story-decorators'
+import {insideIsland} from '../../utils/story-decorators'
 import {Text} from '../text'
 import {VStack} from '../v-stack'
 import {Slider} from './slider'

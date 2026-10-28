@@ -1,9 +1,9 @@
+import {Glyph} from '../../atoms/glyph'
 import {HStack} from '../../atoms/h-stack'
 import {Spacer} from '../../atoms/spacer'
 import {Text} from '../../atoms/text'
 import {VStack} from '../../atoms/v-stack'
-import {Glyph} from '../../glyph'
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import type {RadioGroupComponent, RadioGroupProps} from './radio-group.types'
 
 export const RadioGroup: RadioGroupComponent = ({

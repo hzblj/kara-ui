@@ -13,13 +13,16 @@ and `@hzblj/kara-native` — through their entry points only.
 | `src/atoms/stagger/` | `Stagger`: a `Box` whose children arrive one after another. Only the children new in a render take turns (a first batch, the next page), a single one added later arrives at once. A motion component child is cloned with the props, any other is wrapped in a `Box`. |
 | `src/atoms/rn-*` | The React Native tier — `RnView`, `RnText`, `RnIcon`, `RnScrollView`, `RnFlatList`, `RnSectionList`. Plain RN views with the same `sx` surface, for rows that host native views. |
 | `src/atoms/glass-view/` | A React Native-tier atom over the native module: iOS 26 Liquid Glass around RN children (a translucent capsule elsewhere). |
+| `src/atoms/glyph/` | `Glyph`, `RnGlyph`, `GlyphButton`: the few glyphs kara's own components draw. Internal: not in `atoms/index.ts`, so no story or docs page. |
 | `src/molecules/` | Label, LabeledContent, ListItem (and `RnListItem`, its React Native-tier row for long lists), Link, SearchBar, EmptyState, Collapsible, Pager, RadioGroup, Stepper, Tooltip — and over the native module: NavigationBar, ScrollEdgeContainer, RnTooltip. |
 | `src/organisms/` | Sheet (TrueSheet with a native header: `Sheet.Header`, `Sheet.ScrollView`, `useSheetScroll`), ActionSheet, Alert, Menu, Form, SwipeActions, Snackbar — and over the native module: ContextMenu (long-press on React Native content, with a custom preview on iOS), FabMenu. (`Tabs` lives in `@hzblj/kara-router`, behind the `@hzblj/kara-ui/router` entry, so the main entry never imports expo-router.) |
+| `src/organisms/header/` | The `/header` entry, apart from `organisms/index.ts`: a native stack screen's header for React Navigation and Expo Router alike — `useHeader` / `useHeaderOptions` (titles, search and actions on both sides), `useHeroHeader`, `useHeaderSearch`, `useStackScreenOptions` and its presets, `HeaderInset`, `useHeaderBarInset`, `useHeaderScrollToTop`. Not in the main entry, which must not need `react-native-screens`. |
 | `src/templates/screen/` | `Screen` — the full-bleed native host every screen starts with. |
-| `src/header/` | The `/header` entry: a native stack screen's header for React Navigation and Expo Router alike — `useHeader` / `useHeaderOptions` (titles, search and actions on both sides), `useHeroHeader`, `useHeaderSearch`, `useStackScreenOptions` and its presets, `HeaderInset`, `useHeaderBarInset`, `useHeaderScrollToTop`. Not in the main entry, which must not need `react-native-screens`. |
-| `src/host-context.tsx` | `HostBoundary` + `useHostGuard`: dev warning when a native atom renders outside `Screen`/`Island`. `useInsideHost`: whether one already encloses it, for the atoms that otherwise bring their own. |
-| `src/story-decorators.tsx` | `insideIsland` / `insideIslandOfHeight` — the host a story mounts its subject in. Internal: not exported from `index.ts`. |
-| `src/use-refresh-state.ts` | Bridges SwiftUI's promise-driven `refreshable` and Compose's controlled `PullToRefreshBox` into one async `onRefresh`. |
+| `src/hooks/` | Internal hooks. `host-context.tsx`: `HostBoundary` + `useHostGuard` (dev warning when a native atom renders outside `Screen`/`Island`) and `useInsideHost` (whether one already encloses it, for the atoms that otherwise bring their own). `use-refresh-state.ts`: SwiftUI's promise-driven `refreshable` and Compose's controlled `PullToRefreshBox` as one async `onRefresh`. `use-stack-modifiers.ts`: the Compose stacks' modifier order. |
+| `src/utils/` | Internal helpers. `ripple-clip.ts` (`splitForRipple`), `tap-modifiers.ts` (a SwiftUI stack's `onPress` over its whole frame), `story-decorators.tsx` (`insideIsland` / `insideIslandOfHeight`, the host a story mounts its subject in; never published). |
+
+Nothing loose sits in `src/` besides `index.ts`: a component goes into its tier, a hook shared by several into
+`hooks/`, a plain function into `utils/`. A helper only one component uses stays in that component's folder.
 
 ## Component shape
 
@@ -80,7 +83,7 @@ button/
 ```
 
 **A story mounts its subject in a host, or it shows nothing.** Native atoms take
-`decorators: [insideIsland]` from `story-decorators.tsx`; `insideIslandOfHeight(n)` is for a
+`decorators: [insideIsland]` from `utils/story-decorators.tsx`; `insideIslandOfHeight(n)` is for a
 subtree containing `RnView`, and for native views with no intrinsic height (`ScrollView`, `Pager`).
 The React Native tier — `Box`, the `Rn*` atoms, `Chip`, `Avatar`, `Skeleton`, `Snackbar`,
 `SearchBar`, `SegmentedControl`, `Picker`, `DatePicker`, the lists — takes **no** decorator.
@@ -130,7 +133,7 @@ sync and a native rebuild of the app; a new `.ios.tsx`/`.android.tsx` caller nee
 
 **Every native component that lays out a box takes `AccessibilityProps`** (`@hzblj/kara-sx`): split them off with
 `splitAccessibility`, turn them into modifiers with `useAccessibilityModifiers(props, pressable)` and place those as
-the engine's CLAUDE.md says (last on iOS, after the `clickable` on Android; `use-stack-modifiers.ts` does it for the
+the engine's CLAUDE.md says (last on iOS, after the `clickable` on Android; `hooks/use-stack-modifiers.ts` does it for the
 Compose stacks). A React Native tier component maps the same props with `accessibilityProps`. A pressable thing is a
 `button` unless its props say otherwise, and reads its children as one element.
 
@@ -193,8 +196,8 @@ exports `haptics`, `useHapticFeedback` or the `Haptic` type: an app imports them
 
 **An Android ripple only stops at rounded corners if a parent clips it.** `android_ripple` is drawn as the pressable's
 foreground, which its own `overflow: hidden` does not clip. A shaped pressable splits its style with `splitForRipple`
-(`src/ripple-clip.ts`): the shape, background and outer layout on an outer clipping view, the padding and content layout
-on the pressable inside. Compose stacks avoid the problem by ordering: `use-stack-modifiers.ts` puts `clickable` after
+(`src/utils/ripple-clip.ts`): the shape, background and outer layout on an outer clipping view, the padding and content layout
+on the pressable inside. Compose stacks avoid the problem by ordering: `hooks/use-stack-modifiers.ts` puts `clickable` after
 the clip and background and before the padding, so the ripple fills the shape edge to edge.
 
 ## Sheets
@@ -233,7 +236,7 @@ would lift its content inside it as well. A `Screen` defaults to `none`.
 
 ## Header
 
-**`src/header/` imports no navigation library.** It builds native-stack options (`HeaderOptions`,
+**`src/organisms/header/` imports no navigation library.** It builds native-stack options (`HeaderOptions`,
 `StackScreenOptions`, structural copies of the native stack's own types) and the screen applies them: spread into
 Expo Router's `<Stack.Screen options>` or a React Navigation screen's `options`, or through `useHeader(navigation, …)`,
 which takes either library's `useNavigation()` and calls `setOptions` before the first paint. Expo Router's stack is a
@@ -303,7 +306,7 @@ image on iOS, a vector drawable on Android.
 list row wants rather than a host per row. Same props, same asset, same size. An Android `RnGlyph` draws its drawable
 through the same package's `NativeIconView`; an iOS one is kara's own `IconView` (an SF Symbol).
 
-**`src/glyph/` is internal.** The handful of glyphs kara's own chrome draws — a search field's magnifier, a row's
+**`src/atoms/glyph/` is internal.** The handful of glyphs kara's own chrome draws — a search field's magnifier, a row's
 chevron, a stepper's plus and minus, a bar's back and close — come from `GLYPHS` in `@hzblj/kara-native`: SF Symbols
 on iOS, Material Symbols drawables the module ships on Android. `Glyph`, `RnGlyph` and `GlyphButton` are not
 exported; a component that needs a new glyph adds it to `packages/native/glyphs.json`. App-facing props never take a

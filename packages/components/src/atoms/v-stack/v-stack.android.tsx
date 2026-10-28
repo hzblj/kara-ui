@@ -1,7 +1,7 @@
 import {Column} from '@expo/ui/jetpack-compose'
 import {spacing} from '@hzblj/kara-theme'
-import {useHostGuard} from '../../host-context'
-import {useStackModifiers} from '../../use-stack-modifiers'
+import {useHostGuard} from '../../hooks/host-context'
+import {useStackModifiers} from '../../hooks/use-stack-modifiers'
 import type {VStackAlign, VStackComponent, VStackProps} from './v-stack.types'
 
 const ALIGNMENT = {

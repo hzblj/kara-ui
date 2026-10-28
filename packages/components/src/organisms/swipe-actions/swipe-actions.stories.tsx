@@ -3,7 +3,7 @@ import {fn} from 'storybook/test'
 
 import {List} from '../../atoms/list'
 import {ListItem} from '../../molecules/list-item'
-import {insideIsland} from '../../story-decorators'
+import {insideIsland} from '../../utils/story-decorators'
 import {SwipeActions} from './swipe-actions'
 
 /** `children` is `null` here on purpose — see `list.stories.tsx`; the rows come from the render. */

@@ -5,7 +5,7 @@ import {fn} from 'storybook/test'
 import {HStack} from '../../atoms/h-stack'
 import {Text} from '../../atoms/text'
 import {VStack} from '../../atoms/v-stack'
-import {insideIsland} from '../../story-decorators'
+import {insideIsland} from '../../utils/story-decorators'
 import {Alert} from './alert'
 import type {AlertProps} from './alert.types'
 

@@ -8,7 +8,7 @@ import {
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
 
-import {useInsideHost} from '../../host-context'
+import {useInsideHost} from '../../hooks/host-context'
 import type {DatePickerComponent, DatePickerMode, DatePickerProps} from './date-picker.types'
 
 const COMPONENTS = {

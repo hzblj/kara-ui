@@ -1,6 +1,6 @@
 import type {Meta, StoryObj} from '@storybook/react-native'
 
-import {insideIsland} from '../../story-decorators'
+import {insideIsland} from '../../utils/story-decorators'
 import {HStack} from '../h-stack'
 import {VStack} from '../v-stack'
 import {Progress} from './progress'

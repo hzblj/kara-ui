@@ -3,7 +3,7 @@ import {testID as testIdModifier} from '@expo/ui/jetpack-compose/modifiers'
 import {splitAccessibility, useAccessibilityModifiers, useSxModifiers} from '@hzblj/kara-sx'
 import {radii, useAppTheme} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import type {SurfaceComponent, SurfaceProps} from './surface.types'
 
 const cornerRadii = (radius: number) => ({bottomEnd: radius, bottomStart: radius, topEnd: radius, topStart: radius})

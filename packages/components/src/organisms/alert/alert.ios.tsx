@@ -1,7 +1,7 @@
 import {Button, Spacer, Alert as SwiftUIAlert, Text as SwiftUIText} from '@expo/ui/swift-ui'
 import {frame} from '@expo/ui/swift-ui/modifiers'
 
-import {useHostGuard} from '../../host-context'
+import {useHostGuard} from '../../hooks/host-context'
 import type {AlertComponent, AlertProps} from './alert.types'
 
 /**

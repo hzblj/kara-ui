@@ -6,7 +6,7 @@ import {DrawableIcon, NativeImage} from '@hzblj/kara-native/jetpack-compose'
 import {spacing as spacingTokens, type TextVariant, useAppTheme} from '@hzblj/kara-theme'
 import {useCallback, useMemo} from 'react'
 
-import {useInsideHost} from '../../host-context'
+import {useInsideHost} from '../../hooks/host-context'
 import {HStack} from '../h-stack'
 import type {SegmentedControlComponent, SegmentedControlProps, SegmentedControlSegment} from './segmented-control.types'
 import {imageUri, segmentOf} from './segments'

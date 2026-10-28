@@ -10,7 +10,7 @@ import {
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useCallback, useMemo} from 'react'
 
-import {useInsideHost} from '../../host-context'
+import {useInsideHost} from '../../hooks/host-context'
 import type {PickerComponent, PickerProps} from './picker.types'
 
 /**
