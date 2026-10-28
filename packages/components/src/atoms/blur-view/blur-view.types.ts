@@ -1,6 +1,7 @@
 import type {BlurMaterial, BlurVibrancy} from '@hzblj/kara-native/swift-ui'
 import type {ResponsiveViewSx} from '@hzblj/kara-sx'
 import type {ReactNode} from 'react'
+import type {SharedValue} from 'react-native-reanimated'
 
 export type {BlurMaterial, BlurVibrancy} from '@hzblj/kara-native/swift-ui'
 
@@ -19,6 +20,13 @@ export type BlurViewProps = ResponsiveViewSx & {
   appearance?: 'dark' | 'light'
   /** React Native content, over the material. */
   children?: ReactNode
+  /**
+   * How far the material has come in, from 0 (none) to 1 (the full material), `1` by default. iOS reaches it the way
+   * UIKit fades a material in (a paused effect animation at that fraction), Android scales the blur, the saturation and
+   * the surface by it. A shared value animates it on the UI thread, a bar's background fading in as content scrolls
+   * under it; a number sets it.
+   */
+  intensity?: number | SharedValue<number>
   /** How much of what lies behind shows through, from `ultraThin` (most) to `ultraThick` (least). `regular` by default. */
   material?: BlurMaterial
   /** Test identifier, forwarded to the view. */

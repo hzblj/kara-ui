@@ -97,6 +97,17 @@ class BackdropBlurView(context: Context, appContext: AppContext) : ExpoView(cont
       applyEffect()
     }
 
+  /**
+   * How far the material has come in, 0 to 1: the blur's radius, the saturation's lift and the tint's alpha all scale
+   * by it, so animating it fades the material in the way iOS's intensity does.
+   */
+  var intensity: Float = 1f
+    set(value) {
+      field = value
+      applyEffect()
+      invalidate()
+    }
+
   private val preDraw = ViewTreeObserver.OnPreDrawListener {
     recordBackdrop()
     true
@@ -138,9 +149,11 @@ class BackdropBlurView(context: Context, appContext: AppContext) : ExpoView(cont
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
       return
     }
-    val blur = if (blurRadius > 0f) RenderEffect.createBlurEffect(blurRadius, blurRadius, Shader.TileMode.CLAMP) else null
-    val saturate = if (saturation != 1f) {
-      RenderEffect.createColorFilterEffect(ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(saturation) }))
+    val radius = blurRadius * intensity
+    val lift = 1f + (saturation - 1f) * intensity
+    val blur = if (radius > 0f) RenderEffect.createBlurEffect(radius, radius, Shader.TileMode.CLAMP) else null
+    val saturate = if (lift != 1f) {
+      RenderEffect.createColorFilterEffect(ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(lift) }))
     } else {
       null
     }
@@ -228,7 +241,7 @@ class BackdropBlurView(context: Context, appContext: AppContext) : ExpoView(cont
     if (blurred) {
       canvas.drawRenderNode(node!!)
     }
-    tintPaint.color = if (blurred) tint else fallbackTint
+    tintPaint.color = scaleAlpha(if (blurred) tint else fallbackTint, intensity)
     if (Color.alpha(tintPaint.color) > 0) {
       canvas.drawRect(bounds, tintPaint)
     }
@@ -241,3 +254,6 @@ class BackdropBlurView(context: Context, appContext: AppContext) : ExpoView(cont
     }
   }
 }
+
+private fun scaleAlpha(color: Int, factor: Float): Int =
+  Color.argb((Color.alpha(color) * factor.coerceIn(0f, 1f)).toInt(), Color.red(color), Color.green(color), Color.blue(color))

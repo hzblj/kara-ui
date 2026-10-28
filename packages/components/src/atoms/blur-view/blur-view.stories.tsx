@@ -18,9 +18,10 @@ const Backdrop = () => (
 )
 
 const meta = {
-  args: {borderRadius: 'large', material: 'regular', px: 's16', py: 's12'},
+  args: {borderRadius: 'large', intensity: 1, material: 'regular', px: 's16', py: 's12'},
   argTypes: {
     appearance: {control: 'select', options: [undefined, 'light', 'dark']},
+    intensity: {control: {max: 1, min: 0, step: 0.05, type: 'range'}},
     material: {control: 'select', options: MATERIALS},
     vibrancy: {control: 'select', options: [undefined, 'primary', 'secondary', 'tertiary', 'quaternary', 'fill']},
   },
@@ -58,3 +59,5 @@ export const UltraThick: Story = {args: {material: 'ultraThick'}}
 export const Vibrant: Story = {args: {vibrancy: 'secondary'}}
 
 export const DarkOverAnything: Story = {args: {appearance: 'dark', material: 'thin'}}
+
+export const HalfIntensity: Story = {args: {intensity: 0.5, material: 'thick'}}

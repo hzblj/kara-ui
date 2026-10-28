@@ -59,6 +59,9 @@ class KaraUIModule : Module() {
       Prop("cornerRadius") { view: BackdropBlurView, radius: Float ->
         view.cornerRadius = radius * view.resources.displayMetrics.density
       }
+      Prop("intensity") { view: BackdropBlurView, intensity: Float? ->
+        view.intensity = (intensity ?: 1f).coerceIn(0f, 1f)
+      }
       Prop("glassTint") { view: BackdropBlurView, color: Color? ->
         view.tint = color?.toArgb() ?: Color.TRANSPARENT
       }
