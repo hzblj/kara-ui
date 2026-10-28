@@ -13,6 +13,8 @@ export type BlurViewProps = {
   colorScheme?: 'dark' | 'light'
   /** In points, continuous. It clips the children too. */
   cornerRadius?: number
+  /** How far the material has come in, 0 to 1. 1 by default. */
+  intensity?: number
   material?: BlurMaterial
   style?: StyleProp<ViewStyle>
   testID?: string

@@ -15,6 +15,9 @@ extension BlurView {
       Prop("cornerRadius") { (view: BlurView, radius: Double?) in
         view.cornerRadius = CGFloat(radius ?? 0)
       }
+      Prop("intensity") { (view: BlurView, intensity: Double?) in
+        view.intensity = CGFloat(min(max(intensity ?? 1, 0), 1))
+      }
     }
   }
 }

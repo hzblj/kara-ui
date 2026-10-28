@@ -10,10 +10,12 @@ import expo.modules.kara.ui.icon.DrawableIconView
 import expo.modules.kara.ui.images.NativeImageView
 import expo.modules.kara.ui.modifiers.ModifierRegistration
 import expo.modules.kara.ui.ripple.RippleConfigurationView
+import expo.modules.kara.ui.searchfield.SearchFieldView
 import expo.modules.kara.ui.swipe.SwipeActionsBoxView
 import expo.modules.kara.ui.text.AnimatedTextView
 import expo.modules.kara.ui.tooltip.TooltipBoxView
 import expo.modules.kara.ui.topappbar.TopAppBarView
+import expo.modules.kotlin.functions.Queues
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 
@@ -57,6 +59,9 @@ class KaraUIModule : Module() {
       Prop("cornerRadius") { view: BackdropBlurView, radius: Float ->
         view.cornerRadius = radius * view.resources.displayMetrics.density
       }
+      Prop("intensity") { view: BackdropBlurView, intensity: Float? ->
+        view.intensity = (intensity ?: 1f).coerceIn(0f, 1f)
+      }
       Prop("glassTint") { view: BackdropBlurView, color: Color? ->
         view.tint = color?.toArgb() ?: Color.TRANSPARENT
       }
@@ -82,6 +87,26 @@ class KaraUIModule : Module() {
     }
 
     View(RippleConfigurationView::class)
+
+    View(SearchFieldView::class) {
+      Events("onQueryChange", "onSearchFocusChange", "onSearchSubmit")
+
+      AsyncFunction("clearQuery") { view: SearchFieldView ->
+        view.clearQuery()
+      }.runOnQueue(Queues.MAIN)
+
+      AsyncFunction("setQuery") { view: SearchFieldView, text: String ->
+        view.setQuery(text)
+      }.runOnQueue(Queues.MAIN)
+
+      AsyncFunction("focusField") { view: SearchFieldView ->
+        view.focusField()
+      }.runOnQueue(Queues.MAIN)
+
+      AsyncFunction("blurField") { view: SearchFieldView ->
+        view.blurField()
+      }.runOnQueue(Queues.MAIN)
+    }
 
     View(SwipeActionsBoxView::class) {
       Events("onOpenChange")

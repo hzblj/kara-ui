@@ -11,10 +11,17 @@ import UIKit
  Without one they mount into the blur's `contentView` and keep their colours. The effect view is the shape — its
  continuous corner radius clips the material and the children alike. The appearance is the app theme's rather than
  the trait the view inherits, the same as `GlassView`, unless the caller pins one.
+
+ `intensity` (0 to 1) is how far the material has come in: UIKit has no blur radius to set, so below 1 the effect is
+ the end state of a paused `UIViewPropertyAnimator` from no effect, at that fraction — the way UIKit itself fades a
+ material in. Only the fraction moves while the intensity animates; the animator is rebuilt when the material changes,
+ and when the view returns to a window, since UIKit stops a paused animator that leaves the screen.
  */
 public final class BlurView: ExpoView {
   private let blurView = UIVisualEffectView(effect: nil)
   private let vibrancyView = UIVisualEffectView(effect: nil)
+  private var blurEffect = UIBlurEffect(style: .systemMaterial)
+  private var intensityAnimator: UIViewPropertyAnimator?
 
   var material = "regular" {
     didSet {
@@ -41,6 +48,13 @@ public final class BlurView: ExpoView {
     didSet { setNeedsLayout() }
   }
 
+  var intensity: CGFloat = 1 {
+    didSet {
+      guard intensity != oldValue else { return }
+      applyIntensity()
+    }
+  }
+
   public required init(appContext: AppContext? = nil) {
     super.init(appContext: appContext)
     blurView.clipsToBounds = true
@@ -48,6 +62,17 @@ public final class BlurView: ExpoView {
     blurView.contentView.addSubview(vibrancyView)
     addSubview(blurView)
     applyEffects()
+  }
+
+  deinit {
+    intensityAnimator?.stopAnimation(true)
+  }
+
+  public override func didMoveToWindow() {
+    super.didMoveToWindow()
+    if window != nil, intensity < 1 {
+      rebuildIntensityAnimator()
+    }
   }
 
   public override func layoutSubviews() {
@@ -82,7 +107,7 @@ public final class BlurView: ExpoView {
 
   private func applyEffects() {
     let blur = UIBlurEffect(style: BlurView.blurStyle(for: material))
-    blurView.effect = blur
+    blurEffect = blur
     if let vibrancy {
       vibrancyView.effect = UIVibrancyEffect(blurEffect: blur, style: BlurView.vibrancyStyle(for: vibrancy))
       vibrancyView.isHidden = false
@@ -90,6 +115,38 @@ public final class BlurView: ExpoView {
       vibrancyView.effect = nil
       vibrancyView.isHidden = true
     }
+    rebuildIntensityAnimator()
+  }
+
+  private func applyIntensity() {
+    guard intensity < 1 else {
+      rebuildIntensityAnimator()
+      return
+    }
+    guard let animator = intensityAnimator else {
+      rebuildIntensityAnimator()
+      return
+    }
+    animator.fractionComplete = max(0, intensity)
+  }
+
+  private func rebuildIntensityAnimator() {
+    intensityAnimator?.stopAnimation(true)
+    intensityAnimator = nil
+
+    guard intensity < 1 else {
+      blurView.effect = blurEffect
+      return
+    }
+
+    blurView.effect = nil
+    let effect = blurEffect
+    let animator = UIViewPropertyAnimator(duration: 1, curve: .linear) { [weak blurView] in
+      blurView?.effect = effect
+    }
+    animator.pausesOnCompletion = true
+    animator.fractionComplete = max(0, intensity)
+    intensityAnimator = animator
   }
 
   /// SwiftUI's `Material` names over UIKit's adaptive styles; `overrideUserInterfaceStyle` picks light or dark.

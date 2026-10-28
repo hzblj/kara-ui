@@ -6,6 +6,7 @@ its `package.json` is where the public entry points are defined.
 | Entry | Re-exports |
 | --- | --- |
 | `@hzblj/kara-ui` | `@hzblj/kara-components`, `@hzblj/kara-sx`, `@hzblj/kara-theme` |
+| `@hzblj/kara-ui/header` | `@hzblj/kara-components/header` — `useHeader`, `useHeaderOptions`, `useHeroHeader`, `useHeaderSearch`, `useStackScreenOptions`, `HeaderInset`, `useHeaderBarInset`, `useHeaderScrollToTop` |
 | `@hzblj/kara-ui/router` | `@hzblj/kara-router` — `Tabs`, `navigationTheme`, `ZoomTransition` |
 | `@hzblj/kara-ui/swift-ui`, `/jetpack-compose` | `@hzblj/kara-native/swift-ui`, `/jetpack-compose` |
 | `@hzblj/kara-ui/app.plugin.js` | `@hzblj/kara-expo-plugin` |
@@ -17,4 +18,5 @@ not here. The root `README.md` is the same page plus the packages table and the 
 block's README keeps the same header, says to install `@hzblj/kara-ui` instead, and links to its docs pages.
 
 **Peers are the union of the building blocks' peers**, so a consumer installing only this package is told what to
-install. `expo-router` is optional — only `/router` needs it.
+install. `expo-router` is optional — only `/router` needs it — and so are `react-native-screens` and
+`react-native-safe-area-context`, which only `/header` needs (every native stack has them already).

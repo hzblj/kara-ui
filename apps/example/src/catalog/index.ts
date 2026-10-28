@@ -1,5 +1,6 @@
 export * from './catalog'
 export * from './component-screen'
 export * from './components-screen'
+export * from './header'
 export * from './shot'
 export * from './zoom'

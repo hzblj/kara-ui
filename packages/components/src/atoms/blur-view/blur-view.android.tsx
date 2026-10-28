@@ -3,6 +3,7 @@ import {useSx} from '@hzblj/kara-sx'
 import {type ColorToken, type OpacitySize, useAppTheme, withOpacity} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
 import {StyleSheet} from 'react-native'
+import Animated, {isSharedValue, useAnimatedProps} from 'react-native-reanimated'
 
 import type {BlurMaterial, BlurViewComponent, BlurViewProps} from './blur-view.types'
 
@@ -28,6 +29,8 @@ const MATERIALS: Record<BlurMaterial, MaterialSpec> = {
   ultraThin: {blur: 20, fill: 'surface.base', opacity: {dark: 'o50', light: 'o25'}, saturation: 1.8},
 }
 
+const AnimatedBackdropBlurView = Animated.createAnimatedComponent(BackdropBlurView)
+
 /**
  * The materials in Android's terms: kara's `BackdropBlurView` — what lies behind, blurred and saturated — under a
  * Material tonal surface that gets higher and more opaque as the material thickens. Pinned to the appearance the app
@@ -36,6 +39,7 @@ const MATERIALS: Record<BlurMaterial, MaterialSpec> = {
 export const BlurView: BlurViewComponent = ({
   appearance,
   children,
+  intensity = 1,
   material = 'regular',
   testID,
   vibrancy: _vibrancy,
@@ -52,12 +56,35 @@ export const BlurView: BlurViewComponent = ({
     return {cornerRadius: typeof borderRadius === 'number' ? borderRadius : 0, style: rest}
   }, [resolved])
 
+  const animatedProps = useAnimatedProps(() => ({
+    intensity: isSharedValue<number>(intensity) ? intensity.value : intensity,
+  }))
+  const glassTint = withOpacity(base, spec.opacity[dark ? 'dark' : 'light'])
+
+  if (isSharedValue<number>(intensity)) {
+    return (
+      <AnimatedBackdropBlurView
+        animatedProps={animatedProps}
+        blurRadius={spec.blur}
+        cornerRadius={cornerRadius}
+        fallbackTint={withOpacity(base, 'o95')}
+        glassTint={glassTint}
+        saturation={spec.saturation}
+        style={style}
+        testID={testID}
+      >
+        {children}
+      </AnimatedBackdropBlurView>
+    )
+  }
+
   return (
     <BackdropBlurView
       blurRadius={spec.blur}
       cornerRadius={cornerRadius}
       fallbackTint={withOpacity(base, 'o95')}
-      glassTint={withOpacity(base, spec.opacity[dark ? 'dark' : 'light'])}
+      glassTint={glassTint}
+      intensity={intensity}
       saturation={spec.saturation}
       style={style}
       testID={testID}

@@ -12,13 +12,21 @@ const MATCH_HEIGHT_ONLY = {horizontal: false, vertical: true}
 
 const MATCH_NEITHER = {horizontal: false, vertical: false}
 
-export const Island: IslandComponent = ({children, matchContents = true, style, testID, ...sx}: IslandProps) => {
+export const Island: IslandComponent = ({
+  children,
+  ignoreSafeArea = 'keyboard',
+  matchContents = true,
+  style,
+  testID,
+  ...sx
+}: IslandProps) => {
   const theme = useAppTheme()
   const resolved = useSx(sx)
 
   return (
     <Host
       colorScheme={theme.dark ? 'dark' : 'light'}
+      ignoreSafeArea={ignoreSafeArea === 'none' ? undefined : ignoreSafeArea}
       matchContents={matchContents ? MATCH_HEIGHT_ONLY : MATCH_NEITHER}
       modifiers={DYNAMIC_TYPE_CAP}
       seedColor={theme.materialSeed}

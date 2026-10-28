@@ -11,6 +11,7 @@ const MATCH_NEITHER = {horizontal: false, vertical: false}
 
 export const Island: IslandComponent = ({
   children,
+  ignoreSafeArea = 'keyboard',
   matchContents = true,
   style,
   testID: _testID,
@@ -22,6 +23,7 @@ export const Island: IslandComponent = ({
   return (
     <Host
       colorScheme={theme.dark ? 'dark' : 'light'}
+      ignoreSafeAreaKeyboardInsets={ignoreSafeArea === 'all' || ignoreSafeArea === 'keyboard'}
       matchContents={matchContents ? MATCH_HEIGHT_ONLY : MATCH_NEITHER}
       seedColor={theme.materialSeed}
       style={style ? [resolved, style] : resolved}

@@ -12,7 +12,12 @@ import type {ScreenComponent, ScreenProps} from './screen.types'
  * screen, none under a navigation bar — the way a SwiftUI host keeps to the safe area. Compose would draw under it:
  * the app is edge to edge, and `Host` pads for nothing. The background still runs to the edge.
  */
-export const Screen: ScreenComponent = ({bg = 'surface.base', children, ignoreKeyboardInset, testID}: ScreenProps) => {
+export const Screen: ScreenComponent = ({
+  bg = 'surface.base',
+  children,
+  ignoreSafeArea = 'none',
+  testID,
+}: ScreenProps) => {
   const theme = useAppTheme()
   const frame = useRef<View>(null)
   const [statusBarOverlap, setStatusBarOverlap] = useState(0)
@@ -32,7 +37,7 @@ export const Screen: ScreenComponent = ({bg = 'surface.base', children, ignoreKe
     <View onLayout={onLayout} ref={frame} style={StyleSheet.absoluteFill} testID={testID}>
       <Host
         colorScheme={theme.dark ? 'dark' : 'light'}
-        ignoreSafeAreaKeyboardInsets={ignoreKeyboardInset}
+        ignoreSafeAreaKeyboardInsets={ignoreSafeArea === 'all' || ignoreSafeArea === 'keyboard'}
         seedColor={theme.materialSeed}
         style={StyleSheet.absoluteFill}
       >

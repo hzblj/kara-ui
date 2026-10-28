@@ -15,6 +15,8 @@ export type BackdropBlurViewProps = {
   hairlineColor?: ColorValue
   /** In dp. */
   hairlineWidth?: number
+  /** How far the material has come in, 0 to 1: scales the blur, the saturation's lift and the tint's alpha. 1 by default. */
+  intensity?: number
   /** Applied to the backdrop after the blur; 1 leaves it as it is, more lifts its colour the way iOS's materials do. */
   saturation?: number
   style?: StyleProp<ViewStyle>

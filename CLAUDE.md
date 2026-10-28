@@ -13,7 +13,7 @@ Every package has its own `CLAUDE.md` — read that one before touching it.
 | `packages/theme/` | `@hzblj/kara-theme` | Tokens, palette, typography, `ThemeConfig` overrides (`colors`, `fonts`, `materialSeed`, `dynamicColor`), the platform colour resolvers, `KaraProvider`, breakpoints. |
 | `packages/sx/` | `@hzblj/kara-sx` | The `sx` engine: one surface → SwiftUI modifiers, Compose modifiers or a React Native style. |
 | `packages/native/` | `@hzblj/kara-native` | The `KaraUI` Expo native module (Swift/Kotlin) and its raw bindings (`/swift-ui`, `/jetpack-compose`). |
-| `packages/components/` | `@hzblj/kara-components` | Atoms, molecules, organisms, `Screen` — and a story beside every component. |
+| `packages/components/` | `@hzblj/kara-components` | Atoms, molecules, organisms, `Screen` — and a story beside every component. Its `/header` entry builds a native stack screen's header for React Navigation and Expo Router alike. |
 | `packages/router/` | `@hzblj/kara-router` | `Tabs`, `navigationTheme` and `ZoomTransition` (kara's tokens over `@hzblj/expo-zoom-transition`), apart so nothing else imports expo-router. |
 | `packages/expo-plugin/` | `@hzblj/kara-expo-plugin` | The optional config plugin (`icons`, handed to `@hzblj/expo-native-icons`, and `iosSemanticColors`), compiled for Node. |
 | `packages/kara-ui/` | `@hzblj/kara-ui` | The umbrella consumers install: re-exports only, the public entry points, the npm README. |
