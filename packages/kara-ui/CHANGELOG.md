@@ -1,5 +1,19 @@
 # @hzblj/kara-ui
 
+## 0.20.1
+
+### Patch Changes
+
+- [#62](https://github.com/hzblj/kara-ui/pull/62) [`0c62a1f`](https://github.com/hzblj/kara-ui/commit/0c62a1f5950d679d2d87a0351081f78154c54704) Thanks [@hzblj](https://github.com/hzblj)! - A `SegmentedControl` with `bg` now shows exactly that colour on iOS. UIKit drew its own track over a grey system fill on top of kara's, whatever colour the control was given, so a white track showed grey inside a white rim. The control now hides those track images (alpha 0 after each of its layouts) while kara draws the track, and the Liquid Glass pill stays the system's.
+
+- Updated dependencies [[`0c62a1f`](https://github.com/hzblj/kara-ui/commit/0c62a1f5950d679d2d87a0351081f78154c54704)]:
+  - @hzblj/kara-native@0.20.1
+  - @hzblj/kara-components@0.20.1
+  - @hzblj/kara-theme@0.20.1
+  - @hzblj/kara-sx@0.20.1
+  - @hzblj/kara-router@0.20.1
+  - @hzblj/kara-expo-plugin@0.20.1
+
 ## 0.20.0
 
 ### Minor Changes
