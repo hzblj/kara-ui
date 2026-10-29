@@ -83,6 +83,7 @@ export const NavigationBar: NavigationBarComponent = ({
       ref={barRef}
       searchButtonImageName={toImageName(search?.buttonIcon)}
       searchButtonLabel={search ? (search.buttonLabel ?? DEFAULT_LABELS.search) : undefined}
+      searchButtonPlacement={search?.buttonPlacement}
       searchCancelImageName={toImageName(search?.cancelIcon)}
       searchCancelLabel={search ? (search.cancelLabel ?? DEFAULT_LABELS.cancel) : undefined}
       searchClearImageName={toImageName(clearIcon)}

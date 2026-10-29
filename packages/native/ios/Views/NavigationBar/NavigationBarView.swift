@@ -9,49 +9,13 @@ private let searchBarRowHeight: CGFloat = 52
 private let barItemRowHeight: CGFloat = 44
 private let barItemSize: CGFloat = 44
 private let searchCancelSpacing: CGFloat = 8
+private let integratedSearchCancelGap: CGFloat = 12
 
-final class NavigationBarTitleView: UIView {
-  let label = UILabel()
-
-  var maxWidth: CGFloat = .greatestFiniteMagnitude {
-    didSet {
-      if oldValue != maxWidth {
-        contentDidChange()
-      }
-    }
-  }
-
-  override init(frame: CGRect) {
-    super.init(frame: frame)
-    label.numberOfLines = 1
-    label.lineBreakMode = .byTruncatingTail
-    label.accessibilityTraits = .header
-    addSubview(label)
-  }
-
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-
-  override var intrinsicContentSize: CGSize {
-    let size = label.intrinsicContentSize
-    return CGSize(width: min(size.width, maxWidth), height: size.height)
-  }
-
-  override func sizeThatFits(_ size: CGSize) -> CGSize {
-    intrinsicContentSize
-  }
-
-  override func layoutSubviews() {
-    super.layoutSubviews()
-    label.frame = bounds
-  }
-
-  func contentDidChange() {
-    invalidateIntrinsicContentSize()
-    frame.size = intrinsicContentSize
-    setNeedsLayout()
-  }
+/// What the bar shows: the title view and the items on each side.
+struct NavigationBarContent {
+  let titleView: UIView?
+  let leftItems: [UIBarButtonItem]
+  let rightItems: [UIBarButtonItem]
 }
 
 /**
@@ -62,9 +26,11 @@ final class NavigationBarTitleView: UIView {
  items on both sides.
 
  A search placeholder adds a `UISearchBar`, placed the way a native-stack header places its search controller:
- `stacked` (the default) in a row of its own under the title, `integratedButton` as a search item beside the trailing
- items that turns the whole bar into the field. A focused field gets a cancel item next to it, a bar item like the
- others, so `searchCancelImageName` can give it the app's own glyph.
+ `stacked` (the default) in a row of its own under the title, `integratedButton` as a search button beside the trailing
+ items, or after the leading ones (`searchButtonPlacement`), that turns the whole bar into the field. On iOS 26 the
+ button grows into the field with the bar's own Liquid Glass morph (`NavigationBarSearchField`,
+ `NavigationBarSearchTransition`); earlier iOS cross-dissolves. A focused field gets a cancel item next to it, a bar item
+ like the others, so `searchCancelImageName` can give it the app's own glyph.
 
  An item's `testID` becomes its `accessibilityIdentifier`, which is what UI test tools match an `id` against.
  */
@@ -100,14 +66,20 @@ public final class NavigationBarView: ExpoView, UISearchBarDelegate {
     searchBar.delegate = self
     return searchBar
   }()
-  private lazy var searchCancelItem = UIBarButtonItem(
-    image: UIImage(systemName: "xmark"),
-    primaryAction: UIAction { [weak self] _ in self?.cancelSearch() }
+  private lazy var searchCancelItem = makeSearchItem(systemImageName: "xmark") { [weak self] in
+    self?.cancelSearch()
+  }
+  private lazy var searchField = NavigationBarSearchField(searchBar: searchBar, voice: searchVoice)
+  private lazy var searchTransition = NavigationBarSearchTransition(
+    container: self,
+    item: item,
+    titleView: titleView,
+    field: searchField,
+    searchItem: searchButtonItem
   )
-  private lazy var searchButtonItem = UIBarButtonItem(
-    image: UIImage(systemName: "magnifyingglass"),
-    primaryAction: UIAction { [weak self] _ in self?.beginIntegratedSearch() }
-  )
+  private lazy var searchButtonItem = makeSearchItem(systemImageName: "magnifyingglass") { [weak self] in
+    self?.beginIntegratedSearch()
+  }
   private lazy var leadingTitleItem: UIBarButtonItem = {
     let titleItem = UIBarButtonItem(customView: titleView)
     if #available(iOS 26.0, *) {
@@ -123,7 +95,8 @@ public final class NavigationBarView: ExpoView, UISearchBarDelegate {
   private var leadingReservedWidth: CGFloat = 0
   private var trailingReservedWidth: CGFloat = 0
   private var searchPlaceholder: String?
-  private var searchPlacement = "stacked"
+  private var searchPlacement = NavigationBarSearchPlacement.stacked
+  private var searchButtonPlacement = NavigationBarSearchButtonPlacement.trailing
   private var isSearchModeActive = false
   private var isSearchCancelShown = false
   private var searchFieldInsets: UIEdgeInsets?
@@ -151,6 +124,11 @@ public final class NavigationBarView: ExpoView, UISearchBarDelegate {
       let searchArea = CGRect(x: 0, y: barArea.maxY, width: bounds.width, height: searchRowHeight)
       layout(searchRowBar, in: searchArea)
       layoutSearchField(centeredAt: searchArea.midY, isCancelShown: isSearchCancelShown)
+    } else if isSearchFieldInBar {
+      searchField.expandedPlatterWidth = max(
+        0,
+        bounds.width - 2 * barHorizontalMargin - barItemSize - integratedSearchCancelGap
+      )
     } else if isSearchModeActive {
       layoutSearchField(centeredAt: barArea.midY, isCancelShown: true)
     }
@@ -230,13 +208,16 @@ public final class NavigationBarView: ExpoView, UISearchBarDelegate {
   func setSearchPlaceholder(_ placeholder: String?) {
     let wasSearchEnabled = isSearchEnabled
     searchPlaceholder = placeholder
-    searchBar.placeholder = placeholder
+    searchField.placeholder = placeholder
+    if !searchField.isHosting {
+      searchBar.placeholder = placeholder
+    }
     if wasSearchEnabled != isSearchEnabled {
       updateSearchPlacement()
     }
   }
 
-  func setSearchPlacement(_ placement: String) {
+  func setSearchPlacement(_ placement: NavigationBarSearchPlacement) {
     guard searchPlacement != placement else {
       return
     }
@@ -244,12 +225,26 @@ public final class NavigationBarView: ExpoView, UISearchBarDelegate {
     updateSearchPlacement()
   }
 
+  func setSearchButtonPlacement(_ placement: NavigationBarSearchButtonPlacement) {
+    guard searchButtonPlacement != placement else {
+      return
+    }
+    searchButtonPlacement = placement
+    updateItems()
+    updateTitleMaxWidth()
+  }
+
   func setSearchButtonImageName(_ name: String?) {
     searchButtonItem.image = templateImage(named: name) ?? UIImage(systemName: "magnifyingglass")
+    searchField.buttonImage = searchButtonItem.image
+    if !searchField.isHosting {
+      searchBar.setImage(searchField.fieldIcon, for: .search, state: .normal)
+    }
   }
 
   func setSearchButtonLabel(_ label: String?) {
     searchButtonItem.accessibilityLabel = label
+    searchField.buttonLabel = label
   }
 
   func setSearchCancelImageName(_ name: String?) {
@@ -317,6 +312,11 @@ public final class NavigationBarView: ExpoView, UISearchBarDelegate {
   }
 
   private func updateSearchFieldVisibility() {
+    if isSearchFieldInBar {
+      searchField.host(isCollapsed: !isSearchModeActive)
+      return
+    }
+    searchField.release()
     guard isStackedSearch || isSearchModeActive else {
       searchBar.removeFromSuperview()
       return
@@ -335,8 +335,7 @@ public final class NavigationBarView: ExpoView, UISearchBarDelegate {
       return
     }
     isSearchModeActive = true
-    transitionSearchMode()
-    searchBar.becomeFirstResponder()
+    changeSearchMode()
   }
 
   private func endIntegratedSearch() {
@@ -344,7 +343,43 @@ public final class NavigationBarView: ExpoView, UISearchBarDelegate {
       return
     }
     isSearchModeActive = false
-    transitionSearchMode()
+    changeSearchMode()
+  }
+
+  private func changeSearchMode() {
+    searchTransition.cancel()
+    guard isSearchFieldInBar, searchField.isHosting, window != nil else {
+      transitionSearchMode()
+      if isSearchModeActive {
+        searchBar.becomeFirstResponder()
+      }
+      return
+    }
+    let content = currentContent()
+    guard isSearchModeActive else {
+      searchTransition.close(to: content, placement: searchButtonPlacement, isTitleVisible: isTitleVisible)
+      return
+    }
+    searchTransition.open(to: content, placement: searchButtonPlacement) { [weak self] in
+      self?.focusSearchField(attempts: 3)
+    }
+  }
+
+  private func focusSearchField(attempts: Int) {
+    bar.layoutIfNeeded()
+    guard isSearchModeActive, !searchBar.becomeFirstResponder(), attempts > 1 else {
+      return
+    }
+    DispatchQueue.main.async {
+      self.focusSearchField(attempts: attempts - 1)
+    }
+  }
+
+  private var isSearchFieldInBar: Bool {
+    guard #available(iOS 26.0, *) else {
+      return false
+    }
+    return isIntegratedSearch
   }
 
   private func transitionSearchMode() {
@@ -389,6 +424,14 @@ public final class NavigationBarView: ExpoView, UISearchBarDelegate {
     }
     searchBar.resignFirstResponder()
     endIntegratedSearch()
+  }
+
+  public func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+    guard isSearchFieldInBar, !isSearchModeActive else {
+      return true
+    }
+    beginIntegratedSearch()
+    return false
   }
 
   public func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
@@ -476,37 +519,60 @@ public final class NavigationBarView: ExpoView, UISearchBarDelegate {
   }
 
   private var isStackedSearch: Bool {
-    isSearchEnabled && searchPlacement != "integratedButton"
+    isSearchEnabled && searchPlacement == .stacked
   }
 
   private var isIntegratedSearch: Bool {
-    isSearchEnabled && searchPlacement == "integratedButton"
+    isSearchEnabled && searchPlacement == .integratedButton
   }
 
   private func updateItems() {
-    let leadingGroups = makeGroups(leadingItems, placement: .leading)
+    searchButtonItem.customView = isSearchFieldInBar ? searchField : nil
+    let content = currentContent()
+    item.titleView = content.titleView
+    item.leftBarButtonItems = content.leftItems
+    item.rightBarButtonItems = content.rightItems
+  }
+
+  private func currentContent() -> NavigationBarContent {
+    var leadingGroups = makeGroups(leadingItems, placement: .leading)
     var trailingGroups = makeGroups(trailingItems, placement: .trailing)
     if isIntegratedSearch {
-      trailingGroups.insert([searchButtonItem], at: 0)
+      switch searchButtonPlacement {
+      case .leading:
+        leadingGroups.append([searchButtonItem])
+      case .trailing:
+        trailingGroups.insert([searchButtonItem], at: 0)
+      }
     }
     leadingReservedWidth = reservedWidth(of: leadingGroups)
     trailingReservedWidth = reservedWidth(of: trailingGroups)
 
     if isSearchModeActive {
-      item.titleView = nil
-      item.leftBarButtonItems = []
-      item.rightBarButtonItems = [searchCancelItem]
-      return
+      return searchContent()
     }
 
     var leftItems = barItems(from: leadingGroups)
     if isLeading {
       leftItems.append(leadingTitleItem)
     }
+    return NavigationBarContent(
+      titleView: isLeading ? nil : titleView,
+      leftItems: leftItems,
+      rightItems: Array(barItems(from: trailingGroups).reversed())
+    )
+  }
 
-    item.titleView = isLeading ? nil : titleView
-    item.leftBarButtonItems = leftItems
-    item.rightBarButtonItems = Array(barItems(from: trailingGroups).reversed())
+  private func searchContent() -> NavigationBarContent {
+    guard #available(iOS 26.0, *), isSearchFieldInBar else {
+      return NavigationBarContent(titleView: nil, leftItems: [], rightItems: [searchCancelItem])
+    }
+    switch searchButtonPlacement {
+    case .leading:
+      return NavigationBarContent(titleView: nil, leftItems: [searchCancelItem], rightItems: [searchButtonItem])
+    case .trailing:
+      return NavigationBarContent(titleView: nil, leftItems: [], rightItems: [searchCancelItem, .fixedSpace(), searchButtonItem])
+    }
   }
 
   private func updateTitleMaxWidth() {
@@ -594,6 +660,14 @@ public final class NavigationBarView: ExpoView, UISearchBarDelegate {
     button.accessibilityLabel = barItem.label
     button.accessibilityIdentifier = barItem.testID
     return button
+  }
+
+  private func makeSearchItem(systemImageName: String, action: @escaping () -> Void) -> UIBarButtonItem {
+    let searchItem = UIBarButtonItem(image: UIImage(systemName: systemImageName), primaryAction: UIAction { _ in action() })
+    if #available(iOS 26.0, *) {
+      searchItem.sharesBackground = false
+    }
+    return searchItem
   }
 
   private func templateImage(named name: String?) -> UIImage? {
