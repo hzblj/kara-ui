@@ -40,6 +40,7 @@ public class KaraUIModule: Module {
     NavigationItemSearchView.definition()
     NavigationItemSubtitleView.definition()
     ScrollEdgeContainerView.definition()
+    ScrollEdgeTopBarView.definition()
     SegmentedControlView.definition()
     SheetGrabberView.definition()
     TooltipView.definition()

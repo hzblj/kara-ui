@@ -1,5 +1,6 @@
 import {Group, List as SwiftUIList} from '@expo/ui/swift-ui'
 import {listRowSeparator, listStyle, type ModifierConfig, refreshable} from '@expo/ui/swift-ui/modifiers'
+import {contentScrollView} from '@hzblj/kara-native/swift-ui'
 import {useMemo} from 'react'
 
 import {useHostGuard} from '../../hooks/host-context'
@@ -21,7 +22,7 @@ export const List: ListComponent = ({
   useHostGuard('List')
 
   const modifiers = useMemo<ModifierConfig[]>(
-    () => [listStyle(variant), ...(onRefresh ? [refreshable(onRefresh)] : [])],
+    () => [listStyle(variant), contentScrollView(), ...(onRefresh ? [refreshable(onRefresh)] : [])],
     [onRefresh, variant]
   )
 

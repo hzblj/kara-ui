@@ -796,6 +796,7 @@ export const COMPONENTS: ComponentDoc[] = [
       'Rows are separated for you; a `Divider` among them is one too many.',
       '`onRefresh` returns a promise; the spinner runs until it settles.',
       '`variant` is `insetGrouped` (the iOS default) or `plain` (the Android default); `separators={false}` drops the lines between rows.',
+      'On iOS a large title in the header collapses as the list scrolls.',
     ],
     renders: {android: 'Compose LazyColumn', ios: 'SwiftUI List'},
     summary: 'A native scrolling list of rows.',
@@ -887,6 +888,8 @@ export const COMPONENTS: ComponentDoc[] = [
     notes: [
       'iOS 26 gives both bars the system scroll edge effect: the progressive blur under content scrolling past them.',
       'Below iOS 26 the bars are still inset, without the effect: check `isScrollEdgeEffectAvailable()` and give them a background.',
+      'Know a bar’s height up front? Pass `initialTopBarHeight` / `initialBottomBarHeight` and the first frame already starts below it.',
+      '`contentScrollView` makes the iOS 26 tab bar minimise as this scroll view scrolls; `topEdgeEffectHidden` drops the top blur, e.g. over a cover image.',
       'Android does what a Material top app bar does on scroll: the bars stack above and below the scroll view, transparent at rest, and fill with `surface.secondary` (Material’s `surfaceContainer`), the top one once content scrolls under it and the bottom one while there is more below. The scroll view keeps its own `onScroll`.',
     ],
     renders: {android: 'Material bars that fill on scroll', ios: 'UIScrollEdgeEffect'},

@@ -50,9 +50,13 @@ export const ScrollEdgeContainer: ScrollEdgeContainerComponent = ({
   automaticInsets: _automaticInsets,
   bottomBar,
   children,
+  contentScrollView: _contentScrollView,
   effect: _effect,
+  initialBottomBarHeight: _initialBottomBarHeight,
+  initialTopBarHeight: _initialTopBarHeight,
   testID,
   topBar,
+  topEdgeEffectHidden: _topEdgeEffectHidden,
   ...sx
 }: ScrollEdgeContainerProps) => {
   const topFilled = useSharedValue<number>(opacity.o0)

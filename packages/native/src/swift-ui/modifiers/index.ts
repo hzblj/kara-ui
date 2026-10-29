@@ -1,3 +1,4 @@
+export * from './content-scroll-view'
 export * from './counter-badge'
 export * from './scaled-font'
 export * from './symbol-style'

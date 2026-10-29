@@ -23,6 +23,9 @@ import ExpoUI
  */
 enum ModifierRegistration {
   private static let installation: Void = {
+    ViewModifierRegistry.register("contentScrollView") { params, appContext, _ in
+      try ContentScrollViewModifier(from: params, appContext: appContext)
+    }
     ViewModifierRegistry.register("counterBadge") { params, appContext, _ in
       try CounterBadgeModifier(from: params, appContext: appContext)
     }
