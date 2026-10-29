@@ -38,6 +38,13 @@ public final class SheetGrabberView: ExpoView {
     guard sheet.prefersGrabberVisible != isGrabberVisible else {
       return
     }
+    // While the sheet is being presented the grabber is part of the presentation: animating it on its own laid the
+    // presentation out inside that animation, and the dimming view grew from the top-left corner over the screen.
+    let controller = sheet.presentedViewController
+    guard !controller.isBeingPresented, controller.transitionCoordinator == nil else {
+      sheet.prefersGrabberVisible = isGrabberVisible
+      return
+    }
     sheet.animateChanges {
       sheet.prefersGrabberVisible = isGrabberVisible
     }
