@@ -34,8 +34,11 @@ extension NavigationBarView {
       Prop("searchTestID") { (view: NavigationBarView, testID: String?) in
         view.setSearchTestID(testID)
       }
-      Prop("searchPlacement") { (view: NavigationBarView, placement: String?) in
-        view.setSearchPlacement(placement ?? "stacked")
+      Prop("searchPlacement") { (view: NavigationBarView, placement: NavigationBarSearchPlacement?) in
+        view.setSearchPlacement(placement ?? .stacked)
+      }
+      Prop("searchButtonPlacement") { (view: NavigationBarView, placement: NavigationBarSearchButtonPlacement?) in
+        view.setSearchButtonPlacement(placement ?? .trailing)
       }
       Prop("searchButtonImageName") { (view: NavigationBarView, name: String?) in
         view.setSearchButtonImageName(name)

@@ -78,6 +78,12 @@ export type NavigationBarSearchRef = {
 export type NavigationBarSearchPlacement = 'integratedButton' | 'stacked'
 
 /**
+ * Where `integratedButton` puts its search button: beside the trailing items, or after the leading ones. On iOS 26 the
+ * button grows into the field and the cancel splits off its end, the way the system's own search does.
+ */
+export type NavigationBarSearchButtonPlacement = 'leading' | 'trailing'
+
+/**
  * A search field in the bar. iOS only for now; Android keeps the title. A focused field gets a cancel item that
  * empties it and ends the search, a bar item like the others.
  */
@@ -86,6 +92,8 @@ export type NavigationBarSearch = {
   buttonIcon?: IconName
   /** `integratedButton`: the search item's label for VoiceOver. `Search` by default. */
   buttonLabel?: string
+  /** `integratedButton`: `trailing` by default. */
+  buttonPlacement?: NavigationBarSearchButtonPlacement
   /** The cancel item's icon, one of the app's icons; the system cross unset. */
   cancelIcon?: IconName
   /** The cancel item's label for VoiceOver. `Cancel` by default. */

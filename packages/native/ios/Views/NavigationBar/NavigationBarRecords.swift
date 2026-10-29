@@ -38,3 +38,15 @@ enum NavigationBarItemPlacement: String {
   case leading
   case trailing
 }
+
+/// Where the search field goes: a row of its own under the title, or a search button that turns the bar into the field.
+internal enum NavigationBarSearchPlacement: String, Enumerable {
+  case stacked
+  case integratedButton
+}
+
+/// The side of `integratedButton`'s search button: beside the trailing items (the default) or after the leading ones.
+internal enum NavigationBarSearchButtonPlacement: String, Enumerable {
+  case leading
+  case trailing
+}

@@ -47,6 +47,10 @@ final class SearchFieldAccessory: UIView {
 
   var onAction: ((Action) -> Void)?
 
+  /// Hides the microphone, the clear button and the meter, which then take no touches: the navigation bar's
+  /// integrated search keeps the field collapsed into its search button while it is not searching.
+  private(set) var isContentHidden = false
+
   var isListening = false {
     didSet {
       guard isListening != oldValue else {
@@ -166,7 +170,10 @@ final class SearchFieldAccessory: UIView {
   }
 
   override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-    bounds.contains(point)
+    guard !isContentHidden else {
+      return false
+    }
+    return bounds.contains(point)
       || [microphoneButton, clearButton, stopButton].contains { $0.isUserInteractionEnabled && $0.frame.contains(point) }
   }
 
@@ -279,10 +286,18 @@ final class SearchFieldAccessory: UIView {
     onAction?(.start)
   }
 
+  func setContentHidden(_ isHidden: Bool, isAnimated: Bool) {
+    guard isContentHidden != isHidden else {
+      return
+    }
+    isContentHidden = isHidden
+    update(isAnimated: isAnimated && window != nil)
+  }
+
   private func update(isAnimated: Bool) {
-    let listening = isListening
-    let showsClear = !listening && !(field?.text ?? "").isEmpty
-    let showsMicrophone = !listening && !showsClear
+    let listening = isListening && !isContentHidden
+    let showsClear = !isListening && !isContentHidden && !(field?.text ?? "").isEmpty
+    let showsMicrophone = !isListening && !isContentHidden && !showsClear
 
     UIView.performWithoutAnimation {
       bounds.size = intrinsicContentSize

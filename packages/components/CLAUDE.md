@@ -227,7 +227,8 @@ holds text and, while listening, a waveform of the app's transcription with a st
 it hears without `onChangeText`.
 `separated` (iOS 26 glass capsules) has no Material counterpart, and `search` is iOS-only for now: `stacked` adds a
 52 pt row under the bar (`SEARCH_ROW_HEIGHT`, which `Sheet.Header` counts in its first estimate), `integratedButton`
-keeps the bar's height.
+keeps the bar's height. `search.buttonPlacement` puts the integrated button beside the trailing items (default) or after
+the leading ones; on iOS 26 it grows into the field with the bar's own glass morph.
 
 ## Hosts and safe areas
 

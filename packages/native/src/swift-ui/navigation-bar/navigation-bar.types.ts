@@ -12,6 +12,12 @@ export type NavigationBarTitleAlignment = 'center' | 'leading'
  */
 export type NavigationBarSearchPlacement = 'integratedButton' | 'stacked'
 
+/**
+ * The side of `integratedButton`'s search button: beside the trailing items, or after the leading ones. On iOS 26 the
+ * button grows into the field with the bar's own Liquid Glass morph, and the cancel splits off the field's end.
+ */
+export type NavigationBarSearchButtonPlacement = 'leading' | 'trailing'
+
 /** The back chevron, the system close item, or an image from the app's asset catalog with a title for VoiceOver. */
 export type NavigationBarItemType = 'back' | 'close' | 'icon'
 
@@ -48,6 +54,8 @@ export type NavigationBarProps = {
   searchButtonImageName?: string
   /** `integratedButton`: the search item's accessibility label. */
   searchButtonLabel?: string
+  /** `integratedButton`: `trailing` by default. */
+  searchButtonPlacement?: NavigationBarSearchButtonPlacement
   /** An asset-catalog image for the cancel item a focused field gets, drawn as a template; `xmark` unset. */
   searchCancelImageName?: string
   /** The cancel item's accessibility label. */

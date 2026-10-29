@@ -1076,6 +1076,7 @@ export const COMPONENTS: ComponentDoc[] = [
       'iOS: a standalone `UINavigationBar`; on iOS 26 neighbours share one glass capsule, and `separated` gives an item its own.',
       'Android: Material’s top app bar.',
       "`search` (iOS): a field under the title, or a search button that turns the bar into the field (`placement: 'integratedButton'`).",
+      "`search.buttonPlacement`: the search button on the trailing side (default) or after the leading items. On iOS 26 it grows into the field like the system's search.",
       '`search.voice` puts a microphone in the field, with a live waveform while it listens. See Header › Voice.',
       'It places nothing: items go on the side and in the order you give them.',
     ],
