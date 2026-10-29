@@ -9,13 +9,28 @@ import {Callout, Hero, List, P, Section, Table} from './parts'
 
 const docs = docsStyles()
 
+const EFFECTS_USAGE = `const [likes, setLikes] = useState(0)
+
+<Icon name="heart" effect={{type: 'bounce'}} effectTrigger={likes} />
+<Icon name="signal" effect={{type: 'variableColor', fill: 'iterative'}} effectActive={searching} />
+<Icon name={liked ? 'heart-filled' : 'heart'} transition="replace" />
+<RnIcon name="weather" renderingMode="palette" color="content.accent" secondaryColor="content.success" />
+<RnIcon name="volume" variableValue={0.6} transition="automatic" />`
+
+const LAYERS_SVG = `<svg viewBox="0 0 24 24">
+  <path d="…"/>                                 <!-- the speaker -->
+  <path data-variable="" d="…"/>                <!-- on above 0 -->
+  <path data-variable="" d="…"/>                <!-- on above 1/3 -->
+  <path data-variable="" opacity="0.5" d="…"/>  <!-- on above 2/3, secondary -->
+</svg>`
+
 export const icons: Guide = {
   Content: () => (
     <>
       <Hero id="icons" kicker="Core concepts" title="Icons">
         <P>
           {
-            'kara ships no icon set and no icon font. Your app brings a folder of SVGs; the config plugin turns each one into an asset-catalog image on iOS and a vector drawable on Android at prebuild, and writes their names as a type, so `<Icon name="bolt" />` only compiles for an icon you have.'
+            'kara ships no icon set and no icon font. Your app brings a folder of SVGs; the config plugin turns each one into an asset-catalog image and a custom SF Symbol on iOS and a vector drawable on Android at prebuild, and writes their names as a type, so `<Icon name="bolt" />` only compiles for an icon you have.'
           }
         </P>
       </Hero>
@@ -43,7 +58,8 @@ export const icons: Guide = {
       <Section id="svg-rules" title="What an SVG may contain">
         <List
           items={[
-            'Single-colour `<path>`s only: the platform tints every icon, with `color` or the surrounding tint. Anything else fails the prebuild, naming the file.',
+            '`<path>`s only: the platform tints every icon, with `color` or the surrounding tint. Anything else fails the prebuild, naming the file.',
+            'Each path is a layer. Its `fill`, `opacity`, `data-variable` and `data-motion-group` only matter to the rendering modes, variable values and effects below.',
             '`share.android.svg` replaces `share.svg` on Android (and `.ios.svg` on iOS), for the glyphs the platforms draw differently.',
           ]}
         />
@@ -55,12 +71,12 @@ export const icons: Guide = {
           rows={[
             [
               '`Icon`',
-              'SwiftUI `Image` from the asset catalog, Compose `Icon` with the drawable',
+              'SwiftUI `Image` of the custom SF Symbol, Compose `Icon` with the drawable',
               'Inside a `Screen` or `Island`',
             ],
             [
               '`RnIcon`',
-              'A `UIImageView` of the same asset, one Android view drawing the drawable',
+              'A `UIImageView` of the same symbol, one Android view drawing the drawable',
               'Anywhere, which is what a list row wants',
             ],
           ]}
@@ -72,10 +88,51 @@ export const icons: Guide = {
         </P>
       </Section>
 
+      <Section id="effects" title="Effects, transitions and colours">
+        <P>
+          {
+            'Both tiers take the same props, on both platforms. iOS plays them through SF Symbols; Android draws the same.'
+          }
+        </P>
+        <CodeBlock code={EFFECTS_USAGE} language="tsx" title="Effects" />
+        <Table
+          columns={['Prop', 'Does']}
+          rows={[
+            [
+              '`effect`',
+              '`bounce`, `pulse`, `variableColor`, `wiggle`, `rotate`, `breathe`; `scale`, `appear` and `disappear` hold a state',
+            ],
+            ['`effectTrigger`', 'Plays the effect once whenever it changes'],
+            ['`effectActive`', 'Without a trigger, runs the effect while true'],
+            [
+              '`transition`',
+              'Animates a new `name`: `replace`, `replaceUpUp`, `replaceOffUp`, `magicReplace`, `automatic`',
+            ],
+            ['`renderingMode`', '`hierarchical`, `palette` (with `secondaryColor`, `tertiaryColor`) or `multicolor`'],
+            ['`variableValue`', '0 to 1: lights the `data-variable` layers it passes'],
+            ['`gradient`', 'Soft shading of each layer, as iOS 26 does'],
+          ]}
+        />
+        <CodeBlock code={LAYERS_SVG} language="bash" title="assets/icons/volume.svg" />
+        <List
+          items={[
+            "`fill`: the layer's own colour in `multicolor`. Black means the tint.",
+            '`opacity` under 0.75: a secondary layer, under 0.375 tertiary.',
+            '`data-variable`: lit by `variableValue`. Empty spreads them evenly; a number is its threshold.',
+            '`data-motion-group`: layers that move together when an effect runs `byLayer`.',
+          ]}
+        />
+        <Callout>
+          {
+            'Wiggle, rotate and breathe need iOS 18, the gradient iOS 26. After upgrading, run a prebuild: the symbols are new assets.'
+          }
+        </Callout>
+      </Section>
+
       <Section id="package" title="The package underneath">
         <P>
           {
-            'The plugin, the names and the React Native tier come from [@hzblj/expo-native-icons](https://www.npmjs.com/package/@hzblj/expo-native-icons), which kara installs with itself. It knows nothing about kara, so an app without it can use the same plugin and its `NativeIcon`. Natively, each icon is `native_icon_<name>`, with `-` turned into `_`.'
+            'The plugin, the names and the React Native tier come from [@hzblj/expo-native-icons](https://www.npmjs.com/package/@hzblj/expo-native-icons), which kara installs with itself. It knows nothing about kara, so an app without it can use the same plugin and its `NativeIcon`. Natively, each icon is `native_icon_<name>`, with `-` turned into `_`, and its symbol `native_symbol_<name>`.'
           }
         </P>
       </Section>
@@ -95,6 +152,7 @@ export const icons: Guide = {
     {id: 'setup', label: 'Set up'},
     {id: 'svg-rules', label: 'What an SVG may contain'},
     {id: 'tiers', label: 'Icon and RnIcon'},
+    {id: 'effects', label: 'Effects, transitions and colours'},
     {id: 'package', label: 'The package underneath'},
     {id: 'ci', label: 'Without Expo'},
   ],

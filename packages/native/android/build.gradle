@@ -41,6 +41,9 @@ dependencies {
   // A search field's voice draws the transcription's level with expo-waveform's LiveWaveformView; the app links it
   // through autolinking, since @hzblj/expo-waveform is a dependency of this package.
   compileOnly project(':hzblj-expo-waveform')
+  // An icon with an effect, a transition, a rendering mode or a variable value is expo-native-icons' NativeIconView,
+  // which the app links through @hzblj/kara-components' dependency on @hzblj/expo-native-icons.
+  compileOnly project(':hzblj-expo-native-icons')
 
   implementation 'androidx.compose.foundation:foundation-android:1.10.2'
   implementation 'androidx.compose.ui:ui-android:1.10.2'

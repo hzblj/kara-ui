@@ -575,7 +575,8 @@ export const COMPONENTS: ComponentDoc[] = [
   },
   {
     code: `<Icon name="heart" />
-<RnIcon color="content.accent" name="heart" />`,
+<RnIcon color="content.accent" name="heart" />
+<Icon effect={{type: 'bounce'}} effectTrigger={likes} name="heart" />`,
     exports: ['Icon', 'RnIcon'],
     group: 'content',
     host: 'native',
@@ -584,8 +585,9 @@ export const COMPONENTS: ComponentDoc[] = [
     notes: [
       'Your own SVGs, made native at prebuild by the config plugin (see Icons). The library ships no icon set.',
       '`Icon` draws inside a host; `RnIcon` draws the same asset anywhere in React Native layout.',
+      'Both play SF Symbols effects and transitions and draw rendering modes and variable values, on both platforms (see Icons).',
     ],
-    renders: {android: 'Compose Icon with a vector drawable', ios: 'SwiftUI Image from the asset catalog'},
+    renders: {android: 'Compose Icon with a vector drawable', ios: 'SwiftUI Image of a custom SF Symbol'},
     summary: 'Your own SVG icons, drawn natively in both tiers.',
     types: ['IconProps'],
   },
