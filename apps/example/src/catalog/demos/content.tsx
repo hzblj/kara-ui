@@ -10,6 +10,7 @@ import {
   GlassView,
   HStack,
   Icon,
+  type IconEffect,
   type IconName,
   Image,
   Island,
@@ -161,6 +162,14 @@ const AvatarDemo = () => (
 
 const ICONS: IconName[] = ['home', 'search', 'heart', 'star', 'share', 'notification', 'settings', 'user', 'trash']
 
+const EFFECTS: {effect: IconEffect; name: IconName}[] = [
+  {effect: {type: 'pulse'}, name: 'notification'},
+  {effect: {repeat: 'continuous', type: 'rotate'}, name: 'settings'},
+  {effect: {style: 'pulse', type: 'breathe'}, name: 'star'},
+  {effect: {type: 'wiggle'}, name: 'share'},
+  {effect: {type: 'bounce'}, name: 'heart'},
+]
+
 const IconDemo = () => (
   <>
     <Section caption="Icon draws inside a native island, RnIcon anywhere in React Native layout." title="Both tiers">
@@ -182,6 +191,23 @@ const IconDemo = () => (
         <RnIcon color="content.accent" name="heart" />
         <RnIcon color="content.success" name="check" />
         <RnIcon color="content.destructive" name="warning" />
+      </Box>
+    </Section>
+    <Section
+      caption="SF Symbols effects on the app’s own icons, in both tiers and on both platforms: pulse, rotate, breathe, wiggle and bounce, running while effectActive."
+      title="Effects"
+    >
+      <Island>
+        <HStack spacing="s16" wide>
+          {EFFECTS.map(({effect, name}) => (
+            <Icon color="content.accent" effect={effect} key={effect.type} name={name} />
+          ))}
+        </HStack>
+      </Island>
+      <Box flexDirection="row" gap="s16">
+        {EFFECTS.map(({effect, name}) => (
+          <RnIcon color="content.accent" effect={effect} key={effect.type} name={name} />
+        ))}
       </Box>
     </Section>
   </>

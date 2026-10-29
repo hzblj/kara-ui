@@ -42,7 +42,7 @@
     "tsc:check": "tsc -p ./tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@hzblj/expo-native-icons": "^0.1.0"
+    "@hzblj/expo-native-icons": "^0.2.0"
   },
   "peerDependencies": {
     "expo": "*"

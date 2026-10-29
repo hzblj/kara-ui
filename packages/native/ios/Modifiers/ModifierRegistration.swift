@@ -29,6 +29,9 @@ enum ModifierRegistration {
     ViewModifierRegistry.register("scaledFont") { params, appContext, _ in
       try ScaledFontModifier(from: params, appContext: appContext)
     }
+    ViewModifierRegistry.register("symbolStyle") { params, appContext, _ in
+      try SymbolStyleModifier(from: params, appContext: appContext)
+    }
     ViewModifierRegistry.register("underline") { params, appContext, _ in
       try UnderlineModifier(from: params, appContext: appContext)
     }

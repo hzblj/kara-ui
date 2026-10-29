@@ -59,7 +59,7 @@
     ]
   },
   "dependencies": {
-    "@hzblj/expo-native-icons": "^0.1.0",
+    "@hzblj/expo-native-icons": "^0.2.0",
     "@hzblj/expo-zoom-transition": "^0.2.0",
     "@hzblj/kara-components": "workspace:^",
     "@hzblj/kara-native": "workspace:^",
