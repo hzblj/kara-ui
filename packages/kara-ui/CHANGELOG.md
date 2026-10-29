@@ -1,5 +1,19 @@
 # @hzblj/kara-ui
 
+## 0.23.1
+
+### Patch Changes
+
+- [#76](https://github.com/hzblj/kara-ui/pull/76) [`595f958`](https://github.com/hzblj/kara-ui/commit/595f958186491d4e4da658ea4d209354d2ba372b) Thanks [@hzblj](https://github.com/hzblj)! - Closing a native-stack header's integrated search button no longer flashes the field's magnifier and the microphone in the empty button before its glyph blurs in: they fade out with the placeholder.
+
+- Updated dependencies [[`595f958`](https://github.com/hzblj/kara-ui/commit/595f958186491d4e4da658ea4d209354d2ba372b)]:
+  - @hzblj/kara-native@0.23.1
+  - @hzblj/kara-theme@0.23.1
+  - @hzblj/kara-sx@0.23.1
+  - @hzblj/kara-components@0.23.1
+  - @hzblj/kara-router@0.23.1
+  - @hzblj/kara-expo-plugin@0.23.1
+
 ## 0.23.0
 
 ### Patch Changes
