@@ -2625,16 +2625,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hzblj/expo-native-icons@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "@hzblj/expo-native-icons@npm:0.1.0"
+"@hzblj/expo-native-icons@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "@hzblj/expo-native-icons@npm:0.2.0"
+  dependencies:
+    svgpath: "npm:^2.6.0"
   peerDependencies:
     expo: ">=57"
     react: "*"
     react-native: "*"
   bin:
-    native-icons: bin/native-icons.js
-  checksum: 10c0/d7eb5dd32cf0b48f63bbec55a37d8cbed461f40f843eeece0660ed09e09abfcf0cf8e0030c1bc46a3dd3bce2a6237293cf4fdfbd9cbbd4b428169ffcc70c7599
+    native-icons: ./bin/native-icons.js
+  checksum: 10c0/757c7d459fce48fad703fefc955d2d38ea9e1abbf2f761928e39622ed2cc0b459fb03e8b43fe01fd12ad13dbf6f1ef5fcd536dc52fbd37df844de92e2cc0bfc1
   languageName: node
   linkType: hard
 
@@ -2679,7 +2681,7 @@ __metadata:
   resolution: "@hzblj/kara-components@workspace:packages/components"
   dependencies:
     "@expo/ui": "npm:~57.0.18"
-    "@hzblj/expo-native-icons": "npm:^0.1.0"
+    "@hzblj/expo-native-icons": "npm:^0.2.0"
     "@hzblj/expo-rich-haptics": "npm:^0.1.0"
     "@hzblj/kara-native": "workspace:^"
     "@hzblj/kara-sx": "workspace:^"
@@ -2723,7 +2725,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@hzblj/kara-expo-plugin@workspace:packages/expo-plugin"
   dependencies:
-    "@hzblj/expo-native-icons": "npm:^0.1.0"
+    "@hzblj/expo-native-icons": "npm:^0.2.0"
     "@types/node": "npm:^22.0.0"
     expo: "npm:~57.0.22"
     typescript: "npm:~7.0.2"
@@ -2737,7 +2739,7 @@ __metadata:
   resolution: "@hzblj/kara-native@workspace:packages/native"
   dependencies:
     "@expo/ui": "npm:~57.0.18"
-    "@hzblj/expo-native-icons": "npm:^0.1.0"
+    "@hzblj/expo-native-icons": "npm:^0.2.0"
     "@hzblj/expo-waveform": "npm:^0.4.0"
     "@hzblj/expo-zoom-transition": "npm:^0.2.0"
     "@material-symbols/svg-400": "npm:^0.48.0"
@@ -2761,7 +2763,7 @@ __metadata:
   resolution: "@hzblj/kara-router@workspace:packages/router"
   dependencies:
     "@expo/ui": "npm:~57.0.18"
-    "@hzblj/expo-native-icons": "npm:^0.1.0"
+    "@hzblj/expo-native-icons": "npm:^0.2.0"
     "@hzblj/expo-zoom-transition": "npm:^0.2.0"
     "@hzblj/kara-components": "workspace:^"
     "@hzblj/kara-native": "workspace:^"
@@ -2828,7 +2830,7 @@ __metadata:
   resolution: "@hzblj/kara-ui@workspace:packages/kara-ui"
   dependencies:
     "@expo/ui": "npm:~57.0.18"
-    "@hzblj/expo-native-icons": "npm:^0.1.0"
+    "@hzblj/expo-native-icons": "npm:^0.2.0"
     "@hzblj/kara-components": "workspace:^"
     "@hzblj/kara-expo-plugin": "workspace:^"
     "@hzblj/kara-native": "workspace:^"
@@ -11162,6 +11164,13 @@ __metadata:
   version: 1.0.0
   resolution: "supports-preserve-symlinks-flag@npm:1.0.0"
   checksum: 10c0/6c4032340701a9950865f7ae8ef38578d8d7053f5e10518076e6554a9381fa91bd9c6850193695c141f32b21f979c985db07265a758867bac95de05f7d8aeb39
+  languageName: node
+  linkType: hard
+
+"svgpath@npm:^2.6.0":
+  version: 2.6.0
+  resolution: "svgpath@npm:2.6.0"
+  checksum: 10c0/aed042d7cc0e2f3b55d618af2bee58faf8820d53f5d45490194e9bd1cd9ae7d57be641fd3692429a133be2ffb75ff43aad2e6b1c297359ffbc808016a106f199
   languageName: node
   linkType: hard
 
