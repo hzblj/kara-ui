@@ -1,5 +1,17 @@
 # @hzblj/kara-native
 
+## 0.23.0
+
+### Minor Changes
+
+- [#74](https://github.com/hzblj/kara-ui/pull/74) [`874778c`](https://github.com/hzblj/kara-ui/commit/874778c94b9757942e7466aff6e00bc791cb2481) Thanks [@hzblj](https://github.com/hzblj)! - `NavigationBar`'s integrated search (`placement: 'integratedButton'`) opens the way the system's own does on iOS 26: the search button grows into the field with the bar's Liquid Glass morph and the cancel splits off its end, then merges back and the field shrinks into the button on close. `search.buttonPlacement: 'leading'` puts the button after the leading items.
+
+- [#72](https://github.com/hzblj/kara-ui/pull/72) [`71631d9`](https://github.com/hzblj/kara-ui/commit/71631d98ca18a4793773df8b8ca974e8e58b90e1) Thanks [@hzblj](https://github.com/hzblj)! - A search field's `voice` takes `sizes`: the clear and microphone glyphs, the stop button and the waveform (its width, height and bars, `barRadius: 0` for flat ones), each keeping its default when left out. New bars grow in from the middle as they come in at the edge, and the waveform keeps flowing while the main thread is busy (`@hzblj/expo-waveform` 0.4.0).
+
+### Patch Changes
+
+- [#75](https://github.com/hzblj/kara-ui/pull/75) [`83e36b8`](https://github.com/hzblj/kara-ui/commit/83e36b82e136e450303a34ca47df3fe2732133ae) Thanks [@hzblj](https://github.com/hzblj)! - `SheetGrabber` no longer makes a sheet's dimmed background grow from the top-left corner, or the sheet jump, when it opens: the grabber is set as part of the sheet's own presentation.
+
 ## 0.22.0
 
 ### Minor Changes
