@@ -22,12 +22,28 @@ final class SearchFieldAccessory: UIView {
     case start, stop
   }
 
+  /// What the parts measure, in points, from the record's `sizes`. A glyph left at `nil` keeps its own size: an app
+  /// image's, or the system symbol's.
+  struct Sizes: Equatable {
+    var clearIconSize: CGFloat?
+    var microphoneIconSize: CGFloat?
+    var stopButtonSize: CGFloat = 26
+    var waveformWidth: CGFloat = 64
+    var waveformHeight: CGFloat = 20
+    var waveformBarWidth: CGFloat = 2
+    var waveformBarGap: CGFloat = 2
+    /// `nil` is half of the bar's width: round ends.
+    var waveformBarRadius: CGFloat?
+    var waveformMinBarHeight: CGFloat = 2
+  }
+
   private static let height: CGFloat = 32
   private static let idleWidth: CGFloat = 30
-  private static let listeningWidth: CGFloat = 104
-  private static let stopSize: CGFloat = 26
+  /// The place a glyph of its own size takes: the microphone's centre sits half of it from the trailing edge.
   private static let glyphSize: CGFloat = 20
-  private static let waveformSize = CGSize(width: 64, height: 20)
+  /// Between the waveform and the stop button, and between the text and the waveform.
+  private static let meterGap: CGFloat = 8
+  private static let textGap: CGFloat = 9
 
   var onAction: ((Action) -> Void)?
 
@@ -63,6 +79,7 @@ final class SearchFieldAccessory: UIView {
   private let stopButton = UIButton(type: .system)
   private let waveform = LiveWaveformView()
   private var stopImage: UIImage?
+  private var sizes = Sizes()
   private weak var field: UISearchTextField?
   private var fieldClearButtonMode: UITextField.ViewMode?
   private var editingObservers: [NSObjectProtocol] = []
@@ -78,13 +95,10 @@ final class SearchFieldAccessory: UIView {
     stopButton.addAction(UIAction { [weak self] _ in self?.onAction?(.stop) }, for: .primaryActionTriggered)
     if #unavailable(iOS 26.0) {
       stopButton.backgroundColor = .tertiarySystemFill
-      stopButton.layer.cornerRadius = Self.stopSize / 2
       stopButton.layer.cornerCurve = .circular
     }
 
-    waveform.style.barWidth = 2
-    waveform.style.barGap = 2
-    waveform.style.minBarHeight = 2
+    waveform.growIn = LiveWaveformGrowIn()
     waveform.color = color
     waveform.isAccessibilityElement = false
 
@@ -99,12 +113,27 @@ final class SearchFieldAccessory: UIView {
     fatalError("init(coder:) is not supported")
   }
 
-  /// Glyphs (an app image by name, drawn as a template, or the system's), labels and colour.
+  /// Glyphs (an app image by name, drawn as a template, or the system's), labels, colour and sizes.
   func apply(_ record: SearchVoiceRecord) {
-    microphoneButton.setImage(Self.image(named: record.microphoneImageName, system: "mic", pointSize: 17), for: .normal)
+    let sizes = Sizes(record.sizes)
+    microphoneButton.setImage(
+      Self.image(named: record.microphoneImageName, system: "mic", pointSize: 17, size: sizes.microphoneIconSize),
+      for: .normal)
     clearButton.setImage(
-      Self.image(named: record.clearImageName, system: "xmark.circle.fill", pointSize: 17), for: .normal)
+      Self.image(named: record.clearImageName, system: "xmark.circle.fill", pointSize: 17, size: sizes.clearIconSize),
+      for: .normal)
     stopImage = Self.image(named: record.stopImageName, system: "stop.fill", pointSize: 11)
+    if #unavailable(iOS 26.0) {
+      stopButton.layer.cornerRadius = sizes.stopButtonSize / 2
+    }
+    waveform.style.barWidth = sizes.waveformBarWidth
+    waveform.style.barGap = sizes.waveformBarGap
+    waveform.style.barRadius = sizes.waveformBarRadius
+    waveform.style.minBarHeight = sizes.waveformMinBarHeight
+    if sizes != self.sizes {
+      self.sizes = sizes
+      update(isAnimated: false)
+    }
     microphoneButton.accessibilityLabel = record.microphoneLabel
     clearButton.accessibilityLabel = record.clearLabel
     stopButton.accessibilityLabel = record.stopLabel
@@ -112,21 +141,28 @@ final class SearchFieldAccessory: UIView {
     isListening = record.listening
   }
 
+  /// Listening, the waveform and the stop button take the room left of the microphone's place.
   override var intrinsicContentSize: CGSize {
-    CGSize(width: isListening ? Self.listeningWidth : Self.idleWidth, height: Self.height)
+    let listeningWidth =
+      Self.textGap + sizes.waveformWidth + Self.meterGap + sizes.stopButtonSize / 2 + microphonePlace / 2
+    return CGSize(width: isListening ? listeningWidth : Self.idleWidth, height: Self.height)
   }
 
   override func layoutSubviews() {
     super.layoutSubviews()
-    let iconMidX = bounds.maxX + measureTrailingOverhang() - Self.glyphSize / 2
+    let iconMidX = bounds.maxX + measureTrailingOverhang() - microphonePlace / 2
     let midY = bounds.midY
+    let stopSize = sizes.stopButtonSize
     microphoneButton.frame = CGRect(x: iconMidX - Self.idleWidth / 2, y: 0, width: Self.idleWidth, height: bounds.height)
     clearButton.frame = microphoneButton.frame
-    stopButton.frame = CGRect(
-      x: iconMidX - Self.stopSize / 2, y: midY - Self.stopSize / 2, width: Self.stopSize, height: Self.stopSize)
+    stopButton.frame = CGRect(x: iconMidX - stopSize / 2, y: midY - stopSize / 2, width: stopSize, height: stopSize)
     waveform.frame = CGRect(
-      x: stopButton.frame.minX - 8 - Self.waveformSize.width, y: midY - Self.waveformSize.height / 2,
-      width: Self.waveformSize.width, height: Self.waveformSize.height)
+      x: stopButton.frame.minX - Self.meterGap - sizes.waveformWidth, y: midY - sizes.waveformHeight / 2,
+      width: sizes.waveformWidth, height: sizes.waveformHeight)
+  }
+
+  private var microphonePlace: CGFloat {
+    sizes.microphoneIconSize ?? Self.glyphSize
   }
 
   override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
@@ -186,11 +222,19 @@ final class SearchFieldAccessory: UIView {
     update(isAnimated: window != nil)
   }
 
-  private static func image(named name: String?, system: String, pointSize: CGFloat) -> UIImage? {
-    if let image = name.flatMap({ UIImage(named: $0) }) {
-      return image.withRenderingMode(.alwaysTemplate)
+  /// An app image by name or the system symbol, fitted into a square of `size` points when one is given.
+  private static func image(named name: String?, system: String, pointSize: CGFloat, size: CGFloat? = nil) -> UIImage? {
+    let image =
+      name.flatMap({ UIImage(named: $0) })?.withRenderingMode(.alwaysTemplate)
+      ?? UIImage(systemName: system, withConfiguration: UIImage.SymbolConfiguration(pointSize: pointSize))
+    guard let image, let size, image.size.width > 0, image.size.height > 0 else {
+      return image
     }
-    return UIImage(systemName: system, withConfiguration: UIImage.SymbolConfiguration(pointSize: pointSize))
+    let scale = min(size / image.size.width, size / image.size.height)
+    let drawn = CGSize(width: image.size.width * scale, height: image.size.height * scale)
+    return UIGraphicsImageRenderer(size: CGSize(width: size, height: size)).image { _ in
+      image.draw(in: CGRect(origin: CGPoint(x: (size - drawn.width) / 2, y: (size - drawn.height) / 2), size: drawn))
+    }.withRenderingMode(.alwaysTemplate)
   }
 
   private func applyStopImage() {
@@ -280,4 +324,38 @@ struct SearchVoiceRecord: Record {
   @Field var stopLabel: String?
   @Field var clearLabel: String?
   @Field var color: UIColor?
+  @Field var sizes: SearchVoiceSizesRecord?
+}
+
+/// `SearchVoiceSizes` in `src/search-voice.ts`: each size left out keeps the accessory's own.
+struct SearchVoiceSizesRecord: Record {
+  @Field var clearIconSize: Double?
+  @Field var microphoneIconSize: Double?
+  @Field var stopButtonSize: Double?
+  @Field var waveform: SearchVoiceWaveformSizesRecord?
+}
+
+struct SearchVoiceWaveformSizesRecord: Record {
+  @Field var width: Double?
+  @Field var height: Double?
+  @Field var barWidth: Double?
+  @Field var barGap: Double?
+  @Field var barRadius: Double?
+  @Field var minBarHeight: Double?
+}
+
+extension SearchFieldAccessory.Sizes {
+  init(_ record: SearchVoiceSizesRecord?) {
+    let defaults = Self()
+    let waveform = record?.waveform
+    clearIconSize = record?.clearIconSize.map { CGFloat($0) }
+    microphoneIconSize = record?.microphoneIconSize.map { CGFloat($0) }
+    stopButtonSize = record?.stopButtonSize.map { CGFloat($0) } ?? defaults.stopButtonSize
+    waveformWidth = waveform?.width.map { CGFloat($0) } ?? defaults.waveformWidth
+    waveformHeight = waveform?.height.map { CGFloat($0) } ?? defaults.waveformHeight
+    waveformBarWidth = waveform?.barWidth.map { CGFloat($0) } ?? defaults.waveformBarWidth
+    waveformBarGap = waveform?.barGap.map { CGFloat($0) } ?? defaults.waveformBarGap
+    waveformBarRadius = waveform?.barRadius.map { CGFloat($0) }
+    waveformMinBarHeight = waveform?.minBarHeight.map { CGFloat($0) } ?? defaults.waveformMinBarHeight
+  }
 }

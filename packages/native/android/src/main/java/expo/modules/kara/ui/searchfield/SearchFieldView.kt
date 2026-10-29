@@ -4,6 +4,7 @@ package expo.modules.kara.ui.searchfield
 
 import expo.modules.kotlin.sharedobjects.SharedObject
 import com.hzblj.expowaveform.WaveformStyle
+import com.hzblj.expowaveform.LiveWaveformGrowIn
 import com.hzblj.expowaveform.LiveWaveformView
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.graphics.toArgb
@@ -118,8 +119,26 @@ data class SearchFieldProps(
   val stopIconName: MutableState<String?> = mutableStateOf(null),
   val microphoneLabel: MutableState<String?> = mutableStateOf(null),
   val stopLabel: MutableState<String?> = mutableStateOf(null),
-  val voiceMeter: MutableState<SharedObject?> = mutableStateOf(null)
+  val voiceMeter: MutableState<SharedObject?> = mutableStateOf(null),
+  val voiceSizes: MutableState<SearchVoiceSizes?> = mutableStateOf(null)
 ) : ComposeProps
+
+/** `SearchVoiceSizes` in `src/search-voice.ts`, in dp: each size left out keeps Material's own. */
+data class SearchVoiceSizes(
+  @Field val clearIconSize: Float? = null,
+  @Field val microphoneIconSize: Float? = null,
+  @Field val stopButtonSize: Float? = null,
+  @Field val waveform: SearchVoiceWaveformSizes? = null
+) : Record
+
+data class SearchVoiceWaveformSizes(
+  @Field val width: Float? = null,
+  @Field val height: Float? = null,
+  @Field val barWidth: Float? = null,
+  @Field val barGap: Float? = null,
+  @Field val barRadius: Float? = null,
+  @Field val minBarHeight: Float? = null
+) : Record
 
 open class SearchFieldTextEvent(
   @Field open val text: String = ""
@@ -207,6 +226,7 @@ class SearchFieldView(context: Context, appContext: AppContext) :
     val microphoneLabel by props.microphoneLabel
     val stopLabel by props.stopLabel
     val voiceMeter by props.voiceMeter
+    val voiceSizes by props.voiceSizes
     val blurRequest by blurRequests
 
     val focusManager = LocalFocusManager.current
@@ -289,8 +309,11 @@ class SearchFieldView(context: Context, appContext: AppContext) :
             trailingIcon = {
               Row(verticalAlignment = Alignment.CenterVertically) {
                 if (voiceEnabled && voiceListening) {
-                  VoiceMeter(voiceMeter, icon)
-                  FilledTonalIconButton(onClick = { onVoiceAction(SearchFieldVoiceEvent("stop")) }) {
+                  VoiceMeter(voiceMeter, icon, voiceSizes?.waveform)
+                  FilledTonalIconButton(
+                    onClick = { onVoiceAction(SearchFieldVoiceEvent("stop")) },
+                    modifier = voiceSizes?.stopButtonSize?.let { Modifier.size(it.dp) } ?: Modifier
+                  ) {
                     DrawableIcon(stopIconName, stopLabel)
                   }
                 } else if (voiceEnabled) {
@@ -304,14 +327,14 @@ class SearchFieldView(context: Context, appContext: AppContext) :
                   ) { showsClear ->
                     if (showsClear) {
                       IconButton(onClick = { textFieldState.clearText() }) {
-                        DrawableIcon(clearIconName, clearLabel)
+                        DrawableIcon(clearIconName, clearLabel, voiceSizes?.clearIconSize)
                       }
                     } else {
                       IconButton(onClick = {
                         focusRequester.requestFocus()
                         onVoiceAction(SearchFieldVoiceEvent("start"))
                       }) {
-                        DrawableIcon(microphoneIconName, microphoneLabel)
+                        DrawableIcon(microphoneIconName, microphoneLabel, voiceSizes?.microphoneIconSize)
                       }
                     }
                   }
@@ -406,20 +429,25 @@ private fun CollapsibleSection(isVisible: Boolean, content: @Composable () -> Un
 }
 
 @Composable
-private fun VoiceMeter(meter: SharedObject?, color: ComposeColor) {
+private fun VoiceMeter(meter: SharedObject?, color: ComposeColor, sizes: SearchVoiceWaveformSizes?) {
   val tint = if (color.isSpecified) color else LocalContentColor.current
   AndroidView(
-    factory = { context ->
-      val density = context.resources.displayMetrics.density
-      LiveWaveformView(context).apply {
-        style = WaveformStyle(barWidth = 2 * density, barGap = 2 * density, minBarHeight = 2 * density)
-      }
-    },
+    factory = { context -> LiveWaveformView(context).apply { growIn = LiveWaveformGrowIn() } },
     update = { view ->
+      val density = view.resources.displayMetrics.density
+      view.style = WaveformStyle(
+        barWidth = (sizes?.barWidth ?: VOICE_METER_BAR) * density,
+        barGap = (sizes?.barGap ?: VOICE_METER_BAR) * density,
+        barRadius = sizes?.barRadius?.let { it * density },
+        minBarHeight = (sizes?.minBarHeight ?: VOICE_METER_BAR) * density
+      )
       view.meter = meter
       view.color = tint.toArgb()
     },
-    modifier = Modifier.size(width = VoiceMeterWidth, height = VoiceMeterHeight)
+    modifier = Modifier.size(
+      width = sizes?.width?.dp ?: VoiceMeterWidth,
+      height = sizes?.height?.dp ?: VoiceMeterHeight
+    )
   )
 }
 
@@ -437,7 +465,7 @@ private fun ClearButton(isVisible: Boolean, iconName: String?, label: String?, o
 }
 
 @Composable
-private fun DrawableIcon(name: String?, contentDescription: String?) {
+private fun DrawableIcon(name: String?, contentDescription: String?, size: Float? = null) {
   val context = LocalContext.current
   val id = remember(name) { resourceId(context, name) }
 
@@ -445,7 +473,11 @@ private fun DrawableIcon(name: String?, contentDescription: String?) {
     return
   }
 
-  Icon(painter = painterResource(id), contentDescription = contentDescription)
+  Icon(
+    painter = painterResource(id),
+    contentDescription = contentDescription,
+    modifier = size?.let { Modifier.size(it.dp) } ?: Modifier
+  )
 }
 
 private object SearchKeyboard : InputTransformation {
@@ -462,6 +494,7 @@ private const val ICON_SCALE = 0.6f
 private val VoiceButtonWidth = 48.dp
 private val VoiceMeterWidth = 64.dp
 private val VoiceMeterHeight = 20.dp
+private const val VOICE_METER_BAR = 2f
 
 private val HeaderEasing = CubicBezierEasing(0.2f, 0f, 0f, 1f)
 private val HeaderSizeSpec = tween<IntSize>(durationMillis = 350, easing = HeaderEasing)

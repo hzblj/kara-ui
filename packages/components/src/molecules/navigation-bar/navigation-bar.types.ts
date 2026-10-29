@@ -1,4 +1,4 @@
-import type {SearchVoiceMeter} from '@hzblj/kara-native'
+import type {SearchVoiceMeter, SearchVoiceSizes} from '@hzblj/kara-native'
 import type {ReactNode, Ref} from 'react'
 import type {ColorValue} from 'react-native'
 
@@ -34,6 +34,8 @@ export type SearchFieldVoice = {
   onStart: () => void
   /** The stop button was pressed. */
   onStop: () => void
+  /** The glyphs, the stop button and the waveform, each the platform's own size unless set. */
+  sizes?: SearchVoiceSizes
   /** The glyph in the stop button. */
   stopIcon?: IconName
   /** The stop button's accessibility label. */

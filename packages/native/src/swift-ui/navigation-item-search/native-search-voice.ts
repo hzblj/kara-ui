@@ -1,6 +1,6 @@
 import type {ProcessedColorValue} from 'react-native'
 
-import {searchVoiceColor} from '../../search-voice'
+import {type SearchVoiceSizes, searchVoiceColor} from '../../search-voice'
 import type {SearchFieldVoiceIOS} from './navigation-item-search.types'
 
 /** What crosses the bridge: the voice without its handlers and meter. */
@@ -12,6 +12,7 @@ export type NativeSearchVoiceRecord = {
   listening: boolean
   microphoneImageName?: string
   microphoneLabel?: string
+  sizes?: SearchVoiceSizes
   stopImageName?: string
   stopLabel?: string
 }
@@ -24,6 +25,7 @@ export const toNativeSearchVoice = (voice: SearchFieldVoiceIOS | undefined): Nat
   listening: voice?.listening ?? false,
   microphoneImageName: voice?.microphoneImageName,
   microphoneLabel: voice?.microphoneLabel,
+  sizes: voice?.sizes,
   stopImageName: voice?.stopImageName,
   stopLabel: voice?.stopLabel,
 })

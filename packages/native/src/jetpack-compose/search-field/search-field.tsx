@@ -3,7 +3,7 @@ import type {NativeSyntheticEvent} from 'react-native'
 
 import {GLYPHS} from '../../glyphs'
 import {requireKaraView} from '../../require-view'
-import {type SearchVoiceActionEvent, sharedObjectId} from '../../search-voice'
+import {type SearchVoiceActionEvent, type SearchVoiceSizes, sharedObjectId} from '../../search-voice'
 import type {SearchFieldProps} from './search-field.types'
 
 type TextEvent = NativeSyntheticEvent<{text: string}>
@@ -26,6 +26,7 @@ type NativeSearchFieldProps = Omit<
   voiceEnabled: boolean
   voiceListening: boolean
   voiceMeter: number | null
+  voiceSizes?: SearchVoiceSizes
 }
 
 const NativeSearchField = requireKaraView<NativeSearchFieldProps>('SearchFieldView')
@@ -78,6 +79,7 @@ export const SearchField = ({
       voiceEnabled={voice !== undefined}
       voiceListening={voice?.listening ?? false}
       voiceMeter={sharedObjectId(voice?.meter)}
+      voiceSizes={voice?.sizes}
     />
   )
 }
