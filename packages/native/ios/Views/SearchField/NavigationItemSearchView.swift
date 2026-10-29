@@ -4,8 +4,9 @@ import UIKit
 /**
  A layout-less view (`display: contents`, `disableForceFlatten`) inside a native-stack screen that dresses the search
  controller react-native-screens puts on that screen's `UINavigationItem`: the app's clear and cancel glyphs
- (`SearchFieldAppearance`), the voice accessory (`SearchFieldAccessory`) and the reset of a search that the integrated
- search's system close ended without telling the search bar's delegate (`SearchCloseObserver`).
+ (`SearchFieldAppearance`), the voice accessory (`SearchFieldAccessory`), the reset of a search that the integrated
+ search's system close ended without telling the search bar's delegate (`SearchCloseObserver`) and the fade of the
+ field's content while an integrated search button closes (`IntegratedSearchCollapseFade`).
 
  It finds the item through the responder chain, so it must sit in the screen's tree. react-native-screens sets the
  controller after the screen mounts, so the first attach is retried for about 5 s.
@@ -17,6 +18,7 @@ public final class NavigationItemSearchView: ExpoView {
   let accessory = SearchFieldAccessory()
   let appearance = SearchFieldAppearance()
   private let closeObserver = SearchCloseObserver()
+  private lazy var collapseFade = IntegratedSearchCollapseFade(accessory: accessory)
   private var isVoiceEnabled = false
 
   public required init(appContext: AppContext? = nil) {
@@ -42,6 +44,7 @@ public final class NavigationItemSearchView: ExpoView {
       accessory.detach()
       appearance.detach()
       closeObserver.detach()
+      collapseFade.detach()
       return
     }
     attach()
@@ -57,6 +60,7 @@ public final class NavigationItemSearchView: ExpoView {
       }
       appearance.attach(to: searchController.searchBar)
       closeObserver.attach(to: searchController)
+      collapseFade.attach(to: searchController)
       return
     }
     guard attempt < Self.attachAttempts else {
