@@ -1,5 +1,21 @@
 # @hzblj/kara-ui
 
+## 0.25.0
+
+### Minor Changes
+
+- [#80](https://github.com/hzblj/kara-ui/pull/80) [`e9d4c23`](https://github.com/hzblj/kara-ui/commit/e9d4c23328a2e72e0fb124621cc4f491b3f86335) Thanks [@hzblj](https://github.com/hzblj)! - `ScrollEdgeContainer` catches up with Footshop's: it sets the scroll view's top inset natively as soon as the top bar is laid out, so a list no longer starts under its bar for a few frames and then jumps (most visible on a tab rendered before it is first shown); `initialTopBarHeight` / `initialBottomBarHeight` give the first frame its insets; `contentScrollView` lets the iOS 26 tab bar minimise with this scroll view; `topEdgeEffectHidden` drops the top blur. A list remounted by `key` keeps its inset and edge effects, and a bottom bar no longer jumps while the keyboard animates. On iOS a `List` is its screen's content scroll view, so a large title in the header collapses as the list scrolls. Run a prebuild after upgrading.
+
+### Patch Changes
+
+- Updated dependencies [[`e9d4c23`](https://github.com/hzblj/kara-ui/commit/e9d4c23328a2e72e0fb124621cc4f491b3f86335)]:
+  - @hzblj/kara-native@0.25.0
+  - @hzblj/kara-components@0.25.0
+  - @hzblj/kara-router@0.25.0
+  - @hzblj/kara-sx@0.25.0
+  - @hzblj/kara-theme@0.25.0
+  - @hzblj/kara-expo-plugin@0.25.0
+
 ## 0.24.0
 
 ### Minor Changes
