@@ -11,6 +11,8 @@ export type ListVariant = 'insetGrouped' | 'plain'
  *
  * Rows are separated for you (SwiftUI's own separators, a `Divider` between rows on Android), so a `Divider` among
  * the children is one too many: on iOS it becomes an empty row of its own.
+ *
+ * On iOS the list is its screen's content scroll view, so a native-stack large title collapses as it scrolls.
  */
 export type ListProps = {
   /** The rows: native views, one row each. */

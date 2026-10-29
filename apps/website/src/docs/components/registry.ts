@@ -796,6 +796,7 @@ export const COMPONENTS: ComponentDoc[] = [
       'Rows are separated for you; a `Divider` among them is one too many.',
       '`onRefresh` returns a promise; the spinner runs until it settles.',
       '`variant` is `insetGrouped` (the iOS default) or `plain` (the Android default); `separators={false}` drops the lines between rows.',
+      'On iOS a large title in the header collapses as the list scrolls.',
     ],
     renders: {android: 'Compose LazyColumn', ios: 'SwiftUI List'},
     summary: 'A native scrolling list of rows.',

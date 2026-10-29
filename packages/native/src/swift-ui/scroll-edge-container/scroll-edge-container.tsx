@@ -13,7 +13,14 @@ type NativeScrollEdgeContainerProps = {
   topBarHeight: number
 }
 
+type NativeScrollEdgeTopBarProps = {
+  children?: ReactNode
+  pointerEvents: 'box-none'
+  scrollInsetExtra?: number
+}
+
 const NativeScrollEdgeContainer = requireKaraView<NativeScrollEdgeContainerProps>('ScrollEdgeContainerView')
+const NativeScrollEdgeTopBar = requireKaraView<NativeScrollEdgeTopBarProps>('ScrollEdgeTopBarView')
 
 const styles = StyleSheet.create({
   bottomBar: {bottom: 0, left: 0, position: 'absolute', right: 0},
@@ -46,6 +53,7 @@ export const ScrollEdgeContainer = ({
   }, [])
 
   const {contentInset, scrollIndicatorInsets} = children.props
+  const scrollInsetExtra = automaticInsets ? (contentInset?.top ?? 0) : undefined
 
   const scrollable = useMemo(() => {
     if (!automaticInsets) {
@@ -87,7 +95,9 @@ export const ScrollEdgeContainer = ({
     >
       {scrollable}
       <View collapsable={false} onLayout={onTopBarLayout} style={styles.topBar}>
-        {topBar}
+        <NativeScrollEdgeTopBar pointerEvents="box-none" scrollInsetExtra={scrollInsetExtra}>
+          {topBar}
+        </NativeScrollEdgeTopBar>
       </View>
       <View collapsable={false} onLayout={onBottomBarLayout} style={styles.bottomBar}>
         {bottomBar}

@@ -140,7 +140,7 @@ private func configureEdgeEffects(in host: UIView?, effect: ScrollEdgeEffectOpti
 }
 
 @MainActor
-private func firstScrollView(in view: UIView?) -> UIScrollView? {
+func firstScrollView(in view: UIView?) -> UIScrollView? {
   guard let view else {
     return nil
   }
