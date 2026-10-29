@@ -2649,15 +2649,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hzblj/expo-waveform@npm:^0.3.0":
-  version: 0.3.0
-  resolution: "@hzblj/expo-waveform@npm:0.3.0"
+"@hzblj/expo-waveform@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "@hzblj/expo-waveform@npm:0.4.0"
   peerDependencies:
     expo: ">=57"
     expo-modules-core: "*"
     react: "*"
     react-native: "*"
-  checksum: 10c0/ee36eb939e9b6e7003b25899d0bb61a15f72e61017c992aaf52dc6bddacb7f35310d8c36a597df6688b942881a9ef973daee9d87f21d6956cba7b905101efbb6
+  checksum: 10c0/f58135d6d12b6642afaf4ef41e7c52fa34ef183ce5924013564520ebef224f06eeaf73eb39148da0a7e3d593a9a8e2ad44a73ff27674aa2f4dfb27daf97d10b7
   languageName: node
   linkType: hard
 
@@ -2738,7 +2738,7 @@ __metadata:
   dependencies:
     "@expo/ui": "npm:~57.0.18"
     "@hzblj/expo-native-icons": "npm:^0.1.0"
-    "@hzblj/expo-waveform": "npm:^0.3.0"
+    "@hzblj/expo-waveform": "npm:^0.4.0"
     "@hzblj/expo-zoom-transition": "npm:^0.2.0"
     "@material-symbols/svg-400": "npm:^0.48.0"
     "@types/react": "npm:~19.2.18"

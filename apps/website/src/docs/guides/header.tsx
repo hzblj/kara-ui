@@ -93,6 +93,15 @@ const search = useHeaderSearch({
 
 useEffect(() => search.setText(transcript.text.trim()), [transcript.text])`
 
+const VOICE_SIZES = `voice: {
+  // …
+  sizes: {
+    clearIconSize: 14,
+    stopButtonSize: 28,
+    waveform: {width: 72, barWidth: 3, barRadius: 0},
+  },
+}`
+
 const HERO = `// layout: <Stack.Screen name="place" options={HERO_HEADER_SCREEN_OPTIONS} />
 
 export default function Place() {
@@ -207,6 +216,12 @@ export const header: Guide = {
             'Leave `voice` out (or set it to `undefined`) to turn the microphone off. Typing over the dictation, or ending the search, calls `onCancel`. `NavigationBar` and `Sheet.Header` take the same `voice` on their `search`.'
           }
         </P>
+        <P>
+          {
+            'New bars grow in from the middle as they come in at the edge. `sizes` sets the glyphs, the stop button and the waveform; anything left out keeps its default. `barRadius: 0` gives flat bars.'
+          }
+        </P>
+        <CodeBlock code={VOICE_SIZES} />
       </Section>
 
       <Section id="hero" title="Hero header">

@@ -97,7 +97,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@hzblj/expo-waveform": "^0.3.0",
+    "@hzblj/expo-waveform": "^0.4.0",
     "@hzblj/expo-zoom-transition": "^0.2.0",
     "sf-symbols-typescript": "^2.2.0"
   }
