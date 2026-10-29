@@ -20,8 +20,25 @@ export type ScrollEdgeContainerProps = {
   bottomBar?: ReactNode
   /** Exactly one React Native scroll view. */
   children: ReactElement<ScrollEdgeScrollableProps>
+  /**
+   * Makes the scroll view its screen's content scroll view for the bottom edge, the one the iOS 26 tab bar watches to
+   * minimise on scroll. UIKit otherwise takes the screen's first scroll view, which may be another one.
+   */
+  contentScrollView?: boolean
   effect?: ScrollEdgeEffect
+  /**
+   * The bottom bar's height until it is measured. The bars are measured after the first frame, so without it a newly
+   * mounted container lays the scroll view out with no bottom inset for that frame.
+   */
+  initialBottomBarHeight?: number
+  /**
+   * The top bar's height until it is measured: a caller that already knows it (a pager page, a screen whose bar was
+   * measured elsewhere) keeps the first frame's content from starting under the bar.
+   */
+  initialTopBarHeight?: number
   style?: StyleProp<ViewStyle>
   testID?: string
   topBar?: ReactNode
+  /** Hides the top edge effect, e.g. while a cover image sits under the top bar. */
+  topEdgeEffectHidden?: boolean
 }

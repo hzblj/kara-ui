@@ -10,9 +10,13 @@ export const ScrollEdgeContainer: ScrollEdgeContainerComponent = ({
   automaticInsets,
   bottomBar,
   children,
+  contentScrollView,
   effect,
+  initialBottomBarHeight,
+  initialTopBarHeight,
   testID,
   topBar,
+  topEdgeEffectHidden,
   ...sx
 }: ScrollEdgeContainerProps) => {
   const style = useSx(sx)
@@ -21,10 +25,14 @@ export const ScrollEdgeContainer: ScrollEdgeContainerComponent = ({
     <NativeScrollEdgeContainer
       automaticInsets={automaticInsets}
       bottomBar={bottomBar}
+      contentScrollView={contentScrollView}
       effect={effect}
+      initialBottomBarHeight={initialBottomBarHeight}
+      initialTopBarHeight={initialTopBarHeight}
       style={style}
       testID={testID}
       topBar={topBar}
+      topEdgeEffectHidden={topEdgeEffectHidden}
     >
       {children}
     </NativeScrollEdgeContainer>
