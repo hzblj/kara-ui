@@ -1,5 +1,11 @@
 # @hzblj/kara-native
 
+## 0.25.1
+
+### Patch Changes
+
+- [#82](https://github.com/hzblj/kara-ui/pull/82) [`ac467e2`](https://github.com/hzblj/kara-ui/commit/ac467e2395360710f0745ccd49f21434eb101afe) Thanks [@hzblj](https://github.com/hzblj)! - Closing a native-stack header's integrated search button in a modal presented over another modal brings the search button's glyph back at once instead of leaving an empty circle for a moment: the search reports its close as soon as it dismisses. Run a prebuild after upgrading.
+
 ## 0.25.0
 
 ### Minor Changes
