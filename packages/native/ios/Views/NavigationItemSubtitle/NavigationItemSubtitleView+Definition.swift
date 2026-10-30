@@ -22,6 +22,9 @@ extension NavigationItemSubtitleView {
       Prop("color") { (view: NavigationItemSubtitleView, color: UIColor?) in
         view.color = color ?? .secondaryLabel
       }
+      Prop("transition") { (view: NavigationItemSubtitleView, record: NavigationTitleTransitionRecord?) in
+        view.transition = NavigationTitleTransition(record: record)
+      }
     }
   }
 }

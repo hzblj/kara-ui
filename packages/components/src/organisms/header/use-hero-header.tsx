@@ -142,6 +142,7 @@ export const useHeroHeader = (
     revealedTrailingActions,
     subtitle,
     title,
+    titleTransition,
     trailingActions,
   }: HeroHeaderParams
 ): HeroHeader => {
@@ -177,6 +178,7 @@ export const useHeroHeader = (
     subtitle,
     title,
     titleRevealProgress: scrollProgress,
+    titleTransition,
     trailingActions: visibleTrailingActions,
   })
 

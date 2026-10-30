@@ -1,3 +1,4 @@
+import type {NavigationTitleTransition} from '@hzblj/kara-native'
 import {type ReactNode, useCallback, useMemo, useState} from 'react'
 import {type LayoutChangeEvent, Platform, StyleSheet, useWindowDimensions, View} from 'react-native'
 import Animated, {
@@ -126,6 +127,7 @@ type TitleParams = {
   title?: string
   titleHidden: boolean
   titleRevealProgress?: SharedValue<number>
+  titleTransition?: NavigationTitleTransition
 }
 
 /**
@@ -133,7 +135,14 @@ type TitleParams = {
  * large), plus on Android the large title row and the scroll worklet that collapses it into the bar, as Material's large
  * top app bar does. iOS needs neither: the large title is UIKit's own.
  */
-export const useHeaderTitle = ({largeTitle, subtitle, title, titleHidden, titleRevealProgress}: TitleParams) => {
+export const useHeaderTitle = ({
+  largeTitle,
+  subtitle,
+  title,
+  titleHidden,
+  titleRevealProgress,
+  titleTransition,
+}: TitleParams) => {
   const scrollY = useSharedValue(0)
   const largeTitleHeight = useSharedValue(0)
   const revealed = useIsTitleRevealed(titleRevealProgress)
@@ -169,7 +178,9 @@ export const useHeaderTitle = ({largeTitle, subtitle, title, titleHidden, titleR
       const shownTitle = revealed ? title : ''
 
       // The subtitle styles the screen's navigation item from inside its tree, which `headerBackground` is.
-      titleOptions.headerBackground = () => <NativeSubtitle subtitle={subtitle} subtitleHidden={!revealed} />
+      titleOptions.headerBackground = () => (
+        <NativeSubtitle subtitle={subtitle} subtitleHidden={!revealed} transition={titleTransition} />
+      )
       titleOptions.headerTitle = shownTitle
       titleOptions.title = shownTitle
       return titleOptions
@@ -209,6 +220,7 @@ export const useHeaderTitle = ({largeTitle, subtitle, title, titleHidden, titleR
     title,
     titleHidden,
     titleRevealProgress,
+    titleTransition,
   ])
 
   const largeTitleRow = useMemo(

@@ -9,11 +9,15 @@ import UIKit
  while `attributedSubtitle` survives it.
 
  It finds the item through the responder chain (the first view controller up is the screen's), so it has to sit inside
- the screen's tree. `subtitleHidden` changes cross-dissolve the navigation bar, so a title revealed on scroll and its
- subtitle fade in together. Leaving the window resets the item's style and subtitle.
+ the screen's tree. `subtitleHidden` changes play `transition` (`NavigationTitleAnimator`) over the title and subtitle.
+ The stack clears its title in the same commit that hides it, so the view takes pictures of both lines just before
+ (KVO with `.prior` on `navigationItem.title`) and the exit plays those. When the trailing bar items change in the same
+ commit, a snapshot of the old bar, masked to the side of the title, fades out over them. Leaving the window resets the
+ item's style and subtitle.
  */
 public final class NavigationItemSubtitleView: ExpoView {
-  private static let revealDuration: TimeInterval = 0.25
+  private static let trailingItemsFadeDuration: TimeInterval = 0.25
+  private static let trailingItemsGap: CGFloat = 4
 
   var subtitle = "" {
     didSet {
@@ -69,7 +73,13 @@ public final class NavigationItemSubtitleView: ExpoView {
     }
   }
 
+  var transition = NavigationTitleTransition.rise
+
   private weak var navigationItem: UINavigationItem?
+  private var titleObservation: NSKeyValueObservation?
+  private var shownSnapshots: [NavigationTitleSnapshot] = []
+  private var trailingItems: [String] = []
+  private let animator = NavigationTitleAnimator()
 
   public override func didMoveToSuperview() {
     super.didMoveToSuperview()
@@ -88,27 +98,126 @@ public final class NavigationItemSubtitleView: ExpoView {
     }
 
     let item = controller.navigationItem
+    observeTitle(of: item)
     navigationItem = item
     let attributedSubtitle = subtitleHidden ? nil : makeAttributedSubtitle()
-    let update = {
-      item.style = .browser
-      item.attributedSubtitle = attributedSubtitle
-    }
+    let currentTrailingItems = Self.signature(of: item.rightBarButtonItems)
+    let haveTrailingItemsChanged = currentTrailingItems != trailingItems
+    trailingItems = currentTrailingItems
 
     guard animated, let navigationBar = controller.navigationController?.navigationBar, window != nil else {
-      update()
+      animator.cancel()
+      item.style = .browser
+      item.attributedSubtitle = attributedSubtitle
       return
     }
 
-    UIView.transition(
-      with: navigationBar,
-      duration: Self.revealDuration,
-      options: [.transitionCrossDissolve, .allowUserInteraction],
-      animations: update
+    let previousBar = haveTrailingItemsChanged ? navigationBar.snapshotView(afterScreenUpdates: false) : nil
+    let exitSnapshots = subtitleHidden ? takeExitSnapshots(in: navigationBar, item: item) : []
+    item.style = .browser
+    item.attributedSubtitle = attributedSubtitle
+
+    let titleSnapshots = subtitleHidden ? exit(in: navigationBar, snapshots: exitSnapshots) : enter(in: navigationBar, item: item)
+    if let previousBar {
+      fadeTrailingItems(of: navigationBar, from: previousBar, beside: titleSnapshots)
+    }
+  }
+
+  private func enter(in navigationBar: UINavigationBar, item: UINavigationItem) -> [NavigationTitleSnapshot] {
+    let snapshots = animator.enter(in: navigationBar, title: item.title ?? "", subtitle: subtitle, transition: transition)
+    guard snapshots.isEmpty, transition.isAnimated else {
+      return snapshots
+    }
+    // The stack may set its title after this view's props in the same commit; one turn later the label is there.
+    DispatchQueue.main.async { [weak self, weak navigationBar] in
+      guard let self, let navigationBar, !self.subtitleHidden else {
+        return
+      }
+      self.animator.enter(in: navigationBar, title: item.title ?? "", subtitle: self.subtitle, transition: self.transition)
+    }
+    return snapshots
+  }
+
+  private func exit(in navigationBar: UINavigationBar, snapshots: [NavigationTitleSnapshot]) -> [NavigationTitleSnapshot] {
+    if transition.exit == .reverse {
+      animator.exit(in: navigationBar, snapshots: snapshots)
+    } else {
+      animator.cancel()
+    }
+    return snapshots
+  }
+
+  private func takeExitSnapshots(in navigationBar: UINavigationBar, item: UINavigationItem) -> [NavigationTitleSnapshot] {
+    defer {
+      shownSnapshots = []
+    }
+    if !shownSnapshots.isEmpty {
+      return shownSnapshots
+    }
+    return animator.snapshots(in: navigationBar, title: item.title ?? "", subtitle: subtitle, transition: transition)
+  }
+
+  private func observeTitle(of item: UINavigationItem) {
+    guard navigationItem !== item || titleObservation == nil else {
+      return
+    }
+    titleObservation = item.observe(\.title, options: [.prior]) { [weak self] item, change in
+      guard change.isPrior else {
+        return
+      }
+      MainActor.assumeIsolated {
+        self?.captureShownTitle(of: item)
+      }
+    }
+  }
+
+  private func captureShownTitle(of item: UINavigationItem) {
+    guard !subtitleHidden, transition.exit == .reverse, window != nil,
+      let navigationBar = owningViewController()?.navigationController?.navigationBar
+    else {
+      shownSnapshots = []
+      return
+    }
+    shownSnapshots = animator.snapshots(in: navigationBar, title: item.title ?? "", subtitle: subtitle, transition: transition)
+  }
+
+  private func fadeTrailingItems(
+    of navigationBar: UINavigationBar,
+    from previousBar: UIView,
+    beside titleSnapshots: [NavigationTitleSnapshot]
+  ) {
+    guard let container = navigationBar.superview else {
+      return
+    }
+    let titleEnd = titleSnapshots.map(\.frame.maxX).max() ?? navigationBar.bounds.midX
+    let start = titleEnd + Self.trailingItemsGap
+    let mask = CALayer()
+    mask.backgroundColor = UIColor.black.cgColor
+    mask.frame = CGRect(x: start, y: 0, width: max(0, navigationBar.bounds.width - start), height: navigationBar.bounds.height)
+    previousBar.frame = navigationBar.frame
+    previousBar.isUserInteractionEnabled = false
+    previousBar.layer.mask = mask
+    container.insertSubview(previousBar, aboveSubview: navigationBar)
+    UIView.animate(
+      withDuration: Self.trailingItemsFadeDuration,
+      delay: 0,
+      options: [.allowUserInteraction],
+      animations: { previousBar.alpha = 0 },
+      completion: { _ in previousBar.removeFromSuperview() }
     )
   }
 
+  /** What tells the trailing items apart; a native stack builds new ones on every header update. */
+  private static func signature(of items: [UIBarButtonItem]?) -> [String] {
+    (items ?? []).map { item in
+      "\(item.title ?? "")|\(item.image != nil)|\(item.customView != nil)|\(item.accessibilityLabel ?? "")"
+    }
+  }
+
   private func reset() {
+    animator.cancel()
+    titleObservation = nil
+    shownSnapshots = []
     guard #available(iOS 26.0, *), let item = navigationItem else {
       return
     }
