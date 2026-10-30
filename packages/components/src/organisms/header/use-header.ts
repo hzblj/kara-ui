@@ -20,10 +20,11 @@ export const useHeaderOptions = ({
   title,
   titleHidden = false,
   titleRevealProgress,
+  titleTransition,
   trailingActions,
 }: HeaderParams): HeaderOptionsResult => {
   const theme = useAppTheme()
-  const headerTitle = useHeaderTitle({largeTitle, subtitle, title, titleHidden, titleRevealProgress})
+  const headerTitle = useHeaderTitle({largeTitle, subtitle, title, titleHidden, titleRevealProgress, titleTransition})
 
   const actionOptions = useMemo(
     () => toHeaderOptions({backHidden, leadingActions, trailingActions}, theme),

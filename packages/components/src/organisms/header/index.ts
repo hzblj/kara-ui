@@ -1,3 +1,11 @@
+export type {
+  NavigationTitleEasing,
+  NavigationTitleLineMotion,
+  NavigationTitleTiming,
+  NavigationTitleTransition,
+  NavigationTitleTransitionConfig,
+  NavigationTitleTransitionPreset,
+} from '@hzblj/kara-native'
 export * from './header.types'
 export * from './header-inset'
 export * from './header-large-title-fade'

@@ -261,8 +261,9 @@ after a native stack upgrade.
 navigation item's own (`NavigationItemSubtitle` from `headerBackground`, which sits in the screen's tree, with the
 native title only once it is revealed), elsewhere as a title view kara draws (on iOS it asks for the window's width and
 shrinks, because the bar centres a custom title view in what the items leave). `titleRevealProgress` (0..1) fades the
-title in; past half iOS 26 switches its native title and subtitle on with the bar's cross-dissolve, through
-`useIsTitleRevealed`, the one place the header crosses from the UI thread to JS. `largeTitle` is UIKit's own on iOS;
+title in; past half iOS 26 switches its native title and subtitle on, through `useIsTitleRevealed`, the one place the
+header crosses from the UI thread to JS, and `titleTransition` (handed to `NavigationItemSubtitle` as `transition`) says
+how they come in and leave. `largeTitle` is UIKit's own on iOS;
 the native stack has none on Android, so there it is the list's first row (`largeTitle` in the result) and the bar's
 title fades in between half and all of that row's height scrolled away, from the `onScroll` worklet the screen feeds,
 as Material's large top app bar collapses. An unset `largeTitle` leaves the stack's own setting alone.

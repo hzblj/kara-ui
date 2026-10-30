@@ -123,6 +123,22 @@ export default function Place() {
   )
 }`
 
+const TITLE_TRANSITION = `// A preset
+useHeroHeader(navigation, {title: 'Northern lights', subtitle: 'Iceland', heroHeight: 460, titleTransition: 'fade'})
+
+// Or adjust one
+useHeroHeader(navigation, {
+  title: 'Northern lights',
+  subtitle: 'Iceland',
+  heroHeight: 460,
+  titleTransition: {
+    preset: 'rise',
+    title: {offset: 10, timing: {type: 'spring', response: 0.5, dampingFraction: 0.8}},
+    subtitle: {delay: 0.05, timing: {type: 'timing', duration: 0.3, easing: 'easeOut'}},
+    exit: 'none',
+  },
+})`
+
 export const header: Guide = {
   Content: () => (
     <>
@@ -172,6 +188,7 @@ export const header: Guide = {
             ['`subtitle`', 'Title and subtitle on the leading side.'],
             ['`largeTitle`', 'A large title that collapses into the bar.'],
             ['`titleRevealProgress`', 'Fades the title in, 0 to 1. For a title that shows after scrolling.'],
+            ['`titleTransition`', 'How a revealed title and subtitle come in and leave (iOS 26).'],
             ['`titleHidden`', 'The bar without a title.'],
           ]}
         />
@@ -181,6 +198,40 @@ export const header: Guide = {
           }
         </P>
         <CodeBlock code={LARGE_TITLE} />
+      </Section>
+
+      <Section id="title-transition" title="Title transition">
+        <P>
+          {
+            'On iOS 26 a revealed title with a subtitle comes in with `titleTransition` and leaves the same way backwards. Works with `titleRevealProgress` and `useHeroHeader`.'
+          }
+        </P>
+        <Table
+          columns={['Preset', 'What it does']}
+          rows={[
+            ['`rise` (default)', 'Mail’s title: each line rises from below out of a blur, the subtitle trails.'],
+            ['`blur`', 'The same, in place.'],
+            ['`fade`', 'A plain fade.'],
+            ['`none`', 'No animation.'],
+          ]}
+        />
+        <P>{'Pass an object to adjust a preset. Anything you leave out keeps the preset’s.'}</P>
+        <CodeBlock code={TITLE_TRANSITION} />
+        <Table
+          columns={['Option', 'What it does']}
+          rows={[
+            ['`offset`', 'Points below its place to start from. Negative starts above.'],
+            ['`blur`', 'Starting blur radius, in points.'],
+            ['`scale`', 'Starting scale.'],
+            ['`delay`', 'Seconds before the line starts.'],
+            [
+              '`timing`',
+              '`{type: "spring", response, dampingFraction}` or `{type: "timing", duration, easing}`. `easing` takes a name or bézier points.',
+            ],
+            ['`exit`', '`reverse` (default) plays the entry backwards, `none` hides at once.'],
+          ]}
+        />
+        <P>{'With Reduce Motion on, the lines only fade.'}</P>
       </Section>
 
       <Section id="search" title="Search">
@@ -264,6 +315,7 @@ export const header: Guide = {
     {id: 'setup', label: 'Setup'},
     {id: 'actions', label: 'Actions'},
     {id: 'titles', label: 'Titles'},
+    {id: 'title-transition', label: 'Title transition'},
     {id: 'search', label: 'Search'},
     {id: 'voice', label: 'Voice'},
     {id: 'hero', label: 'Hero header'},

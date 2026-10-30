@@ -7,7 +7,11 @@ import type {NativeSubtitleComponent, NativeSubtitleProps} from './native-subtit
 /** iOS 26 puts a title and its subtitle on the leading side itself (`UINavigationItem.style = .browser`). */
 export const hasNativeSubtitle = isScrollEdgeEffectAvailable()
 
-export const NativeSubtitle: NativeSubtitleComponent = ({subtitle, subtitleHidden}: NativeSubtitleProps) => {
+export const NativeSubtitle: NativeSubtitleComponent = ({
+  subtitle,
+  subtitleHidden,
+  transition,
+}: NativeSubtitleProps) => {
   const theme = useAppTheme()
 
   return (
@@ -17,6 +21,7 @@ export const NativeSubtitle: NativeSubtitleComponent = ({subtitle, subtitleHidde
       fontSize={theme.typography.label.fontSize}
       subtitle={subtitle}
       subtitleHidden={subtitleHidden}
+      transition={transition}
     />
   )
 }

@@ -1,3 +1,4 @@
+import type {NavigationTitleTransition} from '@hzblj/kara-native'
 import type {ColorToken} from '@hzblj/kara-theme'
 import type {ReactElement, ReactNode, RefObject} from 'react'
 import type {ColorValue, ImageSourcePropType} from 'react-native'
@@ -175,9 +176,14 @@ export type HeaderParams = {
   titleHidden?: boolean
   /**
    * Fades the title (and subtitle) in as this goes from 0 to 1, for a detail screen whose title appears once its image
-   * has scrolled away. Past half, iOS 26 switches its native title and subtitle on with a cross-dissolve.
+   * has scrolled away. Past half, iOS 26 brings its native title and subtitle in with `titleTransition`.
    */
   titleRevealProgress?: SharedValue<number>
+  /**
+   * iOS 26, with a `subtitle`: how the revealed title and subtitle come in, and leave again. A preset (`rise`, Mail's
+   * title, by default; `blur`, `fade`, `none`) or a preset with your own offset, blur, scale, delay and timing per line.
+   */
+  titleTransition?: NavigationTitleTransition
   /**
    * The trailing side's actions, in screen order toward the edge: the close usually last. Unset leaves the side as the
    * stack's options have it; an empty array clears it.
@@ -333,7 +339,10 @@ export type HeaderSearch = {
 /** Whether the header over a hero is light (over a dark image) or dark (over a light one). */
 export type HeroHeaderStyle = 'dark' | 'light'
 
-export type HeroHeaderParams = Pick<HeaderParams, 'backHidden' | 'leadingActions' | 'subtitle' | 'trailingActions'> & {
+export type HeroHeaderParams = Pick<
+  HeaderParams,
+  'backHidden' | 'leadingActions' | 'subtitle' | 'titleTransition' | 'trailingActions'
+> & {
   /** The hero's height: the header fades in while the part of it under the bar scrolls away. */
   heroHeight: number
   /**
