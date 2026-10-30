@@ -1,5 +1,11 @@
 # @hzblj/kara-native
 
+## 0.26.0
+
+### Minor Changes
+
+- [#84](https://github.com/hzblj/kara-ui/pull/84) [`598b21c`](https://github.com/hzblj/kara-ui/commit/598b21c815b20ed3a85dfd00abfbdc18deccd767) Thanks [@hzblj](https://github.com/hzblj)! - A header's revealed title and subtitle on iOS 26 now rise into the bar out of a blur like Mail's title, with the subtitle trailing, and leave the same way backwards. Pick another preset (`blur`, `fade`, `none`) or set offset, blur, scale, delay, spring or easing per line with `titleTransition` on `useHeader` and `useHeroHeader`, or `transition` on `NavigationItemSubtitle`.
+
 ## 0.25.1
 
 ### Patch Changes
