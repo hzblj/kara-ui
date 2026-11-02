@@ -44,8 +44,8 @@ data class DrawableIconProps(
   val effectActive: MutableState<Boolean?> = mutableStateOf(null)
 ) : ComposeProps {
   /** Whether anything asks for what only expo-native-icons' view draws: Material's `Icon` only tints a drawable. */
-  val needsNativeIcon: Boolean
-    get() = effect.value != null || transition.value != null || variableValue.value != null ||
+  fun needsNativeIcon(): Boolean =
+    effect.value != null || transition.value != null || variableValue.value != null ||
       gradient.value == true || (renderingMode.value ?: "monochrome") != "monochrome"
 }
 
@@ -79,7 +79,7 @@ class DrawableIconView(context: Context, appContext: AppContext) :
     val tint = iconColor.composeOrNull ?: LocalContentColor.current
     val sizeModifier = Modifier.size((iconSize ?: DEFAULT_SIZE).dp)
 
-    if (!props.needsNativeIcon) {
+    if (!props.needsNativeIcon()) {
       Icon(
         painter = painterResource(id),
         contentDescription = accessibilityLabel,
