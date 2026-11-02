@@ -1,5 +1,19 @@
 # @hzblj/kara-ui
 
+## 0.26.2
+
+### Patch Changes
+
+- [#88](https://github.com/hzblj/kara-ui/pull/88) [`a42700c`](https://github.com/hzblj/kara-ui/commit/a42700c6897c9102f24faa52ef5117516f021cc6) Thanks [@hzblj](https://github.com/hzblj)! - An SVG in `NativeImage` on Android (a logo in a segmented button) fills the height it is drawn at, instead of keeping its own `width`/`height` in the top-left corner.
+
+- Updated dependencies [[`a42700c`](https://github.com/hzblj/kara-ui/commit/a42700c6897c9102f24faa52ef5117516f021cc6)]:
+  - @hzblj/kara-native@0.26.2
+  - @hzblj/kara-theme@0.26.2
+  - @hzblj/kara-sx@0.26.2
+  - @hzblj/kara-components@0.26.2
+  - @hzblj/kara-router@0.26.2
+  - @hzblj/kara-expo-plugin@0.26.2
+
 ## 0.26.1
 
 ### Patch Changes
