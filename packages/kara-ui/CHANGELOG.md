@@ -1,5 +1,19 @@
 # @hzblj/kara-ui
 
+## 0.26.1
+
+### Patch Changes
+
+- [#86](https://github.com/hzblj/kara-ui/pull/86) [`53fdb98`](https://github.com/hzblj/kara-ui/commit/53fdb986c6cb5850b24dd3c70238f5aeb6d85e9d) Thanks [@hzblj](https://github.com/hzblj)! - Android apps no longer crash on start with `NoSuchElementException: List is empty` from `DrawableIconView`'s props.
+
+- Updated dependencies [[`53fdb98`](https://github.com/hzblj/kara-ui/commit/53fdb986c6cb5850b24dd3c70238f5aeb6d85e9d)]:
+  - @hzblj/kara-native@0.26.1
+  - @hzblj/kara-theme@0.26.1
+  - @hzblj/kara-sx@0.26.1
+  - @hzblj/kara-components@0.26.1
+  - @hzblj/kara-router@0.26.1
+  - @hzblj/kara-expo-plugin@0.26.1
+
 ## 0.26.0
 
 ### Minor Changes
