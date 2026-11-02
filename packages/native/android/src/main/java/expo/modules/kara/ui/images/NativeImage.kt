@@ -21,6 +21,10 @@ internal sealed interface NativeImage {
     }
   }
 
+  /**
+   * An SVG scaled to the height it is drawn at. androidsvg draws a document that has its own `width`/`height` at that
+   * size in the corner of any viewport, so both are set to 100%: with them a logo came out a third of its height.
+   */
   class Vector(private val svg: SVG) : NativeImage {
     override val width = svg.documentViewBox?.width() ?: svg.documentWidth
     override val height = svg.documentViewBox?.height() ?: svg.documentHeight
@@ -29,6 +33,8 @@ internal sealed interface NativeImage {
       if (svg.documentViewBox == null && width > 0f && height > 0f) {
         svg.setDocumentViewBox(0f, 0f, width, height)
       }
+      svg.setDocumentWidth("100%")
+      svg.setDocumentHeight("100%")
     }
 
     override fun render(heightPx: Int): Bitmap? {

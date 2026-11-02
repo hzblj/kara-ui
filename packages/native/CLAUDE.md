@@ -13,7 +13,7 @@ component. Autolinked into any app that installs `@hzblj/kara-ui` (a transitive 
 | `ios/Modifiers/` | SwiftUI modifiers registered into `@expo/ui`'s registry: `contentScrollView` (a background view that finds the modified `List`'s scroll view up to the SwiftUI host and sets it as the screen's content scroll view for the top edge, a turn of the main queue later, so a native-stack large title collapses with it; UIKit only looks in the screen's first subview chain and finds none inside a host; `List` sets it), `scaledFont`, `underline`, `counterBadge`, `symbolStyle` (an app icon's custom SF Symbol: rendering mode and colours, iOS 26 gradient, the replace transition animated on a change of `transitionValue`, an effect once per `effectTrigger` or while `effectActive`; the SwiftUI twin of `@hzblj/expo-native-icons`' UIKit `NativeIconView`, same effect record), all in `ModifierRegistration` (once per process). |
 | `android/.../modifiers/` | Compose modifiers registered into `@expo/ui`'s registry: `underline`, and `karaAccessibility` (content and state descriptions, a role or heading, the click action's label, merging or clearing descendants), which `@hzblj/kara-sx` maps the accessibility props onto. `@expo/ui`'s own `semantics` carries only a content description. Both in `ModifierRegistration` (once per process). |
 | `ios/Fabric/` | Runtime fixes to React Native's own component views, installed from `OnCreate`: `OpacityVisibilitySync`. |
-| `android/src/main/java/expo/modules/kara/ui/` | `KaraUIModule.kt` plus one package per component (`blur`, `colorpicker`, `fab`, `icon`, `modifiers`, `ripple`, `swipe`, `tooltip`, `topappbar`). |
+| `android/src/main/java/expo/modules/kara/ui/` | `KaraUIModule.kt` plus one package per component (`blur`, `colorpicker`, `fab`, `icon`, `images`, `modifiers`, `ripple`, `swipe`, `tooltip`, `topappbar`). |
 | `src/swift-ui/`, `src/jetpack-compose/` | `requireKaraView` bindings and typed wrappers per view, the modifiers' JS side. The `/swift-ui` and `/jetpack-compose` entries. |
 | `ios/Views/Icon/`, `android/.../icon/` | iOS `IconView` (an SF Symbol in a `UIImageView`, the React Native tier of a glyph) and Android's `DrawableIconView` (Compose `Icon` over a drawable by name, inside a host: an app icon or a glyph; with an effect, a transition, a rendering mode, a variable value or a gradient it is `@hzblj/expo-native-icons`' `NativeIconView` in an `AndroidView` instead, `compileOnly` on `:hzblj-expo-native-icons`). The app's icons outside a host, and Android glyphs, are `@hzblj/expo-native-icons`' `NativeIconView`; their names come from its `iconResourceName`. |
 | `glyphs.json`, `scripts/generate-glyphs.mjs`, `src/glyphs.ts` | The few glyphs kara's components draw: SF Symbol + Material Symbol per name. `yarn glyphs:generate` writes `android/src/main/res/drawable/kara_glyph_*.xml` and `src/glyphs.ts` (both committed) from `@material-symbols/svg-400`; `THIRD_PARTY_NOTICES.md` carries the Apache 2.0 notice. |
@@ -63,6 +63,10 @@ pod install / Gradle sync. Swift/Kotlin are not type-checked by `yarn typecheck`
 the plugin's `native_icon_*` (`@hzblj/expo-native-icons`) in the app's own catalog and resources, and Gradle merges the module's `kara_glyph_*`
 drawables into the same place. An iOS asset catalog shipped by this pod would not build (two `Assets.car`), which is
 why app icons are generated into the app and iOS glyphs are SF Symbols.
+
+**An Android SVG fills the height it is drawn at.** androidsvg draws a document that has its own `width`/`height` at
+that size in the top-left corner of any viewport, so `NativeImage` sets both to 100% before rendering; with them a
+carrier logo in a segmented button came out a third of its height, stuck to the top.
 
 **React Native opacity reaches UIKit through `OpacityVisibilitySync`.** Fabric writes `opacity` to `layer.opacity`,
 past `alpha`, so a subtree mounted under a view at opacity 0 (Legend List containers before their first layout,
