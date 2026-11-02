@@ -43,6 +43,11 @@ reads it as layout or style. Prefix it (`bubbleWidth`).
 `KaraUIModule.kt` (the functional registration shares one `viewType` with `@expo/ui` and drops events). JS — a folder
 in `src/<platform>/` exported from its `index.ts`. Then the cross-platform component in `@hzblj/kara-components`.
 
+**A Compose props class holds only `MutableState` properties.** Derive anything else in a function. Without
+`@OptimizedComposeProps` Expo reads every member property by reflection as `MutableState<T>` when the module
+registers, so a computed `val` (`DrawableIconProps.needsNativeIcon`) crashed the app on start
+(`NoSuchElementException: List is empty` in `PropsParsingStrategy`).
+
 **Process-wide setup happens once per process.** Every React runtime gets its own `AppContext` and runs `OnCreate`,
 and two can be alive or initialising at the same time (a dev client opened by its deep link while it launches, a
 reload during startup, brownfield hosts). `@expo/ui`'s modifier registries are maps with no lock on both platforms:
