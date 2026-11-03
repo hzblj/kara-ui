@@ -50,6 +50,9 @@ internal struct ScrollEdgeContainerView: ExpoSwiftUI.View, ExpoSwiftUI.WithHosti
       ) {
         configureEdgeEffects(in: scrollHost, effect: effect, isTopHidden: isTopHidden, isContentScrollView: isContentScrollView)
       }
+      .modifier(ScrollableKeyChangeModifier(scrollableKey: props.scrollableKey) {
+        topBarView(in: children.indices.contains(1) ? children[1].uiView : nil)?.syncScrollInset()
+      })
       .modifier(EdgeBarModifier(edge: .top, height: props.topBarHeight, elementOpacity: props.elementOpacity, bar: child(at: 1, in: children)))
       .modifier(EdgeBarModifier(edge: .bottom, height: props.bottomBarHeight, elementOpacity: props.elementOpacity, bar: child(at: 2, in: children)))
       .ignoresSafeArea()
@@ -109,6 +112,27 @@ private struct EdgeBarModifier: ViewModifier {
  `allowsHitTesting(false)`, a scroll-edge element interaction added at runtime and a 2 % opacity did not count; glass
  counted only in part. iOS 26 measures the same as before.
  */
+/**
+ Syncs the top inset again whenever a new scroll child mounts. `ScrollEdgeTopBarView` syncs only when its own height
+ changes, so a list mounted from a bar height JS measured before the bar got its safe area, while the bar had already
+ grown natively, kept that inset until JS remounted it: a screen pushed over a busy one sat about the header's height
+ too high for a few hundred milliseconds and then jumped. SwiftUI runs the action after the Fabric transaction that
+ mounted the child and before the frame renders, so the list starts at the right inset.
+ */
+private struct ScrollableKeyChangeModifier: ViewModifier {
+  let scrollableKey: String
+  let action: () -> Void
+
+  @ViewBuilder
+  func body(content: Content) -> some View {
+    if #available(iOS 17.0, *) {
+      content.onChange(of: scrollableKey) { action() }
+    } else {
+      content.onChange(of: scrollableKey) { _ in action() }
+    }
+  }
+}
+
 private struct EdgeElementShape: View {
   let edge: VerticalEdge
   let opacity: Double
@@ -185,6 +209,22 @@ private func owningViewController(of view: UIView) -> UIViewController? {
       return controller
     }
     responder = current.next
+  }
+  return nil
+}
+
+@MainActor
+private func topBarView(in view: UIView?) -> ScrollEdgeTopBarView? {
+  guard let view else {
+    return nil
+  }
+  if let bar = view as? ScrollEdgeTopBarView {
+    return bar
+  }
+  for subview in view.subviews {
+    if let bar = topBarView(in: subview) {
+      return bar
+    }
   }
   return nil
 }

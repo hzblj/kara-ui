@@ -23,7 +23,7 @@ public final class ScrollEdgeTopBarView: ExpoView {
     }
   }
 
-  private func syncScrollInset() {
+  func syncScrollInset() {
     guard let scrollInsetExtra, window != nil, let scrollView = containerScrollView() else {
       return
     }
