@@ -1,5 +1,21 @@
 # @hzblj/kara-ui
 
+## 0.27.2
+
+### Patch Changes
+
+- [#98](https://github.com/hzblj/kara-ui/pull/98) [`6c2a322`](https://github.com/hzblj/kara-ui/commit/6c2a322e6a59d7b4311e8f9b227e8c2d7f458807) Thanks [@hzblj](https://github.com/hzblj)! - `ScrollEdgeContainer` (iOS) syncs the top inset natively whenever a new scroll child mounts, not only when the top bar's height changes. A list mounted from a bar height measured before the bar got its safe area no longer sits about the header's height too high for a moment and jumps when JS catches up (a screen pushed over a busy one).
+
+- [#96](https://github.com/hzblj/kara-ui/pull/96) [`9e225a3`](https://github.com/hzblj/kara-ui/commit/9e225a32fea6cc85920750e7705acb480313251f) Thanks [@hzblj](https://github.com/hzblj)! - `NavigationItemSubtitle` (iOS 26) plays the exit with the title as it was on screen. It no longer lays the bar out to take the exit's pictures: the stack has just cleared the bar items at that point, so the layout spread the title over the whole bar, the title left untruncated over the trailing items and the old items never faded out.
+
+- Updated dependencies [[`6c2a322`](https://github.com/hzblj/kara-ui/commit/6c2a322e6a59d7b4311e8f9b227e8c2d7f458807), [`9e225a3`](https://github.com/hzblj/kara-ui/commit/9e225a32fea6cc85920750e7705acb480313251f)]:
+  - @hzblj/kara-native@0.27.2
+  - @hzblj/kara-theme@0.27.2
+  - @hzblj/kara-sx@0.27.2
+  - @hzblj/kara-components@0.27.2
+  - @hzblj/kara-router@0.27.2
+  - @hzblj/kara-expo-plugin@0.27.2
+
 ## 0.27.1
 
 ### Patch Changes
