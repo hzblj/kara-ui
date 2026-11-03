@@ -17,6 +17,12 @@ type UseSheetHeaderParams = {
 /** The bar's own height (`NavigationBar`) plus the room above it, before the header has been measured. */
 const ESTIMATED_HEADER_HEIGHT = (Platform.OS === 'ios' ? 56 : 64) + spacing.s16
 
+/**
+ * Above a header with no bar. Android's grabber is drawn over the sheet's content, 16 dp from the top and 4 dp tall, so
+ * there the header starts 8 dp under it. iOS's grabber ends 10 pt from the top, inside the usual 16 pt.
+ */
+const HEADER_TOP_WITHOUT_BAR = Platform.OS === 'android' ? 's28' : 's16'
+
 /** Where a large title's bar title appears once it has scrolled away: the platform's own place for it. */
 const COLLAPSED_TITLE_ALIGNMENT: NavigationBarTitleAlignment = Platform.OS === 'ios' ? 'center' : 'leading'
 
@@ -83,7 +89,7 @@ export const useSheetHeader = ({header: headerProps, scrollable}: UseSheetHeader
     }
 
     return (
-      <Box onLayout={isOverlay ? handleHeaderLayout : undefined} pt="s16">
+      <Box onLayout={isOverlay ? handleHeaderLayout : undefined} pt={hasBar ? 's16' : HEADER_TOP_WITHOUT_BAR}>
         {hasBar ? (
           <NavigationBar
             inverted={inverted}

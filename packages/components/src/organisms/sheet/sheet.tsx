@@ -1,5 +1,5 @@
-import {useAppTheme} from '@hzblj/kara-theme'
-import {type DetentChangeEvent, TrueSheet} from '@lodev09/react-native-true-sheet'
+import {useAppTheme, withOpacity} from '@hzblj/kara-theme'
+import {type DetentChangeEvent, type GrabberOptions, TrueSheet} from '@lodev09/react-native-true-sheet'
 import {useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef} from 'react'
 import {Platform, StyleSheet, View} from 'react-native'
 import type {SheetComponent, SheetDetent, SheetProps} from './sheet.types'
@@ -39,6 +39,22 @@ const SheetRoot = ({
   const theme = useAppTheme()
   const {content, header: headerProps} = useMemo(() => splitSheetChildren(children), [children])
   const sheetHeader = useSheetHeader({header: headerProps, scrollable})
+  const inverted = headerProps?.inverted ?? false
+  /**
+   * Material's drag handle, `onSurfaceVariant` at 40 %, in the app's theme. TrueSheet's own Android grabber picks black
+   * or white by the system's night mode, so an app themed apart from the device drew it in the sheet's own colour.
+   */
+  const grabberOptions = useMemo<GrabberOptions | undefined>(() => {
+    if (Platform.OS !== 'android') {
+      return undefined
+    }
+
+    const color = inverted
+      ? theme.color('content.on.accent:o40')
+      : withOpacity(String(theme.color('content.secondary')), 'o40')
+
+    return {adaptive: false, color}
+  }, [inverted, theme])
   const sheetRef = useRef<TrueSheet>(null)
   const presented = useRef(false)
   /** A dismissal we asked for: `onDismiss` reports the user's, never ours. */
@@ -114,6 +130,7 @@ const SheetRoot = ({
         draggable={draggable}
         footer={footer}
         grabber={grabber}
+        grabberOptions={grabberOptions}
         header={sheetHeader.header}
         headerStyle={sheetHeader.headerStyle}
         onDetentChange={handleDetentChange}
