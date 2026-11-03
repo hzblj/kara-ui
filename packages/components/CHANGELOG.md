@@ -1,5 +1,16 @@
 # @hzblj/kara-components
 
+## 0.27.1
+
+### Patch Changes
+
+- [#93](https://github.com/hzblj/kara-ui/pull/93) [`2ca91cf`](https://github.com/hzblj/kara-ui/commit/2ca91cf797ebf8471ca027131ec9362be516c1d5) Thanks [@hzblj](https://github.com/hzblj)! - Android integrated search: the bar's search closes on its first Cancel (the field's focus event now carries `hasText`, since it reached JS a frame before the emptied text), the hidden `TopAppBar` under the open search no longer takes taps or TalkBack focus at the field's edges, and `autoFocus` shows the keyboard only once the field really has focus.
+
+- Updated dependencies [[`2ca91cf`](https://github.com/hzblj/kara-ui/commit/2ca91cf797ebf8471ca027131ec9362be516c1d5), [`4b04a5c`](https://github.com/hzblj/kara-ui/commit/4b04a5c1ed207a6a4a809f4d1e63abafb71aa6d5)]:
+  - @hzblj/kara-native@0.27.1
+  - @hzblj/kara-theme@0.27.1
+  - @hzblj/kara-sx@0.27.1
+
 ## 0.27.0
 
 ### Minor Changes
