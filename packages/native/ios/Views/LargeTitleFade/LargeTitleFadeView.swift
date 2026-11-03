@@ -5,12 +5,37 @@ import UIKit
 /// away: out as fast as UIKit drops the title, back while it returns. It starts in the same frame as UIKit's own
 /// animation, which a fade started from JavaScript misses by several frames. While hidden it takes no touches and
 /// VoiceOver skips it.
+///
+/// The fade runs on an inner container that the React Native children mount into, never on the view's own `alpha`:
+/// React Native owns the component view's `layer.opacity` and writes it back from props in `invalidateLayer` after
+/// every layout change of the view (and on a light/dark change), which brought the content back at full opacity
+/// under an open search as soon as its frame moved.
 public final class LargeTitleFadeView: ExpoView, SearchPresentationListener {
   private static let attachAttempts = 10
   private static let hideDuration: TimeInterval = 0.08
   private static let showDuration: TimeInterval = 0.25
 
+  private let contentView = LargeTitleFadeContentView()
   private weak var relay: SearchPresentationRelay?
+
+  public required init(appContext: AppContext? = nil) {
+    super.init(appContext: appContext)
+    contentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    addSubview(contentView)
+  }
+
+  public override func layoutSubviews() {
+    super.layoutSubviews()
+    contentView.frame = bounds
+  }
+
+  public override func mountChildComponentView(_ childComponentView: UIView, index: Int) {
+    contentView.insertSubview(childComponentView, at: index)
+  }
+
+  public override func unmountChildComponentView(_ childComponentView: UIView, index: Int) {
+    childComponentView.removeFromSuperview()
+  }
 
   public override func didMoveToWindow() {
     super.didMoveToWindow()
@@ -31,11 +56,11 @@ public final class LargeTitleFadeView: ExpoView, SearchPresentationListener {
   }
 
   private func applySearching(_ isSearching: Bool, isAnimated: Bool) {
-    isUserInteractionEnabled = !isSearching
-    accessibilityElementsHidden = isSearching
+    contentView.isUserInteractionEnabled = !isSearching
+    contentView.accessibilityElementsHidden = isSearching
     let alpha: CGFloat = isSearching ? 0 : 1
     guard isAnimated else {
-      self.alpha = alpha
+      contentView.alpha = alpha
       return
     }
     let curve: UIView.AnimationOptions = isSearching ? .curveEaseOut : .curveEaseInOut
@@ -44,7 +69,7 @@ public final class LargeTitleFadeView: ExpoView, SearchPresentationListener {
       delay: 0,
       options: [.beginFromCurrentState, .overrideInheritedDuration, .overrideInheritedCurve, curve]
     ) {
-      self.alpha = alpha
+      self.contentView.alpha = alpha
     }
   }
 
@@ -75,6 +100,22 @@ public final class LargeTitleFadeView: ExpoView, SearchPresentationListener {
         return controller
       }
       responder = current.next
+    }
+    return nil
+  }
+}
+
+/// Holds the React Native children and passes a touch that hits none of them on to React Native's own hit test, so
+/// the container never takes a touch the view itself would not.
+private final class LargeTitleFadeContentView: UIView {
+  override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    guard isUserInteractionEnabled, !isHidden, alpha > 0.01 else {
+      return nil
+    }
+    for subview in subviews.reversed() {
+      if let view = subview.hitTest(subview.convert(point, from: self), with: event) {
+        return view
+      }
     }
     return nil
   }
