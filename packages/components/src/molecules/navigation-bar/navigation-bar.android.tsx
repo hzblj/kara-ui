@@ -42,7 +42,6 @@ export const NavigationBar: NavigationBarComponent = ({
   const color = theme.color(inverted ? 'content.on.accent' : 'content.primary')
 
   const fieldRef = useRef<SearchFieldRef>(null)
-  const query = useRef('')
   const echo = useRef<string | null>(null)
   const [searchActive, setSearchActive] = useState(false)
 
@@ -76,8 +75,6 @@ export const NavigationBar: NavigationBarComponent = ({
 
   const handleChangeText = useCallback(
     (text: string) => {
-      query.current = text
-
       if (echo.current === text) {
         echo.current = null
         return
@@ -89,10 +86,10 @@ export const NavigationBar: NavigationBarComponent = ({
   )
 
   const handleFocusChange = useCallback(
-    (focused: boolean) => {
+    (focused: boolean, hasText: boolean) => {
       onFocusChange?.(focused)
 
-      if (!focused && query.current === '') {
+      if (!focused && !hasText) {
         setSearchActive(false)
       }
     },
@@ -109,7 +106,6 @@ export const NavigationBar: NavigationBarComponent = ({
       },
       setText: (text: string) => {
         echo.current = text
-        query.current = text
         fieldRef.current?.setQuery(text).catch(ignoreDetachedView)
       },
     }),

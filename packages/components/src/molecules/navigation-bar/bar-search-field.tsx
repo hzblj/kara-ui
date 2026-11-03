@@ -25,7 +25,7 @@ export type BarSearchFieldProps = {
   cancelLabel?: string
   clearIcon?: IconName
   onChangeText: (text: string) => void
-  onFocusChange?: (focused: boolean) => void
+  onFocusChange?: (focused: boolean, hasText: boolean) => void
   placeholder: string
   ref?: Ref<SearchFieldRef>
   testID?: string

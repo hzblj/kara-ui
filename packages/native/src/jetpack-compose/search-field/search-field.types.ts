@@ -44,8 +44,12 @@ export type SearchFieldProps = {
   iconColor: ColorValue
   /** In sp. */
   letterSpacing?: number
-  /** Called when the field gains or loses focus. */
-  onFocusChange?: (isFocused: boolean) => void
+  /**
+   * Called when the field gains or loses focus, with whether it holds text at that moment. Cancel empties and blurs the
+   * field at once, and the focus change arrives before the emptied text does (a frame later), so check `hasText` here
+   * rather than the last `onQueryChange`.
+   */
+  onFocusChange?: (isFocused: boolean, hasText: boolean) => void
   /** Called with the text after every change, typed, cleared or set through the ref. */
   onQueryChange?: (text: string) => void
   /** Called with the text when the keyboard's search action is pressed. The keyboard hides first. */

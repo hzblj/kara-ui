@@ -35,6 +35,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -100,7 +103,8 @@ data class TopAppBarProps(
  * drawables. Material has no grouped capsules, so iOS's `separated` has no counterpart here.
  *
  * A `search` slot (a search field) shows while `searchActive`: it grows from the trailing edge over the bar, which
- * fades out under it, and shrinks back into that corner when the flag clears. JS owns the flag and the item that sets
+ * fades out under it and stops taking touches and TalkBack focus (the field leaves a margin at both ends, where the
+ * hidden items still pressed), and shrinks back into that corner when the flag clears. JS owns the flag and the item that sets
  * it, so the bar's search button is an ordinary item.
  */
 @SuppressLint("ViewConstructor")
@@ -123,8 +127,9 @@ class TopAppBarView(context: Context, appContext: AppContext) :
     val fontSize by props.fontSize
     val searchActive by props.searchActive
     val searchSlot = findChildSlotView(this@TopAppBarView, SEARCH_SLOT)
+    val barHidden = searchActive && searchSlot != null
     val barAlpha by animateFloatAsState(
-      targetValue = if (searchActive && searchSlot != null) 0f else 1f,
+      targetValue = if (barHidden) 0f else 1f,
       animationSpec = tween(durationMillis = if (searchActive) 150 else 250, easing = SearchEasing),
       label = "barAlpha"
     )
@@ -159,7 +164,7 @@ class TopAppBarView(context: Context, appContext: AppContext) :
     }
 
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.CenterEnd) {
-      val barModifier = Modifier.fillMaxWidth().graphicsLayer { alpha = barAlpha }
+      val barModifier = Modifier.fillMaxWidth().graphicsLayer { alpha = barAlpha }.inert(barHidden)
       if (titleAlignment == "leading") {
         TopAppBar(
           title = titleContent,
@@ -213,6 +218,21 @@ class TopAppBarView(context: Context, appContext: AppContext) :
 }
 
 private val NoInsets = WindowInsets(0, 0, 0, 0)
+
+/** Swallows every touch that reaches the modified view and hides it from accessibility while [inert]. */
+private fun Modifier.inert(inert: Boolean): Modifier {
+  if (!inert) {
+    return this
+  }
+
+  return clearAndSetSemantics {}.pointerInput(Unit) {
+    awaitPointerEventScope {
+      while (true) {
+        awaitPointerEvent(PointerEventPass.Initial).changes.forEach { it.consume() }
+      }
+    }
+  }
+}
 
 private const val SEARCH_SLOT = "search"
 

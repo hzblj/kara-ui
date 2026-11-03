@@ -60,6 +60,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -146,7 +147,8 @@ open class SearchFieldTextEvent(
 ) : Record, Serializable
 
 open class SearchFieldFocusChangeEvent(
-  @Field open val isFocused: Boolean = false
+  @Field open val isFocused: Boolean = false,
+  @Field open val hasText: Boolean = false
 ) : Record, Serializable
 
 open class SearchFieldVoiceEvent(
@@ -270,8 +272,7 @@ class SearchFieldView(context: Context, appContext: AppContext) :
     }
 
     LaunchedEffect(Unit) {
-      if (autoFocus) {
-        runCatching { focusRequester.requestFocus() }
+      if (autoFocus && focusRequester.requestFocusWhenAttached()) {
         keyboardController?.show()
       }
     }
@@ -304,7 +305,7 @@ class SearchFieldView(context: Context, appContext: AppContext) :
               .onFocusChanged { state ->
                 if (state.isFocused != isFocused) {
                   isFocused = state.isFocused
-                  onSearchFocusChange(SearchFieldFocusChangeEvent(state.isFocused))
+                  onSearchFocusChange(SearchFieldFocusChangeEvent(state.isFocused, textFieldState.text.isNotEmpty()))
                 }
               }
               .applyTestTag(fieldTestID),
@@ -513,3 +514,21 @@ private val HeaderInset = 16.dp
 private val CancelEndInset = 8.dp
 private val TitleVerticalInset = 8.dp
 private val FieldVerticalInset = 8.dp
+
+private const val FOCUS_ATTEMPTS = 10
+
+/**
+ * Asks for focus until the field's focus target is attached, a frame at a time for up to [FOCUS_ATTEMPTS] frames, and
+ * tells whether it got it, so the keyboard never comes up for a field that has no focus.
+ */
+private suspend fun FocusRequester.requestFocusWhenAttached(): Boolean {
+  repeat(FOCUS_ATTEMPTS) {
+    if (runCatching { requestFocus() }.getOrDefault(false)) {
+      return true
+    }
+
+    withFrameNanos {}
+  }
+
+  return false
+}
