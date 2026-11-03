@@ -65,7 +65,7 @@ export type SheetProps = {
   draggable?: boolean
   /** Pinned to the bottom, above the content and the keyboard. */
   footer?: ReactElement
-  /** The drag handle. On by default. */
+  /** The drag handle. On by default. On Android it is Material's handle, coloured by the app's theme. */
   grabber?: boolean
   /** The user dismissed it; `visible` going false does not call this. */
   onDismiss: () => void

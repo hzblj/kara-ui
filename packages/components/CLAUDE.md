@@ -216,6 +216,11 @@ the inset is 0. A `large` title lives inside the scroll view and flips the bar's
 `backgroundColor`: untinted Liquid Glass on iOS 26, a material blur before it. The corner radius is already the
 system's on iOS. Android keeps `bg`, since Material's sheet has no glass.
 
+**Android's grabber is drawn in the app's theme.** TrueSheet's own picks black or white by the system's night mode, so
+an app themed apart from the device drew it in the sheet's colour; `Sheet` passes Material's handle colour instead
+(`content.secondary`, `onSurfaceVariant`, at 40 %; `content.on.accent` under an `inverted` header). It sits over the
+content, 16 dp from the top, so a header without a bar starts 28 dp down there.
+
 **`onDismiss` is the user's dismissal only.** `visible` going false dismisses without calling it, and a sheet
 unmounted while presented dismisses itself — otherwise it would stay on screen over everything.
 
