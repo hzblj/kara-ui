@@ -1,5 +1,17 @@
 # @hzblj/kara-native
 
+## 0.27.0
+
+### Minor Changes
+
+- [#90](https://github.com/hzblj/kara-ui/pull/90) [`31cb3e0`](https://github.com/hzblj/kara-ui/commit/31cb3e0d3562b5030e6e8221e790f3078e96950e) Thanks [@hzblj](https://github.com/hzblj)! - Android catches up with iOS:
+
+  - Every ripple on Android takes the new `fill.ripple` token, Compose controls and pressables alike, instead of each control's content colour. Override it in your theme like any colour.
+  - `useHeaderSearch({placement: 'integratedButton'})` is the toolbar's own search on Android too: a magnifier in the bar's corner that expands over the title, with the microphone in the field. Pass `searchBar` to `useHeader` on both platforms.
+  - `NavigationBar` and `Sheet.Header` take `search` on Android: a field in a row under the bar, or a search item that grows into the field over the bar and closes once the field is cancelled, cleared or left empty.
+  - `NavigationItemSearch` has an Android side, `TopAppBar` a `Search` slot with `searchActive`, and `SearchField` an `autoFocus`.
+  - A `TopAppBar` that loses its leading or trailing items drops them instead of keeping the last ones.
+
 ## 0.26.2
 
 ### Patch Changes
