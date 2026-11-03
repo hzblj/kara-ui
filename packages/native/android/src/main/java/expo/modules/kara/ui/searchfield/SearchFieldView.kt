@@ -438,7 +438,7 @@ private fun CollapsibleSection(isVisible: Boolean, content: @Composable () -> Un
 }
 
 @Composable
-private fun VoiceMeter(meter: SharedObject?, color: ComposeColor, sizes: SearchVoiceWaveformSizes?) {
+internal fun VoiceMeter(meter: SharedObject?, color: ComposeColor, sizes: SearchVoiceWaveformSizes?) {
   val tint = if (color.isSpecified) color else LocalContentColor.current
   AndroidView(
     factory = { context -> LiveWaveformView(context).apply { growIn = LiveWaveformGrowIn() } },
@@ -474,7 +474,7 @@ private fun ClearButton(isVisible: Boolean, iconName: String?, label: String?, o
 }
 
 @Composable
-private fun DrawableIcon(name: String?, contentDescription: String?, size: Float? = null) {
+internal fun DrawableIcon(name: String?, contentDescription: String?, size: Float? = null) {
   val context = LocalContext.current
   val id = remember(name) { resourceId(context, name) }
 
@@ -499,7 +499,7 @@ private object SearchKeyboard : InputTransformation {
   override fun TextFieldBuffer.transformInput() = Unit
 }
 
-private const val ICON_SCALE = 0.6f
+internal const val ICON_SCALE = 0.6f
 private val VoiceButtonWidth = 48.dp
 private val VoiceMeterWidth = 64.dp
 private val VoiceMeterHeight = 20.dp

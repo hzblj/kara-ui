@@ -278,23 +278,33 @@ export type HeaderOptionsResult = HeaderContent & {
 export type HeaderSearchBarOptions = {
   allowToolbarIntegration?: boolean
   autoCapitalize?: 'characters' | 'none' | 'sentences' | 'words'
+  /** Android: the toolbar search's magnifier and X. */
+  headerIconColor?: string
   hideNavigationBar?: boolean
   hideWhenScrolling?: boolean
+  /** Android: the placeholder's colour. */
+  hintTextColor?: string
   obscureBackground?: boolean
   onBlur?: () => void
   onCancelButtonPress?: () => void
   onChangeText?: (event: {nativeEvent: {text: string}}) => void
+  /** Android: the toolbar search closed (back, or the X on an empty field). */
+  onClose?: () => void
   onFocus?: () => void
+  /** Android: the toolbar search opened. */
+  onOpen?: () => void
   placeholder?: string
   placement?: 'automatic' | 'inline' | 'integrated' | 'integratedButton' | 'integratedCentered' | 'stacked'
   ref?: RefObject<SearchBarCommands | null>
+  /** Android: the typed text. */
+  textColor?: string
   tintColor?: string
 }
 
 /**
- * Where the search goes on iOS: `stacked` in a row under the title (title and items kept); `integratedButton` as a
- * search button in the bar's trailing corner that opens the field in the bar, the title and items hidden meanwhile.
- * The integrated field's close is the system's: iOS gives it no other glyph.
+ * Where the search goes: `stacked` in a row under the title (title and items kept); `integratedButton` as a search
+ * button in the bar's trailing corner that opens the field in the bar, the title and items hidden meanwhile. On iOS the
+ * integrated field's close is the system's, which takes no other glyph; on Android back closes it.
  */
 export type HeaderSearchPlacement = 'integratedButton' | 'stacked'
 
@@ -307,16 +317,16 @@ export type HeaderSearchParams = {
   enabled?: boolean
   /** Shown while the field is empty. `Search` by default. */
   placeholder?: string
-  /** iOS: `stacked` by default. Android always puts its field in a row under the bar. */
+  /** `stacked` by default. */
   placement?: HeaderSearchPlacement
   /** A microphone in the field: see `SearchFieldVoice`. Write what it hears with `setText`. */
   voice?: SearchFieldVoice
 }
 
 /**
- * A header's search: what to give `useHeader` (`searchBar`, iOS), the row Android puts under its bar (`searchInput`),
- * the scrim that washes the content out while the field is focused and empty (render it last, over the content), and
- * the query to filter by.
+ * A header's search: what to give `useHeader` (`searchBar`), the row Android puts under its bar for `stacked`
+ * (`searchInput`), the scrim that washes the content out while the field is focused and empty (render it last, over
+ * the content), and the query to filter by.
  */
 export type HeaderSearch = {
   /** Empties the field and ends the search. */
@@ -324,13 +334,13 @@ export type HeaderSearch = {
   /** The field's text. */
   query: string
   /**
-   * Over the content while the field is focused and empty; a tap on it ends the search. On iOS it also carries the
+   * Over the content while the field is focused and empty; a tap on it ends the search. It also carries the header
    * field's glyphs and voice, which have to sit in the screen's tree. Render it last.
    */
   scrim: ReactElement | null
-  /** Android: the Material search field, a row to put right under the bar. `null` on iOS. */
+  /** Android, `stacked`: the Material search field, a row to put right under the bar. `null` otherwise. */
   searchInput: ReactElement | null
-  /** iOS: `search` for `useHeader`. `undefined` on Android. */
+  /** `search` for `useHeader`: always on iOS, for `integratedButton` on Android. `undefined` otherwise. */
   searchBar: HeaderSearchBarOptions | undefined
   /** Puts text into the field and the query, the way dictation fills it in. */
   setText: (text: string) => void
