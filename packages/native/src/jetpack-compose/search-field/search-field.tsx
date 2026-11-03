@@ -8,7 +8,7 @@ import type {SearchFieldProps} from './search-field.types'
 
 type TextEvent = NativeSyntheticEvent<{text: string}>
 
-type FocusChangeEvent = NativeSyntheticEvent<{isFocused: boolean}>
+type FocusChangeEvent = NativeSyntheticEvent<{isFocused: boolean; hasText: boolean}>
 
 type NativeSearchFieldProps = Omit<
   SearchFieldProps,
@@ -49,7 +49,7 @@ export const SearchField = ({
   const handleQueryChange = useCallback((event: TextEvent) => onQueryChange?.(event.nativeEvent.text), [onQueryChange])
 
   const handleFocusChange = useCallback(
-    (event: FocusChangeEvent) => onFocusChange?.(event.nativeEvent.isFocused),
+    (event: FocusChangeEvent) => onFocusChange?.(event.nativeEvent.isFocused, event.nativeEvent.hasText),
     [onFocusChange]
   )
 
