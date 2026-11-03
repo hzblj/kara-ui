@@ -16,6 +16,12 @@ type NativeTopAppBarProps = Omit<TopAppBarProps, 'leadingItems' | 'trailingItems
 
 const NativeTopAppBar = requireKaraView<NativeTopAppBarProps>('TopAppBarView')
 
+/**
+ * Sent instead of a missing side: the items are a Compose prop of a non-null type, which a removed prop (`null`) cannot
+ * clear, so a bar that loses its back item would keep showing it.
+ */
+const NO_ITEMS: TopAppBarItem[] = []
+
 /** What crosses the bridge: everything but the handler, which stays here and is found again by index. */
 const toNativeItem = ({iconName, label, testID, type}: TopAppBarItem): NativeTopAppBarItem => ({
   iconName,
@@ -29,8 +35,8 @@ const toNativeItem = ({iconName, label, testID, type}: TopAppBarItem): NativeTop
  * `actions` slots in the order given. A Compose view: it renders inside a host.
  */
 export const TopAppBar = ({leadingItems, trailingItems, ...props}: TopAppBarProps) => {
-  const nativeLeadingItems = useMemo(() => leadingItems?.map(toNativeItem), [leadingItems])
-  const nativeTrailingItems = useMemo(() => trailingItems?.map(toNativeItem), [trailingItems])
+  const nativeLeadingItems = useMemo(() => (leadingItems ?? NO_ITEMS).map(toNativeItem), [leadingItems])
+  const nativeTrailingItems = useMemo(() => (trailingItems ?? NO_ITEMS).map(toNativeItem), [trailingItems])
 
   const handleItemPress = useCallback(
     (event: ItemPressEvent) => {
