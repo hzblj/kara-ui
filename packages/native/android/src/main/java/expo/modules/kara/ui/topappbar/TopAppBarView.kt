@@ -6,12 +6,20 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.CubicBezierEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -24,13 +32,17 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import expo.modules.kara.ui.icon.resourceId
 import expo.modules.kotlin.AppContext
@@ -43,6 +55,8 @@ import expo.modules.kotlin.views.ComposeProps
 import expo.modules.kotlin.views.ExpoComposeView
 import expo.modules.ui.applyTestTag
 import expo.modules.ui.composeOrNull
+import expo.modules.ui.findChildSlotView
+import expo.modules.ui.renderSlot
 import expo.modules.ui.resolveFontFamily
 import java.io.Serializable
 import androidx.compose.ui.graphics.Color as ComposeColor
@@ -75,7 +89,8 @@ data class TopAppBarProps(
   val itemColor: MutableState<Color?> = mutableStateOf(null),
   val titleColor: MutableState<Color?> = mutableStateOf(null),
   val fontFamily: MutableState<String?> = mutableStateOf(null),
-  val fontSize: MutableState<Float?> = mutableStateOf(null)
+  val fontSize: MutableState<Float?> = mutableStateOf(null),
+  val searchActive: MutableState<Boolean> = mutableStateOf(false)
 ) : ComposeProps
 
 /**
@@ -83,6 +98,10 @@ data class TopAppBarProps(
  * all. Leading items go into the `navigationIcon` slot and trailing ones into `actions`, in the order given, so a close
  * item can sit on either side. `back` and `close` are kara's own Material Symbols glyphs, `icon` is one of the app's
  * drawables. Material has no grouped capsules, so iOS's `separated` has no counterpart here.
+ *
+ * A `search` slot (a search field) shows while `searchActive`: it grows from the trailing edge over the bar, which
+ * fades out under it, and shrinks back into that corner when the flag clears. JS owns the flag and the item that sets
+ * it, so the bar's search button is an ordinary item.
  */
 @SuppressLint("ViewConstructor")
 class TopAppBarView(context: Context, appContext: AppContext) :
@@ -102,6 +121,13 @@ class TopAppBarView(context: Context, appContext: AppContext) :
     val titleColor by props.titleColor
     val fontFamilyName by props.fontFamily
     val fontSize by props.fontSize
+    val searchActive by props.searchActive
+    val searchSlot = findChildSlotView(this@TopAppBarView, SEARCH_SLOT)
+    val barAlpha by animateFloatAsState(
+      targetValue = if (searchActive && searchSlot != null) 0f else 1f,
+      animationSpec = tween(durationMillis = if (searchActive) 150 else 250, easing = SearchEasing),
+      label = "barAlpha"
+    )
 
     val titleStyle = remember(fontFamilyName, fontSize) {
       TextStyle(
@@ -132,24 +158,39 @@ class TopAppBarView(context: Context, appContext: AppContext) :
       BarItems(trailingItems, "trailing")
     }
 
-    if (titleAlignment == "leading") {
-      TopAppBar(
-        title = titleContent,
-        modifier = Modifier.fillMaxWidth(),
-        navigationIcon = navigationIcon,
-        actions = actions,
-        windowInsets = NoInsets,
-        colors = colors
-      )
-    } else {
-      CenterAlignedTopAppBar(
-        title = titleContent,
-        modifier = Modifier.fillMaxWidth(),
-        navigationIcon = navigationIcon,
-        actions = actions,
-        windowInsets = NoInsets,
-        colors = colors
-      )
+    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.CenterEnd) {
+      val barModifier = Modifier.fillMaxWidth().graphicsLayer { alpha = barAlpha }
+      if (titleAlignment == "leading") {
+        TopAppBar(
+          title = titleContent,
+          modifier = barModifier,
+          navigationIcon = navigationIcon,
+          actions = actions,
+          windowInsets = NoInsets,
+          colors = colors
+        )
+      } else {
+        CenterAlignedTopAppBar(
+          title = titleContent,
+          modifier = barModifier,
+          navigationIcon = navigationIcon,
+          actions = actions,
+          windowInsets = NoInsets,
+          colors = colors
+        )
+      }
+
+      searchSlot?.let { slot ->
+        AnimatedVisibility(
+          visible = searchActive,
+          enter = expandHorizontally(SearchSizeSpec, expandFrom = Alignment.End) + fadeIn(SearchFadeInSpec),
+          exit = shrinkHorizontally(SearchSizeSpec, shrinkTowards = Alignment.End) + fadeOut(SearchFadeOutSpec)
+        ) {
+          Box(Modifier.fillMaxWidth().padding(start = SearchStartInset, end = SearchEndInset)) {
+            slot.renderSlot()
+          }
+        }
+      }
     }
   }
 
@@ -172,6 +213,16 @@ class TopAppBarView(context: Context, appContext: AppContext) :
 }
 
 private val NoInsets = WindowInsets(0, 0, 0, 0)
+
+private const val SEARCH_SLOT = "search"
+
+/** Material's emphasized easing; the field grows in 350 ms and fades in after its first 100 ms. */
+private val SearchEasing = CubicBezierEasing(0.2f, 0f, 0f, 1f)
+private val SearchSizeSpec = tween<IntSize>(durationMillis = 350, easing = SearchEasing)
+private val SearchFadeInSpec = tween<Float>(durationMillis = 250, delayMillis = 100, easing = SearchEasing)
+private val SearchFadeOutSpec = tween<Float>(durationMillis = 150, easing = SearchEasing)
+private val SearchStartInset = 16.dp
+private val SearchEndInset = 8.dp
 
 @Composable
 private fun DrawableIcon(name: String?, contentDescription: String) {

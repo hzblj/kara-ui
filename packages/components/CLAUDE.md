@@ -18,7 +18,7 @@ and `@hzblj/kara-native` — through their entry points only.
 | `src/organisms/` | Sheet (TrueSheet with a native header: `Sheet.Header`, `Sheet.ScrollView`, `useSheetScroll`), ActionSheet, Alert, Menu, Form, SwipeActions, Snackbar — and over the native module: ContextMenu (long-press on React Native content, with a custom preview on iOS), FabMenu. (`Tabs` lives in `@hzblj/kara-router`, behind the `@hzblj/kara-ui/router` entry, so the main entry never imports expo-router.) |
 | `src/organisms/header/` | The `/header` entry, apart from `organisms/index.ts`: a native stack screen's header for React Navigation and Expo Router alike — `useHeader` / `useHeaderOptions` (titles, search and actions on both sides), `useHeroHeader`, `useHeaderSearch`, `useStackScreenOptions` and its presets, `HeaderInset`, `useHeaderBarInset`, `useHeaderScrollToTop`. Not in the main entry, which must not need `react-native-screens`. |
 | `src/templates/screen/` | `Screen` — the full-bleed native host every screen starts with. |
-| `src/hooks/` | Internal hooks. `host-context.tsx`: `HostBoundary` + `useHostGuard` (dev warning when a native atom renders outside `Screen`/`Island`) and `useInsideHost` (whether one already encloses it, for the atoms that otherwise bring their own). `use-refresh-state.ts`: SwiftUI's promise-driven `refreshable` and Compose's controlled `PullToRefreshBox` as one async `onRefresh`. `use-stack-modifiers.ts`: the Compose stacks' modifier order. |
+| `src/hooks/` | Internal hooks. `compose-host.tsx`: `ComposeHost`, the host of every Compose tree kara draws on Android (import it only from `.android` files): the theme's appearance and Material seed, and `RippleConfiguration` with `fill.ripple`, so a Compose ripple matches the React Native ones (`Pressable`, `RnListItem`, the context menu trigger), which take the same token; a Compose `CompositionLocal` cannot be set once for the app, every host is its own composition. `host-context.tsx`: `HostBoundary` + `useHostGuard` (dev warning when a native atom renders outside `Screen`/`Island`) and `useInsideHost` (whether one already encloses it, for the atoms that otherwise bring their own). `use-refresh-state.ts`: SwiftUI's promise-driven `refreshable` and Compose's controlled `PullToRefreshBox` as one async `onRefresh`. `use-stack-modifiers.ts`: the Compose stacks' modifier order. |
 | `src/utils/` | Internal helpers. `ripple-clip.ts` (`splitForRipple`), `tap-modifiers.ts` (a SwiftUI stack's `onPress` over its whole frame), `story-decorators.tsx` (`insideIsland` / `insideIslandOfHeight`, the host a story mounts its subject in; never published). |
 
 Nothing loose sits in `src/` besides `index.ts`: a component goes into its tier, a hook shared by several into
@@ -289,10 +289,20 @@ field is focused and empty and ends the search on a tap; it starts under the bar
 (kara-native's `NavigationItemSearch`, which has to sit in the screen's tree): the app's clear and cancel glyphs
 (`clearIcon`, `cancelIcon`), the voice, and the reset of a search the integrated search's system close ended without
 telling react-native-screens. `placement: 'integratedButton'` puts the search behind a button in the bar's corner
-(the bar hidden while it is open); its close stays the system's, since iOS gives it no other glyph. `voice`
-(`SearchFieldVoice`) is optional and records nothing: the app runs the dictation and writes it with `setText`; typed
-text that differs from the last `setText`, or the end of the search, calls `voice.onCancel` while listening. Android
-passes the same voice to its Material `SearchField`.
+(the bar hidden while it is open); its close stays the system's, since iOS gives it no other glyph. On
+Android `integratedButton` is react-native-screens' toolbar search instead of the row (`searchBar` with the theme's text,
+hint and icon colours, since `SearchView` otherwise follows the system night mode, and `onOpen`/`onClose`), and `scrim`
+carries the Android `NavigationItemSearch`: the microphone in the toolbar field, the X kept in the corner with the
+bar's icon ripple and the app's clear glyph; back closes it. `voice` (`SearchFieldVoice`) is optional and records
+nothing: the app runs the dictation and writes it with `setText`; typed text that differs from the last `setText`, or
+the end of the search, calls `voice.onCancel` while listening. A stacked Android row passes the same voice to its
+Material `SearchField` (`BarSearchField`, shared with `NavigationBar`'s Android search).
+
+**`NavigationBar` search on Android.** `stacked` is a `BarSearchField` row under the Material bar; `integratedButton` a
+search item (`buttonIcon`, kara's magnifier unset) at the inner end of the trailing items or after the leading ones,
+which turns on `TopAppBar`'s `searchActive` with the field in `TopAppBar.Search` (`autoFocus`). The Compose field's
+cancel, `ref.clear()` or the field blurring while empty close it again. `ref.setText` keeps its iOS contract (no
+`onChangeText`) by dropping the echo the Compose field sends for a programmatic text.
 
 **`SheetGrabber`** (`/header`) shows the system grabber of a native-stack screen presented as a `modal` sheet, which
 react-native-screens gives only `formSheet`; render it anywhere in the presented content. Android renders nothing.

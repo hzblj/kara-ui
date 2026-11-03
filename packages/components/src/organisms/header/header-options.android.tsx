@@ -1,12 +1,10 @@
-import {Host} from '@expo/ui/jetpack-compose'
-import {useAppTheme} from '@hzblj/kara-theme'
 import type {ReactNode} from 'react'
 import {StyleSheet, View} from 'react-native'
-
 import {ActivityIndicator} from '../../atoms/activity-indicator'
 import {Button} from '../../atoms/button'
 import {GlyphButton} from '../../atoms/glyph'
 import {IconButton} from '../../atoms/icon-button'
+import {ComposeHost} from '../../hooks/compose-host'
 import {HostBoundary} from '../../hooks/host-context'
 import {Menu, type MenuAction} from '../menu'
 import type {
@@ -30,12 +28,10 @@ const styles = StyleSheet.create({
 
 /** A host sized to its button both ways: the toolbar gives custom content no width to fill. */
 const ActionHost = ({children}: {children: ReactNode}) => {
-  const theme = useAppTheme()
-
   return (
-    <Host colorScheme={theme.dark ? 'dark' : 'light'} matchContents seedColor={theme.materialSeed}>
+    <ComposeHost matchContents>
       <HostBoundary>{children}</HostBoundary>
-    </Host>
+    </ComposeHost>
   )
 }
 

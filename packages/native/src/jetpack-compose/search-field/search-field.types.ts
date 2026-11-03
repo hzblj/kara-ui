@@ -23,6 +23,8 @@ export type SearchFieldRef = {
 }
 
 export type SearchFieldProps = {
+  /** Focuses the field and shows the keyboard as soon as it is composed, e.g. when it expands into a bar. */
+  autoFocus?: boolean
   /** The text button that expands next to the field while it is focused or holds text, and clears and blurs it. */
   cancelLabel: string
   /**

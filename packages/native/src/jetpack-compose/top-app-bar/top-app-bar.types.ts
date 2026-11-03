@@ -1,3 +1,4 @@
+import type {ReactNode} from 'react'
 import type {ColorValue} from 'react-native'
 
 export type TopAppBarTitleAlignment = 'center' | 'leading'
@@ -17,11 +18,18 @@ export type TopAppBarItem = {
 }
 
 export type TopAppBarProps = {
+  /** `TopAppBar.Search` and nothing else: the field shown over the bar while `searchActive`. */
+  children?: ReactNode
   fontFamily?: string
   fontSize?: number
   itemColor: ColorValue
   /** The `navigationIcon` slot, in order. */
   leadingItems?: TopAppBarItem[]
+  /**
+   * Shows `TopAppBar.Search`: it grows from the trailing edge over the bar, which fades out under it, and shrinks back
+   * into that corner when this turns off. The item that turns it on is an ordinary trailing item.
+   */
+  searchActive?: boolean
   title?: string
   titleAlignment?: TopAppBarTitleAlignment
   titleColor: ColorValue

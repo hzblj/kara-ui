@@ -114,6 +114,14 @@ export const theming: Guide = {
         </P>
       </Section>
 
+      <Section id="ripple" title="Ripple">
+        <P>
+          {
+            "Every ripple on Android, Compose controls and pressables alike, takes `fill.ripple`. Its alpha is the strength. Override it like any colour: `fill: {ripple: adaptive({dark: '#ffffff33', light: '#0000001f'})}`."
+          }
+        </P>
+      </Section>
+
       <Section id="fonts" title="Your own typeface">
         <P>
           {

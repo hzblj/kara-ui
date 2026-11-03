@@ -85,6 +85,11 @@ export const palette = {
       primary: native({android: 'error', ios: 'systemRedColor'}),
     },
     quaternary: native({android: 'surfaceContainerHighest', ios: 'quaternarySystemFillColor'}),
+    /**
+     * Every ripple on Android — Compose controls and React Native pressables alike — in one colour instead of each
+     * control's content colour. Its alpha is the ripple's strength. iOS has no ripple and never reads it.
+     */
+    ripple: adaptive({dark: whiteAlpha[7], light: blackAlpha[5]}),
     success: {
       base: adaptive({dark: greenAlpha[5], light: green[20]}),
       primary: native({dark: green[11], ios: 'systemGreenColor', light: green[10]}),

@@ -1,9 +1,9 @@
-import {Column, Host} from '@expo/ui/jetpack-compose'
+import {Column} from '@expo/ui/jetpack-compose'
 import {padding} from '@expo/ui/jetpack-compose/modifiers'
 import {useSxModifiers} from '@hzblj/kara-sx'
-import {useAppTheme} from '@hzblj/kara-theme'
 import {useCallback, useMemo, useRef, useState} from 'react'
 import {StatusBar, StyleSheet, View} from 'react-native'
+import {ComposeHost} from '../../hooks/compose-host'
 import {HostBoundary} from '../../hooks/host-context'
 import type {ScreenComponent, ScreenProps} from './screen.types'
 
@@ -18,7 +18,6 @@ export const Screen: ScreenComponent = ({
   ignoreSafeArea = 'none',
   testID,
 }: ScreenProps) => {
-  const theme = useAppTheme()
   const frame = useRef<View>(null)
   const [statusBarOverlap, setStatusBarOverlap] = useState(0)
   const sx = useSxModifiers({bg, tall: true, wide: true})
@@ -35,16 +34,14 @@ export const Screen: ScreenComponent = ({
 
   return (
     <View onLayout={onLayout} ref={frame} style={StyleSheet.absoluteFill} testID={testID}>
-      <Host
-        colorScheme={theme.dark ? 'dark' : 'light'}
+      <ComposeHost
         ignoreSafeAreaKeyboardInsets={ignoreSafeArea === 'all' || ignoreSafeArea === 'keyboard'}
-        seedColor={theme.materialSeed}
         style={StyleSheet.absoluteFill}
       >
         <Column modifiers={modifiers}>
           <HostBoundary>{children}</HostBoundary>
         </Column>
-      </Host>
+      </ComposeHost>
     </View>
   )
 }

@@ -1,4 +1,4 @@
-import {Host, SegmentedButton, SingleChoiceSegmentedButtonRow, Text} from '@expo/ui/jetpack-compose'
+import {SegmentedButton, SingleChoiceSegmentedButtonRow, Text} from '@expo/ui/jetpack-compose'
 import {fillMaxWidth, height, testID as testIdModifier, weight} from '@expo/ui/jetpack-compose/modifiers'
 import {iconResourceName} from '@hzblj/expo-native-icons'
 import {haptics} from '@hzblj/expo-rich-haptics'
@@ -6,6 +6,7 @@ import {DrawableIcon, NativeImage} from '@hzblj/kara-native/jetpack-compose'
 import {spacing as spacingTokens, type TextVariant, useAppTheme} from '@hzblj/kara-theme'
 import {useCallback, useMemo} from 'react'
 
+import {ComposeHost} from '../../hooks/compose-host'
 import {useInsideHost} from '../../hooks/host-context'
 import {HStack} from '../h-stack'
 import type {SegmentedControlComponent, SegmentedControlProps, SegmentedControlSegment} from './segmented-control.types'
@@ -147,9 +148,5 @@ export const SegmentedControl: SegmentedControlComponent = ({
     return row
   }
 
-  return (
-    <Host colorScheme={theme.dark ? 'dark' : 'light'} matchContents={MATCH_HEIGHT_ONLY} seedColor={theme.materialSeed}>
-      {row}
-    </Host>
-  )
+  return <ComposeHost matchContents={MATCH_HEIGHT_ONLY}>{row}</ComposeHost>
 }

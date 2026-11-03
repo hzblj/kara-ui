@@ -1,9 +1,10 @@
 import {DateTimePicker} from '@expo/ui/community/datetime-picker'
-import {DateTimePicker as ComposeDateTimePicker, Host, RNHostView} from '@expo/ui/jetpack-compose'
+import {DateTimePicker as ComposeDateTimePicker, RNHostView} from '@expo/ui/jetpack-compose'
 import {alpha, testID as testIdModifier} from '@expo/ui/jetpack-compose/modifiers'
 import {opacity, useAppTheme} from '@hzblj/kara-theme'
 import {useCallback, useMemo, useState} from 'react'
 
+import {ComposeHost} from '../../hooks/compose-host'
 import {useInsideHost} from '../../hooks/host-context'
 import {Box} from '../box'
 import {Pressable} from '../pressable'
@@ -104,17 +105,7 @@ export const DatePicker: DatePickerComponent = (props: DatePickerProps) => {
   if (datePickerStyle === 'graphical' && mode !== 'time') {
     const calendar = <Calendar {...props} disabled={disabled} />
 
-    return insideHost ? (
-      calendar
-    ) : (
-      <Host
-        colorScheme={theme.dark ? 'dark' : 'light'}
-        matchContents={MATCH_HEIGHT_ONLY}
-        seedColor={theme.materialSeed}
-      >
-        {calendar}
-      </Host>
-    )
+    return insideHost ? calendar : <ComposeHost matchContents={MATCH_HEIGHT_ONLY}>{calendar}</ComposeHost>
   }
 
   const field = (

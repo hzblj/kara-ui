@@ -9,8 +9,10 @@ import expo.modules.kara.ui.colorpicker.ColorWellView
 import expo.modules.kara.ui.icon.DrawableIconView
 import expo.modules.kara.ui.images.NativeImageView
 import expo.modules.kara.ui.modifiers.ModifierRegistration
+import expo.modules.kara.ui.navigationitemsearch.NavigationItemSearchView
 import expo.modules.kara.ui.ripple.RippleConfigurationView
 import expo.modules.kara.ui.searchfield.SearchFieldView
+import expo.modules.kara.ui.searchfield.SearchVoiceSizes
 import expo.modules.kara.ui.swipe.SwipeActionsBoxView
 import expo.modules.kara.ui.text.AnimatedTextView
 import expo.modules.kara.ui.tooltip.TooltipBoxView
@@ -18,6 +20,7 @@ import expo.modules.kara.ui.topappbar.TopAppBarView
 import expo.modules.kotlin.functions.Queues
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
+import expo.modules.kotlin.sharedobjects.SharedObject
 
 class KaraUIModule : Module() {
   override fun definition() = ModuleDefinition {
@@ -84,6 +87,53 @@ class KaraUIModule : Module() {
 
     View(ColorWellView::class) {
       Events("onValueChange")
+    }
+
+    View(NavigationItemSearchView::class) {
+      Events("onVoiceAction")
+
+      Prop("clearIconName") { view: NavigationItemSearchView, name: String? ->
+        view.clearIconName = name
+        view.applyCloseAppearance()
+      }
+      Prop("iconColor") { view: NavigationItemSearchView, color: Color? ->
+        view.iconColor.value = color
+      }
+      Prop("microphoneIconName") { view: NavigationItemSearchView, name: String? ->
+        view.microphoneIconName.value = name
+      }
+      Prop("microphoneLabel") { view: NavigationItemSearchView, label: String? ->
+        view.microphoneLabel.value = label
+      }
+      Prop("rippleColor") { view: NavigationItemSearchView, color: Color? ->
+        view.rippleColor.value = color
+        view.applyCloseAppearance()
+      }
+      Prop("stopContainerColor") { view: NavigationItemSearchView, color: Color? ->
+        view.stopContainerColor.value = color
+      }
+      Prop("stopIconName") { view: NavigationItemSearchView, name: String? ->
+        view.stopIconName.value = name
+      }
+      Prop("stopLabel") { view: NavigationItemSearchView, label: String? ->
+        view.stopLabel.value = label
+      }
+      Prop("voiceEnabled") { view: NavigationItemSearchView, enabled: Boolean? ->
+        val value = enabled ?: false
+        if (view.voiceEnabled.value != value) {
+          view.voiceEnabled.value = value
+          view.refreshAttachment()
+        }
+      }
+      Prop("voiceListening") { view: NavigationItemSearchView, listening: Boolean? ->
+        view.listening.value = listening ?: false
+      }
+      Prop("voiceMeter") { view: NavigationItemSearchView, meter: SharedObject? ->
+        view.meter.value = meter
+      }
+      Prop("voiceSizes") { view: NavigationItemSearchView, sizes: SearchVoiceSizes? ->
+        view.sizes.value = sizes
+      }
     }
 
     View(RippleConfigurationView::class)

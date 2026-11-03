@@ -120,7 +120,8 @@ data class SearchFieldProps(
   val microphoneLabel: MutableState<String?> = mutableStateOf(null),
   val stopLabel: MutableState<String?> = mutableStateOf(null),
   val voiceMeter: MutableState<SharedObject?> = mutableStateOf(null),
-  val voiceSizes: MutableState<SearchVoiceSizes?> = mutableStateOf(null)
+  val voiceSizes: MutableState<SearchVoiceSizes?> = mutableStateOf(null),
+  val autoFocus: MutableState<Boolean> = mutableStateOf(false)
 ) : ComposeProps
 
 /** `SearchVoiceSizes` in `src/search-voice.ts`, in dp: each size left out keeps Material's own. */
@@ -228,6 +229,7 @@ class SearchFieldView(context: Context, appContext: AppContext) :
     val voiceMeter by props.voiceMeter
     val voiceSizes by props.voiceSizes
     val blurRequest by blurRequests
+    val autoFocus by props.autoFocus
 
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -265,6 +267,13 @@ class SearchFieldView(context: Context, appContext: AppContext) :
       snapshotFlow { textFieldState.text.toString() }
         .drop(1)
         .collect { onQueryChange(SearchFieldTextEvent(it)) }
+    }
+
+    LaunchedEffect(Unit) {
+      if (autoFocus) {
+        runCatching { focusRequester.requestFocus() }
+        keyboardController?.show()
+      }
     }
 
     LaunchedEffect(blurRequest) {
@@ -429,7 +438,7 @@ private fun CollapsibleSection(isVisible: Boolean, content: @Composable () -> Un
 }
 
 @Composable
-private fun VoiceMeter(meter: SharedObject?, color: ComposeColor, sizes: SearchVoiceWaveformSizes?) {
+internal fun VoiceMeter(meter: SharedObject?, color: ComposeColor, sizes: SearchVoiceWaveformSizes?) {
   val tint = if (color.isSpecified) color else LocalContentColor.current
   AndroidView(
     factory = { context -> LiveWaveformView(context).apply { growIn = LiveWaveformGrowIn() } },
@@ -465,7 +474,7 @@ private fun ClearButton(isVisible: Boolean, iconName: String?, label: String?, o
 }
 
 @Composable
-private fun DrawableIcon(name: String?, contentDescription: String?, size: Float? = null) {
+internal fun DrawableIcon(name: String?, contentDescription: String?, size: Float? = null) {
   val context = LocalContext.current
   val id = remember(name) { resourceId(context, name) }
 
@@ -490,7 +499,7 @@ private object SearchKeyboard : InputTransformation {
   override fun TextFieldBuffer.transformInput() = Unit
 }
 
-private const val ICON_SCALE = 0.6f
+internal const val ICON_SCALE = 0.6f
 private val VoiceButtonWidth = 48.dp
 private val VoiceMeterWidth = 64.dp
 private val VoiceMeterHeight = 20.dp

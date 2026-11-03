@@ -1,8 +1,9 @@
-import {Text as ComposeText, Host, RNHostView, Row, TextButton} from '@expo/ui/jetpack-compose'
+import {Text as ComposeText, RNHostView, Row, TextButton} from '@expo/ui/jetpack-compose'
 
 import {TooltipBox} from '@hzblj/kara-native/jetpack-compose'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {Button} from '../../atoms/button'
+import {ComposeHost} from '../../hooks/compose-host'
 import {HostBoundary} from '../../hooks/host-context'
 import type {RnTooltipAction, RnTooltipComponent, RnTooltipProps} from './rn-tooltip.types'
 
@@ -53,7 +54,7 @@ export const RnTooltip: RnTooltipComponent = ({
   const theme = useAppTheme()
 
   return (
-    <Host colorScheme={theme.dark ? 'dark' : 'light'} matchContents seedColor={theme.materialSeed}>
+    <ComposeHost matchContents>
       <HostBoundary>
         <TooltipBox
           actionsAlignment={actionsAlignment}
@@ -90,6 +91,6 @@ export const RnTooltip: RnTooltipComponent = ({
           <RNHostView matchContents>{children}</RNHostView>
         </TooltipBox>
       </HostBoundary>
-    </Host>
+    </ComposeHost>
   )
 }

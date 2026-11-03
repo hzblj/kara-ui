@@ -22,8 +22,9 @@ export const RnListItem: RnListItemComponent = ({
   // One element for a screen reader, as `ListItem` is: a button when it can be pressed.
   const a11y = accessibilityProps({accessible: true, ...accessibility}, onPress ? 'button' : undefined)
   const pressedColor = theme.color('fill.tertiary')
+  const rippleColor = theme.color('fill.ripple')
 
-  const ripple = useMemo(() => ({color: pressedColor}), [pressedColor])
+  const ripple = useMemo(() => ({color: rippleColor}), [rippleColor])
   const highlight = useMemo(
     () =>
       Platform.OS === 'ios'

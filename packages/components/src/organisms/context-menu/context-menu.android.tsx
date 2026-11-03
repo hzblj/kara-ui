@@ -1,10 +1,11 @@
-import {Text as ComposeText, DropdownMenu, DropdownMenuItem, Host} from '@expo/ui/jetpack-compose'
+import {Text as ComposeText, DropdownMenu, DropdownMenuItem} from '@expo/ui/jetpack-compose'
 import {haptics} from '@hzblj/expo-rich-haptics'
 import {useSx} from '@hzblj/kara-sx'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useCallback, useMemo, useRef, useState} from 'react'
 import {type GestureResponderEvent, Pressable, StyleSheet, View} from 'react-native'
 import {Icon} from '../../atoms/icon'
+import {ComposeHost} from '../../hooks/compose-host'
 import {HostBoundary} from '../../hooks/host-context'
 import {splitForRipple} from '../../utils/ripple-clip'
 import type {MenuAction} from '../menu'
@@ -73,7 +74,7 @@ const ContextMenuRoot = ({actions, children, testID, ...props}: ContextMenuProps
 
   // The shape clips on an outer view, so the ripple and the highlight follow the trigger's rounded corners.
   const {inner, outer} = useMemo(() => splitForRipple(resolved), [resolved])
-  const ripple = useMemo(() => ({color: theme.color('fill.tertiary')}), [theme])
+  const ripple = useMemo(() => ({color: theme.color('fill.ripple')}), [theme])
   const highlight = useMemo(() => ({backgroundColor: theme.color('fill.tertiary')}), [theme])
 
   const open = useCallback((event: GestureResponderEvent) => {
@@ -96,12 +97,7 @@ const ContextMenuRoot = ({actions, children, testID, ...props}: ContextMenuProps
         {expanded ? <View pointerEvents="none" style={[StyleSheet.absoluteFill, highlight]} /> : null}
         {children}
         {anchor ? (
-          <Host
-            colorScheme={theme.dark ? 'dark' : 'light'}
-            pointerEvents="none"
-            seedColor={theme.materialSeed}
-            style={[styles.anchor, {left: anchor.x, top: anchor.y}]}
-          >
+          <ComposeHost pointerEvents="none" style={[styles.anchor, {left: anchor.x, top: anchor.y}]}>
             <HostBoundary>
               <DropdownMenu color={theme.color('surface.primary')} expanded={expanded} onDismissRequest={dismiss}>
                 <DropdownMenu.Items>
@@ -111,7 +107,7 @@ const ContextMenuRoot = ({actions, children, testID, ...props}: ContextMenuProps
                 </DropdownMenu.Items>
               </DropdownMenu>
             </HostBoundary>
-          </Host>
+          </ComposeHost>
         ) : null}
       </Pressable>
     </View>

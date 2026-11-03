@@ -237,13 +237,13 @@ export const header: Guide = {
       <Section id="search" title="Search">
         <P>
           {
-            'iOS puts the field under the title. Android gets a row (`searchInput`) to place under the bar. `scrim` dims the content while the field is empty.'
+            'iOS puts the field under the title. Android gets a row (`searchInput`) to place under the bar. `scrim` dims the content while the field is empty and carries the field’s voice, so always render it.'
           }
         </P>
         <CodeBlock code={SEARCH} />
         <P>
           {
-            'On iOS the field can also hide behind a search button in the bar’s corner, which opens it in the bar. Its close button there is the system’s; iOS offers no other. `clearIcon` and `cancelIcon` take your own icons for the rest.'
+            "`placement: 'integratedButton'` hides the field behind a search button in the bar’s corner. iOS opens it in the bar; Android expands the toolbar’s own search over the title. Pass `searchBar` to `useHeader` on both. The close is the system’s on iOS, and back on Android. `clearIcon` and `cancelIcon` (iOS) take your own icons."
           }
         </P>
         <CodeBlock code={SEARCH_BUTTON} />

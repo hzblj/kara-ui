@@ -72,20 +72,22 @@ export type NavigationBarSearchRef = {
 }
 
 /**
- * Where the search field goes on iOS, as a native-stack header places its search: `stacked` in a row of its own under
- * the title, `integratedButton` as a search item beside the trailing items that turns the bar into the field.
+ * Where the search field goes, as a native-stack header places its search: `stacked` in a row of its own under the
+ * title, `integratedButton` as a search item that turns the bar into the field.
  */
 export type NavigationBarSearchPlacement = 'integratedButton' | 'stacked'
 
 /**
  * Where `integratedButton` puts its search button: beside the trailing items, or after the leading ones. On iOS 26 the
- * button grows into the field and the cancel splits off its end, the way the system's own search does.
+ * button grows into the field and the cancel splits off its end, the way the system's own search does; on Android the
+ * field grows over the bar from its trailing edge.
  */
 export type NavigationBarSearchButtonPlacement = 'leading' | 'trailing'
 
 /**
- * A search field in the bar. iOS only for now; Android keeps the title. A focused field gets a cancel item that
- * empties it and ends the search, a bar item like the others.
+ * A search field in the bar. A focused field gets a cancel that empties it and ends the search: a bar item on iOS,
+ * Material's text button beside the field on Android. An `integratedButton` search closes again once the field is
+ * cancelled, cleared or left empty.
  */
 export type NavigationBarSearch = {
   /** `integratedButton`: the search item's icon, one of the app's icons; the system magnifying glass unset. */
@@ -130,7 +132,7 @@ export type NavigationBarProps = {
   inverted?: boolean
   /** In screen order, from the leading edge. */
   leadingItems?: NavigationBarItem[]
-  /** A search field (iOS): under the title, or behind a search item beside the trailing items. */
+  /** A search field: under the title, or behind a search item that turns the bar into the field. */
   search?: NavigationBarSearch
   /** Test identifier, forwarded to the native bar. iOS only; Android ignores it. */
   testID?: string
