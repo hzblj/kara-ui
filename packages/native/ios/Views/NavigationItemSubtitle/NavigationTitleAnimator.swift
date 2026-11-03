@@ -23,7 +23,11 @@ final class NavigationTitleAnimator {
   private var overlays: [Overlay] = []
   private var cleanup: DispatchWorkItem?
 
-  /** Pictures of the title and subtitle as they are now, for an exit once the stack has taken the title away. */
+  /**
+   Pictures of the title and subtitle as they are on screen, for an exit once the stack has taken the title away.
+   It never lays the bar out: the stack empties the bar items before it sets the title, and a layout at that
+   point spreads the title over the whole bar, so the exit would play an untruncated title.
+   */
   func snapshots(
     in navigationBar: UINavigationBar,
     title: String,
@@ -33,7 +37,6 @@ final class NavigationTitleAnimator {
     guard transition.isAnimated else {
       return []
     }
-    navigationBar.layoutIfNeeded()
     return Self.lines(title: title, subtitle: subtitle, transition: transition).compactMap { text, motion in
       Self.findLabel(text, in: navigationBar).flatMap { NavigationTitleSnapshot(label: $0, in: navigationBar, motion: motion) }
     }
