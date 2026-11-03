@@ -120,7 +120,8 @@ data class SearchFieldProps(
   val microphoneLabel: MutableState<String?> = mutableStateOf(null),
   val stopLabel: MutableState<String?> = mutableStateOf(null),
   val voiceMeter: MutableState<SharedObject?> = mutableStateOf(null),
-  val voiceSizes: MutableState<SearchVoiceSizes?> = mutableStateOf(null)
+  val voiceSizes: MutableState<SearchVoiceSizes?> = mutableStateOf(null),
+  val autoFocus: MutableState<Boolean> = mutableStateOf(false)
 ) : ComposeProps
 
 /** `SearchVoiceSizes` in `src/search-voice.ts`, in dp: each size left out keeps Material's own. */
@@ -228,6 +229,7 @@ class SearchFieldView(context: Context, appContext: AppContext) :
     val voiceMeter by props.voiceMeter
     val voiceSizes by props.voiceSizes
     val blurRequest by blurRequests
+    val autoFocus by props.autoFocus
 
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -265,6 +267,13 @@ class SearchFieldView(context: Context, appContext: AppContext) :
       snapshotFlow { textFieldState.text.toString() }
         .drop(1)
         .collect { onQueryChange(SearchFieldTextEvent(it)) }
+    }
+
+    LaunchedEffect(Unit) {
+      if (autoFocus) {
+        runCatching { focusRequester.requestFocus() }
+        keyboardController?.show()
+      }
     }
 
     LaunchedEffect(blurRequest) {

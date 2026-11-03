@@ -2,6 +2,7 @@ import {useCallback, useMemo} from 'react'
 import type {NativeSyntheticEvent} from 'react-native'
 
 import {requireKaraView} from '../../require-view'
+import {slot} from '../slot-view'
 import type {TopAppBarItem, TopAppBarProps} from './top-app-bar.types'
 
 type NativeTopAppBarItem = Omit<TopAppBarItem, 'onPress'>
@@ -34,7 +35,7 @@ const toNativeItem = ({iconName, label, testID, type}: TopAppBarItem): NativeTop
  * Material's top app bar on a transparent container — centred or leading title, items in the `navigationIcon` and
  * `actions` slots in the order given. A Compose view: it renders inside a host.
  */
-export const TopAppBar = ({leadingItems, trailingItems, ...props}: TopAppBarProps) => {
+const TopAppBarRoot = ({leadingItems, trailingItems, ...props}: TopAppBarProps) => {
   const nativeLeadingItems = useMemo(() => (leadingItems ?? NO_ITEMS).map(toNativeItem), [leadingItems])
   const nativeTrailingItems = useMemo(() => (trailingItems ?? NO_ITEMS).map(toNativeItem), [trailingItems])
 
@@ -56,3 +57,6 @@ export const TopAppBar = ({leadingItems, trailingItems, ...props}: TopAppBarProp
     />
   )
 }
+
+/** The bar, with `TopAppBar.Search` for the field it shows while `searchActive`. */
+export const TopAppBar = Object.assign(TopAppBarRoot, {Search: slot('search')})
