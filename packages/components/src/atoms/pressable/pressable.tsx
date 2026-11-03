@@ -9,7 +9,7 @@ import {
   timing,
   useSplitSxMotion,
 } from '@hzblj/kara-sx'
-import {opacity, type SpringName, springs, useAppTheme, useReducedMotion, withOpacity} from '@hzblj/kara-theme'
+import {opacity, type SpringName, springs, useAppTheme, useReducedMotion} from '@hzblj/kara-theme'
 import {useCallback, useMemo} from 'react'
 import {Platform, Pressable as RNPressable, type ViewStyle} from 'react-native'
 import Animated, {useAnimatedStyle, useSharedValue, withSpring, withTiming} from 'react-native-reanimated'
@@ -100,13 +100,11 @@ export const Pressable: PressableComponent = markMotionComponent(
       return effect === 'opacity' ? {opacity: 1 - (1 - dimmed) * pressed.value} : {}
     }, [dimmed, effect, pressedScale])
 
-    // Android's press is Material's: a ripple over the content (the pressed state layer, `onSurface` at 10 %) clipped to
-    // the shape by an outer view (`splitForRipple`). The effect, when there is one, moves that outer view, ripple and all.
+    // Android's press is Material's: a ripple over the content in the theme's `fill.ripple`, the colour every Compose
+    // control ripples in too, clipped to the shape by an outer view (`splitForRipple`). The effect, when there is one,
+    // moves that outer view, ripple and all.
     const ripple = useMemo(
-      () =>
-        isAndroid && withRipple
-          ? {color: withOpacity(String(theme.color('content.primary')), 'o10'), foreground: true}
-          : undefined,
+      () => (isAndroid && withRipple ? {color: theme.color('fill.ripple'), foreground: true} : undefined),
       [isAndroid, theme, withRipple]
     )
     const androidStyle = useMemo(

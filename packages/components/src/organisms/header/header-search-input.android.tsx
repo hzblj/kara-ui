@@ -1,10 +1,10 @@
-import {Host} from '@expo/ui/jetpack-compose'
 import {iconResourceName} from '@hzblj/expo-native-icons'
 import {SearchField, type SearchFieldRef} from '@hzblj/kara-native/jetpack-compose'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useImperativeHandle, useMemo, useRef} from 'react'
 import {StyleSheet, View} from 'react-native'
 
+import {ComposeHost} from '../../hooks/compose-host'
 import type {HeaderSearchInputComponent, HeaderSearchInputProps} from './header-search-input.types'
 
 /** Material's search field is 56dp; the row adds 8dp above it and 12dp below, under the top app bar. */
@@ -61,12 +61,7 @@ export const HeaderSearchInput: HeaderSearchInputComponent = ({
 
   return (
     <View style={styles.row}>
-      <Host
-        colorScheme={theme.dark ? 'dark' : 'light'}
-        ignoreSafeAreaKeyboardInsets
-        seedColor={theme.materialSeed}
-        style={styles.field}
-      >
+      <ComposeHost ignoreSafeAreaKeyboardInsets style={styles.field}>
         <SearchField
           cancelLabel="Cancel"
           clearIconName={fieldClearIcon ? iconResourceName(fieldClearIcon) : undefined}
@@ -83,7 +78,7 @@ export const HeaderSearchInput: HeaderSearchInputComponent = ({
           textColor={theme.color('content.primary')}
           voice={nativeVoice}
         />
-      </Host>
+      </ComposeHost>
     </View>
   )
 }

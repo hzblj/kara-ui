@@ -1,7 +1,6 @@
-import {Host} from '@expo/ui/jetpack-compose'
 import {useSx} from '@hzblj/kara-sx'
-import {useAppTheme} from '@hzblj/kara-theme'
 
+import {ComposeHost} from '../../hooks/compose-host'
 import {HostBoundary} from '../../hooks/host-context'
 import type {IslandComponent, IslandProps} from './island.types'
 
@@ -17,18 +16,15 @@ export const Island: IslandComponent = ({
   testID: _testID,
   ...sx
 }: IslandProps) => {
-  const theme = useAppTheme()
   const resolved = useSx(sx)
 
   return (
-    <Host
-      colorScheme={theme.dark ? 'dark' : 'light'}
+    <ComposeHost
       ignoreSafeAreaKeyboardInsets={ignoreSafeArea === 'all' || ignoreSafeArea === 'keyboard'}
       matchContents={matchContents ? MATCH_HEIGHT_ONLY : MATCH_NEITHER}
-      seedColor={theme.materialSeed}
       style={style ? [resolved, style] : resolved}
     >
       <HostBoundary>{children}</HostBoundary>
-    </Host>
+    </ComposeHost>
   )
 }

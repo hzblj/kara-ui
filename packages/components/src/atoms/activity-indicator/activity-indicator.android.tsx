@@ -1,10 +1,11 @@
-import {Host, LoadingIndicator} from '@expo/ui/jetpack-compose'
+import {LoadingIndicator} from '@expo/ui/jetpack-compose'
 import {fillMaxSize, size as sizeModifier, testID as testIdModifier} from '@expo/ui/jetpack-compose/modifiers'
 import {useAccessibilityModifiers} from '@hzblj/kara-sx'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useMemo} from 'react'
 import {StyleSheet} from 'react-native'
 
+import {ComposeHost} from '../../hooks/compose-host'
 import {useInsideHost} from '../../hooks/host-context'
 import type {ActivityIndicatorComponent, ActivityIndicatorProps} from './activity-indicator.types'
 
@@ -43,9 +44,5 @@ export const ActivityIndicator: ActivityIndicatorComponent = ({
     return indicator
   }
 
-  return (
-    <Host colorScheme={theme.dark ? 'dark' : 'light'} seedColor={theme.materialSeed} style={styles[size]}>
-      {indicator}
-    </Host>
-  )
+  return <ComposeHost style={styles[size]}>{indicator}</ComposeHost>
 }

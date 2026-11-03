@@ -3,13 +3,13 @@ import {
   DropdownMenuItem,
   ExposedDropdownMenu,
   ExposedDropdownMenuBox,
-  Host,
   OutlinedTextField,
   useNativeState,
 } from '@expo/ui/jetpack-compose'
 import {fillMaxWidth, menuAnchor, testID as testIdModifier} from '@expo/ui/jetpack-compose/modifiers'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {useEffect, useMemo, useState} from 'react'
+import {ComposeHost} from '../../hooks/compose-host'
 import {HostBoundary, useInsideHost} from '../../hooks/host-context'
 import {Glyph} from '../glyph'
 import type {PickerComponent, PickerProps} from './picker.types'
@@ -89,8 +89,8 @@ export const Picker: PickerComponent = ({disabled = false, onValueChange, option
   }
 
   return (
-    <Host colorScheme={theme.dark ? 'dark' : 'light'} matchContents={MATCH_HEIGHT_ONLY} seedColor={theme.materialSeed}>
+    <ComposeHost matchContents={MATCH_HEIGHT_ONLY}>
       <HostBoundary>{menu}</HostBoundary>
-    </Host>
+    </ComposeHost>
   )
 }
