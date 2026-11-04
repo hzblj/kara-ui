@@ -1,4 +1,5 @@
 import {iconResourceName} from '@hzblj/expo-native-icons'
+import {TabBarExpandOnScrollUp} from '@hzblj/kara-native/swift-ui'
 import {useAppTheme} from '@hzblj/kara-theme'
 import {NativeTabs} from 'expo-router/unstable-native-tabs'
 import {Children, isValidElement, useMemo} from 'react'
@@ -71,15 +72,18 @@ const useTabBarColors = () => {
   }, [theme])
 }
 
-const TabsRoot = ({children, minimizeBehavior = 'never'}: TabsProps) => {
+const TabsRoot = ({children, expandsOnScrollUp = false, minimizeBehavior = 'never'}: TabsProps) => {
   const colors = useTabBarColors()
 
   return (
-    <NativeTabs minimizeBehavior={minimizeBehavior} {...colors}>
-      {Children.map(children, child =>
-        isValidElement<TabsScreenProps>(child) && child.type === TabsScreen ? renderTrigger(child.props) : child
-      )}
-    </NativeTabs>
+    <>
+      <NativeTabs minimizeBehavior={minimizeBehavior} {...colors}>
+        {Children.map(children, child =>
+          isValidElement<TabsScreenProps>(child) && child.type === TabsScreen ? renderTrigger(child.props) : child
+        )}
+      </NativeTabs>
+      {expandsOnScrollUp && Platform.OS === 'ios' && <TabBarExpandOnScrollUp />}
+    </>
   )
 }
 

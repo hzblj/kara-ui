@@ -1113,6 +1113,7 @@ export default function TabsLayout() {
       'An Expo Router layout, on Expo Router’s native tabs: the system tab bar on iOS, Material’s navigation bar on Android, both in the theme’s colours.',
       'Every child route needs a `Tabs.Screen`. `hidden` drops a tab and makes its route unreachable.',
       'The iOS 26 bar does not minimise on scroll unless you ask with `minimizeBehavior`.',
+      'With `onScrollDown`, `expandsOnScrollUp` brings the bar back as soon as the user scrolls up, not only at the top.',
     ],
     renders: {android: 'Material NavigationBar', ios: 'UITabBarController'},
     summary: 'Native tabs for Expo Router.',
