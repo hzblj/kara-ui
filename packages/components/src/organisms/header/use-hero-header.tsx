@@ -216,6 +216,7 @@ export const useHeroHeader = (
   return {
     background,
     contentInsetAdjustmentBehavior: 'never',
+    inlineLargeTitle: null,
     largeTitle: null,
     onScroll,
     progress,

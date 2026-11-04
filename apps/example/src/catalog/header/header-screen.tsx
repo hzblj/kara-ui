@@ -49,10 +49,22 @@ const renderCountry = ({item}: {item: string}) => (
   </View>
 )
 
+type TitleMode = 'inline' | 'large' | 'subtitle'
+
+const NEXT_TITLE_MODE: Record<TitleMode, TitleMode> = {inline: 'subtitle', large: 'inline', subtitle: 'large'}
+
+const LARGE_TITLE: Record<TitleMode, boolean | 'inline'> = {inline: 'inline', large: true, subtitle: false}
+
+const TITLE_MODE_LABEL: Record<TitleMode, string> = {
+  inline: 'Leading title with a subtitle',
+  large: 'Inline large title',
+  subtitle: 'Large title',
+}
+
 /**
  * A pushed screen whose whole header comes from `useHeader`: a large title (UIKit's on iOS, a collapsing first row on
- * Android) or a leading title with a subtitle, a search field, and every kind of action on both sides. The toggles in
- * the list change them live.
+ * Android), the large title inline with the actions or a leading title with a subtitle, a search field, and every kind
+ * of action on both sides. The toggles in the list change them live.
  */
 export const HeaderScreen = () => {
   const navigation = useNavigation()
@@ -60,7 +72,7 @@ export const HeaderScreen = () => {
   const [favourites, setFavourites] = useState(3)
   const [isSharing, setIsSharing] = useState(false)
   const [backHidden, setBackHidden] = useState(false)
-  const [subtitleShown, setSubtitleShown] = useState(false)
+  const [titleMode, setTitleMode] = useState<TitleMode>('large')
   const [sortByName, setSortByName] = useState(true)
 
   const countries = useMemo(() => {
@@ -123,10 +135,10 @@ export const HeaderScreen = () => {
 
   const header = useHeader(navigation, {
     backHidden,
-    largeTitle: !subtitleShown,
+    largeTitle: LARGE_TITLE[titleMode],
     leadingActions,
     search: search.searchBar,
-    subtitle: subtitleShown ? `${countries.length} countries` : undefined,
+    subtitle: titleMode === 'subtitle' ? `${countries.length} countries` : undefined,
     title: 'Countries',
     trailingActions,
   })
@@ -146,8 +158,8 @@ export const HeaderScreen = () => {
           <VStack spacing="s12">
             <Button label="Share (spinner)" onPress={share} variant="secondary" />
             <Button
-              label={subtitleShown ? 'Large title' : 'Leading title with a subtitle'}
-              onPress={() => setSubtitleShown(shown => !shown)}
+              label={TITLE_MODE_LABEL[titleMode]}
+              onPress={() => setTitleMode(mode => NEXT_TITLE_MODE[mode])}
               variant="secondary"
             />
             <Button
@@ -174,6 +186,7 @@ export const HeaderScreen = () => {
         scrollEventThrottle={16}
       />
       {search.scrim}
+      {header.inlineLargeTitle}
     </>
   )
 }

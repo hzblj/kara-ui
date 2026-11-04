@@ -7,9 +7,9 @@ import {useHeaderTitle} from './header-title'
 
 /**
  * A screen's header as native-stack options, with what its list needs alongside: the title (centred, leading with a
- * subtitle, revealed on scroll or large), the actions on both sides (the navigation bar's own items on iOS, Material
- * buttons on Android) and a search field. Spread `options` into Expo Router's `<Stack.Screen options>` or a React
- * Navigation screen's `options`. Memoize the action arrays: new arrays build new options on every render.
+ * subtitle, revealed on scroll, large or inline large), the actions on both sides (the navigation bar's own items on
+ * iOS, Material buttons on Android) and a search field. Spread `options` into Expo Router's `<Stack.Screen options>` or
+ * a React Navigation screen's `options`. Memoize the action arrays: new arrays build new options on every render.
  */
 export const useHeaderOptions = ({
   backHidden,
@@ -42,11 +42,19 @@ export const useHeaderOptions = ({
 
     return {
       contentInsetAdjustmentBehavior: 'automatic',
+      inlineLargeTitle: headerTitle.inlineLargeTitle,
       largeTitle: headerTitle.largeTitle,
       onScroll: headerTitle.onScroll,
       options,
     }
-  }, [actionOptions, headerTitle.largeTitle, headerTitle.onScroll, headerTitle.options, search])
+  }, [
+    actionOptions,
+    headerTitle.inlineLargeTitle,
+    headerTitle.largeTitle,
+    headerTitle.onScroll,
+    headerTitle.options,
+    search,
+  ])
 }
 
 /**
@@ -55,14 +63,14 @@ export const useHeaderOptions = ({
  * belongs in its static `options` too: iOS morphs the bar items between screens only when they exist at the push.
  */
 export const useHeader = (navigation: HeaderNavigation, params: HeaderParams): HeaderContent => {
-  const {contentInsetAdjustmentBehavior, largeTitle, onScroll, options} = useHeaderOptions(params)
+  const {contentInsetAdjustmentBehavior, inlineLargeTitle, largeTitle, onScroll, options} = useHeaderOptions(params)
 
   useLayoutEffect(() => {
     navigation.setOptions(options)
   }, [navigation, options])
 
   return useMemo(
-    () => ({contentInsetAdjustmentBehavior, largeTitle, onScroll}),
-    [contentInsetAdjustmentBehavior, largeTitle, onScroll]
+    () => ({contentInsetAdjustmentBehavior, inlineLargeTitle, largeTitle, onScroll}),
+    [contentInsetAdjustmentBehavior, inlineLargeTitle, largeTitle, onScroll]
   )
 }
