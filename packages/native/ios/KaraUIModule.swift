@@ -44,6 +44,7 @@ public class KaraUIModule: Module {
     ScrollEdgeTopBarView.definition()
     SegmentedControlView.definition()
     SheetGrabberView.definition()
+    TabBarExpandOnScrollUpView.definition()
     TooltipView.definition()
   }
 }

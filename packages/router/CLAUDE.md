@@ -9,6 +9,10 @@ was opened from). Reached by consumers as `@hzblj/kara-ui/router`.
 so a navigator built against the npm copies registers into a context tree that never exists and throws "Couldn't
 register the navigator" the moment the layout mounts.
 
+**`expandsOnScrollUp` renders kara-native's `TabBarExpandOnScrollUp` next to `NativeTabs`**, iOS only. It finds the
+tab bar controller among the layout's descendant view controllers and expands a bar minimized by `onScrollDown` once
+the content is dragged back up; UIKit alone waits for the top of the list. Off by default, like `minimizeBehavior`.
+
 **`Tabs.Screen` renders nothing itself.** The navigator collects its tabs by matching the child element type exactly,
 so a component that merely renders a trigger is invisible to it.
 

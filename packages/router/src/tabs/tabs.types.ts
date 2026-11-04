@@ -32,6 +32,12 @@ export type TabsProps = {
   /** One `Tabs.Screen` per child route; any other child goes to the navigator as it is. */
   children: ReactNode
   /**
+   * With `minimizeBehavior: 'onScrollDown'`, expands the minimized bar as soon as the content is dragged back up, with
+   * the system's own animation. UIKit alone expands it only once the list is back at its top, or on a tap. iOS 26+;
+   * off by default.
+   */
+  expandsOnScrollUp?: boolean
+  /**
    * Whether the iOS 26 tab bar shrinks to a pill while scrolling.
    *
    * Off by default, unlike the system, which minimizes on scroll. Minimizing changes the tab bar's
