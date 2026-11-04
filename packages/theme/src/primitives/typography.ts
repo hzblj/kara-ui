@@ -71,6 +71,16 @@ export const textStyles = {
 
 export type TextVariant = keyof typeof textStyles
 
+/**
+ * An app's change to one variant of the scale: its size, line height, weight, role or growth axis. Whatever it leaves
+ * out keeps the library's value. The variant *names* stay fixed, so every component and every `variant` prop keeps
+ * type-checking; an override changes what a name resolves to.
+ */
+export type TextStyleOverride = Partial<TextStyleToken>
+
+/** The app's changes to the type scale, by variant. */
+export type TypographyOverrides = Partial<Record<TextVariant, TextStyleOverride>>
+
 /** The numeric weight React Native and Compose take, for a variant set in the platform's own face. */
 export const FONT_WEIGHT_VALUES = {
   bold: '700',
@@ -154,25 +164,45 @@ const faceOf = (fonts: FontsConfig | undefined, weight: FontWeight, role: FontRo
   return role === 'mono' ? platformMono(weight) : {fontWeight: FONT_WEIGHT_VALUES[weight]}
 }
 
+/** One variant with the app's override laid over the library's token, field by field. */
+const tokenOf = (variant: TextVariant, overrides: TypographyOverrides | undefined): TextStyleToken => {
+  const token: TextStyleToken = {...textStyles[variant]}
+  const override = overrides?.[variant]
+
+  if (override) {
+    Object.assign(token, override)
+  }
+
+  return token
+}
+
 /**
- * The scale with the app's faces applied. Built once per theme config by the provider, so a text component reads a
- * finished style off the theme rather than resolving faces on every render. `role` sets every variant in one role
- * instead of its own: `mono` is the scale a `monospaced` text reads (`theme.monoTypography`).
+ * The scale with the app's overrides and faces applied. Built once per theme config by the provider, so a text
+ * component reads a finished style off the theme rather than resolving faces on every render. `role` sets every
+ * variant in one role instead of its own: `mono` is the scale a `monospaced` text reads (`theme.monoTypography`).
  */
-export const resolveTypography = (fonts?: FontsConfig, role?: FontRole): Typography => {
-  const entries = Object.entries(textStyles) as [TextVariant, TextStyleToken][]
+export const resolveTypography = (
+  fonts?: FontsConfig,
+  role?: FontRole,
+  overrides?: TypographyOverrides
+): Typography => {
+  const variants = Object.keys(textStyles) as TextVariant[]
 
   return Object.fromEntries(
-    entries.map(([variant, token]) => [
-      variant,
-      {
-        ...faceOf(fonts, token.weight, role ?? token.role),
-        fontSize: token.fontSize,
-        lineHeight: token.lineHeight,
-        scalesWith: token.scalesWith,
-        weight: token.weight,
-      },
-    ])
+    variants.map(variant => {
+      const token = tokenOf(variant, overrides)
+
+      return [
+        variant,
+        {
+          ...faceOf(fonts, token.weight, role ?? token.role),
+          fontSize: token.fontSize,
+          lineHeight: token.lineHeight,
+          scalesWith: token.scalesWith,
+          weight: token.weight,
+        },
+      ]
+    })
   ) as Typography
 }
 
