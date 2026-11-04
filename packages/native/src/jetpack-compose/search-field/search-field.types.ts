@@ -22,7 +22,18 @@ export type SearchFieldRef = {
   setQuery: (text: string) => Promise<void>
 }
 
+/**
+ * Where a search header's title sits, after Material 3's top app bars: `small` in the bar row (`TopAppBar`), `large` on
+ * a row of its own under it (`LargeTopAppBar`).
+ */
+export type SearchFieldAppBarSize = 'small' | 'large'
+
 export type SearchFieldProps = {
+  /**
+   * With `title`, where the title sits: `small` in the bar row, level with whatever the app lays over that row (an
+   * avatar, actions), `large` under it. `large` by default.
+   */
+  appBarSize?: SearchFieldAppBarSize
   /** Focuses the field and shows the keyboard as soon as it is composed, e.g. when it expands into a bar. */
   autoFocus?: boolean
   /** The text button that expands next to the field while it is focused or holds text, and clears and blurs it. */
@@ -70,19 +81,22 @@ export type SearchFieldProps = {
   /** The field's text, its cursor and the cancel button's label. */
   textColor: ColorValue
   /**
-   * Makes it a whole search header: a large title above the field, which collapses with the `toolbarHeight` spacer
-   * above it while the field is focused or holds text, so the field slides up to the top.
+   * Makes it a whole search header: a title above the field (placed by `appBarSize`), which collapses while the field
+   * is focused or holds text, so the field slides up to the top.
    */
   title?: string
   /** `textColor` by default. */
   titleColor?: ColorValue
   /** The title's face. The platform's by default. */
   titleFontFamily?: string
-  /** In sp. */
+  /** In sp. Material's `titleLarge` (`small`) or `headlineMedium` (`large`) by default. */
   titleFontSize?: number
   /** In sp. */
   titleLetterSpacing?: number
-  /** In dp. Room left above the title for a toolbar drawn over it, collapsed together with the title. */
+  /**
+   * In dp. With `small`, the height of the bar row the title is centred in (64, Material's, by default); with `large`,
+   * room left above the title for a toolbar drawn over it (none by default). Collapses together with the title.
+   */
   toolbarHeight?: number
   /**
    * A microphone while the field is empty, the clear button in its place once it holds text, and a live waveform with a
