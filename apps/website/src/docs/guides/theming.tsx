@@ -48,6 +48,13 @@ const FONTS = `const theme = defineTheme({
 <Text monospaced>{orderNumber}</Text>    // JetBrains Mono
 <Text monospacedDigit>{total}</Text>     // Inter, with its tabular figures`
 
+const TYPE_SCALE = `const theme = defineTheme({
+  typography: {
+    headline: {fontSize: 16, lineHeight: 24},
+    headingM: {fontSize: 30, lineHeight: 38, weight: 'bold'},
+  },
+})`
+
 const READ = `import {useAppTheme} from '@hzblj/kara-ui'
 
 const Badge = () => {
@@ -84,6 +91,7 @@ export const theming: Guide = {
           rows={[
             ['`colors`', 'Overrides merged over the palette, in its own shape. An override replaces the whole entry.'],
             ['`fonts`', 'Your own typeface, by role and weight. Omitted, text is set in SF Pro and Roboto.'],
+            ['`typography`', 'Changes to the type scale, by variant: size, line height, weight.'],
             [
               '`materialSeed`',
               'The colour Android’s Material 3 scheme grows from, and with it every Material role and Compose control. Defaults to the accent.',
@@ -136,6 +144,15 @@ export const theming: Guide = {
         <CodeBlock code={FONTS} />
       </Section>
 
+      <Section id="type-scale" title="The type scale">
+        <P>
+          {
+            'Change any variant’s `fontSize`, `lineHeight` or `weight` with `typography`. Leave a field out and it keeps kara’s value. The change reaches everything that sets the variant: `Text`, `RnText` and the native headers. `headline` is the header title, `headingM` the large title.'
+          }
+        </P>
+        <CodeBlock code={TYPE_SCALE} />
+      </Section>
+
       <Section id="reading" title="Reading the theme">
         <P>
           {
@@ -161,6 +178,7 @@ export const theming: Guide = {
     {id: 'colour-kinds', label: 'Three kinds of colour'},
     {id: 'appearance', label: 'Light and dark'},
     {id: 'fonts', label: 'Your own typeface'},
+    {id: 'type-scale', label: 'The type scale'},
     {id: 'reading', label: 'Reading the theme'},
     {id: 'semantic-colours', label: 'Redefining a UIKit colour'},
   ],

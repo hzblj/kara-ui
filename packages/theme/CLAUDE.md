@@ -17,7 +17,7 @@ the value's business, and reading `content.accent` should not require knowing.
 
 | Path | What it is |
 | --- | --- |
-| `src/primitives/` | The scales: `colors`, `spacing` (`s0`…`s96`), `radii`, `shadows`, `opacity`, `zIndex`, `typography` (`textStyles`, `FontsConfig`, `resolveTypography`, `fontFace`), `duration` (transitions.dev's scale, named by what the motion does: `micro` 80 ms to `verySlow` 500 ms, plus `stagger` and `none`), `easing` (`smoothOut`, `inOut`, `out`, `linear` as bézier points), `springs` (SwiftUI's set: `interactive`, `smooth`, `snappy`, `bouncy`, a perceptual duration and a bounce each; `springPhysics(name)` is the mass, stiffness and damping every platform runs), `breakpoints`, `color-source`. |
+| `src/primitives/` | The scales: `colors`, `spacing` (`s0`…`s96`), `radii`, `shadows`, `opacity`, `zIndex`, `typography` (`textStyles`, `TypographyOverrides`, `FontsConfig`, `resolveTypography`, `fontFace`), `duration` (transitions.dev's scale, named by what the motion does: `micro` 80 ms to `verySlow` 500 ms, plus `stagger` and `none`), `easing` (`smoothOut`, `inOut`, `out`, `linear` as bézier points), `springs` (SwiftUI's set: `interactive`, `smooth`, `snappy`, `bouncy`, a perceptual duration and a bounce each; `springPhysics(name)` is the mass, stiffness and damping every platform runs), `breakpoints`, `color-source`. |
 | `src/primitives/color-source.ts` | The three kinds an entry can be: `native({ios?, android?, light?, dark?})`, `adaptive({light, dark, highContrast*})`, or a plain hex. Plus `MAX_CONTRAST_SURFACE` / `MAX_CONTRAST_CONTENT` and `defaultMaterialSeed`. |
 | `src/primitives/shadows.ts` | `shadowGeometry` as a nested scale; `ShadowName` is derived from it as a dotted path (`btn.accent`, `card`), and `ShadowTreeOf` gives the palette the same shape so the two cannot drift. |
 | `src/primitives/breakpoints.ts` | `BREAKPOINT_ORDER` (sm→xl) and `breakpointFor(width)`; `Breakpoint` derives from the array so the scale and the cascade order cannot drift. |
@@ -104,7 +104,10 @@ variant carries a size, a line height, a `weight` and a `role` (`text` | `displa
 turns that into `theme.typography.<variant>`: with no `fonts`, a numeric `fontWeight` on the platform's
 face (SF Pro / Roboto); with `fonts`, the face registered for that role and weight (falling back to the
 role's `regular`, and `display` to `text`), and no `fontWeight`, because the face *is* the weight.
-Components read `theme.typography`, never `textStyles` — the latter is the unresolved scale.
+Components read `theme.typography`, never `textStyles` — the latter is the unresolved scale. An app changes the
+scale through `ThemeConfig.typography` (`TypographyOverrides`: any of a variant's size, line height, weight, role or
+`scalesWith`), laid over `textStyles` field by field before the faces are resolved, so the change reaches every reader
+of `theme.typography` (React Native text, the native atoms, the header options) and `theme.monoTypography` alike.
 
 **`mono` is a role of its own, and never falls back to `text`.** `theme.monoTypography` is every variant at its own
 size and weight in the fixed-width face, what a `monospaced` text reads: the app's `fonts.mono`, else the platform's.

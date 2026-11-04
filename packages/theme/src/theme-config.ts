@@ -1,5 +1,5 @@
 import type {DimmableColor, IosSemanticColorRef, PaletteColor} from './primitives/color-source'
-import type {FontsConfig} from './primitives/typography'
+import type {FontsConfig, TypographyOverrides} from './primitives/typography'
 import {type Palette, palette} from './themes/palette'
 
 /**
@@ -38,6 +38,12 @@ export type ThemeConfig = {
    * ours; `dynamicColor` hands the accent over too. Ignored while `dynamicColor` is on and the OS supports it.
    */
   materialSeed?: string | null
+  /**
+   * Changes to the type scale, by variant: `{headline: {fontSize: 16, lineHeight: 24}}`. Every component reads the
+   * resolved scale, so a change reaches native text, React Native text and the native headers alike. Omitted fields
+   * keep the library's values.
+   */
+  typography?: TypographyOverrides
 }
 
 /** Identity at runtime; there so a theme declared in its own module is checked against `ThemeConfig` where it lives. */

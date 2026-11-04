@@ -42,9 +42,9 @@ const themeSource = (config: ThemeConfig | undefined): ThemeSource => {
     dynamicColor,
     fonts: config?.fonts ?? {},
     materialSeed: seedFor(config, dynamicColor),
-    monoTypography: resolveTypography(config?.fonts, 'mono'),
+    monoTypography: resolveTypography(config?.fonts, 'mono', config?.typography),
     palette,
-    typography: resolveTypography(config?.fonts),
+    typography: resolveTypography(config?.fonts, undefined, config?.typography),
   }
 }
 
