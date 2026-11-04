@@ -21,6 +21,13 @@ internal final class SegmentedControlRecord: Record {
  * hack like the pill corners: if a future iOS draws the track another way, the grey comes back and nothing breaks.
  */
 private final class TrackHidingSegmentedControl: UISegmentedControl {
+  /// Called with `true` when a finger lands on the control and with `false` once the interaction is over.
+  var onInteractionChange: ((Bool) -> Void)?
+
+  private var hasTouches = false
+  private var isInteracting = false
+  private let observedRecognizers = NSHashTable<UIGestureRecognizer>.weakObjects()
+
   var hidesSystemTrack = false {
     didSet {
       guard hidesSystemTrack != oldValue else {
@@ -43,6 +50,51 @@ private final class TrackHidingSegmentedControl: UISegmentedControl {
       imageView.alpha = alpha
     }
   }
+
+  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    super.touchesBegan(touches, with: event)
+    hasTouches = true
+    observeRecognizers(in: self)
+    updateInteraction()
+  }
+
+  override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+    super.touchesEnded(touches, with: event)
+    hasTouches = false
+    updateInteraction()
+  }
+
+  override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+    super.touchesCancelled(touches, with: event)
+    hasTouches = false
+    updateInteraction()
+  }
+
+  /// The pill's drag may run on a gesture recognizer that cancels the control's touches, so the interaction lasts
+  /// while any recognizer of the control or its subviews has begun or changed, not only while it holds touches.
+  private func observeRecognizers(in view: UIView) {
+    for recognizer in view.gestureRecognizers ?? [] where !observedRecognizers.contains(recognizer) {
+      observedRecognizers.add(recognizer)
+      recognizer.addTarget(self, action: #selector(recognizerDidChange))
+    }
+    for subview in view.subviews {
+      observeRecognizers(in: subview)
+    }
+  }
+
+  @objc private func recognizerDidChange() {
+    updateInteraction()
+  }
+
+  private func updateInteraction() {
+    let isRecognizing = observedRecognizers.allObjects.contains { $0.state == .began || $0.state == .changed }
+    let isInteracting = hasTouches || isRecognizing
+    guard isInteracting != self.isInteracting else {
+      return
+    }
+    self.isInteracting = isInteracting
+    onInteractionChange?(isInteracting)
+  }
 }
 
 /**
@@ -56,6 +108,8 @@ public final class SegmentedControlView: ExpoView {
 
   /// What UIKit keeps between its own track and the selected pill.
   private static let systemPillInset: CGFloat = 2
+  /// How long the pill takes to settle back into its fill after the finger leaves.
+  private static let pillSettleDelay: TimeInterval = 0.3
 
   /// The track kara draws itself, under a clear control, once a track colour is set.
   private let track = UIView()
@@ -87,6 +141,10 @@ public final class SegmentedControlView: ExpoView {
   private var verticalPadding: CGFloat?
   /// Each icon segment's template, drawn again in the label's colour whenever the selection or the colours change.
   private var icons: [Int: UIImage] = [:]
+  /// While the pill is lifted (held or dragged) it is clear glass, not the active fill, so the selected title takes the
+  /// inactive colour too; the active one would read as a blank segment on it.
+  private var isPillLifted = false
+  private var pillSettle: DispatchWorkItem?
 
   public required init(appContext: AppContext? = nil) {
     super.init(appContext: appContext)
@@ -94,6 +152,9 @@ public final class SegmentedControlView: ExpoView {
     track.isHidden = true
     control.apportionsSegmentWidthsByContent = false
     control.addTarget(self, action: #selector(segmentChanged), for: .valueChanged)
+    control.onInteractionChange = { [weak self] isInteracting in
+      self?.setPillLifted(isInteracting)
+    }
     addSubview(track)
     addSubview(control)
   }
@@ -211,7 +272,7 @@ public final class SegmentedControlView: ExpoView {
   /// together in the colour the label would have, the selected segment's or the others'.
   private func applyIcons() {
     for (index, icon) in icons where index < segments.count {
-      let color = index == control.selectedSegmentIndex ? activeTextColor : inactiveTextColor
+      let color = index == control.selectedSegmentIndex ? selectedTextColor : inactiveTextColor
       control.setImage(renderSegment(icon: icon, label: segments[index].label, color: color), forSegmentAt: index)
     }
   }
@@ -378,17 +439,46 @@ public final class SegmentedControlView: ExpoView {
     return attributes
   }
 
+  private var selectedTextColor: UIColor {
+    isPillLifted ? inactiveTextColor : activeTextColor
+  }
+
   private func applyTitleAttributes() {
     let inactiveAttributes = titleAttributes(color: inactiveTextColor)
-    let activeAttributes = titleAttributes(color: activeTextColor)
+    let selectedAttributes = titleAttributes(color: selectedTextColor)
     control.setTitleTextAttributes(inactiveAttributes, for: .normal)
-    control.setTitleTextAttributes(activeAttributes, for: .selected)
+    control.setTitleTextAttributes(selectedAttributes, for: .selected)
     // iOS 26 puts the segments under a held or dragged glass pill into the highlighted state; without these their
     // titles fall back to the system black until the drag ends.
     control.setTitleTextAttributes(inactiveAttributes, for: .highlighted)
-    control.setTitleTextAttributes(activeAttributes, for: [.selected, .highlighted])
+    control.setTitleTextAttributes(selectedAttributes, for: [.selected, .highlighted])
     // A new font can change the control's height.
     setNeedsLayout()
+  }
+
+  /// The active colour comes back only once the pill has settled into its fill again, a moment after the finger left.
+  private func setPillLifted(_ isLifted: Bool) {
+    pillSettle?.cancel()
+    pillSettle = nil
+    guard isLifted else {
+      let settle = DispatchWorkItem { [weak self] in
+        self?.pillSettle = nil
+        self?.applyPillLifted(false)
+      }
+      pillSettle = settle
+      DispatchQueue.main.asyncAfter(deadline: .now() + Self.pillSettleDelay, execute: settle)
+      return
+    }
+    applyPillLifted(true)
+  }
+
+  private func applyPillLifted(_ isLifted: Bool) {
+    guard isLifted != isPillLifted else {
+      return
+    }
+    isPillLifted = isLifted
+    applyTitleAttributes()
+    applyIcons()
   }
 
   private func applySelectedValue(_ value: String?) {
