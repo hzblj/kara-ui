@@ -1,5 +1,18 @@
 # @hzblj/kara-router
 
+## 0.28.0
+
+### Minor Changes
+
+- [#100](https://github.com/hzblj/kara-ui/pull/100) [`4f723ab`](https://github.com/hzblj/kara-ui/commit/4f723ab183fcef56641dd76c42937cb01447b6e4) Thanks [@hzblj](https://github.com/hzblj)! - `Tabs` takes `expandsOnScrollUp`: with `minimizeBehavior: 'onScrollDown'`, the iOS 26 tab bar expands again with the system's own animation as soon as the content is dragged back up, instead of only once the list is back at its top. The view behind it is `TabBarExpandOnScrollUp` in `@hzblj/kara-native/swift-ui`, for tabs that are not kara's.
+
+### Patch Changes
+
+- Updated dependencies [[`2323d8e`](https://github.com/hzblj/kara-ui/commit/2323d8e4df8f60bc18555a32a2ae6c8c59c258d8), [`eb223d7`](https://github.com/hzblj/kara-ui/commit/eb223d7d831715c4f08b14898d9883fe7f1195d8), [`4f723ab`](https://github.com/hzblj/kara-ui/commit/4f723ab183fcef56641dd76c42937cb01447b6e4)]:
+  - @hzblj/kara-native@0.28.0
+  - @hzblj/kara-components@0.28.0
+  - @hzblj/kara-theme@0.28.0
+
 ## 0.27.2
 
 ### Patch Changes
