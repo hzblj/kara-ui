@@ -1,5 +1,7 @@
 # @hzblj/kara-native
 
+## 0.29.0
+
 ## 0.28.0
 
 ### Minor Changes

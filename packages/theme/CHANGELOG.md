@@ -1,5 +1,11 @@
 # @hzblj/kara-theme
 
+## 0.29.0
+
+### Minor Changes
+
+- [#103](https://github.com/hzblj/kara-ui/pull/103) [`5403ad1`](https://github.com/hzblj/kara-ui/commit/5403ad1b7019810a06e9fe9306a2337a1a4edaa1) Thanks [@hzblj](https://github.com/hzblj)! - `ThemeConfig` takes `typography`: change any variant of the type scale (its `fontSize`, `lineHeight`, `weight`, `role` or `scalesWith`) by name, e.g. `{headline: {fontSize: 16, lineHeight: 24}}` for smaller header titles. Fields left out keep kara's values. The change reaches `Text`, `RnText`, the native headers and `theme.monoTypography` alike, since they all read the resolved scale.
+
 ## 0.28.0
 
 ## 0.27.2
