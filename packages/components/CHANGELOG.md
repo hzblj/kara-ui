@@ -1,5 +1,18 @@
 # @hzblj/kara-components
 
+## 0.28.0
+
+### Minor Changes
+
+- [#99](https://github.com/hzblj/kara-ui/pull/99) [`2323d8e`](https://github.com/hzblj/kara-ui/commit/2323d8e4df8f60bc18555a32a2ae6c8c59c258d8) Thanks [@hzblj](https://github.com/hzblj)! - `largeTitle: 'inline'` on `useHeader` and `useHeaderOptions` puts the large title on the leading side of the bar row, next to the actions, as the Apple TV app's tabs have it (iOS 17), instead of in a row of its own under the bar. Render the result's new `inlineLargeTitle` after the list. Android shows the bar's plain title. The view behind it is `InlineLargeTitle` in `@hzblj/kara-native/swift-ui`, and `useHeaderScrollToTop` takes the same `largeTitle` value.
+
+### Patch Changes
+
+- Updated dependencies [[`2323d8e`](https://github.com/hzblj/kara-ui/commit/2323d8e4df8f60bc18555a32a2ae6c8c59c258d8), [`eb223d7`](https://github.com/hzblj/kara-ui/commit/eb223d7d831715c4f08b14898d9883fe7f1195d8), [`4f723ab`](https://github.com/hzblj/kara-ui/commit/4f723ab183fcef56641dd76c42937cb01447b6e4)]:
+  - @hzblj/kara-native@0.28.0
+  - @hzblj/kara-sx@0.28.0
+  - @hzblj/kara-theme@0.28.0
+
 ## 0.27.2
 
 ### Patch Changes
