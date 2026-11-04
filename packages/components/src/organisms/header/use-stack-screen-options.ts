@@ -46,7 +46,7 @@ export const useStackScreenOptions = (): StackScreenOptions => {
   }, [theme])
 }
 
-/** A screen with a large title that collapses into the bar as its list scrolls. */
+/** A screen with a large title that collapses into the bar as its list scrolls, or sits in the bar row (`'inline'`). */
 export const LARGE_TITLE_SCREEN_OPTIONS: StackScreenOptions = {headerLargeTitleEnabled: true, headerShown: true}
 
 /** A screen without the stack's header, for one that draws its own or none. */

@@ -31,7 +31,7 @@ export const useHeaderScrollToTop = (
   {largeTitle = false, topInset = 0}: HeaderScrollToTopOptions = {}
 ): HeaderScrollToTopRef => {
   const barInset = useHeaderBarInset()
-  const offset = Platform.OS === 'ios' ? -(barInset + (largeTitle ? LARGE_TITLE_HEIGHT : 0) + topInset) : 0
+  const offset = Platform.OS === 'ios' ? -(barInset + (largeTitle === true ? LARGE_TITLE_HEIGHT : 0) + topInset) : 0
 
   return useMemo(
     () => ({

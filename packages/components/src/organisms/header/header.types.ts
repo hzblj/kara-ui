@@ -153,8 +153,12 @@ export type HeaderParams = {
    * A large title that collapses into the bar as the list scrolls. iOS draws UIKit's own; Android, where the native
    * stack has none, puts it into the content as the list's first row (`largeTitle` in the result) and fades the bar's
    * title in once that row has scrolled away, as Material's large top app bar does. Wire `onScroll` for it.
+   *
+   * `'inline'` puts the large title on the leading side of the bar row instead, level with the actions, as the Apple
+   * TV app's tabs have it (iOS 17), with no row of its own under the bar. Render `inlineLargeTitle` from the result.
+   * Android shows the bar's plain title.
    */
-  largeTitle?: boolean
+  largeTitle?: boolean | 'inline'
   /**
    * The leading side's actions, in screen order from the edge. On iOS they follow the back button. Unset leaves the
    * side as the stack's options have it; an empty array clears it.
@@ -263,7 +267,12 @@ export type HeaderContent = {
    * lets the content run under it.
    */
   contentInsetAdjustmentBehavior: 'automatic' | 'never'
-  /** Android, with `largeTitle`: the large title, to render as the list's first row. `null` everywhere else. */
+  /**
+   * iOS, with `largeTitle: 'inline'`: what keeps the large title in the bar row. Render it once anywhere in the screen,
+   * after the list, outside a SwiftUI host. `null` everywhere else.
+   */
+  inlineLargeTitle: ReactElement | null
+  /** Android, with `largeTitle: true`: the large title, to render as the list's first row. `null` everywhere else. */
   largeTitle: ReactElement | null
   /** A worklet to call with the list's vertical offset from its scroll handler, for what follows the scroll. */
   onScroll: (offsetY: number) => void
@@ -418,8 +427,8 @@ export type HeaderScrollable =
   | {scrollToOffset: (params: {animated?: boolean; offset: number}) => void}
 
 export type HeaderScrollToTopOptions = {
-  /** Whether the screen has a large title, which the top includes on iOS. */
-  largeTitle?: boolean
+  /** The screen's `largeTitle`: the top includes an expanded one on iOS (an inline one has no row of its own). */
+  largeTitle?: boolean | 'inline'
   /** Extra room above the content, for a bar the screen lays out under the header itself. */
   topInset?: number
 }

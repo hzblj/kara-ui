@@ -272,6 +272,12 @@ how they come in and leave. `largeTitle` is UIKit's own on iOS;
 the native stack has none on Android, so there it is the list's first row (`largeTitle` in the result) and the bar's
 title fades in between half and all of that row's height scrolled away, from the `onScroll` worklet the screen feeds,
 as Material's large top app bar collapses. An unset `largeTitle` leaves the stack's own setting alone.
+`largeTitle: 'inline'` keeps the large title in the bar row next to the actions (iOS 17,
+`UINavigationItem.LargeTitleDisplayMode.inline`, the Apple TV app's tabs): the stack still gets
+`headerLargeTitleEnabled`, and the result's `inlineLargeTitle` is kara-native's `InlineLargeTitle`, which turns the
+`.always` react-native-screens writes on every header update into `.inline`. The screen renders it itself, after the
+list, never from `headerBackground`: the native stack mounts that before the content, so it would be the screen's first
+view and UIKit would no longer find the list in the `subviews[0]` chain. Android shows the bar's plain title.
 
 **Hero header.** `useHeroHeader` runs the content under a transparent bar (`HERO_HEADER_SCREEN_OPTIONS`, static, so the
 first frame has no large title) and fades the header in while 50 to 70 % of the hero's part under the bar scrolls

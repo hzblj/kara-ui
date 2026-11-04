@@ -35,6 +35,7 @@ public class KaraUIModule: Module {
     ContextMenuExclusionView.definition()
     GlassView.definition()
     IconView.definition()
+    InlineLargeTitleView.definition()
     LargeTitleFadeView.definition()
     NavigationBarView.definition()
     NavigationItemSearchView.definition()

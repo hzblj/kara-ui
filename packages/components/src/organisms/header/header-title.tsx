@@ -14,6 +14,7 @@ import {scheduleOnRN} from 'react-native-worklets'
 
 import {RnText} from '../../atoms/rn-text'
 import type {HeaderOptions} from './header.types'
+import {NativeInlineLargeTitle} from './native-inline-large-title'
 import {hasNativeSubtitle, NativeSubtitle} from './native-subtitle'
 
 /** Past half, a revealed title counts as shown: the native title and subtitle switch then. */
@@ -121,8 +122,10 @@ const CollapsingTitle = ({
   )
 }
 
+const INLINE_LARGE_TITLE = <NativeInlineLargeTitle />
+
 type TitleParams = {
-  largeTitle?: boolean
+  largeTitle?: boolean | 'inline'
   subtitle?: string
   title?: string
   titleHidden: boolean
@@ -131,9 +134,10 @@ type TitleParams = {
 }
 
 /**
- * The title half of a header: the options that show the title (centred, leading with a subtitle, revealed on scroll or
- * large), plus on Android the large title row and the scroll worklet that collapses it into the bar, as Material's large
- * top app bar does. iOS needs neither: the large title is UIKit's own.
+ * The title half of a header: the options that show the title (centred, leading with a subtitle, revealed on scroll,
+ * large or inline large), plus on Android the large title row and the scroll worklet that collapses it into the bar, as
+ * Material's large top app bar does. iOS needs neither: the large title is UIKit's own, and an inline one only needs
+ * the view that keeps it in the bar row.
  */
 export const useHeaderTitle = ({
   largeTitle,
@@ -160,7 +164,7 @@ export const useHeaderTitle = ({
     const titleOptions: HeaderOptions = {}
 
     if (largeTitle !== undefined) {
-      titleOptions.headerLargeTitleEnabled = Platform.OS === 'ios' && largeTitle
+      titleOptions.headerLargeTitleEnabled = Platform.OS === 'ios' && largeTitle !== false
     }
 
     if (title === undefined) {
@@ -228,5 +232,7 @@ export const useHeaderTitle = ({
     [isAndroidLargeTitle, largeTitleHeight, title]
   )
 
-  return {largeTitle: largeTitleRow, onScroll, options, revealed}
+  const inlineLargeTitle = largeTitle === 'inline' ? INLINE_LARGE_TITLE : null
+
+  return {inlineLargeTitle, largeTitle: largeTitleRow, onScroll, options, revealed}
 }

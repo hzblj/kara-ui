@@ -47,6 +47,17 @@ const onScroll = useAnimatedScrollHandler({
   renderItem={renderCountry}
 />`
 
+const INLINE_LARGE_TITLE = `const header = useHeader(navigation, {title: 'Shop', largeTitle: 'inline', trailingActions})
+
+<>
+  <FlatList
+    contentInsetAdjustmentBehavior={header.contentInsetAdjustmentBehavior}
+    data={products}
+    renderItem={renderProduct}
+  />
+  {header.inlineLargeTitle}
+</>`
+
 const SEARCH = `const search = useHeaderSearch({placeholder: 'Search countries'})
 const header = useHeader(navigation, {title: 'Countries', search: search.searchBar})
 
@@ -186,7 +197,7 @@ export const header: Guide = {
           rows={[
             ['`title`', 'The title in the bar.'],
             ['`subtitle`', 'Title and subtitle on the leading side.'],
-            ['`largeTitle`', 'A large title that collapses into the bar.'],
+            ['`largeTitle`', "A large title that collapses into the bar. `'inline'` keeps it in the bar row."],
             ['`titleRevealProgress`', 'Fades the title in, 0 to 1. For a title that shows after scrolling.'],
             ['`titleTransition`', 'How a revealed title and subtitle come in and leave (iOS 26).'],
             ['`titleHidden`', 'The bar without a title.'],
@@ -198,6 +209,12 @@ export const header: Guide = {
           }
         </P>
         <CodeBlock code={LARGE_TITLE} />
+        <P>
+          {
+            "`largeTitle: 'inline'` puts the large title in the bar row, next to the actions, like the Apple TV app’s tabs (iOS 17). Render `header.inlineLargeTitle` after the list. Android shows the plain bar title."
+          }
+        </P>
+        <CodeBlock code={INLINE_LARGE_TITLE} />
       </Section>
 
       <Section id="title-transition" title="Title transition">
