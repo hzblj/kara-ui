@@ -33,10 +33,11 @@ const NativeSearchField = requireKaraView<NativeSearchFieldProps>('SearchFieldVi
 
 /**
  * Material 3's search input field with autocorrect off and a cancel button that expands next to it while it is in use.
- * With `title`, a whole search header whose large title collapses while the field is active. A Compose view: it
- * renders inside a host.
+ * With `title`, a whole search header whose title collapses while the field is active, in the bar row (`appBarSize`
+ * `small`) or under it (`large`). A Compose view: it renders inside a host.
  */
 export const SearchField = ({
+  appBarSize = 'large',
   clearIconName = GLYPHS.close.android,
   onFocusChange,
   onQueryChange,
@@ -65,6 +66,7 @@ export const SearchField = ({
   return (
     <NativeSearchField
       {...props}
+      appBarSize={appBarSize}
       clearIconName={clearIconName}
       fieldTestID={testID}
       microphoneIconName={voice?.microphoneIconName ?? GLYPHS.microphone.android}

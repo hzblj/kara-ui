@@ -36,6 +36,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.InputTransformation
@@ -46,6 +47,7 @@ import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -85,6 +87,7 @@ import expo.modules.kotlin.records.Field
 import expo.modules.kotlin.records.Record
 import expo.modules.kotlin.viewevent.EventDispatcher
 import expo.modules.kotlin.views.ComposableScope
+import expo.modules.kotlin.types.Enumerable
 import expo.modules.kotlin.views.ComposeProps
 import expo.modules.kotlin.views.ExpoComposeView
 import expo.modules.ui.applyTestTag
@@ -114,6 +117,7 @@ data class SearchFieldProps(
   val titleFontSize: MutableState<Float?> = mutableStateOf(null),
   val titleLetterSpacing: MutableState<Float?> = mutableStateOf(null),
   val toolbarHeight: MutableState<Float?> = mutableStateOf(null),
+  val appBarSize: MutableState<SearchFieldAppBarSize> = mutableStateOf(SearchFieldAppBarSize.LARGE),
   val voiceEnabled: MutableState<Boolean> = mutableStateOf(false),
   val voiceListening: MutableState<Boolean> = mutableStateOf(false),
   val microphoneIconName: MutableState<String?> = mutableStateOf(null),
@@ -124,6 +128,15 @@ data class SearchFieldProps(
   val voiceSizes: MutableState<SearchVoiceSizes?> = mutableStateOf(null),
   val autoFocus: MutableState<Boolean> = mutableStateOf(false)
 ) : ComposeProps
+
+/**
+ * Where a search header's title sits, after Material 3's top app bars: `SMALL` in the bar row like `TopAppBar`,
+ * `LARGE` on a row of its own under it like `LargeTopAppBar`.
+ */
+enum class SearchFieldAppBarSize(val value: String) : Enumerable {
+  SMALL("small"),
+  LARGE("large")
+}
 
 /** `SearchVoiceSizes` in `src/search-voice.ts`, in dp: each size left out keeps Material's own. */
 data class SearchVoiceSizes(
@@ -165,8 +178,10 @@ open class SearchFieldVoiceEvent(
  * follows the transcription natively) and a tonal stop button. Nothing here records: `onVoiceAction` reports `start`
  * and `stop`. The overlay that focuses an idle field stops short of the microphone.
  *
- * With `title` it is a whole search header: a `toolbarHeight` spacer and a large title above the field collapse while
- * the field is active, so the field slides up to the top. React Native content is not composed in: a nested host took
+ * With `title` it is a whole search header whose title collapses while the field is active, so the field slides up to
+ * the top. `appBarSize` places the title like Material's top app bars: `small` centres it in a row of `toolbarHeight`
+ * (64 dp, Material's bar height, by default) set in `titleLarge`, `large` puts it in `headlineMedium` under a
+ * `toolbarHeight` spacer, and the spacer collapses with it. React Native content is not composed in: a nested host took
  * the focus from the field, and a React Native view under a collapsed slot still caught touches at its old place.
  *
  * `clearQuery`, `setQuery`, `focusField` and `blurField` are view functions; they reject once the view is detached.
@@ -222,6 +237,7 @@ class SearchFieldView(context: Context, appContext: AppContext) :
     val titleFontSize by props.titleFontSize
     val titleLetterSpacing by props.titleLetterSpacing
     val toolbarHeight by props.toolbarHeight
+    val appBarSize by props.appBarSize
     val voiceEnabled by props.voiceEnabled
     val voiceListening by props.voiceListening
     val microphoneIconName by props.microphoneIconName
@@ -393,26 +409,46 @@ class SearchFieldView(context: Context, appContext: AppContext) :
       return
     }
 
-    val titleStyle = remember(titleFontFamilyName, titleFontSize, titleLetterSpacing) {
-      TextStyle(
-        fontFamily = resolveFontFamily(titleFontFamilyName, context),
-        fontSize = titleFontSize?.sp ?: TextUnit.Unspecified,
-        letterSpacing = titleLetterSpacing?.sp ?: TextUnit.Unspecified
+    val baseTitleStyle = when (appBarSize) {
+      SearchFieldAppBarSize.SMALL -> MaterialTheme.typography.titleLarge
+      SearchFieldAppBarSize.LARGE -> MaterialTheme.typography.headlineMedium
+    }
+    val titleStyle = remember(baseTitleStyle, titleFontFamilyName, titleFontSize, titleLetterSpacing) {
+      baseTitleStyle.merge(
+        TextStyle(
+          fontFamily = resolveFontFamily(titleFontFamilyName, context),
+          fontSize = titleFontSize?.sp ?: TextUnit.Unspecified,
+          letterSpacing = titleLetterSpacing?.sp ?: TextUnit.Unspecified
+        )
+      )
+    }
+    val titleText: @Composable (Modifier) -> Unit = { modifier ->
+      Text(
+        headerTitle,
+        style = titleStyle,
+        color = titleColor.composeOrNull ?: text,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+        modifier = modifier
       )
     }
 
     Column(Modifier.fillMaxWidth()) {
       CollapsibleSection(isVisible = !isActive) {
-        Column(Modifier.fillMaxWidth()) {
-          Spacer(Modifier.height(toolbarHeight?.dp ?: 0.dp))
-          Text(
-            headerTitle,
-            style = titleStyle,
-            color = titleColor.composeOrNull ?: text,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(horizontal = HeaderInset, vertical = TitleVerticalInset)
-          )
+        when (appBarSize) {
+          SearchFieldAppBarSize.SMALL -> Box(
+            Modifier
+              .fillMaxWidth()
+              .heightIn(min = toolbarHeight?.dp ?: SmallAppBarHeight)
+              .padding(horizontal = HeaderInset),
+            contentAlignment = Alignment.CenterStart
+          ) {
+            titleText(Modifier)
+          }
+          SearchFieldAppBarSize.LARGE -> Column(Modifier.fillMaxWidth()) {
+            Spacer(Modifier.height(toolbarHeight?.dp ?: 0.dp))
+            titleText(Modifier.padding(horizontal = HeaderInset, vertical = TitleVerticalInset))
+          }
         }
       }
       searchRow(
@@ -511,6 +547,7 @@ private val HeaderSizeSpec = tween<IntSize>(durationMillis = 350, easing = Heade
 private val HeaderFadeInSpec = tween<Float>(durationMillis = 250, delayMillis = 100, easing = HeaderEasing)
 private val HeaderFadeOutSpec = tween<Float>(durationMillis = 150, easing = HeaderEasing)
 private val HeaderInset = 16.dp
+private val SmallAppBarHeight = 64.dp
 private val CancelEndInset = 8.dp
 private val TitleVerticalInset = 8.dp
 private val FieldVerticalInset = 8.dp
