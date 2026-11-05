@@ -1,5 +1,17 @@
 # @hzblj/kara-native
 
+## 0.31.0
+
+### Minor Changes
+
+- [#108](https://github.com/hzblj/kara-ui/pull/108) [`abbf241`](https://github.com/hzblj/kara-ui/commit/abbf2416fc973b160764a94654b452f7297cf2a2) Thanks [@hzblj](https://github.com/hzblj)! - - `GlassView` takes its shape from `borderRadius`: a capsule as before without one, rounded corners of the theme radius with one, on iOS 26 (Liquid Glass), on Android (frosted glass) and in the fallback below iOS 26. The native view (`@hzblj/kara-native/swift-ui`) takes it as `cornerRadius`.
+  - `GlassView` takes `variant="clear"`, the more transparent glass for photos, video and maps (`UIGlassEffect`'s `clear`; on Android a thinner surface over the blur). The native view takes it as `glassStyle`.
+
+### Patch Changes
+
+- [#107](https://github.com/hzblj/kara-ui/pull/107) [`0b7c0b5`](https://github.com/hzblj/kara-ui/commit/0b7c0b543e48fc3cdba3515cfea54453cdf5c622) Thanks [@hzblj](https://github.com/hzblj)! - - Android 7 (API 24/25) no longer crashes on a tinted `DrawableIcon`, a `BackdropBlurView` colour or the toolbar search's close ripple: colour props are read through Expo's `ColorCompat` instead of `Color` methods that exist only from Android 8 (expo-modules-core 57.0.4+).
+  - iOS: content under the header search (`LargeTitleFade`) no longer swallows taps while it is hidden: the view turns its own touch handling off, not only its inner container's, so taps reach what lies under it.
+
 ## 0.30.0
 
 ### Minor Changes
