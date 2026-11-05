@@ -52,6 +52,7 @@ import expo.modules.kotlin.viewevent.EventDispatcher
 import expo.modules.kotlin.views.ExpoView
 import expo.modules.ui.composeOrNull
 import androidx.compose.ui.graphics.Color as ComposeColor
+import expo.modules.kotlin.types.ColorCompat
 
 /**
  * Dresses react-native-screens' toolbar search (an appcompat `SearchView`, the Android side of a header's
@@ -113,7 +114,7 @@ class NavigationItemSearchView(context: Context, appContext: AppContext) : ExpoV
     val button = placement.button
 
     rippleColor.value?.let { color ->
-      button.background = RippleDrawable(ColorStateList.valueOf(color.toArgb()), null, null).apply {
+      button.background = RippleDrawable(ColorStateList.valueOf(ColorCompat.toArgb(color)), null, null).apply {
         radius = (CLOSE_RIPPLE_RADIUS_DP * resources.displayMetrics.density).toInt()
       }
     }

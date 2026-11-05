@@ -56,6 +56,7 @@ public final class LargeTitleFadeView: ExpoView, SearchPresentationListener {
   }
 
   private func applySearching(_ isSearching: Bool, isAnimated: Bool) {
+    isUserInteractionEnabled = !isSearching
     contentView.isUserInteractionEnabled = !isSearching
     contentView.accessibilityElementsHidden = isSearching
     let alpha: CGFloat = isSearching ? 0 : 1
