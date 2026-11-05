@@ -7,6 +7,10 @@ export type GlassViewProps = {
   children?: ReactNode
   /** Pins the glass to the app's appearance rather than the trait it inherits. */
   colorScheme?: 'dark' | 'light'
+  /** Uniform corners of this radius, in points. Unset keeps the capsule. */
+  cornerRadius?: number
+  /** `clear` is the more transparent glass for media-rich backgrounds. Defaults to `regular`. */
+  glassStyle?: 'clear' | 'regular'
   /** Tints the material. Unset leaves it clear. */
   glassTint?: ColorValue
   /** Swells toward the finger on touch. Give the children `pointerEvents="none"`. */
@@ -15,5 +19,8 @@ export type GlassViewProps = {
   testID?: string
 }
 
-/** iOS 26 Liquid Glass as a UIKit view, shaped as a capsule. A React Native view, so it needs no host. */
+/**
+ * iOS 26 Liquid Glass as a UIKit view, shaped as a capsule or with `cornerRadius` corners. A React Native view, so it
+ * needs no host.
+ */
 export const GlassView = requireKaraView<GlassViewProps>('GlassView')

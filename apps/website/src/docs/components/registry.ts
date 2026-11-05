@@ -684,6 +684,8 @@ export const COMPONENTS: ComponentDoc[] = [
       'Liquid Glass on iOS 26, as a UIKit view: no host, so it is cheap enough for every cell of a list.',
       'Android has frosted glass of its own: what lies behind the capsule, blurred (Android 12+), under a translucent tonal surface (or `tint`) and a light hairline; the blurred surfaces Android 16 gives its system UI. Below Android 12 the same colours are drawn near-opaque, so the content stays readable.',
       'Below iOS 26 it is a capsule of `tint`, or of the translucent glass fill.',
+      'A capsule unless `borderRadius` gives it corners: `<GlassView borderRadius="large">` is a rounded glass card on every platform.',
+      '`variant="clear"` is the more transparent glass for photos, video and maps, where `regular` would wash them out. Android lets more of the blurred backdrop through.',
       'Interactive glass swells toward the finger on iOS and carries its children; the press itself belongs to a `Pressable` around it. With `borderRadius="full"`, its Android ripple keeps to the capsule.',
       'On Android each glass re-records what lies behind it before every frame: a few buttons cost nothing, but keep it out of the cells of a long list.',
     ],

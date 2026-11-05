@@ -2,8 +2,9 @@ import ExpoModulesCore
 import UIKit
 
 /**
- iOS 26 Liquid Glass as a UIKit view: a `UIVisualEffectView` with `UIGlassEffect` (`regular`, a tint,
- `isInteractive`), shaped as a capsule. Below iOS 26 it draws nothing, the same as SwiftUI's `glassEffect`.
+ iOS 26 Liquid Glass as a UIKit view: a `UIVisualEffectView` with `UIGlassEffect` (`regular` or `clear`, a tint,
+ `isInteractive`), shaped as a capsule, or with uniform corners when `cornerRadius` is set. Below iOS 26 it draws
+ nothing, the same as SwiftUI's `glassEffect`.
 
  It exists for glass in places a SwiftUI `Host` is too expensive — list cells above all. A host per cell is a
  `UIHostingController` plus a SwiftUI graph, which cost a scrolling list several frames per second of main-thread
@@ -25,6 +26,19 @@ public final class GlassView: ExpoView {
     didSet { needsEffectUpdate = true }
   }
 
+  /** `clear` is the more transparent glass Apple keeps for media-rich backgrounds; anything else is `regular`. */
+  var glassStyle: String? {
+    didSet { needsEffectUpdate = true }
+  }
+
+  /** Uniform corners of this radius; unset keeps the capsule. */
+  var cornerRadius: CGFloat? {
+    didSet {
+      needsEffectUpdate = true
+      setNeedsLayout()
+    }
+  }
+
   /**
    Pins the view's appearance to the app theme rather than the trait it inherits. Inside a scroll edge container's
    bar, SwiftUI's scroll pocket switches the bar content's trait to dark over dark content scrolling underneath, and
@@ -42,7 +56,7 @@ public final class GlassView: ExpoView {
   public override func layoutSubviews() {
     super.layoutSubviews()
     effectView.frame = bounds
-    effectView.layer.cornerRadius = min(bounds.width, bounds.height) / 2
+    effectView.layer.cornerRadius = cornerRadius ?? min(bounds.width, bounds.height) / 2
   }
 
   public override func mountChildComponentView(_ childComponentView: UIView, index: Int) {
@@ -66,10 +80,10 @@ public final class GlassView: ExpoView {
     needsEffectUpdate = false
 #if compiler(>=6.2)
     if #available(iOS 26.0, *) {
-      let effect = UIGlassEffect(style: .regular)
+      let effect = UIGlassEffect(style: glassStyle == "clear" ? .clear : .regular)
       effect.tintColor = glassTint
       effect.isInteractive = isInteractive
-      effectView.cornerConfiguration = .capsule()
+      effectView.cornerConfiguration = cornerRadius.map { .uniformCorners(radius: .fixed($0)) } ?? .capsule()
       effectView.effect = effect
     }
 #endif
