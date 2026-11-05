@@ -27,6 +27,7 @@ import expo.modules.kotlin.views.ComposableScope
 import expo.modules.kotlin.views.ComposeProps
 import expo.modules.kotlin.views.ExpoComposeView
 import expo.modules.ui.composeOrNull
+import expo.modules.kotlin.types.ColorCompat
 
 data class DrawableIconProps(
   val resourceName: MutableState<String?> = mutableStateOf(null),
@@ -111,7 +112,7 @@ class DrawableIconView(context: Context, appContext: AppContext) :
       modifier = sizeModifier.then(semantics),
       update = { view ->
         view.resourceName = resourceName
-        view.iconColor = Color.valueOf(tintArgb)
+        view.iconColor = ColorCompat.valueOf(tintArgb)
         view.renderingMode = renderingMode
         view.secondaryColor = secondaryColor
         view.tertiaryColor = tertiaryColor

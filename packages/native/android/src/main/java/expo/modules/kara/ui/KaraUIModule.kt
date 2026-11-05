@@ -21,6 +21,7 @@ import expo.modules.kotlin.functions.Queues
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 import expo.modules.kotlin.sharedobjects.SharedObject
+import expo.modules.kotlin.types.ColorCompat
 
 class KaraUIModule : Module() {
   override fun definition() = ModuleDefinition {
@@ -66,13 +67,13 @@ class KaraUIModule : Module() {
         view.intensity = (intensity ?: 1f).coerceIn(0f, 1f)
       }
       Prop("glassTint") { view: BackdropBlurView, color: Color? ->
-        view.tint = color?.toArgb() ?: Color.TRANSPARENT
+        view.tint = color?.let { ColorCompat.toArgb(it) } ?: Color.TRANSPARENT
       }
       Prop("fallbackTint") { view: BackdropBlurView, color: Color? ->
-        view.fallbackTint = color?.toArgb() ?: Color.TRANSPARENT
+        view.fallbackTint = color?.let { ColorCompat.toArgb(it) } ?: Color.TRANSPARENT
       }
       Prop("hairlineColor") { view: BackdropBlurView, color: Color? ->
-        view.borderColor = color?.toArgb() ?: Color.TRANSPARENT
+        view.borderColor = color?.let { ColorCompat.toArgb(it) } ?: Color.TRANSPARENT
       }
       Prop("hairlineWidth") { view: BackdropBlurView, width: Float ->
         view.borderWidth = width * view.resources.displayMetrics.density
