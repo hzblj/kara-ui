@@ -7,30 +7,39 @@ import type {GlassViewComponent, GlassViewProps} from './glass-view.types'
 /** dp. Strong enough that a photo behind reads as colour and light, not as detail. */
 const BLUR_RADIUS = 16
 
+const GLASS_TINT_OPACITY = {
+  clear: {surface: 'o20', tinted: 'o60'},
+  regular: {surface: 'o50', tinted: 'o85'},
+} as const
+
 /**
  * Frosted glass, Android's way: what lies behind the capsule, blurred (Android 12+), under a tonal Material surface
  * and a light hairline — the blurred surfaces Android 16 gives its own system UI, not a copy of iOS's lens. Without a
  * tint it is the surface colour, translucent, so the content keeps its usual colours on it; a tint fills it with that
  * colour instead. Below Android 12, with nothing to blur, the same colours are drawn near-opaque. Android has no swell,
- * so `interactive` changes nothing here — the `Pressable` around it gives the press its feedback.
+ * so `interactive` changes nothing here — the `Pressable` around it gives the press its feedback. `clear` thins the
+ * surface so more of the backdrop shows through, the way iOS's clear glass does over media. The outline is the
+ * resolved `borderRadius`, a capsule without one.
  */
 export const GlassView: GlassViewComponent = ({
   children,
   interactive: _interactive,
   testID,
   tint,
+  variant = 'regular',
   ...sx
 }: GlassViewProps) => {
   const theme = useAppTheme()
   const style = useSx(sx)
   const base = String(theme.color(tint ?? 'surface.primary'))
+  const isClear = variant === 'clear'
 
   return (
     <BackdropBlurView
       blurRadius={BLUR_RADIUS}
-      cornerRadius={radii.full}
+      cornerRadius={typeof style.borderRadius === 'number' ? style.borderRadius : radii.full}
       fallbackTint={withOpacity(base, 'o95')}
-      glassTint={withOpacity(base, tint ? 'o85' : 'o50')}
+      glassTint={withOpacity(base, GLASS_TINT_OPACITY[isClear ? 'clear' : 'regular'][tint ? 'tinted' : 'surface'])}
       hairlineColor={withOpacity(String(theme.color('content.on.accent')), theme.dark ? 'o20' : 'o60')}
       hairlineWidth={1}
       saturation={1.6}

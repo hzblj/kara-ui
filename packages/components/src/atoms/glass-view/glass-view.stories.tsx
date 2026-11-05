@@ -8,7 +8,11 @@ import {GlassView} from './glass-view'
 
 const meta = {
   args: {interactive: true, px: 's20', py: 's12'},
-  argTypes: {tint: {control: 'select', options: [undefined, 'fill.accent.base', 'fill.tertiary', 'surface.primary']}},
+  argTypes: {
+    borderRadius: {control: 'select', options: [undefined, 'small', 'medium', 'large', 'full']},
+    tint: {control: 'select', options: [undefined, 'fill.accent.base', 'fill.tertiary', 'surface.primary']},
+    variant: {control: 'inline-radio', options: ['regular', 'clear']},
+  },
   component: GlassView,
   parameters: {
     notes:
@@ -16,7 +20,8 @@ const meta = {
       'it is frosted glass: what lies behind, blurred and saturated (Android 12+), under a translucent tonal surface. ' +
       'Below iOS 26 it is a plain capsule of the tint (or the translucent glass fill). Interactive glass swells toward ' +
       'the finger on iOS; the press itself belongs to a `Pressable` around it, whose ripple keeps to the capsule on ' +
-      'Android with `borderRadius="full"`.',
+      'Android with `borderRadius="full"`. `borderRadius` shapes the glass itself (a capsule without one), and ' +
+      '`variant="clear"` is the more transparent glass for photos and video.',
   },
   render: args => (
     <Box align="center" bg="fill.accent.primary" borderRadius="large" p="s24">
@@ -41,3 +46,7 @@ export const Interactive: Story = {}
 export const Tinted: Story = {args: {tint: 'fill.accent.base'}}
 
 export const Static: Story = {args: {interactive: false}}
+
+export const Clear: Story = {args: {variant: 'clear'}}
+
+export const Rounded: Story = {args: {borderRadius: 'large', interactive: false, px: 's24', py: 's20'}}

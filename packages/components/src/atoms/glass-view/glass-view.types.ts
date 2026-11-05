@@ -3,7 +3,8 @@ import type {ColorToken} from '@hzblj/kara-theme'
 import type {ReactNode} from 'react'
 
 /**
- * Glass around a React Native subtree, shaped as a capsule. It belongs to the React Native tier, so it needs no host.
+ * Glass around a React Native subtree, shaped as a capsule unless `borderRadius` gives it corners of a theme radius. It
+ * belongs to the React Native tier, so it needs no host.
  * iOS 26: Liquid Glass. Android: frosted glass, made of what lies behind, blurred on Android 12+, under a translucent
  * tonal surface (or `tint`) and a hairline. iOS before 26 has no Liquid Glass and draws a capsule of `tint` instead, or
  * of the glass buttons' translucent fill (`btn.bg.glass.base`) when there is none.
@@ -23,6 +24,13 @@ export type GlassViewProps = ResponsiveViewSx & {
   testID?: string
   /** Tints the material. Unset leaves it clear on iOS, and the translucent surface colour on Android. */
   tint?: ColorToken
+  /**
+   * `clear` is the more transparent glass for media-rich backgrounds — photos, video, maps — where `regular` would
+   * wash them out. Android lets more of the blurred backdrop through instead. Defaults to `regular`.
+   */
+  variant?: GlassViewVariant
 }
+
+export type GlassViewVariant = 'clear' | 'regular'
 
 export type GlassViewComponent = (props: GlassViewProps) => ReactNode
