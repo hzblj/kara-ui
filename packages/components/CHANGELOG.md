@@ -1,5 +1,19 @@
 # @hzblj/kara-components
 
+## 0.31.0
+
+### Minor Changes
+
+- [#108](https://github.com/hzblj/kara-ui/pull/108) [`abbf241`](https://github.com/hzblj/kara-ui/commit/abbf2416fc973b160764a94654b452f7297cf2a2) Thanks [@hzblj](https://github.com/hzblj)! - - `GlassView` takes its shape from `borderRadius`: a capsule as before without one, rounded corners of the theme radius with one, on iOS 26 (Liquid Glass), on Android (frosted glass) and in the fallback below iOS 26. The native view (`@hzblj/kara-native/swift-ui`) takes it as `cornerRadius`.
+  - `GlassView` takes `variant="clear"`, the more transparent glass for photos, video and maps (`UIGlassEffect`'s `clear`; on Android a thinner surface over the blur). The native view takes it as `glassStyle`.
+
+### Patch Changes
+
+- Updated dependencies [[`0b7c0b5`](https://github.com/hzblj/kara-ui/commit/0b7c0b543e48fc3cdba3515cfea54453cdf5c622), [`abbf241`](https://github.com/hzblj/kara-ui/commit/abbf2416fc973b160764a94654b452f7297cf2a2)]:
+  - @hzblj/kara-native@0.31.0
+  - @hzblj/kara-sx@0.31.0
+  - @hzblj/kara-theme@0.31.0
+
 ## 0.30.0
 
 ### Patch Changes
