@@ -54,7 +54,7 @@ public final class NavigationItemMorphView: ExpoView {
   private let button = NavigationItemMorphButton()
   private lazy var morphItem = UIBarButtonItem(customView: button)
   private weak var navigationItem: UINavigationItem?
-  private weak var originalItem: UIBarButtonItem?
+  private var originalItem: UIBarButtonItem?
   private var itemsObservation: NSKeyValueObservation?
   private var isReplacing = false
   private var attachAttempts = 0
@@ -147,6 +147,7 @@ public final class NavigationItemMorphView: ExpoView {
     itemsObservation = nil
     defer {
       navigationItem = nil
+      originalItem = nil
     }
     guard let item = navigationItem, var items = item.rightBarButtonItems,
       let index = items.firstIndex(where: { $0 === morphItem })
