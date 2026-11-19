@@ -13,6 +13,7 @@ import type {
   NativeHeaderItem,
   NativeHeaderMenuElement,
 } from './header.types'
+import {morphsNatively} from './header-item-morph'
 import type {HeaderOptionsBuilder} from './header-options.types'
 
 const DEFAULT_LABELS = {back: 'Back', close: 'Close'} as const
@@ -49,7 +50,12 @@ const toMenuElement = (item: HeaderMenuItem): NativeHeaderMenuElement => {
  * iOS 26 draws a bar button item monochrome whatever the navigation bar's tint, so every item takes the header's tint
  * itself (the native stack hands it to the items function); an icon action's own `color` wins.
  */
-const toItem = (action: HeaderAction, theme: Theme, tintColor: HeaderItemProps['tintColor']): NativeHeaderItem => {
+const toItem = (
+  action: HeaderAction,
+  theme: Theme,
+  tintColor: HeaderItemProps['tintColor'],
+  isTrailing: boolean
+): NativeHeaderItem => {
   switch (action.type) {
     case 'back':
     case 'close': {
@@ -88,6 +94,20 @@ const toItem = (action: HeaderAction, theme: Theme, tintColor: HeaderItemProps['
         type: 'button',
       }
     case 'text':
+      if (action.collapsed && action.collapsedIcon && !(isTrailing && morphsNatively(action))) {
+        return {
+          accessibilityLabel: action.label,
+          disabled: action.disabled,
+          icon: imageIcon(action.collapsedIcon),
+          identifier: action.testID,
+          label: action.label,
+          onPress: action.onPress,
+          sharesBackground: action.separated ? false : undefined,
+          tintColor,
+          type: 'button',
+        }
+      }
+
       return {
         disabled: action.disabled,
         identifier: action.testID,
@@ -115,12 +135,12 @@ const toItem = (action: HeaderAction, theme: Theme, tintColor: HeaderItemProps['
 }
 
 const toItems =
-  (actions: HeaderAction[], theme: Theme) =>
+  (actions: HeaderAction[], theme: Theme, isTrailing: boolean) =>
   ({tintColor}: HeaderItemProps) => {
     const items: NativeHeaderItem[] = []
 
     for (const action of actions) {
-      items.push(toItem(action, theme, tintColor))
+      items.push(toItem(action, theme, tintColor, isTrailing))
 
       if (action.separated) {
         items.push(GROUP_BREAK)
@@ -137,11 +157,11 @@ export const toHeaderOptions: HeaderOptionsBuilder = (
   const options: HeaderOptions = {headerBackVisible: !backHidden}
 
   if (leadingActions) {
-    options.unstable_headerLeftItems = leadingActions.length > 0 ? toItems(leadingActions, theme) : undefined
+    options.unstable_headerLeftItems = leadingActions.length > 0 ? toItems(leadingActions, theme, false) : undefined
   }
 
   if (trailingActions) {
-    options.unstable_headerRightItems = trailingActions.length > 0 ? toItems(trailingActions, theme) : undefined
+    options.unstable_headerRightItems = trailingActions.length > 0 ? toItems(trailingActions, theme, true) : undefined
   }
 
   return options

@@ -65,6 +65,16 @@ export type HeaderIconAction = HeaderActionBase & {
 
 /** An action drawn as its label: "Edit", "Done". */
 export type HeaderTextAction = HeaderActionBase & {
+  /**
+   * Shows `collapsedIcon` instead of the label, for a label that makes room for a title revealed on scroll (true once
+   * `titleRevealProgress` starts, say).
+   */
+  collapsed?: boolean
+  /**
+   * The icon the action turns into while `collapsed`. On iOS 26 a trailing action with a `testID` morphs: the label
+   * fades, its glass springs into a circle and the icon scales in. Elsewhere the label and the icon swap.
+   */
+  collapsedIcon?: IconName
   /** Dims the action and stops it responding. */
   disabled?: boolean
   /** The action's text. */

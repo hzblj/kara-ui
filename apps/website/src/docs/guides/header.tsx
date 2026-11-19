@@ -177,7 +177,10 @@ export const header: Guide = {
               '`icon`',
               'One of your icons. `loading`, `badge` (iOS 26), `selected`, `color`, `tonal` (Android: a soft filled circle).',
             ],
-            ['`text`', 'A label: “Edit”, “Done”. `prominent` on iOS.'],
+            [
+              '`text`',
+              'A label: “Edit”, “Done”. `prominent` on iOS. `collapsedIcon` with `collapsed` turns it into an icon, a morph on iOS 26 (give it a `testID`).',
+            ],
             ['`menu`', 'An icon that opens a menu. Rows, sections (`submenu`), `checked`, `destructive`.'],
             ['`custom`', 'Any React Native element.'],
           ]}

@@ -3,6 +3,12 @@ import type {NativeStackNavigationOptions} from 'expo-router'
 import type {HeaderInsetComponent, HeaderOptions, HeaderSearchBarOptions, StackScreenOptions} from './header.types'
 import {HeaderInset as AndroidHeaderInset} from './header-inset.android'
 import {HeaderInset as IosHeaderInset} from './header-inset.ios'
+import {
+  withHeaderItemMorphs as androidHeaderItemMorphs,
+  morphsNatively as androidMorphsNatively,
+} from './header-item-morph.android'
+import {withHeaderItemMorphs as iosHeaderItemMorphs, morphsNatively as iosMorphsNatively} from './header-item-morph.ios'
+import type {HeaderItemMorphCheck, HeaderItemMorphs} from './header-item-morph.types'
 import {toHeaderOptions as androidHeaderOptions} from './header-options.android'
 import {toHeaderOptions as iosHeaderOptions} from './header-options.ios'
 import type {HeaderOptionsBuilder} from './header-options.types'
@@ -49,3 +55,7 @@ export const _stackOptions = (options: StackScreenOptions): NativeStackNavigatio
 export const _searchBarOptions = (options: HeaderSearchBarOptions): NativeStackNavigationOptions => ({
   headerSearchBarOptions: options,
 })
+export const _iosHeaderItemMorphs: HeaderItemMorphs = iosHeaderItemMorphs
+export const _androidHeaderItemMorphs: HeaderItemMorphs = androidHeaderItemMorphs
+export const _iosMorphsNatively: HeaderItemMorphCheck = iosMorphsNatively
+export const _androidMorphsNatively: HeaderItemMorphCheck = androidMorphsNatively

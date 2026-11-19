@@ -45,6 +45,7 @@ public class KaraUIModule: Module {
     InlineLargeTitleView.definition()
     LargeTitleFadeView.definition()
     NavigationBarView.definition()
+    NavigationItemMorphView.definition()
     NavigationItemSearchView.definition()
     NavigationItemSubtitleView.definition()
     ScrollEdgeContainerView.definition()
