@@ -183,6 +183,7 @@ export const header: Guide = {
           items={[
             '`leadingActions` and `trailingActions`, in screen order.',
             '`separated: true` gives an action its own glass on iOS 26.',
+            'Actions take the header’s tint, on iOS 26 too, where the system would draw them black. An icon’s `color` wins.',
             '`backHidden: true` hides the back button. On Android a trailing `close` moves to the start.',
             'Memoize the arrays.',
           ]}

@@ -244,10 +244,11 @@ final class SearchFieldAccessory: UIView {
     }.withRenderingMode(.alwaysTemplate)
   }
 
+  /// iOS 26's glass button configuration ignores `baseForegroundColor` for its image, so the glyph comes pre-coloured.
   private func applyStopImage() {
     if #available(iOS 26.0, *) {
       var stop = UIButton.Configuration.glass()
-      stop.image = stopImage
+      stop.image = stopImage?.withTintColor(color, renderingMode: .alwaysOriginal)
       stop.baseForegroundColor = color
       stop.cornerStyle = .capsule
       stop.contentInsets = .zero

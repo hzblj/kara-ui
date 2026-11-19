@@ -2,7 +2,7 @@ import UIKit
 
 /**
  The app's own glyphs on a search bar: `clearImageName` for the field's clear button, `cancelImageName` for iOS 26's
- cancel circle beside the field.
+ cancel circle beside the field, `searchIconColor` for the field's magnifier.
 
  That cancel is a `UIButton` with a `UIButton.Configuration` and no public API, so this takes the first `UIButton` of
  the search bar outside its text field and sets the image from a `configurationUpdateHandler` (UIKit sets none there),
@@ -38,6 +38,16 @@ final class SearchFieldAppearance {
     }
   }
 
+  /// Replaces the field's grey magnifier with the system one pre-coloured; `nil` keeps the system's.
+  var searchIconColor: UIColor? {
+    didSet {
+      guard searchIconColor != oldValue else {
+        return
+      }
+      applySearchIcon()
+    }
+  }
+
   private weak var searchBar: UISearchBar?
   private weak var cancelButton: UIButton?
   private var editingObserver: NSObjectProtocol?
@@ -63,6 +73,9 @@ final class SearchFieldAppearance {
     }
     applyClearImage()
     applyCancelImage()
+    if searchIconColor != nil {
+      applySearchIcon()
+    }
   }
 
   func detach() {
@@ -76,6 +89,9 @@ final class SearchFieldAppearance {
     if clearImageName != nil {
       searchBar.setImage(nil, for: .clear, state: .normal)
     }
+    if searchIconColor != nil {
+      searchBar.setImage(nil, for: .search, state: .normal)
+    }
     resetCancelButton()
     self.searchBar = nil
   }
@@ -86,6 +102,16 @@ final class SearchFieldAppearance {
     }
     let image = clearImageName.flatMap { UIImage(named: $0) }
     searchBar.setImage(image?.withTintColor(clearColor, renderingMode: .alwaysOriginal), for: .clear, state: .normal)
+  }
+
+  private func applySearchIcon() {
+    guard let searchBar else {
+      return
+    }
+    let image = searchIconColor.flatMap {
+      UIImage(systemName: "magnifyingglass")?.withTintColor($0, renderingMode: .alwaysOriginal)
+    }
+    searchBar.setImage(image, for: .search, state: .normal)
   }
 
   private func applyCancelImage() {

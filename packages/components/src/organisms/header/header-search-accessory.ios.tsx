@@ -36,6 +36,7 @@ export const HeaderSearchAccessory: HeaderSearchAccessoryComponent = ({
     <NavigationItemSearch
       cancelImageName={toImageName(cancelIcon)}
       clearImageName={toImageName(clearIcon)}
+      iconColor={color}
       voice={nativeVoice}
     />
   )

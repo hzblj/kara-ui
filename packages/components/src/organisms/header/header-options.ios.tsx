@@ -6,6 +6,7 @@ import {ActivityIndicator} from '../../atoms/activity-indicator'
 import type {IconName} from '../../atoms/icon'
 import type {
   HeaderAction,
+  HeaderItemProps,
   HeaderMenuItem,
   HeaderOptions,
   HeaderParams,
@@ -44,7 +45,11 @@ const toMenuElement = (item: HeaderMenuItem): NativeHeaderMenuElement => {
   }
 }
 
-const toItem = (action: HeaderAction, theme: Theme): NativeHeaderItem => {
+/**
+ * iOS 26 draws a bar button item monochrome whatever the navigation bar's tint, so every item takes the header's tint
+ * itself (the native stack hands it to the items function); an icon action's own `color` wins.
+ */
+const toItem = (action: HeaderAction, theme: Theme, tintColor: HeaderItemProps['tintColor']): NativeHeaderItem => {
   switch (action.type) {
     case 'back':
     case 'close': {
@@ -57,6 +62,7 @@ const toItem = (action: HeaderAction, theme: Theme): NativeHeaderItem => {
         label,
         onPress: action.onPress,
         sharesBackground: action.separated ? false : undefined,
+        tintColor,
         type: 'button',
       }
     }
@@ -78,7 +84,7 @@ const toItem = (action: HeaderAction, theme: Theme): NativeHeaderItem => {
         onPress: action.onPress,
         selected: action.selected,
         sharesBackground: action.separated ? false : undefined,
-        tintColor: action.color ? theme.color(action.color) : undefined,
+        tintColor: action.color ? theme.color(action.color) : tintColor,
         type: 'button',
       }
     case 'text':
@@ -88,6 +94,7 @@ const toItem = (action: HeaderAction, theme: Theme): NativeHeaderItem => {
         label: action.label,
         onPress: action.onPress,
         sharesBackground: action.separated ? false : undefined,
+        tintColor,
         type: 'button',
         variant: action.prominent ? 'prominent' : undefined,
       }
@@ -99,6 +106,7 @@ const toItem = (action: HeaderAction, theme: Theme): NativeHeaderItem => {
         label: action.label,
         menu: {items: action.items.map(toMenuElement), title: action.title},
         sharesBackground: action.separated ? false : undefined,
+        tintColor,
         type: 'menu',
       }
     case 'custom':
@@ -106,19 +114,21 @@ const toItem = (action: HeaderAction, theme: Theme): NativeHeaderItem => {
   }
 }
 
-const toItems = (actions: HeaderAction[], theme: Theme) => () => {
-  const items: NativeHeaderItem[] = []
+const toItems =
+  (actions: HeaderAction[], theme: Theme) =>
+  ({tintColor}: HeaderItemProps) => {
+    const items: NativeHeaderItem[] = []
 
-  for (const action of actions) {
-    items.push(toItem(action, theme))
+    for (const action of actions) {
+      items.push(toItem(action, theme, tintColor))
 
-    if (action.separated) {
-      items.push(GROUP_BREAK)
+      if (action.separated) {
+        items.push(GROUP_BREAK)
+      }
     }
-  }
 
-  return items
-}
+    return items
+  }
 
 export const toHeaderOptions: HeaderOptionsBuilder = (
   {backHidden = false, leadingActions, trailingActions}: HeaderParams,
