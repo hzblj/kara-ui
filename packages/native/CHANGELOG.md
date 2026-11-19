@@ -1,5 +1,15 @@
 # @hzblj/kara-native
 
+## 0.31.1
+
+### Patch Changes
+
+- [#110](https://github.com/hzblj/kara-ui/pull/110) [`0c84bda`](https://github.com/hzblj/kara-ui/commit/0c84bda0fb2bed3d68e2f5be1a214b2346e7b1d1) Thanks [@hzblj](https://github.com/hzblj)! - On iOS 26 header actions, `NavigationBar` items and the search buttons take the header's tint instead of the system's black, the search field's magnifier follows it (`iconColor` on `NavigationItemSearch`), and the voice stop button takes the voice colour.
+
+- [#111](https://github.com/hzblj/kara-ui/pull/111) [`0619638`](https://github.com/hzblj/kara-ui/commit/061963822a842256d504365af3683a5bd27dae33) Thanks [@hzblj](https://github.com/hzblj)! - Swipe actions take their label and icon colours from the theme on iOS 26 (`content.secondary`, `content.on.accent`, `content.on.destructive`), through the new `configureSwipeActionAppearance` in kara-native, since SwiftUI has no API for them.
+
+- [#113](https://github.com/hzblj/kara-ui/pull/113) [`2e685bb`](https://github.com/hzblj/kara-ui/commit/2e685bb03243555daa43e750f2d2cc6ca3b8f22a) Thanks [@hzblj](https://github.com/hzblj)! - Android: a `SwipeActions` row swiped after another screen was pushed on top and popped shows its actions again, instead of sliding over an empty strip. The reveal's alpha and clip are now read in composition: Compose drops the snapshot reads of `graphicsLayer` and draw lambdas when react-native-screens detaches the screen below a push.
+
 ## 0.31.0
 
 ### Minor Changes

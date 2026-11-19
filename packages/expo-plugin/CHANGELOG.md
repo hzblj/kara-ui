@@ -1,5 +1,7 @@
 # @hzblj/kara-expo-plugin
 
+## 0.31.1
+
 ## 0.31.0
 
 ## 0.30.0
