@@ -1,5 +1,20 @@
 # @hzblj/kara-components
 
+## 0.31.1
+
+### Patch Changes
+
+- [#112](https://github.com/hzblj/kara-ui/pull/112) [`71319ee`](https://github.com/hzblj/kara-ui/commit/71319eef4a51e7f709a70308b31fe1f9cc67ff6b) Thanks [@hzblj](https://github.com/hzblj)! - A header `icon` action takes `tonal`: on Android it draws Material's filled tonal icon button, a soft circle that still reads over a photo, as a profile button on a hero wants. iOS keeps its bar item in the bar's glass.
+
+- [#110](https://github.com/hzblj/kara-ui/pull/110) [`0c84bda`](https://github.com/hzblj/kara-ui/commit/0c84bda0fb2bed3d68e2f5be1a214b2346e7b1d1) Thanks [@hzblj](https://github.com/hzblj)! - On iOS 26 header actions, `NavigationBar` items and the search buttons take the header's tint instead of the system's black, the search field's magnifier follows it (`iconColor` on `NavigationItemSearch`), and the voice stop button takes the voice colour.
+
+- [#111](https://github.com/hzblj/kara-ui/pull/111) [`0619638`](https://github.com/hzblj/kara-ui/commit/061963822a842256d504365af3683a5bd27dae33) Thanks [@hzblj](https://github.com/hzblj)! - Swipe actions take their label and icon colours from the theme on iOS 26 (`content.secondary`, `content.on.accent`, `content.on.destructive`), through the new `configureSwipeActionAppearance` in kara-native, since SwiftUI has no API for them.
+
+- Updated dependencies [[`0c84bda`](https://github.com/hzblj/kara-ui/commit/0c84bda0fb2bed3d68e2f5be1a214b2346e7b1d1), [`0619638`](https://github.com/hzblj/kara-ui/commit/061963822a842256d504365af3683a5bd27dae33), [`2e685bb`](https://github.com/hzblj/kara-ui/commit/2e685bb03243555daa43e750f2d2cc6ca3b8f22a)]:
+  - @hzblj/kara-native@0.31.1
+  - @hzblj/kara-theme@0.31.1
+  - @hzblj/kara-sx@0.31.1
+
 ## 0.31.0
 
 ### Minor Changes
