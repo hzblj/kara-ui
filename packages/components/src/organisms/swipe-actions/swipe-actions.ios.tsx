@@ -1,7 +1,9 @@
 import {Button, Image, Label, SwipeActions as SwiftUISwipeActions} from '@expo/ui/swift-ui'
 import {tint} from '@expo/ui/swift-ui/modifiers'
 import {iconResourceName} from '@hzblj/expo-native-icons'
+import {configureSwipeActionAppearance} from '@hzblj/kara-native'
 import {useAppTheme} from '@hzblj/kara-theme'
+import {useEffect} from 'react'
 
 import {useHostGuard} from '../../hooks/host-context'
 import type {SwipeAction, SwipeActionsComponent, SwipeActionsProps} from './swipe-actions.types'
@@ -33,6 +35,24 @@ const Actions = ({actions, allowsFullSwipe, edge}: ActionsProps) => {
   )
 }
 
+/**
+ * SwiftUI has no API for a swipe action's title or icon colour, so they follow the theme the way Android's ripple
+ * follows `fill.ripple`: the title `content.secondary`, the icon `content.on.accent`, or `content.on.destructive` on a
+ * `fill.destructive.primary` capsule. The appearance is global (iOS 26+), set again only when the theme changes.
+ */
+const useSwipeActionAppearance = () => {
+  const theme = useAppTheme()
+
+  useEffect(() => {
+    configureSwipeActionAppearance({
+      destructiveBackgroundColor: {light: theme.color('fill.destructive.primary')},
+      destructiveIconColor: {light: theme.color('content.on.destructive')},
+      iconColor: {light: theme.color('content.on.accent')},
+      titleColor: {light: theme.color('content.secondary')},
+    })
+  }, [theme])
+}
+
 export const SwipeActions: SwipeActionsComponent = ({
   allowsFullSwipe = true,
   children,
@@ -41,6 +61,7 @@ export const SwipeActions: SwipeActionsComponent = ({
   trailing = [],
 }: SwipeActionsProps) => {
   useHostGuard('SwipeActions')
+  useSwipeActionAppearance()
 
   return (
     <SwiftUISwipeActions testID={testID}>
