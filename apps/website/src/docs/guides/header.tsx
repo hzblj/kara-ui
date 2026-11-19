@@ -173,7 +173,10 @@ export const header: Guide = {
           columns={['Type', 'What it is']}
           rows={[
             ['`back`, `close`', 'The platform’s chevron or cross. `icon` swaps in your own.'],
-            ['`icon`', 'One of your icons. `loading`, `badge` (iOS 26), `selected`, `color`.'],
+            [
+              '`icon`',
+              'One of your icons. `loading`, `badge` (iOS 26), `selected`, `color`, `tonal` (Android: a soft filled circle).',
+            ],
             ['`text`', 'A label: “Edit”, “Done”. `prominent` on iOS.'],
             ['`menu`', 'An icon that opens a menu. Rows, sections (`submenu`), `checked`, `destructive`.'],
             ['`custom`', 'Any React Native element.'],
