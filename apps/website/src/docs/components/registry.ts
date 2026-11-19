@@ -242,6 +242,7 @@ export const COMPONENTS: ComponentDoc[] = [
       'iOS 26 draws each action as a round button in its tint with the label under it, the way Mail does. Compose has no swipe actions, so Android has kara’s own: the row slides on an anchored drag, and filled icon buttons with their labels under them show in the strip it leaves.',
       'One row is open at a time, and a tap on an open row closes it. A press closes the row before the action runs.',
       '`allowsFullSwipe` (on by default) runs the edge’s first action on a swipe all the way across. iOS only.',
+      'The colours come from your theme, the way the ripple does: the label `content.secondary`, the icon `content.on.accent`, or `content.on.destructive` on a destructive action. SwiftUI has no API for them, so on iOS 26 kara sets them itself.',
     ],
     renders: {android: 'Anchored drag (kara)', ios: 'SwiftUI swipeActions'},
     summary: 'Buttons revealed by swiping a list row.',

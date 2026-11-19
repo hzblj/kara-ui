@@ -22,6 +22,13 @@ public class KaraUIModule: Module {
       SystemColors.hex(names, dark: dark)
     }
 
+    // Colours every list swipe action from then on; the views are wrapped once per process, on the main queue.
+    Function("configureSwipeActionAppearance") { (record: SwipeActionAppearanceRecord) in
+      DispatchQueue.main.async {
+        SwipeActionAppearance.configure(record)
+      }
+    }
+
     // Runs once per runtime, and runtimes can start concurrently: both install once per process, thread-safely, and
     // nothing is undone in `OnDestroy` (see `ModifierRegistration`).
     OnCreate {

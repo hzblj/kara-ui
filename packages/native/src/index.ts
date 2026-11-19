@@ -11,5 +11,6 @@ export type {
 export * from './require-view'
 export type {SearchVoice, SearchVoiceMeter, SearchVoiceSizes} from './search-voice'
 export * from './status-bar-appearance'
+export * from './swipe-action-appearance'
 export * from './system-color'
 export type {TextWeight} from './text-weight'
