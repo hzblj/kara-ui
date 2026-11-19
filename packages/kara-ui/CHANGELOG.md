@@ -1,5 +1,21 @@
 # @hzblj/kara-ui
 
+## 0.32.0
+
+### Minor Changes
+
+- [#115](https://github.com/hzblj/kara-ui/pull/115) [`b3a7902`](https://github.com/hzblj/kara-ui/commit/b3a7902a6336fb2e903f5e79c8dce825e134f4c3) Thanks [@hzblj](https://github.com/hzblj)! - A header `text` action takes `collapsedIcon` and `collapsed`, for a label that makes room for a title revealed on scroll. On iOS 26 a trailing action with a `testID` morphs: the label fades, its glass stretches a little and springs into a circle, and the icon scales in; a press still swells the glass. Elsewhere the label and the icon swap. The morph is the new `NavigationItemMorph` in kara-native.
+
+### Patch Changes
+
+- Updated dependencies [[`b3a7902`](https://github.com/hzblj/kara-ui/commit/b3a7902a6336fb2e903f5e79c8dce825e134f4c3)]:
+  - @hzblj/kara-native@0.32.0
+  - @hzblj/kara-components@0.32.0
+  - @hzblj/kara-router@0.32.0
+  - @hzblj/kara-sx@0.32.0
+  - @hzblj/kara-theme@0.32.0
+  - @hzblj/kara-expo-plugin@0.32.0
+
 ## 0.31.1
 
 ### Patch Changes
