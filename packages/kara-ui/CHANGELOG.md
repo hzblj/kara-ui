@@ -1,5 +1,19 @@
 # @hzblj/kara-ui
 
+## 0.32.1
+
+### Patch Changes
+
+- [#117](https://github.com/hzblj/kara-ui/pull/117) [`0107dc9`](https://github.com/hzblj/kara-ui/commit/0107dc9d61f3dd685f578a070939861c0e096b3f) Thanks [@hzblj](https://github.com/hzblj)! - A press on a header action that morphs on iOS 26 reaches its `onPress` again. The morph replaced the bar item and kept only a weak reference to it, so nothing held the item any more and the press had nowhere to go.
+
+- Updated dependencies [[`0107dc9`](https://github.com/hzblj/kara-ui/commit/0107dc9d61f3dd685f578a070939861c0e096b3f)]:
+  - @hzblj/kara-native@0.32.1
+  - @hzblj/kara-components@0.32.1
+  - @hzblj/kara-theme@0.32.1
+  - @hzblj/kara-sx@0.32.1
+  - @hzblj/kara-router@0.32.1
+  - @hzblj/kara-expo-plugin@0.32.1
+
 ## 0.32.0
 
 ### Minor Changes
