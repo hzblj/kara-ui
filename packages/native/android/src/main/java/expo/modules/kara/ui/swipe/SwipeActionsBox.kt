@@ -18,6 +18,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -27,10 +29,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.drawscope.clipRect
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
@@ -112,6 +114,8 @@ class SwipeActionsBoxView(context: Context, appContext: AppContext) :
     val leadingOffset = if (leadingSlot != null && leadingWidth > 0) leadingWidth + clearance else 0f
     val trailingOffset = if (trailingSlot != null && trailingWidth > 0) -(trailingWidth + clearance) else 0f
     val target = SwipeActionsValue.entries.firstOrNull { it.edge == openEdge } ?: SwipeActionsValue.Closed
+    val leadingReveal = remember(leadingOffset) { derivedStateOf { revealFraction(state.currentOffset(), leadingOffset) } }
+    val trailingReveal = remember(trailingOffset) { derivedStateOf { revealFraction(state.currentOffset(), trailingOffset) } }
 
     LaunchedEffect(leadingOffset, trailingOffset, target) {
       state.updateAnchors(
@@ -161,23 +165,29 @@ class SwipeActionsBoxView(context: Context, appContext: AppContext) :
       )
     ) {
       leadingSlot?.let { slot ->
-        Box(
+        RevealedActions(
+          reveal = leadingReveal,
+          openOffset = leadingOffset,
+          inset = inset,
+          fromStart = true,
           modifier = Modifier
             .align(Alignment.CenterStart)
             .padding(start = actionsInset.dp)
             .onSizeChanged { leadingWidth = it.width }
-            .revealed(state, leadingOffset, inset, fromStart = true)
         ) {
           slot.renderSlot()
         }
       }
       trailingSlot?.let { slot ->
-        Box(
+        RevealedActions(
+          reveal = trailingReveal,
+          openOffset = trailingOffset,
+          inset = inset,
+          fromStart = false,
           modifier = Modifier
             .align(Alignment.CenterEnd)
             .padding(end = actionsInset.dp)
             .onSizeChanged { trailingWidth = it.width }
-            .revealed(state, trailingOffset, inset, fromStart = false)
         ) {
           slot.renderSlot()
         }
@@ -202,19 +212,32 @@ class SwipeActionsBoxView(context: Context, appContext: AppContext) :
 private fun AnchoredDraggableState<SwipeActionsValue>.currentOffset(): Float = offset.takeUnless { it.isNaN() } ?: 0f
 
 /**
+ * One edge's actions, revealed as the row slides off them. The fraction is read here, in composition, so only this box
+ * recomposes while the row is dragged. Not in a `graphicsLayer` or draw lambda: react-native-screens detaches the
+ * screen below a push and `AndroidComposeView` drops those lambdas' snapshot reads on detach, so after a screen on top
+ * and back the row still slid but its actions stayed at the alpha and clip they had when the screen left.
+ */
+@Composable
+private fun RevealedActions(
+  reveal: State<Float>,
+  openOffset: Float,
+  inset: Float,
+  fromStart: Boolean,
+  modifier: Modifier,
+  content: @Composable () -> Unit
+) {
+  Box(modifier = modifier.revealed(reveal.value, openOffset, inset, fromStart)) {
+    content()
+  }
+}
+
+/**
  * Draws one edge's actions only inside the strip the row has slid off — measured from the box's edge, `inset` outside
  * the actions themselves — and fades them in on the way.
  */
-private fun Modifier.revealed(
-  state: AnchoredDraggableState<SwipeActionsValue>,
-  openOffset: Float,
-  inset: Float,
-  fromStart: Boolean
-): Modifier =
-  graphicsLayer {
-    alpha = revealFraction(state.currentOffset(), openOffset)
-  }.drawWithContent {
-    val vacated = revealFraction(state.currentOffset(), openOffset) * abs(openOffset)
+private fun Modifier.revealed(fraction: Float, openOffset: Float, inset: Float, fromStart: Boolean): Modifier =
+  alpha(fraction).drawWithContent {
+    val vacated = fraction * abs(openOffset)
     if (fromStart) {
       clipRect(right = vacated - inset) { this@drawWithContent.drawContent() }
     } else {
