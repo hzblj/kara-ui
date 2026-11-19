@@ -2,6 +2,7 @@ import {useAppTheme} from '@hzblj/kara-theme'
 import {useLayoutEffect, useMemo} from 'react'
 
 import type {HeaderContent, HeaderNavigation, HeaderOptions, HeaderOptionsResult, HeaderParams} from './header.types'
+import {withHeaderItemMorphs} from './header-item-morph'
 import {toHeaderOptions} from './header-options'
 import {useHeaderTitle} from './header-title'
 
@@ -40,12 +41,14 @@ export const useHeaderOptions = ({
       options.headerSearchBarOptions = search
     }
 
+    const morphedOptions = withHeaderItemMorphs(options, trailingActions, theme)
+
     return {
       contentInsetAdjustmentBehavior: 'automatic',
       inlineLargeTitle: headerTitle.inlineLargeTitle,
       largeTitle: headerTitle.largeTitle,
       onScroll: headerTitle.onScroll,
-      options,
+      options: morphedOptions,
     }
   }, [
     actionOptions,
@@ -54,6 +57,8 @@ export const useHeaderOptions = ({
     headerTitle.onScroll,
     headerTitle.options,
     search,
+    theme,
+    trailingActions,
   ])
 }
 

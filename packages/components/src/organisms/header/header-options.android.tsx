@@ -97,6 +97,20 @@ const HeaderActionView = ({action}: {action: HeaderAction}) => {
         </ActionHost>
       )
     case 'text':
+      if (action.collapsed && action.collapsedIcon) {
+        return (
+          <ActionHost>
+            <IconButton
+              accessibilityLabel={action.label}
+              disabled={action.disabled}
+              name={action.collapsedIcon}
+              onPress={action.onPress}
+              testID={action.testID}
+            />
+          </ActionHost>
+        )
+      }
+
       return (
         <ActionHost>
           <Button
