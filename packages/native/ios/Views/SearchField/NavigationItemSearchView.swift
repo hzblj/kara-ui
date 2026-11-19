@@ -3,8 +3,8 @@ import UIKit
 
 /**
  A layout-less view (`display: contents`, `disableForceFlatten`) inside a native-stack screen that dresses the search
- controller react-native-screens puts on that screen's `UINavigationItem`: the app's clear and cancel glyphs
- (`SearchFieldAppearance`), the voice accessory (`SearchFieldAccessory`), the reset of a search that the integrated
+ controller react-native-screens puts on that screen's `UINavigationItem`: the app's clear and cancel glyphs and the
+ magnifier's colour (`SearchFieldAppearance`), the voice accessory (`SearchFieldAccessory`), the reset of a search that the integrated
  search's system close ended without telling the search bar's delegate (`SearchCloseObserver`) and the fade of the
  field's content while an integrated search button closes (`IntegratedSearchCollapseFade`).
 
@@ -20,6 +20,15 @@ public final class NavigationItemSearchView: ExpoView {
   private let closeObserver = SearchCloseObserver()
   private lazy var collapseFade = IntegratedSearchCollapseFade(accessory: accessory)
   private var isVoiceEnabled = false
+
+  /// The field's magnifier and, on iOS 26, the integrated search button, which UIKit draws monochrome like every bar
+  /// item whatever the bar's tint.
+  var iconColor: UIColor? {
+    didSet {
+      appearance.searchIconColor = iconColor
+      applySearchButtonColor()
+    }
+  }
 
   public required init(appContext: AppContext? = nil) {
     super.init(appContext: appContext)
@@ -61,6 +70,7 @@ public final class NavigationItemSearchView: ExpoView {
       appearance.attach(to: searchController.searchBar)
       closeObserver.attach(to: searchController)
       collapseFade.attach(to: searchController)
+      applySearchButtonColor()
       return
     }
     guard attempt < Self.attachAttempts else {
@@ -69,6 +79,14 @@ public final class NavigationItemSearchView: ExpoView {
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1 * Double(attempt + 1)) { [weak self] in
       self?.attach(attempt: attempt + 1)
     }
+  }
+
+  private func applySearchButtonColor() {
+    guard #available(iOS 26.0, *), let navigationItem = owningViewController()?.navigationItem,
+          navigationItem.searchController != nil else {
+      return
+    }
+    navigationItem.searchBarPlacementBarButtonItem.tintColor = iconColor
   }
 
   private func owningViewController() -> UIViewController? {

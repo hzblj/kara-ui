@@ -18,6 +18,9 @@ extension NavigationItemSearchView {
       Prop("cancelImageName") { (view: NavigationItemSearchView, name: String?) in
         view.appearance.cancelImageName = name
       }
+      Prop("iconColor") { (view: NavigationItemSearchView, color: UIColor?) in
+        view.iconColor = color
+      }
     }
   }
 }

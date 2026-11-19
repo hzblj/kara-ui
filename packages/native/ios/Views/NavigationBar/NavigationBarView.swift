@@ -66,6 +66,8 @@ public final class NavigationBarView: ExpoView, UISearchBarDelegate {
     searchBar.delegate = self
     return searchBar
   }()
+  /// iOS 26 draws bar button items monochrome whatever the bar's `tintColor`, so every item takes it itself.
+  private var itemColor: UIColor?
   private lazy var searchCancelItem = makeSearchItem(systemImageName: "xmark") { [weak self] in
     self?.cancelSearch()
   }
@@ -494,6 +496,14 @@ public final class NavigationBarView: ExpoView, UISearchBarDelegate {
     bar.tintColor = color
     searchRowBar.tintColor = color
     searchBar.tintColor = color
+    guard itemColor != color else {
+      return
+    }
+    itemColor = color
+    searchField.iconColor = color
+    searchButtonItem.tintColor = color
+    searchCancelItem.tintColor = color
+    updateItems()
   }
 
   func setTitleColor(_ color: UIColor) {
@@ -659,6 +669,7 @@ public final class NavigationBarView: ExpoView, UISearchBarDelegate {
     }
     button.accessibilityLabel = barItem.label
     button.accessibilityIdentifier = barItem.testID
+    button.tintColor = itemColor
     return button
   }
 

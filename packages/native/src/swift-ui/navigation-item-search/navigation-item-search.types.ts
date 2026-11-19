@@ -1,3 +1,5 @@
+import type {ColorValue} from 'react-native'
+
 import type {SearchVoice} from '../../search-voice'
 
 /** A search field's voice on iOS, with the app's own glyphs: asset-catalog image names, drawn as templates. */
@@ -18,6 +20,11 @@ export type NavigationItemSearchProps = {
   cancelImageName?: string
   /** The field's own clear button, without `voice`: an asset-catalog image, drawn in the secondary label colour. */
   clearImageName?: string
+  /**
+   * The field's magnifier and, on iOS 26, the integrated search button (`integratedButton`), which UIKit otherwise draws
+   * monochrome like every bar item whatever the header's tint. Unset keeps the system's.
+   */
+  iconColor?: ColorValue
   /** A microphone in the field, a waveform and a stop button while listening. */
   voice?: SearchFieldVoiceIOS
 }

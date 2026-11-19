@@ -47,6 +47,16 @@ final class NavigationBarSearchField: UIView {
     }
   }
 
+  /// Pre-colours the magnifier, which the field otherwise draws in its own grey; `nil` keeps it a template.
+  var iconColor: UIColor? {
+    didSet {
+      guard iconColor != oldValue else {
+        return
+      }
+      searchBar.setImage(isHosting ? icon : fieldIcon, for: .search, state: .normal)
+    }
+  }
+
   var buttonLabel: String? {
     didSet {
       if isHosting, isCollapsed {
@@ -61,16 +71,24 @@ final class NavigationBarSearchField: UIView {
 
   /// The button's glyph at the size of UIKit's own field magnifier (a 16 pt glyph).
   var fieldIcon: UIImage? {
-    buttonImage.map { image in
+    let image = buttonImage ?? (iconColor == nil ? nil : UIImage(systemName: "magnifyingglass"))
+    return colored(image.map { image in
       let size = CGSize(width: fieldIconSize, height: fieldIconSize)
       return UIGraphicsImageRenderer(size: size).image { _ in
         image.draw(in: CGRect(origin: .zero, size: size))
       }.withRenderingMode(.alwaysTemplate)
-    }
+    })
   }
 
   private var icon: UIImage? {
-    isCollapsed ? buttonImage : fieldIcon
+    isCollapsed ? colored(buttonImage) : fieldIcon
+  }
+
+  private func colored(_ image: UIImage?) -> UIImage? {
+    guard let image, let iconColor else {
+      return image
+    }
+    return image.withTintColor(iconColor, renderingMode: .alwaysOriginal)
   }
 
   init(searchBar: UISearchBar, voice: SearchFieldAccessory) {
@@ -187,7 +205,7 @@ final class NavigationBarSearchField: UIView {
       return
     }
     let cover = UIImageView(image: image)
-    cover.tintColor = iconView.tintColor
+    cover.tintColor = iconColor ?? iconView.tintColor
     let center = iconView.convert(CGPoint(x: iconView.bounds.midX, y: iconView.bounds.midY), to: container)
     cover.frame = CGRect(
       x: center.x - image.size.width / 2,
