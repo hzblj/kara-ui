@@ -55,6 +55,11 @@ export type HeaderIconAction = HeaderActionBase & {
   onPress: () => void
   /** iOS: draws the item in its selected state. Android ignores it. */
   selected?: boolean
+  /**
+   * Android: Material's filled tonal icon button, a soft circle that still reads over a photo (a profile button on a
+   * hero). iOS ignores it: its bar items already sit in the bar's glass.
+   */
+  tonal?: boolean
   type: 'icon'
 }
 

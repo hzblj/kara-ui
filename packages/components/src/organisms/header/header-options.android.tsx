@@ -92,6 +92,7 @@ const HeaderActionView = ({action}: {action: HeaderAction}) => {
             name={action.icon}
             onPress={action.onPress}
             testID={action.testID}
+            variant={action.tonal ? 'tonal' : undefined}
           />
         </ActionHost>
       )
