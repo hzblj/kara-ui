@@ -19,6 +19,7 @@ public final class NavigationItemSearchView: ExpoView {
   let appearance = SearchFieldAppearance()
   private let closeObserver = SearchCloseObserver()
   private lazy var collapseFade = IntegratedSearchCollapseFade(accessory: accessory)
+  private lazy var dismissal = SearchVoiceDismissal(accessory: accessory)
   private var isVoiceEnabled = false
 
   /// The field's magnifier and, on iOS 26, the integrated search button, which UIKit draws monochrome like every bar
@@ -54,6 +55,7 @@ public final class NavigationItemSearchView: ExpoView {
       appearance.detach()
       closeObserver.detach()
       collapseFade.detach()
+      dismissal.detach()
       return
     }
     attach()
@@ -70,6 +72,7 @@ public final class NavigationItemSearchView: ExpoView {
       appearance.attach(to: searchController.searchBar)
       closeObserver.attach(to: searchController)
       collapseFade.attach(to: searchController)
+      dismissal.attach(to: searchController)
       applySearchButtonColor()
       return
     }
