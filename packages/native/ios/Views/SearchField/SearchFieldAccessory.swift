@@ -88,6 +88,8 @@ final class SearchFieldAccessory: UIView {
   private var fieldClearButtonMode: UITextField.ViewMode?
   private var editingObservers: [NSObjectProtocol] = []
   private var rightViewModeObservation: NSKeyValueObservation?
+  /// Catches a programmatic `text` (the search controller's cancel, a clear command), which sends no `.editingChanged`.
+  private var textObservation: NSKeyValueObservation?
 
   override init(frame: CGRect) {
     super.init(frame: CGRect(x: 0, y: 0, width: Self.idleWidth, height: Self.height))
@@ -201,6 +203,9 @@ final class SearchFieldAccessory: UIView {
       }
       field.rightViewMode = .always
     }
+    textObservation = field.observe(\.text) { [weak self] _, _ in
+      self?.refresh()
+    }
     update(isAnimated: false)
   }
 
@@ -210,6 +215,7 @@ final class SearchFieldAccessory: UIView {
     }
     field.removeTarget(self, action: #selector(refresh), for: .editingChanged)
     rightViewModeObservation = nil
+    textObservation = nil
     for observer in editingObservers {
       NotificationCenter.default.removeObserver(observer)
     }
