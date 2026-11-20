@@ -56,6 +56,7 @@ final class SearchFieldAccessory: UIView {
       guard isListening != oldValue else {
         return
       }
+      isListeningEnded = false
       if isListening {
         waveform.reset()
       }
@@ -88,6 +89,9 @@ final class SearchFieldAccessory: UIView {
   private var fieldClearButtonMode: UITextField.ViewMode?
   private var editingObservers: [NSObjectProtocol] = []
   private var rightViewModeObservation: NSKeyValueObservation?
+  /// Catches a programmatic `text` (the search controller's cancel, a clear command), which sends no `.editingChanged`.
+  private var textObservation: NSKeyValueObservation?
+  private var isListeningEnded = false
 
   override init(frame: CGRect) {
     super.init(frame: CGRect(x: 0, y: 0, width: Self.idleWidth, height: Self.height))
@@ -149,7 +153,7 @@ final class SearchFieldAccessory: UIView {
   override var intrinsicContentSize: CGSize {
     let listeningWidth =
       Self.textGap + sizes.waveformWidth + Self.meterGap + sizes.stopButtonSize / 2 + microphonePlace / 2
-    return CGSize(width: isListening ? listeningWidth : Self.idleWidth, height: Self.height)
+    return CGSize(width: showsListening ? listeningWidth : Self.idleWidth, height: Self.height)
   }
 
   override func layoutSubviews() {
@@ -201,6 +205,9 @@ final class SearchFieldAccessory: UIView {
       }
       field.rightViewMode = .always
     }
+    textObservation = field.observe(\.text) { [weak self] _, _ in
+      self?.refresh()
+    }
     update(isAnimated: false)
   }
 
@@ -210,6 +217,7 @@ final class SearchFieldAccessory: UIView {
     }
     field.removeTarget(self, action: #selector(refresh), for: .editingChanged)
     rightViewModeObservation = nil
+    textObservation = nil
     for observer in editingObservers {
       NotificationCenter.default.removeObserver(observer)
     }
@@ -295,10 +303,33 @@ final class SearchFieldAccessory: UIView {
     update(isAnimated: isAnimated && window != nil)
   }
 
+  /// Shows the idle look while the app still reports listening: the search is closing, and the app's `listening`
+  /// arrives through JS only after the bar has landed.
+  func endListening() {
+    guard isListening, !isListeningEnded else {
+      return
+    }
+    isListeningEnded = true
+    update(isAnimated: window != nil)
+  }
+
+  /// Brings the listening look back when the search opens again while the app is still listening.
+  func resumeListening() {
+    guard isListeningEnded else {
+      return
+    }
+    isListeningEnded = false
+    update(isAnimated: false)
+  }
+
+  private var showsListening: Bool {
+    isListening && !isListeningEnded
+  }
+
   private func update(isAnimated: Bool) {
-    let listening = isListening && !isContentHidden
-    let showsClear = !isListening && !isContentHidden && !(field?.text ?? "").isEmpty
-    let showsMicrophone = !isListening && !isContentHidden && !showsClear
+    let listening = showsListening && !isContentHidden
+    let showsClear = !showsListening && !isContentHidden && !(field?.text ?? "").isEmpty
+    let showsMicrophone = !showsListening && !isContentHidden && !showsClear
 
     UIView.performWithoutAnimation {
       bounds.size = intrinsicContentSize
