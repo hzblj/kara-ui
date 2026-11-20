@@ -1,5 +1,21 @@
 # @hzblj/kara-ui
 
+## 0.32.2
+
+### Patch Changes
+
+- [#119](https://github.com/hzblj/kara-ui/pull/119) [`65ba6fd`](https://github.com/hzblj/kara-ui/commit/65ba6fd2899c2c0e82d0c0b38c2b208503c197d9) Thanks [@hzblj](https://github.com/hzblj)! - A header search field that is emptied from code (its cancel, a clear command) shows the microphone again instead of keeping the clear cross. The accessory looked at the text only on typing and on the start and end of editing, and the cancel clears the text after editing has ended.
+
+- [#119](https://github.com/hzblj/kara-ui/pull/119) [`65ba6fd`](https://github.com/hzblj/kara-ui/commit/65ba6fd2899c2c0e82d0c0b38c2b208503c197d9) Thanks [@hzblj](https://github.com/hzblj)! - Closing a header search while the voice is listening no longer jumps: the meter and the stop button fade into the microphone during the search's own dismissal, instead of after the bar has landed, when the app's `listening` arrives through JS.
+
+- Updated dependencies [[`65ba6fd`](https://github.com/hzblj/kara-ui/commit/65ba6fd2899c2c0e82d0c0b38c2b208503c197d9), [`65ba6fd`](https://github.com/hzblj/kara-ui/commit/65ba6fd2899c2c0e82d0c0b38c2b208503c197d9)]:
+  - @hzblj/kara-native@0.32.2
+  - @hzblj/kara-components@0.32.2
+  - @hzblj/kara-theme@0.32.2
+  - @hzblj/kara-sx@0.32.2
+  - @hzblj/kara-router@0.32.2
+  - @hzblj/kara-expo-plugin@0.32.2
+
 ## 0.32.1
 
 ### Patch Changes
