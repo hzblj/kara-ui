@@ -78,6 +78,25 @@ const SEARCH_FADE = `<HeaderInset>
   </HeaderLargeTitleFade>
 </HeaderInset>`
 
+const SEARCH_ANCHOR = `<Box bottom={0} left={0} pointerEvents="box-none" position="absolute" right={0} top={0}>
+  <HeaderAnchor>
+    <HeaderLargeTitleFade>
+      <SegmentedControl options={genders} />
+    </HeaderLargeTitleFade>
+  </HeaderAnchor>
+</Box>`
+
+const SEARCH_LIST = `const headerHeight = useSearchHeaderInset()
+
+<ScrollEdgeContainer
+  flex={1}
+  headerInset
+  initialTopBarHeight={headerHeight + 52}
+  topBar={<Box h={52} />}
+>
+  <RnFlatList contentInsetAdjustmentBehavior="never" data={items} renderItem={renderItem} />
+</ScrollEdgeContainer>`
+
 const SEARCH_BUTTON = `const search = useHeaderSearch({
   placeholder: 'Search brands',
   placement: 'integratedButton',
@@ -277,6 +296,18 @@ export const header: Guide = {
           }
         </P>
         <CodeBlock code={SEARCH_FADE} />
+        <P>
+          {
+            'To keep it glued to the header while the field opens and closes, use `HeaderAnchor` instead of `HeaderInset` (iOS). It moves in the same frame as the bar. Put it in a full-screen overlay with `pointerEvents="box-none"`, and keep native controls in it: a `Pressable` there may drop its press.'
+          }
+        </P>
+        <CodeBlock code={SEARCH_ANCHOR} />
+        <P>
+          {
+            'A list under such a header can follow it the same way. Run it under the header and pass `headerInset` to `ScrollEdgeContainer` (iOS). The top bar then holds only what sits under the header. Start `initialTopBarHeight` at `useSearchHeaderInset()` plus that bar, never lower.'
+          }
+        </P>
+        <CodeBlock code={SEARCH_LIST} />
       </Section>
 
       <Section id="voice" title="Voice">
@@ -316,8 +347,10 @@ export const header: Guide = {
           columns={['Export', 'Use it for']}
           rows={[
             ['`HeaderInset`', 'Content right under a transparent header.'],
+            ['`HeaderAnchor`', 'Native controls right under the header that move with it in the same frame (iOS).'],
             ['`HeaderLargeTitleFade`', 'Content under the header that fades with the large title during search (iOS).'],
             ['`useHeaderBarInset()`', 'The header’s height, as a number.'],
+            ['`useSearchHeaderInset()`', 'The header’s height with its search field showing, as a number.'],
             [
               '`useHeaderScrollToTop(ref, {largeTitle})`',
               'Pass to `useScrollToTop`. A tab press lands on the expanded title.',

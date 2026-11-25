@@ -12,6 +12,7 @@ export const ScrollEdgeContainer: ScrollEdgeContainerComponent = ({
   children,
   contentScrollView,
   effect,
+  headerInset,
   initialBottomBarHeight,
   initialTopBarHeight,
   testID,
@@ -29,6 +30,7 @@ export const ScrollEdgeContainer: ScrollEdgeContainerComponent = ({
       effect={effect}
       initialBottomBarHeight={initialBottomBarHeight}
       initialTopBarHeight={initialTopBarHeight}
+      navigationBarInset={headerInset}
       style={style}
       testID={testID}
       topBar={topBar}

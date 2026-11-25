@@ -36,6 +36,14 @@ export type ScrollEdgeContainerProps = {
    * measured elsewhere) keeps the first frame's content from starting under the bar.
    */
   initialTopBarHeight?: number
+  /**
+   * Under a native header, with the scroll view's `contentInsetAdjustmentBehavior` set to `never`: the native side adds
+   * the navigation bar's height to the top bar, in the same frame as the bar moves (its search field opening or
+   * closing), so the content and the edge effect follow it exactly. The top bar then holds only what sits under
+   * the navigation bar, and `initialTopBarHeight` stays the top inset JS knows: pass the expanded header plus the top
+   * bar, never less.
+   */
+  navigationBarInset?: boolean
   style?: StyleProp<ViewStyle>
   testID?: string
   topBar?: ReactNode

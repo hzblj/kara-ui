@@ -16,13 +16,20 @@ type NativeScrollEdgeContainerProps = {
   topBarHeight: number
 }
 
+type NativeScrollEdgeScrollableProps = {
+  children: ReactNode
+  style: StyleProp<ViewStyle>
+}
+
 type NativeScrollEdgeTopBarProps = {
   children?: ReactNode
+  followsNavigationBar: boolean
   pointerEvents: 'box-none'
   scrollInsetExtra?: number
 }
 
 const NativeScrollEdgeContainer = requireKaraView<NativeScrollEdgeContainerProps>('ScrollEdgeContainerView')
+const NativeScrollEdgeScrollable = requireKaraView<NativeScrollEdgeScrollableProps>('ScrollEdgeScrollableView')
 const NativeScrollEdgeTopBar = requireKaraView<NativeScrollEdgeTopBarProps>('ScrollEdgeTopBarView')
 
 /**
@@ -57,9 +64,13 @@ const nextInsetNudge = (_scrollableKey: Key | null) => {
  * under content scrolling past them. Below iOS 26 the bars are still laid out, just without the effect, so check
  * `isScrollEdgeEffectAvailable()` and draw a fallback there.
  *
- * The scroll view sits in a stable `View` that never remounts, and its `key` goes to native as `scrollableKey`: Expo's
- * SwiftUI host adds a React view to its container only when SwiftUI first makes it, so a scroll view remounted by `key`
- * came back as the same recycled view into a container the unmount had emptied, and the screen went blank.
+ * The scroll view sits in a stable native wrapper that never remounts, and its `key` goes to native as
+ * `scrollableKey`: Expo's SwiftUI host adds a React view to its container only when SwiftUI first makes it, so a scroll
+ * view remounted by `key` came back as the same recycled view into a container the unmount had emptied, and the screen
+ * went blank. The wrapper also sets up every scroll view mounted into it, a remount under the same `key` included.
+ *
+ * With `navigationBarInset` the native side adds the navigation bar to the top bar itself, exactly and in the bar's own
+ * frame, and the bar's layout is never sent back from JS: `initialTopBarHeight` stays the inset React Native knows.
  */
 export const ScrollEdgeContainer = ({
   automaticInsets = true,
@@ -69,6 +80,7 @@ export const ScrollEdgeContainer = ({
   effect = 'soft',
   initialBottomBarHeight = 0,
   initialTopBarHeight = 0,
+  navigationBarInset = false,
   style,
   testID,
   topBar,
@@ -77,9 +89,16 @@ export const ScrollEdgeContainer = ({
   const [topBarHeight, setTopBarHeight] = useState(initialTopBarHeight)
   const [bottomBarHeight, setBottomBarHeight] = useState(initialBottomBarHeight)
 
-  const onTopBarLayout = useCallback((event: LayoutChangeEvent) => {
-    setTopBarHeight(event.nativeEvent.layout.height)
-  }, [])
+  const onTopBarLayout = useCallback(
+    (event: LayoutChangeEvent) => {
+      if (navigationBarInset) {
+        return
+      }
+
+      setTopBarHeight(event.nativeEvent.layout.height)
+    },
+    [navigationBarInset]
+  )
 
   const onBottomBarLayout = useCallback((event: LayoutChangeEvent) => {
     setBottomBarHeight(event.nativeEvent.layout.height)
@@ -140,11 +159,13 @@ export const ScrollEdgeContainer = ({
       testID={testID}
       topBarHeight={topBarHeight}
     >
-      <View collapsable={false} style={styles.scrollable}>
-        {scrollable}
-      </View>
+      <NativeScrollEdgeScrollable style={styles.scrollable}>{scrollable}</NativeScrollEdgeScrollable>
       <View collapsable={false} onLayout={onTopBarLayout} pointerEvents="box-none" style={styles.bar}>
-        <NativeScrollEdgeTopBar pointerEvents="box-none" scrollInsetExtra={scrollInsetExtra}>
+        <NativeScrollEdgeTopBar
+          followsNavigationBar={navigationBarInset}
+          pointerEvents="box-none"
+          scrollInsetExtra={scrollInsetExtra}
+        >
           {topBar}
         </NativeScrollEdgeTopBar>
       </View>

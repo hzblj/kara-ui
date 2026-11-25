@@ -7,6 +7,10 @@ import UIKit
  so both flashed sharp in the empty circle and blurred away under the button's glyph (UIKit's grey magnifier hides it in
  a plain app, a tinted search bar made it black). They fade out with the placeholder when the search dismisses and come
  back when it presents again. Other placements keep their field on screen and are left alone.
+
+ Only the magnifier it hid itself comes back (`fadedMagnifier`): a stacked search's magnifier belongs to UIKit, which
+ fades it with the bar as the search scrolls away, and setting it back to alpha 1 whenever the screen left the window
+ drew it over a collapsed header after a tab switch.
  */
 @MainActor
 final class IntegratedSearchCollapseFade: SearchPresentationListener {
@@ -15,6 +19,7 @@ final class IntegratedSearchCollapseFade: SearchPresentationListener {
   private let accessory: SearchFieldAccessory
   private weak var searchController: UISearchController?
   private weak var relay: SearchPresentationRelay?
+  private weak var fadedMagnifier: UIView?
   private var generation = 0
 
   init(accessory: SearchFieldAccessory) {
@@ -49,6 +54,7 @@ final class IntegratedSearchCollapseFade: SearchPresentationListener {
     }
     generation += 1
     let current = generation
+    fadedMagnifier = magnifier
     accessory.setContentHidden(true, isAnimated: true)
     UIView.animate(
       withDuration: Self.fadeDuration,
@@ -72,10 +78,11 @@ final class IntegratedSearchCollapseFade: SearchPresentationListener {
 
   private func showContent() {
     generation += 1
-    if let magnifier = searchController?.searchBar.searchTextField.leftView {
+    if let magnifier = fadedMagnifier {
       magnifier.isHidden = false
       magnifier.alpha = 1
     }
+    fadedMagnifier = nil
     accessory.setContentHidden(false, isAnimated: false)
   }
 }

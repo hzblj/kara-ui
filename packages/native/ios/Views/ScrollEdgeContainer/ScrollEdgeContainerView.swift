@@ -7,6 +7,11 @@ internal enum ScrollEdgeEffectOption: String, Enumerable {
   case hard
 }
 
+/**
+ `nativeTopBarHeight` is the top bar's height as `ScrollEdgeTopBarView` measures it natively, in a window, plus the
+ navigation bar while it follows one. The top `safeAreaBar` prefers it over the `topBarHeight` JS sends, which comes a
+ few frames later and, in the navigation bar mode, never follows the bar at all.
+ */
 internal final class ScrollEdgeContainerProps: ExpoSwiftUI.ViewProps {
   @Field var topBarHeight: Double = 0
   @Field var bottomBarHeight: Double = 0
@@ -15,6 +20,15 @@ internal final class ScrollEdgeContainerProps: ExpoSwiftUI.ViewProps {
   @Field var isTopEdgeEffectHidden: Bool = false
   @Field var scrollableKey: String = ""
   @Field var isContentScrollView: Bool = false
+  var nativeTopBarHeight: Double?
+
+  func setNativeTopBarHeight(_ height: Double) {
+    guard nativeTopBarHeight != height else {
+      return
+    }
+    objectWillChange.send()
+    nativeTopBarHeight = height
+  }
 }
 
 /**
@@ -32,28 +46,27 @@ internal struct ScrollEdgeContainerView: ExpoSwiftUI.View, ExpoSwiftUI.WithHosti
   var body: some View {
     let children = props.children ?? []
     let scrollChild = children.first
-    let scrollHost = scrollChild?.uiView
-    let effect = props.effect
-    let isTopHidden = props.isTopEdgeEffectHidden
-    let isContentScrollView = props.isContentScrollView
+    let scrollHost = scrollChild?.uiView as? ScrollEdgeScrollableView
+    let topBarHost = children.indices.contains(1) ? children[1].uiView : nil
+    let settings = EdgeEffectSettings(props: props)
 
     child(at: 0, in: children)
       .ignoresSafeArea()
-      .task(
-        id: EdgeEffectTarget(
-          child: scrollChild?.id,
-          scrollableKey: props.scrollableKey,
-          effect: effect,
-          isTopHidden: isTopHidden,
-          isContentScrollView: isContentScrollView
-        )
-      ) {
-        configureEdgeEffects(in: scrollHost, effect: effect, isTopHidden: isTopHidden, isContentScrollView: isContentScrollView)
+      .task(id: EdgeEffectTarget(child: scrollChild?.id, scrollableKey: props.scrollableKey, settings: settings)) {
+        configureEdgeEffects(in: scrollHost, settings: settings, topBar: topBarView(in: topBarHost))
+        syncNavigationBarFollower(in: topBarHost)
       }
       .modifier(ScrollableKeyChangeModifier(scrollableKey: props.scrollableKey) {
-        topBarView(in: children.indices.contains(1) ? children[1].uiView : nil)?.syncScrollInset()
+        topBarView(in: topBarHost)?.scrollChildDidChange()
       })
-      .modifier(EdgeBarModifier(edge: .top, height: props.topBarHeight, elementOpacity: props.elementOpacity, bar: child(at: 1, in: children)))
+      .modifier(
+        EdgeBarModifier(
+          edge: .top,
+          height: props.nativeTopBarHeight ?? props.topBarHeight,
+          elementOpacity: props.elementOpacity,
+          bar: child(at: 1, in: children)
+        )
+      )
       .modifier(EdgeBarModifier(edge: .bottom, height: props.bottomBarHeight, elementOpacity: props.elementOpacity, bar: child(at: 2, in: children)))
       .ignoresSafeArea()
   }
@@ -157,44 +170,85 @@ private struct EdgeElementShape: View {
 private struct EdgeEffectTarget: Equatable {
   let child: ObjectIdentifier?
   let scrollableKey: String
+  let settings: EdgeEffectSettings
+}
+
+private struct EdgeEffectSettings: Equatable {
   let effect: ScrollEdgeEffectOption
   let isTopHidden: Bool
   let isContentScrollView: Bool
+
+  init(props: ScrollEdgeContainerProps) {
+    effect = props.effect
+    isTopHidden = props.isTopEdgeEffectHidden
+    isContentScrollView = props.isContentScrollView
+  }
+}
+
+typealias ScrollEdgeContainerHost = ExpoSwiftUI.HostingView<ScrollEdgeContainerProps, ScrollEdgeContainerView>
+
+@MainActor
+func scrollEdgeContainerHost(of view: UIView) -> ScrollEdgeContainerHost? {
+  var current = view.superview
+  while let candidate = current {
+    if let host = candidate as? ScrollEdgeContainerHost {
+      return host
+    }
+    current = candidate.superview
+  }
+  return nil
+}
+
+/** The whole setup for the scroll child mounted last, run by `ScrollEdgeScrollableView` after each mount. */
+@MainActor
+func configureScrollChild(in host: ScrollEdgeContainerHost) {
+  guard let props = host.getProps() as? ScrollEdgeContainerProps, let children = props.children else {
+    return
+  }
+  let topBar = children.indices.contains(1) ? topBarView(in: children[1].uiView) : nil
+  let scrollable = children.first?.uiView as? ScrollEdgeScrollableView
+  configureEdgeEffects(in: scrollable, settings: EdgeEffectSettings(props: props), topBar: topBar)
+  topBar?.scrollChildDidChange()
 }
 
 /**
  Edge-effect state survives Fabric view recycling: a sheet that hides both vertical edges of the scroll view it pins
  hands that `UIScrollView` on to the next React Native scroll view with its edges still hidden. So both edges are
- set again (the top one hidden only with `isTopHidden`, style from `effect`) whenever the scroll child changes —
- SwiftUI's `.scrollEdgeEffectStyle` never reaches a hosted UIKit scroll view.
+ set again (the top one hidden only with `isTopHidden` or by `ScrollEdgeTopEffectGate`, style from `effect`) whenever
+ the scroll child changes — SwiftUI's `.scrollEdgeEffectStyle` never reaches a hosted UIKit scroll view.
 
  `isContentScrollView` makes the scroll view its view controller's content scroll view for the bottom edge, the one
  the iOS 26 tab bar watches to minimise on scroll; UIKit otherwise takes the screen's first scroll view.
  */
 @MainActor
 private func configureEdgeEffects(
-  in host: UIView?,
-  effect: ScrollEdgeEffectOption,
-  isTopHidden: Bool,
-  isContentScrollView: Bool
+  in scrollable: ScrollEdgeScrollableView?,
+  settings: EdgeEffectSettings,
+  topBar: ScrollEdgeTopBarView?
 ) {
-  guard let scrollView = firstScrollView(in: host) else {
+  guard let scrollable, let scrollView = scrollable.scrollView else {
     return
   }
 
   ScrollEdgeTopPin.attach(to: scrollView)
 
-  if isContentScrollView, #available(iOS 15.0, *) {
+  if settings.isContentScrollView, #available(iOS 15.0, *) {
     owningViewController(of: scrollView)?.setContentScrollView(scrollView, for: .bottom)
   }
+
+  ScrollEdgeTopEffectGate.apply(
+    to: scrollView,
+    in: scrollable,
+    isCallerHidden: settings.isTopHidden,
+    followsNavigationBar: topBar?.followsNavigationBar ?? false
+  )
 
 #if compiler(>=6.2)
   guard #available(iOS 26.0, *) else {
     return
   }
 
-  let style = effect.edgeEffectStyle
-  scrollView.topEdgeEffect.isHidden = isTopHidden
+  let style = settings.effect.edgeEffectStyle
   scrollView.topEdgeEffect.style = style
   scrollView.bottomEdgeEffect.isHidden = false
   scrollView.bottomEdgeEffect.style = style
@@ -211,6 +265,14 @@ private func owningViewController(of view: UIView) -> UIViewController? {
     responder = current.next
   }
   return nil
+}
+
+@MainActor
+private func syncNavigationBarFollower(in view: UIView?) {
+  guard let bar = topBarView(in: view), bar.followsNavigationBar else {
+    return
+  }
+  bar.syncScrollInset()
 }
 
 @MainActor
@@ -260,4 +322,3 @@ private extension ScrollEdgeEffectOption {
   }
 }
 #endif
-

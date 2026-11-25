@@ -458,6 +458,17 @@ export type HeaderInsetProps = {
 
 export type HeaderInsetComponent = (props: HeaderInsetProps) => ReactNode
 
+export type HeaderAnchorProps = {
+  /**
+   * Content laid out from the top of the screen that shows right under the header and moves with it in the same frame,
+   * a search field opening or closing included. Made for native controls (`SegmentedControl`, chips); its parent must
+   * already reach under the header.
+   */
+  children?: ReactNode
+}
+
+export type HeaderAnchorComponent = (props: HeaderAnchorProps) => ReactNode
+
 export type HeaderLargeTitleFadeProps = {
   /** Content under the header (segments, chips) that leaves with the large title while the header search is open. */
   children?: ReactNode
