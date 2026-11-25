@@ -16,7 +16,7 @@ and `@hzblj/kara-native` — through their entry points only.
 | `src/atoms/glyph/` | `Glyph`, `RnGlyph`, `GlyphButton`: the few glyphs kara's own components draw. Internal: not in `atoms/index.ts`, so no story or docs page. |
 | `src/molecules/` | Label, LabeledContent, ListItem (and `RnListItem`, its React Native-tier row for long lists), Link, SearchBar, EmptyState, Collapsible, Pager, RadioGroup, Stepper, Tooltip — and over the native module: NavigationBar, ScrollEdgeContainer, RnTooltip. |
 | `src/organisms/` | Sheet (TrueSheet with a native header: `Sheet.Header`, `Sheet.ScrollView`, `useSheetScroll`), ActionSheet, Alert, Menu, Form, SwipeActions, Snackbar — and over the native module: ContextMenu (long-press on React Native content, with a custom preview on iOS), FabMenu. (`Tabs` lives in `@hzblj/kara-router`, behind the `@hzblj/kara-ui/router` entry, so the main entry never imports expo-router.) |
-| `src/organisms/header/` | The `/header` entry, apart from `organisms/index.ts`: a native stack screen's header for React Navigation and Expo Router alike — `useHeader` / `useHeaderOptions` (titles, search and actions on both sides), `useHeroHeader`, `useHeaderSearch`, `useStackScreenOptions` and its presets, `HeaderInset`, `useHeaderBarInset`, `useHeaderScrollToTop`. Not in the main entry, which must not need `react-native-screens`. |
+| `src/organisms/header/` | The `/header` entry, apart from `organisms/index.ts`: a native stack screen's header for React Navigation and Expo Router alike — `useHeader` / `useHeaderOptions` (titles, search and actions on both sides), `useHeroHeader`, `useHeaderSearch`, `useStackScreenOptions` and its presets, `HeaderInset`, `HeaderAnchor`, `useHeaderBarInset`, `useSearchHeaderInset`, `useHeaderScrollToTop`. Not in the main entry, which must not need `react-native-screens`. |
 | `src/templates/screen/` | `Screen` — the full-bleed native host every screen starts with. |
 | `src/hooks/` | Internal hooks. `compose-host.tsx`: `ComposeHost`, the host of every Compose tree kara draws on Android (import it only from `.android` files): the theme's appearance and Material seed, and `RippleConfiguration` with `fill.ripple`, so a Compose ripple matches the React Native ones (`Pressable`, `RnListItem`, the context menu trigger), which take the same token; a Compose `CompositionLocal` cannot be set once for the app, every host is its own composition. `host-context.tsx`: `HostBoundary` + `useHostGuard` (dev warning when a native atom renders outside `Screen`/`Island`) and `useInsideHost` (whether one already encloses it, for the atoms that otherwise bring their own). `use-refresh-state.ts`: SwiftUI's promise-driven `refreshable` and Compose's controlled `PullToRefreshBox` as one async `onRefresh`. `use-stack-modifiers.ts`: the Compose stacks' modifier order. |
 | `src/utils/` | Internal helpers. `ripple-clip.ts` (`splitForRipple`), `tap-modifiers.ts` (a SwiftUI stack's `onPress` over its whole frame), `story-decorators.tsx` (`insideIsland` / `insideIslandOfHeight`, the host a story mounts its subject in; never published). |
@@ -333,6 +333,16 @@ animation (search open and close). Content mounted into it mid-animation changes
 animation, so it draws half that height off until the animation ends and then jumps. Hide it instead of unmounting it:
 `HeaderLargeTitleFade` (kara-native `LargeTitleFade`, a fragment on Android) fades it with the large title and keeps it
 mounted.
+
+**`HeaderAnchor` and `ScrollEdgeContainer`'s `headerInset` follow the bar natively, in the same frame.** `HeaderInset`
+gets the bar's height through a Fabric commit, which Yoga rounds to pixels and skips under 1 px, frames after UIKit moved
+the bar. `HeaderAnchor` (kara-native `NavigationBarAnchor`, a fragment on Android) lays its content out from the top of
+the screen and shifts it under the bar in the bar's own call, for native controls in a full-screen `box-none` overlay
+(Yoga does not know the shift, so the parent must reach that far, and a `Pressable` measures the unshifted place).
+`headerInset` (kara-native `navigationBarInset`) adds the header to the container's top bar and the list's inset
+natively, unrounded, for a list with `contentInsetAdjustmentBehavior="never"` under the header: its top bar holds only
+what sits under the header, and `initialTopBarHeight` is the expanded header (`useSearchHeaderInset()`: the bar inset
+plus the 54pt stacked search bar, 0 on Android) plus that bar, never less, since the list is placed at its top natively.
 
 ## Icons
 

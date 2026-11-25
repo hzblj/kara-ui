@@ -6,6 +6,9 @@ extension ScrollEdgeTopBarView {
       Prop("scrollInsetExtra") { (view: ScrollEdgeTopBarView, extra: Double?) in
         view.scrollInsetExtra = extra
       }
+      Prop("followsNavigationBar") { (view: ScrollEdgeTopBarView, follows: Bool?) in
+        view.followsNavigationBar = follows ?? false
+      }
     }
   }
 }

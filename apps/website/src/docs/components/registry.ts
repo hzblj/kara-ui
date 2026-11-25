@@ -893,6 +893,7 @@ export const COMPONENTS: ComponentDoc[] = [
       'Below iOS 26 the bars are still inset, without the effect: check `isScrollEdgeEffectAvailable()` and give them a background.',
       'Know a bar’s height up front? Pass `initialTopBarHeight` / `initialBottomBarHeight` and the first frame already starts below it.',
       '`contentScrollView` makes the iOS 26 tab bar minimise as this scroll view scrolls; `topEdgeEffectHidden` drops the top blur, e.g. over a cover image.',
+      'Under a native header, `headerInset` adds the header to the top bar in the same frame as the header changes (iOS). Give the scroll view `contentInsetAdjustmentBehavior="never"`, keep only what sits under the header in the top bar, and start `initialTopBarHeight` at `useSearchHeaderInset()` plus that bar.',
       'Android does what a Material top app bar does on scroll: the bars stack above and below the scroll view, transparent at rest, and fill with `surface.secondary` (Material’s `surfaceContainer`), the top one once content scrolls under it and the bottom one while there is more below. The scroll view keeps its own `onScroll`.',
     ],
     renders: {android: 'Material bars that fill on scroll', ios: 'UIScrollEdgeEffect'},

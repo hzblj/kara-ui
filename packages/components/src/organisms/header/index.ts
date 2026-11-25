@@ -7,6 +7,7 @@ export type {
   NavigationTitleTransitionPreset,
 } from '@hzblj/kara-native'
 export * from './header.types'
+export * from './header-anchor'
 export * from './header-inset'
 export * from './header-large-title-fade'
 export {useIsTitleRevealed} from './header-title'
@@ -17,4 +18,5 @@ export * from './use-header-bar-inset'
 export * from './use-header-scroll-to-top'
 export * from './use-header-search'
 export * from './use-hero-header'
+export * from './use-search-header-inset'
 export * from './use-stack-screen-options'

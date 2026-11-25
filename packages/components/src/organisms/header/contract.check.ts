@@ -1,6 +1,14 @@
 import type {NativeStackNavigationOptions} from 'expo-router'
 
-import type {HeaderInsetComponent, HeaderOptions, HeaderSearchBarOptions, StackScreenOptions} from './header.types'
+import type {
+  HeaderAnchorComponent,
+  HeaderInsetComponent,
+  HeaderOptions,
+  HeaderSearchBarOptions,
+  StackScreenOptions,
+} from './header.types'
+import {HeaderAnchor as AndroidHeaderAnchor} from './header-anchor.android'
+import {HeaderAnchor as IosHeaderAnchor} from './header-anchor.ios'
 import {HeaderInset as AndroidHeaderInset} from './header-inset.android'
 import {HeaderInset as IosHeaderInset} from './header-inset.ios'
 import {
@@ -30,13 +38,20 @@ import type {SheetGrabberComponent} from './sheet-grabber.types'
 import {useHeaderBarInset as androidHeaderBarInset} from './use-header-bar-inset.android'
 import {useHeaderBarInset as iosHeaderBarInset} from './use-header-bar-inset.ios'
 import type {UseHeaderBarInset} from './use-header-bar-inset.types'
+import {useSearchHeaderInset as androidSearchHeaderInset} from './use-search-header-inset.android'
+import {useSearchHeaderInset as iosSearchHeaderInset} from './use-search-header-inset.ios'
+import type {UseSearchHeaderInset} from './use-search-header-inset.types'
 
 export const _iosHeaderOptions: HeaderOptionsBuilder = iosHeaderOptions
 export const _androidHeaderOptions: HeaderOptionsBuilder = androidHeaderOptions
 export const _iosHeaderInset: HeaderInsetComponent = IosHeaderInset
 export const _androidHeaderInset: HeaderInsetComponent = AndroidHeaderInset
+export const _iosHeaderAnchor: HeaderAnchorComponent = IosHeaderAnchor
+export const _androidHeaderAnchor: HeaderAnchorComponent = AndroidHeaderAnchor
 export const _iosHeaderBarInset: UseHeaderBarInset = iosHeaderBarInset
 export const _androidHeaderBarInset: UseHeaderBarInset = androidHeaderBarInset
+export const _iosSearchHeaderInset: UseSearchHeaderInset = iosSearchHeaderInset
+export const _androidSearchHeaderInset: UseSearchHeaderInset = androidSearchHeaderInset
 export const _iosHeaderSearchAccessory: HeaderSearchAccessoryComponent = IosHeaderSearchAccessory
 export const _androidHeaderSearchAccessory: HeaderSearchAccessoryComponent = AndroidHeaderSearchAccessory
 export const _iosSheetGrabber: SheetGrabberComponent = IosSheetGrabber

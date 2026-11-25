@@ -27,6 +27,14 @@ export type ScrollEdgeContainerProps = ResponsiveViewSx & {
   contentScrollView?: boolean
   /** iOS 26: how hard the edge cuts. `soft` by default. */
   effect?: ScrollEdgeEffect
+  /**
+   * iOS: for a scroll view under a native header that runs under the header itself
+   * (`contentInsetAdjustmentBehavior="never"`). The header's height is added to the top bar's inset in the same frame
+   * as the header changes (its search field opening or closing), so the content and the edge effect follow it exactly.
+   * The top bar then holds only what sits under the header. Set `initialTopBarHeight` to the expanded header
+   * (`useSearchHeaderInset()` with a search field) plus the top bar, never less.
+   */
+  headerInset?: boolean
   /** iOS: the bottom bar's height before it is measured, so the first frame already has the inset. */
   initialBottomBarHeight?: number
   /** iOS: the top bar's height before it is measured, so the first frame's content starts below the bar. */
